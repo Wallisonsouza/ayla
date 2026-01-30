@@ -54,6 +54,7 @@ public:
   core::ast::ASTStatementNode *parse_variable_declaration();
   core::ast::ASTStatementNode *parse_function_declaration();
   core::ast::ASTStatementNode *parse_if_statement();
+  parser::node::ASTWhileStatementNode *parse_while_statemente();
 
   parser::node::BlockStatementNode *parse_block_statement();
   core::ast::PatternNode *parse_function_parameter();

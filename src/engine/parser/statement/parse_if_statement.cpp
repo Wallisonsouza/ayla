@@ -9,7 +9,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
   auto *condition = parse_expression();
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::IfConditionMissing, "expected condition after 'if'");
+    report_error(DiagnosticCode::ConditionMissing, "expected condition after 'if'");
 
     recover_until(RecoverBoundary::If);
 
@@ -18,7 +18,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
 
   if (condition->kind == core::ast::NodeKind::Assignment) {
 
-    report_error(DiagnosticCode::IfConditionAssignment, "assignment is not allowed in if condition");
+    report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 
     recover_until(RecoverBoundary::If);
 
@@ -29,7 +29,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
 
   if (then_block->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::IfBlockError, "error in then block");
+    report_error(DiagnosticCode::BlockError, "error in then block");
 
     recover_until(RecoverBoundary::If);
 
@@ -46,7 +46,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
 
     if (else_block && else_block->flags.has(NodeFlags::HasError)) {
 
-      report_error(DiagnosticCode::IfBlockError, "error in else block");
+      report_error(DiagnosticCode::BlockError, "error in else block");
 
       recover_until(RecoverBoundary::If);
 

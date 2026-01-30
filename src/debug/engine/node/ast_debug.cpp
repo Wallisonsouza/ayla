@@ -69,6 +69,7 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const parser::node::ASTArrayLiteralNode *>(node)); break;
 
+  case NodeKind::WhileStatement: debug_while(static_cast<const parser::node::ASTWhileStatementNode *>(node)); break;
   default: out << "<error>\n"; break;
   }
 

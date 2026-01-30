@@ -85,7 +85,7 @@ struct ASTDebug {
   void debug_if_statement(const parser::node::IfStatementNode *node);
   void debug_assing_node(const parser::node::statement::AssignmentNode *node);
   void debug_block(const parser::node::BlockStatementNode *node);
-
+  void debug_while(const parser::node::ASTWhileStatementNode *node);
   void debug_children(const std::vector<const core::ast::ASTNode *> &children);
 
   template <typename T> void debug_labeled_childrens(const std::vector<T *> &children, const std::string &label, bool is_last) {

@@ -1,5 +1,8 @@
 #include "Resolver.hpp"
 #include "core/node/Type.hpp"
+#include "engine/parser/node/literal_nodes.hpp"
+#include "engine/parser/node/statement/ImportStatement.hpp"
+#include "engine/parser/node/statement_nodes.hpp"
 #include <iostream>
 
 void Resolver::resolve(core::ast::ASTNode *node) {
@@ -13,6 +16,8 @@ void Resolver::resolve(core::ast::ASTNode *node) {
   case core::ast::NodeKind::BooleanLiteral: return;
 
   case core::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
+
+  case core::ast::NodeKind::WhileStatement: resolve_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
 
   case core::ast::NodeKind::BlockStatement: resolve_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
 
@@ -35,12 +40,10 @@ void Resolver::resolve(core::ast::ASTNode *node) {
   case core::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<parser::node::FunctionDeclarationNode *>(node)); break;
 
   case core::ast::NodeKind::ReturnStatement: resolve_return_statement(static_cast<parser::node::ReturnStatementNode *>(node)); break;
-  case core::ast::NodeKind::Assignment: {
-    auto *assign = static_cast<parser::node::statement::AssignmentNode *>(node);
-    resolve(assign->target);
-    resolve(assign->value);
-    break;
-  }
+
+  case core::ast::NodeKind::Assignment: resolve_assignment(static_cast<parser::node::statement::AssignmentNode *>(node)); break;
+
+  case core::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<parser::node::ASTArrayLiteralNode *>(node)); break;
 
   default: break;
   }

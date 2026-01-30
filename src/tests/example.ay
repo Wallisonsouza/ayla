@@ -1,1 +1,8 @@
-val a: number = [10,20, 30]
+import debug.console
+
+val a: number = 10
+
+while a < 100  {
+  a = a + 1
+  console.log(a)
+}

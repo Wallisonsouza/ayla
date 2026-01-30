@@ -16,6 +16,7 @@ enum class TokenKind : uint8_t {
   IF_KEYWORD,     // Representa a palavra-chave 'if'.
   ELSE_KEYWORD,   // Representa a palavra-chave 'else'.
   RETURN_KEYWORD, // Representa a palavra-chave 'return'.
+  WHILE_KEYWORD,
 
   OPEN_BRACKET,
   CLOSE_BRACKET,

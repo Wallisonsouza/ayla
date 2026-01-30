@@ -17,6 +17,36 @@ struct Executor {
 
   Executor(RuntimeScope *scope) : current_scope(scope) {}
 
+  // Value execute_assignment(CompilationUnit &unit, parser::node::statement::AssignmentNode *node) {
+
+  //   Value val = execute_node(unit, node->value);
+
+  //   if (auto *id = dynamic_cast<core::ast::IdentifierNode *>(node->target)) {
+  //     Value *ref = current_scope->get_ref(id->symbol_id);
+  //     if (!ref) throw std::runtime_error("Assignment to undefined variable");
+
+  //     *ref = std::move(val);
+  //     return *ref;
+  //   }
+
+  //   throw std::runtime_error("Invalid assignment target");
+  // }
+
+  Value execute_while(CompilationUnit &unit, parser::node::ASTWhileStatementNode *node) {
+
+    Value last = Value::Void();
+
+    while (true) {
+      Value cond = execute_node(unit, node->condition);
+
+      if (!cond.as_bool()) { break; }
+
+      last = execute_block(unit, node->block);
+    }
+
+    return last;
+  }
+
   Value execute_assignment(CompilationUnit &unit, parser::node::statement::AssignmentNode *node) {
     // 1. Executa o valor da atribuição
     Value val = execute_node(unit, node->value);
@@ -61,6 +91,8 @@ struct Executor {
 
     case core::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<parser::node::IfStatementNode *>(node));
 
+    case core::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<parser::node::ASTWhileStatementNode *>(node));
+
     case core::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<parser::node::FunctionDeclarationNode *>(node));
 
     case core::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<parser::node::ReturnStatementNode *>(node));
@@ -68,6 +100,20 @@ struct Executor {
     default: return Value::Null();
     }
   }
+
+  // Value execute_array_literal(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node) {
+  //   std::vector<Value *> elements;
+  //   elements.reserve(node->elements.size());
+
+  //   for (auto *expr : node->elements) {
+  //     Value val = execute_node(unit, expr);
+
+  //     Value *stored = current_scope->arena.create<Value>(std::move(val));
+  //     elements.push_back(stored);
+  //   }
+
+  //   return Value::Array(std::move(elements));
+  // }
 
   Value execute_return(CompilationUnit &unit, parser::node::ReturnStatementNode *node) {
     if (!node->value) return Value::Void();

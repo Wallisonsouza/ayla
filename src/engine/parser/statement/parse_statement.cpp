@@ -13,6 +13,8 @@ core::ast::ASTStatementNode *Parser::parse_statement() {
 
   case TokenKind::IF_KEYWORD: return parse_if_statement();
 
+  case TokenKind::WHILE_KEYWORD: return parse_while_statemente();
+
   case TokenKind::RETURN_KEYWORD: return parse_return_statement();
 
   case TokenKind::VALUE_KEYWORD:

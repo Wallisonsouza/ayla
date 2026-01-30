@@ -17,6 +17,13 @@ struct BlockStatementNodeError : BlockStatementNode {
   explicit BlockStatementNodeError() : BlockStatementNode({}) { flags.set(NodeFlags::HasError); }
 };
 
+struct ASTWhileStatementNode : core::ast::ASTStatementNode {
+  core::ast::ASTExpressionNode *condition;
+  BlockStatementNode *block;
+
+  ASTWhileStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *block) : core::ast::ASTStatementNode(core::ast::NodeKind::WhileStatement), condition(cond), block(block) {}
+};
+
 struct IfStatementNode : core::ast::ASTStatementNode {
   core::ast::ASTExpressionNode *condition;
   BlockStatementNode *if_block;
@@ -80,4 +87,5 @@ struct ReturnStatementNode : core::ast::ASTStatementNode {
 
   ReturnStatementNode(core::ast::ASTExpressionNode *v) : ASTStatementNode(core::ast::NodeKind::ReturnStatement), value(v) {}
 };
+
 } // namespace parser::node
