@@ -4,7 +4,7 @@
 
 core::ast::ASTExpressionNode *Parser::parse_assignment(core::ast::ASTExpressionNode *target) {
 
-  if (!unit.tokens.match(TokenKind::Assign)) { return nullptr; }
+  if (!unit.tokens.match(TokenKind::ASSIGN)) { return nullptr; }
 
   auto start = unit.tokens.peek_slice();
 

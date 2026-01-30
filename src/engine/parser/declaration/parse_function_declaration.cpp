@@ -91,7 +91,7 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration() {
 
   core::ast::TypeNode *return_type = nullptr;
 
-  if (unit.tokens.match(TokenKind::Arrow)) {
+  if (unit.tokens.match(TokenKind::ARROW)) {
 
     return_type = parse_type();
 

@@ -1,7 +1,7 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_assing_node(const parser::node::statement::AssignmentNode *node) {
-  out << "Assing\n";
+void ASTDebug::debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node) {
+  out << "ASSIGN\n";
 
   if (node->target) { debug_labeled("Target", node->target, false); }
 

@@ -4,9 +4,13 @@
 #include "core/node/Type.hpp"
 #include "core/node/types.hpp"
 #include "engine/language_context.hpp"
+#include <chrono>
 #include <cmath>
 #include <iostream>
+#include <memory>
 #include <random>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 #define ANSI_RESET "\033[0m"
@@ -34,6 +38,8 @@ inline void create_module_console(LanguageContext &context, core::ModuleId paren
 
   auto *void_return = module->ast.create_node<VoidTypeNode>();
 
+  static std::unordered_map<std::string, std::chrono::high_resolution_clock::time_point> timers;
+
   make_native(module, id(module->ast, "log"), {}, void_return, [](const std::vector<Value> &args) -> Value {
     std::cout << ANSI_BOLD_GRAY << "[log] " << ANSI_GRAY;
     for (auto &arg : args) std::cout << arg.convert_to_string();
@@ -54,6 +60,31 @@ inline void create_module_console(LanguageContext &context, core::ModuleId paren
     std::cerr << ANSI_RESET << std::endl;
     return Value::Void();
   });
+
+  // console.time(label)
+  make_native(module, id(module->ast, "time"), {module->ast.create_node<core::ast::PatternNode>(id(module->ast, "label"), nullptr, nullptr)}, void_return, [](const std::vector<Value> &args) -> Value {
+    if (args.empty()) return Value::Void();
+    std::string label = args[0].convert_to_string();
+    timers[label] = std::chrono::high_resolution_clock::now();
+    return Value::Void();
+  });
+
+  // console.timeEnd(label)
+  make_native(module, id(module->ast, "timeEnd"), {module->ast.create_node<core::ast::PatternNode>(id(module->ast, "label"), nullptr, nullptr)}, void_return,
+              [](const std::vector<Value> &args) -> Value {
+                if (args.empty()) return Value::Void();
+                std::string label = args[0].convert_to_string();
+                auto it = timers.find(label);
+                if (it == timers.end()) {
+                  std::cerr << "Timer [" << label << "] was not started!\n";
+                  return Value::Void();
+                }
+                auto now = std::chrono::high_resolution_clock::now();
+                double elapsed = std::chrono::duration<double, std::milli>(now - it->second).count(); // ms
+                std::cout << "Timer [" << label << "]: " << elapsed << " ms\n";
+                timers.erase(it);
+                return Value::Void();
+              });
 }
 
 inline void create_module_math(LanguageContext &context, core::ModuleId parent = core::INVALID_MODULE) {

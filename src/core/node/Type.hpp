@@ -94,5 +94,4 @@ struct NativeFunctionDeclarationNode : ASTStatementNode {
   NativeFunctionDeclarationNode(IdentifierNode *id, std::vector<PatternNode *> p, TypeNode *ret, Value::NativeFunction cb)
       : ASTStatementNode(core::ast::NodeKind::NativeFunctionDeclaration), identifier(id), params(std::move(p)), return_type(ret), callback(std::move(cb)) {}
 };
-
 } // namespace core::ast

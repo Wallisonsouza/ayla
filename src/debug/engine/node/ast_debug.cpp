@@ -59,7 +59,7 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const parser::node::IfStatementNode *>(node)); break;
 
-  case NodeKind::Assignment: debug_assing_node(static_cast<const parser::node::statement::AssignmentNode *>(node)); break;
+  case NodeKind::Assignment: debug_ASSIGN_node(static_cast<const parser::node::statement::AssignmentNode *>(node)); break;
 
   case NodeKind::BlockStatement: debug_block(static_cast<const parser::node::BlockStatementNode *>(node)); break;
 

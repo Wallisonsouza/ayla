@@ -24,7 +24,7 @@ core::ast::PatternNode *Parser::parse_pattern(core::ast::Modifiers mods) {
   }
 
   core::ast::ASTExpressionNode *value_node = nullptr;
-  if (unit.tokens.match(TokenKind::Assign)) {
+  if (unit.tokens.match(TokenKind::ASSIGN)) {
     value_node = parse_expression();
     if (!value_node) {
       report_error(DiagnosticCode::ExpectedExpression, "expression after '='");

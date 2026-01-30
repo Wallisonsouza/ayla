@@ -24,16 +24,19 @@ enum class TokenKind : uint8_t {
   DOUBLE_QUOTE, // Representa uma aspa dupla '"'.
   SINGLE_QUOTE, // Representa uma aspa simples '\''.
   COLON,        // Representa o caractere ':'.
-  Arrow,
-  Plus,        // Representa o operador de adição '+'.
-  Minus,       // Representa o operador de subtração '-'.
-  Star,        // Representa o operador de multiplicação '*'.
-  Slash,       // Representa o operador de divisão '/'.
-  Assign,      // Representa o operador de atribuição '='.
-  Equals,      // Representa o operador de igualdade '=='.
-  Ternary,     // Representa o operador ternário '?'.
-  LessThan,    // Representa o operador '<'.
-  GreaterThan, // Representa o operador '>'.
+  ARROW,
+  PLUS,   // Representa o operador de adição '+'.
+  MINUS,  // Representa o operador de subtração '-'.
+  STAR,   // Representa o operador de multiplicação '*'.
+  SLASH,  // Representa o operador de divisão '/'.
+  ASSIGN, // Representa o operador de atribuição '='.
+  EQUAL,  // Representa o operador de igualdade '=='.
+  NOT_EQUAL,
+  Ternary,    // Representa o operador ternário '?'.
+  LESS,       // Representa o operador '<'.
+  LESS_EQUAL, // Representa o operador '>'.
+  GREATER,
+  GREATER_EQUAL,
 
   OPEN_PAREN,  // Representa o parêntese esquerdo '('.
   Space,       // Representa um espaço em branco.

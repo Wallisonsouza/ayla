@@ -83,7 +83,7 @@ struct ASTDebug {
   void debug_array_literal(const parser::node::ASTArrayLiteralNode *node);
   void debug_path_expression(const parser::node::statement::PathExprNode *node);
   void debug_if_statement(const parser::node::IfStatementNode *node);
-  void debug_assing_node(const parser::node::statement::AssignmentNode *node);
+  void debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node);
   void debug_block(const parser::node::BlockStatementNode *node);
   void debug_while(const parser::node::ASTWhileStatementNode *node);
   void debug_children(const std::vector<const core::ast::ASTNode *> &children);

@@ -99,3 +99,15 @@ struct Value {
   bool is_user_function() const { return std::holds_alternative<UserFunction>(data); }
   bool is_native_function() const { return std::holds_alternative<NativeFunction>(data); }
 };
+
+struct ExecResult {
+  enum class Type { Value, Return };
+
+  Type type;
+  Value value;
+
+  static ExecResult make_value(Value v) { return {Type::Value, std::move(v)}; }
+  static ExecResult make_return(Value v) { return {Type::Return, std::move(v)}; }
+
+  bool is_return() const { return type == Type::Return; }
+};

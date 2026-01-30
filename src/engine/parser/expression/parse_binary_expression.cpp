@@ -34,12 +34,13 @@ core::ast::ASTExpressionNode *Parser::parse_binary_expression(int min_precedence
 
     core::ast::BinaryOperation op;
     switch (tok->descriptor->kind) {
-    case TokenKind::Plus: op = core::ast::BinaryOperation::Add; break;
-    case TokenKind::Minus: op = core::ast::BinaryOperation::Subtract; break;
-    case TokenKind::Star: op = core::ast::BinaryOperation::Multiply; break;
-    case TokenKind::Slash: op = core::ast::BinaryOperation::Divide; break;
-    case TokenKind::Equals: op = core::ast::BinaryOperation::Equal; break;
-    case TokenKind::LessThan: op = core::ast::BinaryOperation::Less; break;
+    case TokenKind::PLUS: op = core::ast::BinaryOperation::Add; break;
+    case TokenKind::MINUS: op = core::ast::BinaryOperation::Subtract; break;
+    case TokenKind::STAR: op = core::ast::BinaryOperation::Multiply; break;
+    case TokenKind::SLASH: op = core::ast::BinaryOperation::Divide; break;
+    case TokenKind::EQUAL: op = core::ast::BinaryOperation::Equal; break;
+    case TokenKind::LESS: op = core::ast::BinaryOperation::Less; break;
+    case TokenKind::LESS_EQUAL: op = core::ast::BinaryOperation::LessEqual; break;
     default: return left;
     }
 
