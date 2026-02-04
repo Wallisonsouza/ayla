@@ -29,11 +29,13 @@ struct Resolver {
   void resolve_function_call(parser::node::FunctionCallNode *node);
   void resolve_assignment(parser::node::statement::AssignmentNode *node);
 
+  void resolve_type(core::ast::TypeNode *type_node);
   void resolve_array_literal(parser::node::ASTArrayLiteralNode *node);
   void resolve_object_literal(parser::node::ObjectLiteralNode *node);
   void resolve_number_literal(parser::node::NumberLiteralNode *node);
   void resolve_string_literal(parser::node::StringLiteralNode *node);
   void resolve_boolean_literal(parser::node::BoolLiteralNode *node);
+  void resolve_type_node(core::ast::TypeNode *node);
 
   void resolve_index_access(parser::node::IndexAccessNode *node);
   void resolve_member_access(parser::node::MemberAccessNode *node);
@@ -53,7 +55,6 @@ struct Resolver {
 
   void resolve_import_node(parser::node::statement::ImportNode *node);
   void resolve_expression_statement(core::ast::ExpressionStatementNode *node);
-  void resolve_ast();
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);

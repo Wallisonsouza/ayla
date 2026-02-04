@@ -7,12 +7,12 @@ namespace parser::node {
 
 struct BinaryExpressionNode : core::ast::ASTExpressionNode {
 
-  core::ast::ASTExpressionNode *left;
+  core::ast::ASTExpressionNode *lhs;
   core::ast::BinaryOperation op;
-  core::ast::ASTExpressionNode *right;
+  core::ast::ASTExpressionNode *rhs;
 
   BinaryExpressionNode(core::ast::ASTExpressionNode *l, core::ast::BinaryOperation o, core::ast::ASTExpressionNode *r)
-      : ASTExpressionNode(core::ast::NodeKind::BinaryExpression), left(l), op(o), right(r) {}
+      : ASTExpressionNode(core::ast::NodeKind::BinaryExpression), lhs(l), op(o), rhs(r) {}
 };
 
 } // namespace parser::node

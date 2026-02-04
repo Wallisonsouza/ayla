@@ -1,58 +1,48 @@
-#include "core/memory/BuiltinTypes.hpp"
-#include "core/node/NodeKind.hpp"
-#include "core/node/Type.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_number_literal(parser::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
+void Resolver::resolve_identifier(core::ast::IdentifierNode *node) {
+  if (!node) return;
 
-void Resolver::resolve_string_literal(parser::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
+  SymbolId id = current_scope->resolve_symbol(node->name);
 
-void Resolver::resolve_boolean_literal(parser::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
-
-void Resolver::resolve_object_literal(parser::node::ObjectLiteralNode *node) {
-
-  auto *obj_type = unit.type_arena.alloc<ObjectType>();
-
-  for (auto *field : node->field_list->elements) {
-
-    if (field->value) resolve(field->value);
-
-    if (!field->key || field->key->kind != core::ast::NodeKind::Identifier) continue;
-
-    auto *key = static_cast<core::ast::IdentifierNode *>(field->key);
-
-    if (obj_type->has_member(key->name)) {
-      report_error(DiagnosticCode::RedeclaredIdentifier, key->slice);
-      continue;
-    }
-
-    Type *valueType = field->value && field->value->inferred_type ? field->value->inferred_type : &BuiltinTypes::Unknown;
-
-    obj_type->add_member(key->name, valueType);
+  if (!id.is_valid()) {
+    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    return;
   }
 
-  node->inferred_type = obj_type;
+  node->resolved_symbol_id = id;
+}
+
+void Resolver::resolve_number_literal(parser::node::NumberLiteralNode *node) {}
+
+void Resolver::resolve_string_literal(parser::node::StringLiteralNode *node) {}
+
+void Resolver::resolve_boolean_literal(parser::node::BoolLiteralNode *node) {}
+
+void Resolver::resolve_object_literal(parser::node::ObjectLiteralNode *node) {
+  for (auto *field : node->field_list->elements) {
+    if (field->value) resolve(field->value);
+  }
 }
 
 void Resolver::resolve_array_literal(parser::node::ASTArrayLiteralNode *node) {
-  if (!node) return;
+  for (auto *el : node->elements) resolve(el);
+}
 
-  Type *elementType = nullptr;
+void Resolver::resolve_type_node(core::ast::TypeNode *node) {
+  if (!node || !node->identifier) return;
 
-  for (auto *el : node->elements) {
-    resolve(el);
+  resolve_identifier(node->identifier);
 
-    Type *t = el->inferred_type ? el->inferred_type : &BuiltinTypes::Unknown;
+  SymbolId sym_id = current_scope->resolve_symbol(node->identifier->name);
 
-    if (!elementType) {
-      elementType = t;
-    } else if (elementType != t) {
-      elementType = &BuiltinTypes::Unknown;
-    }
+  if (sym_id == INVALID_SYMBOL_ID) {
+    report_error(DiagnosticCode::UndeclaredSymbol, node->identifier->slice, {{"name", node->identifier->name}});
+    node->symbol_id = INVALID_SYMBOL_ID;
+    return;
   }
 
-  if (!elementType) elementType = &BuiltinTypes::Unknown;
+  node->symbol_id = sym_id;
 
-  node->inferred_type = unit.type_arena.alloc<ArrayType>(elementType);
+  for (auto *generic : node->generics) { resolve_type_node(generic); }
 }

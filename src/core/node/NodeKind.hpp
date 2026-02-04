@@ -16,7 +16,6 @@ enum class NodeKind {
   CharLiteral,
   NullLiteral,
   Identifier,
-  PathExpression,
   Interface,
 
   // === Statements ===

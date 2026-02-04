@@ -7,5 +7,5 @@ void ASTDebug::debug_while(const parser::node::ASTWhileStatementNode *node) {
 
   if (node->condition) { debug_node(node->condition, false); }
 
-  if (node->block) { debug_node(node->block, true); }
+  if (node->body) { debug_node(node->body, true); }
 }

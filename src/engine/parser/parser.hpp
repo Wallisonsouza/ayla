@@ -4,7 +4,6 @@
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"
-
 #include "engine/parser/error/recover.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"

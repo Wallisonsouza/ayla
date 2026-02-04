@@ -2,7 +2,6 @@
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
-#include "language/module_console.hpp"
 #include "language/window/GLFWBackend.hpp"
 #include "language/window/module_window.hpp"
 

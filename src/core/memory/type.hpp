@@ -12,6 +12,20 @@ struct Type {
 
   explicit Type(TypeKind k) : kind(k) {}
   virtual ~Type() = default;
+
+  std::string to_string() const {
+    switch (kind) {
+    case TypeKind::Unknown: return "Unknown";
+    case TypeKind::Number: return "Number";
+    case TypeKind::String: return "String";
+    case TypeKind::Boolean: return "Boolean";
+    case TypeKind::Function: return "Function";
+    case TypeKind::Object: return "Object";
+    case TypeKind::Array: return "Array";
+    case TypeKind::Void: return "Void";
+    default: return "InvalidType";
+    }
+  }
 };
 
 struct ObjectType : Type {

@@ -22,18 +22,18 @@ struct BlockStatementNodeError : BlockStatementNode {
 
 struct ASTWhileStatementNode : core::ast::ASTStatementNode {
   core::ast::ASTExpressionNode *condition;
-  BlockStatementNode *block;
+  BlockStatementNode *body;
 
-  ASTWhileStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *block) : core::ast::ASTStatementNode(core::ast::NodeKind::WhileStatement), condition(cond), block(block) {}
+  ASTWhileStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *block) : core::ast::ASTStatementNode(core::ast::NodeKind::WhileStatement), condition(cond), body(block) {}
 };
 
 struct IfStatementNode : core::ast::ASTStatementNode {
   core::ast::ASTExpressionNode *condition;
-  BlockStatementNode *if_block;
+  BlockStatementNode *then_block;
   core::ast::ASTStatementNode *else_block;
 
   IfStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *then_b, core::ast::ASTStatementNode *else_b = nullptr)
-      : core::ast::ASTStatementNode(core::ast::NodeKind::IfStatement), condition(cond), if_block(then_b), else_block(else_b) {}
+      : core::ast::ASTStatementNode(core::ast::NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
 };
 
 struct IfStatementNodeError : IfStatementNode {
@@ -71,7 +71,7 @@ struct MemberAccessNode : core::ast::ASTExpressionNode {
   core::ast::ASTExpressionNode *base;
   core::ast::IdentifierNode *field;
 
-  MemberAccessNode(core::ast::ASTExpressionNode *b, core::ast::IdentifierNode *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::PathExpression), base(b), field(f) {}
+  MemberAccessNode(core::ast::ASTExpressionNode *b, core::ast::IdentifierNode *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::MemberAccess), base(b), field(f) {}
 };
 
 struct IndexAccessNode : core::ast::ASTExpressionNode {

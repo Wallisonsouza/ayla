@@ -14,10 +14,16 @@ enum class DiagnosticCode {
   ModuleNotFound,
   RedeclaredIdentifier,
   BlockError,
+  TypeMismatch,
+  InvalidArguments,
 
   // if
   ConditionMissing,
   ConditionAssignment,
   ThenBlockMissing,
-  ElseBlockMissing
+  ElseBlockMissing,
+
+  UnknownType,
+  InvalidMemberAccess,
+  MemberNotFound
 };

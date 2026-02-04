@@ -9,6 +9,9 @@ enum class BinaryOperation {
   Divide,
   Modulo,
 
+  And,
+  Or,
+
   Equal,
   NotEqual,
   Less,

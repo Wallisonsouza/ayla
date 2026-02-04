@@ -1,4 +1,6 @@
 #include "Resolver.hpp"
+#include "core/node/Type.hpp"
+#include "core/node/flags.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
@@ -6,9 +8,9 @@
 
 void Resolver::resolve(core::ast::ASTNode *node) {
 
-  if (!node || node->resolved) return;
+  if (!node || node->flags.has(NodeFlags::Resolved)) return;
 
-  node->resolved = true;
+  node->flags.set(NodeFlags::Resolved);
 
   switch (node->kind) {
 
@@ -26,7 +28,7 @@ void Resolver::resolve(core::ast::ASTNode *node) {
 
   case core::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<parser::node::BinaryExpressionNode *>(node)); break;
 
-  case core::ast::NodeKind::PathExpression: resolve_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
+  case core::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
 
   case core::ast::NodeKind::Import: resolve_import_node(static_cast<parser::node::statement::ImportNode *>(node)); break;
 
@@ -50,14 +52,10 @@ void Resolver::resolve(core::ast::ASTNode *node) {
 
   case core::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
 
+  case core::ast::NodeKind::Type: resolve_type_node(static_cast<core::ast::TypeNode *>(node)); break;
+
   default: break;
   }
-}
-
-void Resolver::resolve_ast() {
-  // resolve_top_level();
-
-  for (auto *node : unit.ast.get_nodes()) { resolve(node); }
 }
 
 void Resolver::push_scope() { current_scope = unit.scopes.create_scope(current_scope); }

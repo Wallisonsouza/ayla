@@ -5,5 +5,5 @@ void ASTDebug::debug_expression_statement(const core::ast::ExpressionStatementNo
 
   out << "ExpressionStatement\n";
 
-  debug_node(node->expr, true);
+  debug_node(node->expression, true);
 }

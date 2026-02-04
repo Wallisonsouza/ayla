@@ -1,6 +1,5 @@
 #pragma once
 #include "symbol.hpp"
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -20,7 +19,7 @@ public:
   }
 
   Symbol *get(SymbolId id) {
-    if (!id.is_valid() || static_cast<size_t>(id) >= symbols.size()) throw std::out_of_range("Invalid SymbolId");
+    if (!id.is_valid() || static_cast<size_t>(id) >= symbols.size()) return nullptr;
 
     return &symbols[static_cast<size_t>(id)];
   }

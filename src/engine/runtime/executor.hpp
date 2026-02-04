@@ -51,7 +51,7 @@ struct Executor {
 
     case core::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<parser::node::BinaryExpressionNode *>(node));
 
-    case core::ast::NodeKind::PathExpression: return execute_path(unit, static_cast<parser::node::MemberAccessNode *>(node));
+    case core::ast::NodeKind::MemberAccess: return execute_path(unit, static_cast<parser::node::MemberAccessNode *>(node));
 
     case core::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<parser::node::FunctionCallNode *>(node));
 
@@ -167,7 +167,7 @@ struct Executor {
 
   // ===================== STATEMENTS =====================
   ExecResult execute_expression_statement(CompilationUnit &unit, core::ast::ExpressionStatementNode *node) {
-    execute_node(unit, node->expr);
+    execute_node(unit, node->expression);
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
@@ -186,7 +186,7 @@ struct Executor {
 
   ExecResult execute_if(CompilationUnit &unit, parser::node::IfStatementNode *node) {
     auto cond = execute_node(unit, node->condition);
-    if (cond.value->as_bool()) return execute_block(unit, node->if_block);
+    if (cond.value->as_bool()) return execute_block(unit, node->then_block);
 
     if (node->else_block) return execute_node(unit, node->else_block);
 
@@ -198,7 +198,7 @@ struct Executor {
     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
     while (execute_node(unit, node->condition).value->as_bool()) {
-      last = execute_block(unit, node->block);
+      last = execute_block(unit, node->body);
       if (last.is_return()) return last;
     }
     return last;
@@ -239,8 +239,8 @@ struct Executor {
 
   // ===================== BINARY =====================
   ExecResult execute_binary(CompilationUnit &unit, parser::node::BinaryExpressionNode *node) {
-    auto lhs = execute_node(unit, node->left).value;
-    auto rhs = execute_node(unit, node->right).value;
+    auto lhs = execute_node(unit, node->lhs).value;
+    auto rhs = execute_node(unit, node->rhs).value;
 
     using BO = core::ast::BinaryOperation;
     switch (node->op) {

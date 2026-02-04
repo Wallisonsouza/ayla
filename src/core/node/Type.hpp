@@ -24,9 +24,9 @@ struct ASTExpressionNode : ASTNode {
 };
 
 struct ExpressionStatementNode : ASTStatementNode {
-  ASTExpressionNode *expr;
+  ASTExpressionNode *expression;
 
-  explicit ExpressionStatementNode(ASTExpressionNode *expr) : ASTStatementNode(NodeKind::ExpressionStatement), expr(expr) {}
+  explicit ExpressionStatementNode(ASTExpressionNode *expr) : ASTStatementNode(NodeKind::ExpressionStatement), expression(expr) {}
 };
 
 struct TypeDeclarationNode : ASTStatementNode {
@@ -43,19 +43,19 @@ struct IdentifierNode : core::ast::ASTExpressionNode {
 };
 
 struct TypeNode : core::ast::ASTNode {
-  IdentifierNode *id;
+  IdentifierNode *identifier;
   const std::vector<TypeNode *> generics;
   bool is_primitive = false;
   SymbolId symbol_id = INVALID_SYMBOL_ID;
 
-  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), id(id), is_primitive(primitive) {}
+  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
 
-  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), id(id), generics(std::move(g)) {}
+  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
 
   static bool is_same_type(TypeNode *a, TypeNode *b) {
-    if (a->is_primitive && b->is_primitive) { return a->id->name == b->id->name; }
+    if (a->is_primitive && b->is_primitive) { return a->identifier->name == b->identifier->name; }
 
-    if (a->id->name != b->id->name) return false;
+    if (a->identifier->name != b->identifier->name) return false;
     if (a->generics.size() != b->generics.size()) return false;
     for (size_t i = 0; i < a->generics.size(); i++) {
       if (!is_same_type(a->generics[i], b->generics[i])) return false;

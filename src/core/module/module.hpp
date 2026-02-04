@@ -1,6 +1,8 @@
 #pragma once
 
+#include "core/memory/type.hpp"
 #include "core/memory/value.hpp"
+#include "core/module/scope.hpp"
 #include "engine/runtime/runtime_scope.hpp"
 #include <string>
 #include <unordered_map>
@@ -18,6 +20,8 @@ struct Module {
   bool initialized = false;
   std::string name;
   RuntimeScope runtime_scope;
+  core::ParserScope parser_scope;
+  ModuleType *type;
 
   void ensure_initialized() {
     if (initialized) return;
@@ -39,12 +43,10 @@ struct Module {
 
   template <typename Fn> void add_native_function(const std::string &name, Fn &&fn) {
 
-    auto object = Value::ObjectValue({});
+    // SymbolId sym_id = parser_scope.resolve_symbol(name);
 
-    // auto existing = parser_scope.resolve(name);
+    // if (!sym_id.is_valid()) { throw std::runtime_error("Symbol '" + name + "' not found in module parser_scope"); }
 
-    // if (!existing) { throw std::runtime_error("Native function '" + name + "' not declared as extern"); }
-
-    // runtime_scope.set(existing->id, std::make_shared<Value>(Value::Native(std::forward<Fn>(fn))));
+    // runtime_scope.set(sym_id, std::make_shared<Value>(Value::Native(std::forward<Fn>(fn))));
   }
 };

@@ -61,7 +61,7 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const parser::node::FunctionDeclarationNode *>(node)); break;
 
-  case NodeKind::PathExpression: debug_path_expression(static_cast<const parser::node::MemberAccessNode *>(node)); break;
+  case NodeKind::MemberAccess: debug_path_expression(static_cast<const parser::node::MemberAccessNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const parser::node::IfStatementNode *>(node)); break;
 

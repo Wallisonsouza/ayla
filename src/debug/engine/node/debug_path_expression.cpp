@@ -2,7 +2,7 @@
 
 void ASTDebug::debug_path_expression(const parser::node::MemberAccessNode *node) {
 
-  debug_header("Path");
+  debug_header("MemberAccessNode");
 
   debug_labeled("Base", node->base, false);
   debug_labeled("Field", node->field, true);

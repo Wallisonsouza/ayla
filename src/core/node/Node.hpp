@@ -12,7 +12,7 @@ struct ASTNode {
   NodeKindBase base_kind;
   SourceSlice slice;
   NodeFlag flags;
-  bool resolved = false;
+
   Type *inferred_type;
 
   virtual ~ASTNode() = default;

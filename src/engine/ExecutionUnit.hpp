@@ -1,6 +1,7 @@
 
 #include "debug/engine/node/ast_debug.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "engine/checker/TypeChecker.hpp"
 #include "engine/lexer/lexer.hpp"
 #include "engine/parser/parser.hpp"
 #include "engine/resolver/Resolver.hpp"
@@ -10,17 +11,21 @@ struct ExecutionUnit {
   Lexer lexer;
   Parser parser;
   Resolver resolver;
+  TypeChecker checker;
 
 public:
-  ExecutionUnit(CompilationUnit &unit) : comp_unit(unit), lexer(unit), parser(unit), resolver(unit, &unit.context.root_scope) {}
+  ExecutionUnit(CompilationUnit &unit) : comp_unit(unit), lexer(unit), parser(unit), resolver(unit, &unit.context.root_scope), checker(unit) {}
 
   void execute() {
+
     lexer.generate_tokens();
+
+    ASTDebug degub;
 
     parser.parse_program();
 
-    ASTDebug debug;
-    debug.dump_ast(comp_unit.ast);
-    resolver.resolve_ast();
+    for (auto &node : comp_unit.ast.get_nodes()) { resolver.resolve(node); }
+
+    for (auto &node : comp_unit.ast.get_nodes()) { checker.check(node); }
   }
 };

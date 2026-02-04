@@ -11,9 +11,14 @@ cd build
 # Gera arquivos de build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
-# Compila usando todos os núcleos
-# make -j$(nproc)
-make -j$(nproc)
+MAX_THREADS=12
+THREADS=$(nproc)
+if [ "$THREADS" -gt "$MAX_THREADS" ]; then
+    THREADS=$MAX_THREADS
+fi
+
+make -j$THREADS
+
 
 # Limpa a tela
 clear

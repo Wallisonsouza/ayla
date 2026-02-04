@@ -8,7 +8,7 @@ void ASTDebug::debug_if_statement(const parser::node::IfStatementNode *node) {
 
   if (node->condition) children.push_back({"Condition", node->condition});
 
-  if (node->if_block) children.push_back({"Then", node->if_block});
+  if (node->then_block) children.push_back({"Then", node->then_block});
 
   if (node->else_block) children.push_back({"Else", node->else_block});
 

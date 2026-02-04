@@ -2,5 +2,5 @@
 
 void Resolver::resolve_expression_statement(core::ast::ExpressionStatementNode *node) {
 
-  if (node->expr) { resolve(node->expr); }
+  if (node->expression) { resolve(node->expression); }
 }

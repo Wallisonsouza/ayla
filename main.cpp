@@ -25,9 +25,9 @@ int main() {
 
       for (auto &diag : exec->comp_unit.diagns.all()) { print(*diag, exec->comp_unit); }
 
-      RuntimeScope scope;
-      Executor interpreter(&scope);
-      interpreter.execute_ast(exec->comp_unit);
+      // RuntimeScope scope;
+      // Executor interpreter(&scope);
+      // interpreter.execute_ast(exec->comp_unit);
 
     } catch (const std::exception &e) { std::cerr << "Erro ao executar " << path << ": " << e.what() << std::endl; }
   }

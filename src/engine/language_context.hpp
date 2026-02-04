@@ -6,6 +6,7 @@
 #include "language/BackendRegistry.hpp"
 
 struct LanguageContext {
+  
   core::table::DescriptorTable descriptor_table;
   core::table::PrecedenceTable precedence_table;
   core::ModuleManager module_manager;
