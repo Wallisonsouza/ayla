@@ -4,7 +4,6 @@
 #include "engine/parser/node/literal_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
-#include <iostream>
 
 void Resolver::resolve(core::ast::ASTNode *node) {
 
@@ -58,13 +57,9 @@ void Resolver::resolve(core::ast::ASTNode *node) {
   }
 }
 
-void Resolver::push_scope() { current_scope = unit.scopes.create_scope(current_scope); }
-
-void Resolver::enter_scope(core::ParserScope *scope) { current_scope = scope; }
-
-void Resolver::leave_scope(core::ParserScope *previous) { current_scope = previous; }
-
-void Resolver::pop_scope() {
-  std::cout << "[pop ] scope=" << current_scope << "\n";
-  current_scope = current_scope->parent;
+core::ParserScope *Resolver::push_scope() {
+  current_scope = unit.scope_manager.create_scope(current_scope);
+  return current_scope;
 }
+
+void Resolver::pop_scope() { current_scope = current_scope->parent; }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "core/memory/symbol.hpp"
-#include "core/memory/value.hpp"
 #include "core/module/scope.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/NodeKind.hpp"
@@ -46,8 +44,8 @@ struct FunctionDeclarationNode : core::ast::ASTStatementNode {
   core::ast::TypeNode *return_type;
   BlockStatementNode *body;
   core::ast::Modifiers modifiers;
-  SymbolId symbol_id = INVALID_SYMBOL_ID;
-  Value::NativeFunction *native_fn = nullptr;
+  SymbolId symbol_id;
+  // Value::NativeFunction *native_fn = nullptr;
 
   core::ParserScope *decl_scope = nullptr;
 
@@ -84,7 +82,7 @@ struct IndexAccessNode : core::ast::ASTExpressionNode {
 struct FunctionCallNode : core::ast::ASTExpressionNode {
   core::ast::ASTExpressionNode *callee;
   std::vector<core::ast::ASTExpressionNode *> arguments;
-  SymbolId symbol_id = INVALID_SYMBOL_ID;
+  SymbolId symbol_id;
   core::ParserScope *decl_scope = nullptr;
   FunctionCallNode(core::ast::ASTExpressionNode *c, std::vector<core::ast::ASTExpressionNode *> a) : ASTExpressionNode(core::ast::NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/memory/SymbolId.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
@@ -75,7 +76,7 @@ struct MemberTable {
 
   SymbolId get(const std::string &name) const {
     auto it = members.find(name);
-    if (it == members.end()) return INVALID_SYMBOL_ID;
+    if (it == members.end()) return SymbolId();
     return it->second;
   }
 

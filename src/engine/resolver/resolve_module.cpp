@@ -9,12 +9,14 @@ void Resolver::resolve_module_declaration(parser::node::statement::ModuleDeclara
 
   std::string module_name = node->path.back()->name;
 
-  auto *prev_scope = current_scope;
-  enter_scope(&module->parser_scope);
+  module->parser_scope = unit.scope_manager.create_scope(nullptr);
+
+  auto *prev = current_scope;
+  current_scope = module->parser_scope;
 
   for (auto *stmt : node->body) resolve(stmt);
 
-  leave_scope(prev_scope);
+  current_scope = prev;
 }
 
 void Resolver::resolve_import_node(parser::node::statement::ImportNode *node) {
@@ -38,8 +40,8 @@ void Resolver::resolve_import_node(parser::node::statement::ImportNode *node) {
     return;
   }
 
-  SymbolId sym_id = unit.symbols.create_symbol(local_name, SymbolKind::Module, Visibility::Public, true, node);
-  unit.symbols.get(sym_id)->module_id = module_id;
+  SymbolId sym_id = unit.context.symbol_manager.create_symbol(local_name, SymbolKind::Module, Visibility::Public, true, node);
+  unit.context.symbol_manager.get(sym_id)->module_id = module_id;
   current_scope->declare(local_name, sym_id);
 
   node->resolved_symbol_id = sym_id;

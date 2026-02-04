@@ -26,7 +26,7 @@ void TypeChecker::check_module_declaration(parser::node::statement::ModuleDeclar
 
   node->inferred_type = module->type;
 
-  if (auto *sym = unit.symbols.get(node->resolved_symbol_id)) { sym->type = module->type; }
+  if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
 void TypeChecker::check_import_node(parser::node::statement::ImportNode *node) {
@@ -40,5 +40,5 @@ void TypeChecker::check_import_node(parser::node::statement::ImportNode *node) {
   }
 
   node->inferred_type = module->type;
-  if (auto *sym = unit.symbols.get(node->resolved_symbol_id)) { sym->type = node->inferred_type; }
+  if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = node->inferred_type; }
 }

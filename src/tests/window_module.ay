@@ -1,7 +1,4 @@
-extern funct create(w: number, h: number, title: string) -> number
-
 module window {
-  
   // Cria uma nova janela com largura, altura e título
   extern funct create(w: number, h: number, title: string) -> number
 

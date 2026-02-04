@@ -1,4 +1,5 @@
 #pragma once
+#include "core/memory/symbol_manager.hpp"
 #include "core/module/module_manager.hpp"
 #include "core/module/scope.hpp"
 #include "core/table/PrecedenceTable.hpp"
@@ -6,10 +7,11 @@
 #include "language/BackendRegistry.hpp"
 
 struct LanguageContext {
-  
+
   core::table::DescriptorTable descriptor_table;
   core::table::PrecedenceTable precedence_table;
   core::ModuleManager module_manager;
+  SymbolManager symbol_manager;
   core::ParserScope root_scope;
   BackendRegistry backends;
 

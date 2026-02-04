@@ -1,7 +1,5 @@
 #pragma once
 #include "core/memory/symbol.hpp"
-#include "core/memory/value.hpp"
-#include "core/module/module.hpp"
 #include "core/node/BinaryOp.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
@@ -11,28 +9,25 @@
 #include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "engine/runtime/value.hpp"
 #include "runtime_scope.hpp"
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <utility>
 #include <vector>
 
 struct Executor {
 
-  struct ScopeGuard {
-    Executor *executor;
-    RuntimeScope *prev_scope;
-    RuntimeScope child_scope;
-
-    ScopeGuard(Executor *ex) : executor(ex), prev_scope(ex->current_scope), child_scope(ex->current_scope) { executor->current_scope = &child_scope; }
-
-    ~ScopeGuard() { executor->current_scope = prev_scope; }
-  };
-
   RuntimeScope *current_scope;
 
   Executor(RuntimeScope *scope) : current_scope(scope) {}
+
+  ExecResult execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node);
+  ExecResult execute_import_node(CompilationUnit &unit, parser::node::statement::ImportNode *node);
+  ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node);
+  ExecResult execute_index_access(CompilationUnit &unit, parser::node::IndexAccessNode *node);
+  ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
+  ExecResult execute_member_acess(CompilationUnit &unit, parser::node::MemberAccessNode *member);
 
   ExecResult execute_node(CompilationUnit &unit, core::ast::ASTNode *node) {
     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
@@ -51,7 +46,7 @@ struct Executor {
 
     case core::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<parser::node::BinaryExpressionNode *>(node));
 
-    case core::ast::NodeKind::MemberAccess: return execute_path(unit, static_cast<parser::node::MemberAccessNode *>(node));
+    case core::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<parser::node::MemberAccessNode *>(node));
 
     case core::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<parser::node::FunctionCallNode *>(node));
 
@@ -79,53 +74,21 @@ struct Executor {
     }
   }
 
-  ExecResult execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
-
-  ExecResult execute_import_node(CompilationUnit &unit, parser::node::statement::ImportNode *node) {
-
-    auto module_id = node->resolved_module_id;
-
-    auto module = unit.context.module_manager.get(module_id);
-
-    if (!module) { std::runtime_error("erro ao carregar modulo " + module->name); }
-
-    module->ensure_initialized();
-
-    std::cout << module->name << "\n";
-
-    // auto module = unit.context.module_manager.get(node->resolved_module_id);
-    // if (!module) throw std::runtime_error("Invalid module");
-
-    // // Garante que o módulo seja inicializado (executa callbacks nativos)
-    // module->ensure_initialized();
-
-    // // Cria um Value do módulo como objeto
-    // Value::ObjectFields fields;
-    // for (auto &[sym_id, val] : module->runtime_scope.values) { fields[sym_id] = val; }
-
-    // auto module_object = std::make_shared<Value>(Value::Object(std::move(fields)));
-
-    // // Injetar no escopo atual
-    // if (node->resolved_symbol_id.is_valid()) { current_scope->set(node->resolved_symbol_id, module_object); }
-
-    // std::cout << "[Executor] Imported module '" << node->path.back()->name << "' as object with " << module_object->get_object_ref().size() << " fields.\n";
-
-    return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
-  }
-
   ExecResult execute_function_call(CompilationUnit &unit, parser::node::FunctionCallNode *node) {
 
     ASTDebug debug;
 
+    std::cout << "aaaa";
+    debug.debug_node(node, true);
     auto callee = execute_node(unit, node->callee).value;
 
-    std::vector<Value> args;
-    for (auto *arg_node : node->arguments) {
+    // std::vector<Value> args;
+    // for (auto *arg_node : node->arguments) {
 
-      debug.debug_node(arg_node, true);
-      auto v = execute_node(unit, arg_node).value;
-      args.push_back(*v);
-    }
+    //   debug.debug_node(arg_node, true);
+    //   auto v = execute_node(unit, arg_node).value;
+    //   args.push_back(*v);
+    // }
 
     // if (callee->is_native_function()) {
     //   auto &fn = callee->get_native();
@@ -173,8 +136,6 @@ struct Executor {
 
   ExecResult execute_block(CompilationUnit &unit, parser::node::BlockStatementNode *block) {
 
-    ScopeGuard guard(this);
-
     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
     for (auto *stmt : block->statements) {
@@ -210,33 +171,6 @@ struct Executor {
     return ExecResult::make_return(execute_node(unit, node->value).value);
   }
 
-  // ===================== ARRAYS =====================
-  ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node) {
-    Value::array elements;
-
-    for (auto *el : node->elements) {
-      auto v = execute_node(unit, el);
-      if (v.is_return()) return v;
-      elements.push_back(v.value);
-    }
-
-    return ExecResult::make_value(std::make_shared<Value>(Value::Array(std::move(elements))));
-  }
-
-  ExecResult execute_index_access(CompilationUnit &unit, parser::node::IndexAccessNode *node) {
-    auto base = execute_node(unit, node->base).value;
-    auto index = execute_node(unit, node->index).value;
-
-    if (!base->is_array()) throw std::runtime_error("Index access on non-array");
-
-    size_t i = static_cast<size_t>(index->get_number());
-    auto &arr = base->get_array();
-
-    if (i >= arr.size()) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
-
-    return ExecResult::make_value(arr[i]);
-  }
-
   // ===================== BINARY =====================
   ExecResult execute_binary(CompilationUnit &unit, parser::node::BinaryExpressionNode *node) {
     auto lhs = execute_node(unit, node->lhs).value;
@@ -259,8 +193,6 @@ struct Executor {
 
   // ===================== VARIABLES =====================
   ExecResult execute_identifier(core::ast::IdentifierNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
-
-  ExecResult execute_path(CompilationUnit &unit, parser::node::MemberAccessNode *member) { return ExecResult::make_value(current_scope->get(member->resolved_symbol_id)); }
 
   ExecResult execute_variable_declaration(CompilationUnit &unit, core::ast::PatternNode *node) {
     auto val = node->value ? execute_node(unit, node->value).value : std::make_shared<Value>(Value::Null());
@@ -302,11 +234,7 @@ struct Executor {
 
   ExecResult execute_function_declaration(CompilationUnit &unit, parser::node::FunctionDeclarationNode *node) {
 
-    if (node->native_fn) {
-      current_scope->set(node->symbol_id, std::make_shared<Value>(Value::Native(*node->native_fn)));
-    } else {
-      current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
-    }
+    current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
 
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }

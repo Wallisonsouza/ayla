@@ -1,9 +1,8 @@
 #pragma once
-#include "core/memory/symbol.hpp"
+#include "core/memory/SymbolId.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
-#include "core/node/flags.hpp"
 #include "core/token/Location.hpp"
 #include <string>
 #include <vector>
@@ -18,7 +17,7 @@ struct ASTStatementNode : ASTNode {
 
 struct ASTExpressionNode : ASTNode {
 
-  SymbolId resolved_symbol_id = INVALID_SYMBOL_ID;
+  SymbolId resolved_symbol_id;
 
   explicit ASTExpressionNode(NodeKind k) : ASTNode(NodeKindBase::Expression, k) {}
 };
@@ -46,7 +45,7 @@ struct TypeNode : core::ast::ASTNode {
   IdentifierNode *identifier;
   const std::vector<TypeNode *> generics;
   bool is_primitive = false;
-  SymbolId symbol_id = INVALID_SYMBOL_ID;
+  SymbolId symbol_id;
 
   explicit TypeNode(IdentifierNode *id, bool primitive = false) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
 
@@ -69,7 +68,7 @@ struct PatternNode : ASTStatementNode {
   core::ast::TypeNode *type;
   core::ast::ASTExpressionNode *value;
   core::ast::Modifiers modifiers;
-  SymbolId symbol_id = INVALID_SYMBOL_ID;
+  SymbolId symbol_id;
 
   PatternNode(core::ast::IdentifierNode *n, core::ast::TypeNode *t, core::ast::ASTExpressionNode *v, core::ast::Modifiers modifiers = {})
       : ASTStatementNode(core::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}

@@ -36,9 +36,8 @@ void Resolver::resolve_type_node(core::ast::TypeNode *node) {
 
   SymbolId sym_id = current_scope->resolve_symbol(node->identifier->name);
 
-  if (sym_id == INVALID_SYMBOL_ID) {
+  if (!sym_id.is_valid()) {
     report_error(DiagnosticCode::UndeclaredSymbol, node->identifier->slice, {{"name", node->identifier->name}});
-    node->symbol_id = INVALID_SYMBOL_ID;
     return;
   }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "core/memory/Arena.hpp"
+
 #include "core/module/scope.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
@@ -19,10 +19,8 @@ struct Resolver {
 
   void resolve(core::ast::ASTNode *node);
 
-  void push_scope();
+  core::ParserScope *push_scope();
   void pop_scope();
-  void enter_scope(core::ParserScope *scope);
-  void leave_scope(core::ParserScope *previous);
 
   void resolve_top_level();
 

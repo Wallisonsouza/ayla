@@ -1,5 +1,3 @@
 import window
 
-window.create(100, 200, "test")
-
-
+window.create(10, 10, "ola")

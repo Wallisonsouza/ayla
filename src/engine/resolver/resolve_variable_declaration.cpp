@@ -9,7 +9,7 @@ void Resolver::resolve_variable_declaration(core::ast::PatternNode *node) {
     return;
   }
 
-  SymbolId symbol = unit.symbols.create_symbol(node->identifier->name, SymbolKind::Variable, Visibility::Public, false, node);
+  SymbolId symbol = unit.context.symbol_manager.create_symbol(node->identifier->name, SymbolKind::Variable, Visibility::Public, false, node);
 
   current_scope->declare(node->identifier->name, symbol);
 

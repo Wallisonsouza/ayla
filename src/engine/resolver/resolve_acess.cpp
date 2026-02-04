@@ -8,8 +8,10 @@ void Resolver::resolve_index_access(parser::node::IndexAccessNode *node) {
 }
 
 void Resolver::resolve_member_access(parser::node::MemberAccessNode *node) {
-  if (!node || !node->base) return;
-  resolve(node->base);
+
+  if (node->base) { resolve(node->base); }
+
+  // if (node->field) { resolve(node->field); }
 }
 
 void Resolver::resolve_function_call(parser::node::FunctionCallNode *node) {

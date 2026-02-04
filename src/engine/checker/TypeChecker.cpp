@@ -35,7 +35,7 @@ void TypeChecker::check(core::ast::ASTNode *node) {
 void TypeChecker::check_identifier(core::ast::IdentifierNode *node) {
   if (!node) return;
 
-  auto *sym = unit.symbols.get(node->resolved_symbol_id);
+  auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id);
 
   if (!sym) {
     report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"expected", node->name}});
@@ -106,7 +106,7 @@ void TypeChecker::check_variable_declaration(core::ast::PatternNode *node) {
 
   node->inferred_type = finalType;
 
-  if (auto *sym = unit.symbols.get(node->symbol_id)) sym->type = finalType;
+  if (auto *sym = unit.context.symbol_manager.get(node->symbol_id)) sym->type = finalType;
 }
 
 //---------------------------
@@ -146,7 +146,7 @@ void TypeChecker::check_function_declaration(parser::node::FunctionDeclarationNo
   ft->return_type = node->return_type ? node->return_type->inferred_type : (current_function_return_type ? current_function_return_type : &BuiltinTypes::Unknown);
 
   node->inferred_type = ft;
-  if (auto *sym = unit.symbols.get(node->symbol_id)) sym->type = ft;
+  if (auto *sym = unit.context.symbol_manager.get(node->symbol_id)) sym->type = ft;
 
   current_function_return_type = nullptr;
 }

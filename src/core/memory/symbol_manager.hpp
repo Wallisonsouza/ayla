@@ -1,31 +1,45 @@
 #pragma once
-#include "symbol.hpp"
-#include <string>
-#include <vector>
+#include "SymbolId.hpp"
+#include "core/memory/symbol.hpp"
+#include <deque>
+#include <stdexcept>
 
 struct SymbolManager {
+  std::deque<Symbol> symbols;
+
 private:
-  std::vector<Symbol> symbols;
-  SymbolId next_id = SymbolId(0);
+  uint32_t next_id = 0;
 
 public:
   SymbolId create_symbol(const std::string &name, SymbolKind kind, Visibility visibility = Visibility::Private, bool is_builtin = false, core::ast::ASTNode *decl = nullptr) {
 
-    SymbolId id = next_id++;
+    if (next_id == SymbolId::INVALID) { throw std::runtime_error("SymbolId overflow"); }
 
+    SymbolId id(next_id++);
     symbols.emplace_back(name, kind, visibility, is_builtin, decl);
 
     return id;
   }
 
   Symbol *get(SymbolId id) {
-    if (!id.is_valid() || static_cast<size_t>(id) >= symbols.size()) return nullptr;
+    if (!id.is_valid()) return nullptr;
 
-    return &symbols[static_cast<size_t>(id)];
+    uint32_t i = id.value;
+
+    if (i >= symbols.size()) return nullptr;
+
+    return &symbols[i];
   }
 
-  void reset() {
-    symbols.clear();
-    next_id = SymbolId(0);
+  const Symbol *get(SymbolId id) const {
+    if (!id.is_valid()) return nullptr;
+
+    uint32_t i = id.value;
+
+    if (i >= symbols.size()) return nullptr;
+
+    return &symbols[i];
   }
+
+  size_t size() const { return symbols.size(); }
 };

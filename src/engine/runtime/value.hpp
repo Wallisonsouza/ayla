@@ -1,5 +1,7 @@
 #pragma once
-#include "core/memory/symbol.hpp"
+#include "core/memory/SymbolId.hpp"
+#include "engine/runtime/array/ArrayValue.hpp"
+#include "engine/runtime/object/ObjectValue.hpp"
 #include <functional>
 #include <memory>
 #include <string>
@@ -26,39 +28,6 @@ struct UserFunction {
 
 struct Value {
 
-  using array = std::vector<std::shared_ptr<Value>>;
-  using ObjectFields = std::unordered_map<SymbolId, std::shared_ptr<Value>>;
-
-  struct ArrayValue {
-    array elements;
-  };
-
-  struct ObjectValue {
-    ObjectFields fields;
-
-    void set(SymbolId id, std::shared_ptr<Value> value) { fields[id] = std::move(value); }
-
-    std::shared_ptr<Value> get(SymbolId id) const {
-      auto it = fields.find(id);
-      if (it != fields.end()) return it->second;
-
-      return nullptr;
-    }
-
-    std::shared_ptr<Value> get_or_throw(SymbolId id) const {
-      auto it = fields.find(id);
-      if (it == fields.end()) throw std::runtime_error("Object field not found");
-
-      return it->second;
-    }
-
-    bool has(SymbolId id) const { return fields.find(id) != fields.end(); }
-
-    void remove(SymbolId id) { fields.erase(id); }
-
-    size_t size() const { return fields.size(); }
-  };
-
   using NativeFunction = std::function<Value(const std::vector<Value> &)>;
 
   using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, UserFunction, ArrayValue, ObjectValue>;
@@ -73,7 +42,7 @@ struct Value {
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
   static Value User(parser::node::FunctionDeclarationNode *node, RuntimeScope *scope) { return Value{UserFunction(node, scope)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
-  static Value Object(ObjectFields fields) { return Value{ObjectValue{std::move(fields)}}; }
+  static Value Object() { return Value{ObjectValue{}}; }
 
   double get_number() const { return std::get<double>(data); }
 

@@ -8,7 +8,7 @@ void Resolver::resolve_function_declaration(parser::node::FunctionDeclarationNod
     return;
   }
 
-  SymbolId sym_id = unit.symbols.create_symbol(node->identifier->name, SymbolKind::Function, Visibility::Public, false, node);
+  SymbolId sym_id = unit.context.symbol_manager.create_symbol(node->identifier->name, SymbolKind::Function, Visibility::Public, false, node);
 
   current_scope->declare(node->identifier->name, sym_id);
   node->symbol_id = sym_id;
@@ -18,7 +18,7 @@ void Resolver::resolve_function_declaration(parser::node::FunctionDeclarationNod
   push_scope();
 
   for (auto *param : node->params) {
-    SymbolId pid = unit.symbols.create_symbol(param->identifier->name, SymbolKind::Variable, Visibility::Private, false, param);
+    SymbolId pid = unit.context.symbol_manager.create_symbol(param->identifier->name, SymbolKind::Variable, Visibility::Private, false, param);
     current_scope->declare(param->identifier->name, pid);
     param->symbol_id = pid;
   }
