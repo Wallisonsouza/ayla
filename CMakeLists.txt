@@ -17,10 +17,22 @@ target_include_directories(ayla PRIVATE
     ${PROJECT_SOURCE_DIR}/src
 )
 
+# ===================== ICU =====================
 find_package(ICU REQUIRED COMPONENTS uc i18n)
 target_link_libraries(ayla PRIVATE ICU::uc ICU::i18n)
+
+# ===================== GLFW =====================
+find_package(glfw3 CONFIG REQUIRED)
+target_link_libraries(ayla PRIVATE glfw)
+
+
+
+
+
 add_custom_target(run
     COMMAND ayla
     DEPENDS ayla
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+

@@ -1,0 +1,4 @@
+import window
+
+window.create(800, 600, "Meu App")
+

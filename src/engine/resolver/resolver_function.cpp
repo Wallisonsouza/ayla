@@ -1,52 +1,35 @@
 #include "Resolver.hpp"
+#include "core/node/Modifier.hpp"
+#include "engine/parser/node/statement_nodes.hpp"
 
 void Resolver::resolve_function_declaration(parser::node::FunctionDeclarationNode *node) {
+  if (!node) return;
+
+  if (current_scope->has_symbol_local(node->identifier->name)) {
+    report_error(DiagnosticCode::RedeclaredIdentifier, node->identifier->slice, {{"name", node->identifier->name}});
+    return;
+  }
+
+  SymbolId sym_id = unit.symbols.create_symbol(node->identifier->name, SymbolKind::Function, Visibility::Public, false, node);
+
+  current_scope->declare(node->identifier->name, sym_id);
+
+  node->symbol_id = sym_id;
+
+  if (node->modifiers.has(core::ast::Modifier::Extern)) return;
 
   push_scope();
 
   for (auto *param : node->params) {
-    if (current_scope->has_symbol_local(param->identifier->name)) {
-      report_error(DiagnosticCode::RedeclaredIdentifier, param->identifier->slice, {{"name", param->identifier->name}});
-      continue;
-    }
+    auto name = param->identifier->name;
 
-    auto symbol = unit.symbols.create_symbol(param->identifier->name, SymbolKind::Variable);
-    current_scope->add_symbol(param->identifier->name, symbol);
+    SymbolId pid = unit.symbols.create_symbol(name, SymbolKind::Variable, Visibility::Private, false, param);
 
-    param->symbol_id = symbol;
+    current_scope->declare(name, pid);
+    param->symbol_id = pid;
   }
 
-  resolve_block(node->body, false);
+  if (node->body) resolve_block(node->body, false);
 
   pop_scope();
-}
-
-void Resolver::resolve_function_call(parser::node::FunctionCallNode *node) {
-
-  resolve(node->callee);
-
-  for (auto *arg : node->args) { resolve(arg); }
-
-  if (node->callee->kind != core::ast::NodeKind::Identifier) {
-    // report_error(DiagnosticCode::NotCallable, node->callee->slice);
-    return;
-  }
-
-  auto *id_node = static_cast<core::ast::IdentifierNode *>(node->callee);
-
-  SymbolId sym_id = current_scope->resolve_symbol(id_node->name);
-
-  if (sym_id == SIZE_MAX) {
-    // report_error(DiagnosticCode::UndeclaredIdentifier, id_node->slice);
-    return;
-  }
-
-  Symbol *sym = unit.symbols.get(sym_id);
-
-  if (sym->kind != SymbolKind::Function) {
-    // report_error(DiagnosticCode::NotCallable, id_node->slice);
-    return;
-  }
-
-  node->symbol_id = sym_id;
 }

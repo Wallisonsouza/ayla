@@ -1,19 +1,20 @@
+#include "core/memory/BuiltinTypes.hpp"
+#include "core/node/Type.hpp"
 #include "engine/resolver/Resolver.hpp"
 
 void Resolver::resolve_identifier(core::ast::IdentifierNode *node) {
-  if (!node) return;
 
   SymbolId id = current_scope->resolve_symbol(node->name);
 
-  if (id == INVALID_SYMBOL_ID) {
-
-    auto *diag = unit.diagns.create(DiagnosticCode::UndeclaredSymbol, node->slice);
-
-    diag->set_expected("identificador declarado");
-    diag->set_found(node->name);
-
+  if (!id.is_valid()) {
+    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
-  node->symbol_id = id;
+  node->resolved_symbol_id = id;
+
+  Symbol *sym = unit.symbols.get(id);
+
+  if (sym) { node->inferred_type = sym->type; }
 }

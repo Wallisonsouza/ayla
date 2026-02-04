@@ -8,3 +8,11 @@ void ASTDebug::debug_import(const parser::node::statement::ImportNode *node) {
 
   for (size_t i = 0; i < count; ++i) { debug_node(node->path[i], i == count - 1); }
 }
+
+void ASTDebug::debug_module_declaration(const parser::node::statement::ModuleDeclarationNode *node) {
+  out << "Module\n";
+
+  for (size_t i = 0; i < node->path.size(); ++i) { debug_node(node->path[i], i == node->path.size() - 1); }
+
+  for (size_t i = 0; i < node->body.size(); ++i) { debug_node(node->body[i], i == node->body.size() - 1); }
+}

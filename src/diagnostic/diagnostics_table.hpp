@@ -41,7 +41,10 @@ static const std::unordered_map<DiagnosticCode, DiagnosticTemplate> DIAG_PT_BR =
     {DiagnosticCode::ExpectedExpression, {"Erro de sintaxe", "Esperado '{expected}'", "Forneça uma expressão válida. Exemplo: val x: i32 = 10;"}},
 
     {DiagnosticCode::ExpectedToken, {"Erro de sintaxe", "Esperado '{expected}', encontrado '{found}'", "Verifique se o token {expected} foi escrito corretamente."}},
-
+    {DiagnosticCode::ModuleNotFound,
+     {"Erro de semântica", "Modulo não encontrado",
+      "Importe somente modulos validos "
+      "conflito."}},
     // symbol
     {DiagnosticCode::RedeclaredIdentifier,
      {"Erro de semântica", "Identificador '{name}' já declarado neste escopo",

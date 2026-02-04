@@ -6,42 +6,29 @@
 
 namespace core {
 
-struct Scope {
+struct SymbolEntry {
+  SymbolId id;
+};
 
-  Scope *parent;
+struct ParserScope {
 
-  std::unordered_map<std::string, Scope *> imports;
-  std::unordered_map<std::string, SymbolId> symbols;
+  ParserScope *parent = nullptr;
+  std::unordered_map<std::string, SymbolId> table;
 
-  Scope(Scope *parent_scope) : parent(parent_scope) {}
+  ParserScope(ParserScope *p = nullptr) : parent(p) {}
+
+  void declare(const std::string &name, SymbolId id) { table[name] = id; }
 
   SymbolId resolve_symbol(const std::string &name) const {
-    auto it = symbols.find(name);
-    if (it != symbols.end()) return it->second;
+    auto it = table.find(name);
+    if (it != table.end()) return it->second;
 
     if (parent) return parent->resolve_symbol(name);
 
     return INVALID_SYMBOL_ID;
   }
 
-  Scope *resolve_import(const std::string &alias) const {
-    auto it = imports.find(alias);
-    if (it != imports.end()) return it->second;
-
-    if (parent) return parent->resolve_import(alias);
-
-    return nullptr;
-  }
-
-  void add_symbol(const std::string &name, SymbolId id) {
-    auto it = symbols.find(name);
-    if (it != symbols.end()) return;
-    symbols[name] = id;
-  }
-
-  bool has_symbol_local(const std::string &name) const { return symbols.find(name) != symbols.end(); }
-
-  void import_scope(const std::string &alias, Scope *scope) { imports[alias] = scope; }
+  bool has_symbol_local(const std::string &name) const { return table.count(name); }
 };
 
 } // namespace core

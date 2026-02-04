@@ -1,7 +1,3 @@
-#include "core/node/Type.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
 #include "engine/parser/parser.hpp"
 
 core::ast::ASTExpressionNode *Parser::parse_number_literal() {
@@ -25,7 +21,7 @@ core::ast::ASTExpressionNode *Parser::parse_string_literal() {
   return unit.ast.create_node<parser::node::StringLiteralNode>(text);
 }
 
-core::ast::IdentifierNode *Parser::parse_identifier_name() {
+core::ast::IdentifierNode *Parser::parse_identifier() {
 
   Token *token = unit.tokens.match(TokenKind::IDENTIFIER);
   if (!token) return nullptr;
@@ -36,44 +32,22 @@ core::ast::IdentifierNode *Parser::parse_identifier_name() {
   return node;
 }
 
-core::ast::ASTExpressionNode *Parser::parse_grouped_expression() {
+core::ast::ASTExpressionNode *Parser::parse_object_literal() {
 
-  auto *open = unit.tokens.match(TokenKind::OPEN_PAREN);
-  if (!open) return nullptr;
+  auto *fieldList =
+      parse_generic_list<parser::node::ASTObjectFieldList, parser::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> parser::node::ObjectFieldNode * {
+        auto *key = parse_identifier();
+        if (!key) return nullptr;
 
-  core::ast::ASTExpressionNode *expr = parse_expression();
-  if (!expr) { return nullptr; }
+        unit.tokens.expect(TokenKind::COLON);
 
-  auto *close = unit.tokens.match(TokenKind::CLOSE_PAREN);
-  if (!close) { return nullptr; }
+        auto *value = parse_expression();
+        if (!value) return nullptr;
 
-  return expr;
-}
+        return unit.ast.create_node<parser::node::ObjectFieldNode>(key, value);
+      });
 
-// a.b.c.d  -> PathExprNode(base=PathExprNode(base=IdentifierNode(a), b), c), d)
-core::ast::ASTExpressionNode *Parser::parse_path_segment(core::ast::ASTExpressionNode *base) {
+  if (!fieldList) return nullptr;
 
-  auto *dot = unit.tokens.match(TokenKind::Dot);
-  if (!dot) return nullptr;
-
-  auto *field = parse_identifier_name();
-
-  if (!field) { return nullptr; }
-
-  return unit.ast.create_node<parser::node::statement::PathExprNode>(base, field);
-}
-
-// a[b] -> IndexAccessNode(base=a, index=b)
-core::ast::ASTExpressionNode *Parser::parse_index_access(core::ast::ASTExpressionNode *base) {
-
-  auto *open = unit.tokens.match(TokenKind::OPEN_BRACKET);
-  if (!open) return nullptr; // erro: '[' esperado
-
-  core::ast::ASTExpressionNode *index_expr = parse_expression();
-  if (!index_expr) return nullptr; // erro: expressão esperada dentro de '[]'
-
-  auto *close = unit.tokens.match(TokenKind::CLOSE_BRACKET);
-  if (!close) return nullptr; // erro: ']' esperado
-
-  return unit.ast.create_node<parser::node::IndexAccessNode>(base, index_expr);
+  return unit.ast.create_node<parser::node::ObjectLiteralNode>(fieldList);
 }

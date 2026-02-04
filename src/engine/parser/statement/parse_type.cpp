@@ -2,7 +2,7 @@
 
 core::ast::TypeNode *Parser::parse_type() {
 
-  auto identifier = parse_identifier_name();
+  auto identifier = parse_identifier();
 
   if (!identifier) return nullptr;
 

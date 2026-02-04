@@ -1,3 +1,4 @@
+#include "core/token/TokenKind.hpp"
 #include "engine/parser/parser.hpp"
 
 core::ast::ASTExpressionNode *Parser::parse_primary_expression() {
@@ -11,9 +12,11 @@ core::ast::ASTExpressionNode *Parser::parse_primary_expression() {
 
   case TokenKind::STRING_LITERAL: return parse_string_literal();
 
-  case TokenKind::IDENTIFIER: return parse_identifier_name();
+  case TokenKind::IDENTIFIER: return parse_identifier();
 
   case TokenKind::OPEN_PAREN: return parse_grouped_expression();
+
+  case TokenKind::OPEN_BRACE: return parse_object_literal();
 
   case TokenKind::OPEN_BRACKET: return parse_array_literal();
 

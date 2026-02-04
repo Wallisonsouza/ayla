@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NodeKind.hpp"
+#include "core/memory/type.hpp"
 #include "core/node/flags.hpp"
 #include "core/token/Location.hpp"
 
@@ -11,6 +12,8 @@ struct ASTNode {
   NodeKindBase base_kind;
   SourceSlice slice;
   NodeFlag flags;
+  bool resolved = false;
+  Type *inferred_type;
 
   virtual ~ASTNode() = default;
 

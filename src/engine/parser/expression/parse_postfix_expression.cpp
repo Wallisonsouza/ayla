@@ -12,13 +12,12 @@ core::ast::ASTExpressionNode *Parser::parse_postfix_expression() {
     switch (tok->descriptor->kind) {
 
     case TokenKind::OPEN_PAREN:
-      expr = finish_call(expr);
+      expr = parse_call_acess(expr);
       if (!expr) return nullptr;
       break;
 
-    case TokenKind::Dot:
-
-      expr = parse_path_segment(expr);
+    case TokenKind::DOT:
+      expr = parse_member_acess(expr);
       if (!expr) return nullptr;
       break;
 

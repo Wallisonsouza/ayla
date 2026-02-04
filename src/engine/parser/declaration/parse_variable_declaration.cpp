@@ -1,7 +1,7 @@
 #include "core/node/flags.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTStatementNode *Parser::parse_variable_declaration() {
+core::ast::ASTStatementNode *Parser::parse_variable_declaration(core::ast::Modifiers modifiers) {
   auto mods = parse_modifiers();
 
   if (!unit.tokens.match(TokenKind::VALUE_KEYWORD) && !unit.tokens.match(TokenKind::CONST_KEYWORD)) { return nullptr; }

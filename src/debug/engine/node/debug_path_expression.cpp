@@ -1,9 +1,9 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_path_expression(const parser::node::statement::PathExprNode *node) {
+void ASTDebug::debug_path_expression(const parser::node::MemberAccessNode *node) {
 
   debug_header("Path");
-  
+
   debug_labeled("Base", node->base, false);
   debug_labeled("Field", node->field, true);
   // size_t count = node->segments.size();

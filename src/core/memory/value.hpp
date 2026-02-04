@@ -1,5 +1,7 @@
 #pragma once
+#include "core/memory/symbol.hpp"
 #include <functional>
+#include <memory>
 #include <string>
 #include <variant>
 #include <vector>
@@ -24,13 +26,42 @@ struct UserFunction {
 
 struct Value {
 
+  using array = std::vector<std::shared_ptr<Value>>;
+  using ObjectFields = std::unordered_map<SymbolId, std::shared_ptr<Value>>;
+
   struct ArrayValue {
-    std::vector<Value *> elements;
+    array elements;
+  };
+
+  struct ObjectValue {
+    ObjectFields fields;
+
+    void set(SymbolId id, std::shared_ptr<Value> value) { fields[id] = std::move(value); }
+
+    std::shared_ptr<Value> get(SymbolId id) const {
+      auto it = fields.find(id);
+      if (it != fields.end()) return it->second;
+
+      return nullptr;
+    }
+
+    std::shared_ptr<Value> get_or_throw(SymbolId id) const {
+      auto it = fields.find(id);
+      if (it == fields.end()) throw std::runtime_error("Object field not found");
+
+      return it->second;
+    }
+
+    bool has(SymbolId id) const { return fields.find(id) != fields.end(); }
+
+    void remove(SymbolId id) { fields.erase(id); }
+
+    size_t size() const { return fields.size(); }
   };
 
   using NativeFunction = std::function<Value(const std::vector<Value> &)>;
 
-  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, UserFunction, ArrayValue>;
+  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, UserFunction, ArrayValue, ObjectValue>;
 
   Storage data;
 
@@ -41,7 +72,8 @@ struct Value {
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
   static Value User(parser::node::FunctionDeclarationNode *node, RuntimeScope *scope) { return Value{UserFunction(node, scope)}; }
-  static Value Array(std::vector<Value *> elems) { return Value{ArrayValue{std::move(elems)}}; }
+  static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
+  static Value Object(ObjectFields fields) { return Value{ObjectValue{std::move(fields)}}; }
 
   double get_number() const { return std::get<double>(data); }
 
@@ -92,9 +124,28 @@ struct Value {
     return false;
   }
 
+  std::shared_ptr<Value> get_property(const SymbolId &name) {
+    auto &obj = std::get<ObjectValue>(data).fields;
+
+    auto it = obj.find(name);
+    if (it == obj.end()) throw std::runtime_error("Property not found: ");
+
+    return it->second;
+  }
+
+  bool is_object() const { return std::holds_alternative<ObjectValue>(data); }
+
+  ObjectValue &get_object_ref() { return std::get<ObjectValue>(data); }
+
+  const ObjectValue &get_object() const { return std::get<ObjectValue>(data); }
+
+  bool is_number() const { return std::holds_alternative<double>(data); }
+
   bool is_array() const { return std::holds_alternative<ArrayValue>(data); }
 
-  const std::vector<Value *> &get_array() const { return std::get<ArrayValue>(data).elements; }
+  const array &get_array() const { return std::get<ArrayValue>(data).elements; }
+
+  array &get_array() { return std::get<ArrayValue>(data).elements; }
 
   bool is_user_function() const { return std::holds_alternative<UserFunction>(data); }
   bool is_native_function() const { return std::holds_alternative<NativeFunction>(data); }
@@ -104,10 +155,11 @@ struct ExecResult {
   enum class Type { Value, Return };
 
   Type type;
-  Value value;
+  std::shared_ptr<Value> value;
 
-  static ExecResult make_value(Value v) { return {Type::Value, std::move(v)}; }
-  static ExecResult make_return(Value v) { return {Type::Return, std::move(v)}; }
+  static ExecResult make_value(std::shared_ptr<Value> v) { return {Type::Value, std::move(v)}; }
+
+  static ExecResult make_return(std::shared_ptr<Value> v) { return {Type::Return, std::move(v)}; }
 
   bool is_return() const { return type == Type::Return; }
 };

@@ -25,6 +25,43 @@ struct ModuleManager {
     return id;
   }
 
+  ModuleId create_module_path(const std::vector<ast::IdentifierNode *> &path) {
+
+    if (path.empty()) return SIZE_MAX;
+
+    ModuleId current = SIZE_MAX;
+
+    for (auto *id_node : path) {
+      ModuleId next = SIZE_MAX;
+      const std::string &name = id_node->name;
+
+      if (current == SIZE_MAX) {
+        // raiz
+        auto it = root_modules.find(name);
+        if (it != root_modules.end()) next = it->second;
+      } else {
+        // filhos
+        auto &children = modules[current].children;
+        auto it = children.find(name);
+        if (it != children.end()) next = it->second;
+      }
+
+      if (next == SIZE_MAX) {
+
+        next = modules.size();
+        modules.emplace_back(name, current);
+        if (current == SIZE_MAX)
+          root_modules[name] = next;
+        else
+          modules[current].children[name] = next;
+      }
+
+      current = next;
+    }
+
+    return current;
+  }
+
   Module *get(ModuleId id) { return &modules[id]; }
 
   ModuleId find_path(std::vector<ast::IdentifierNode *> &path, size_t &failed_index) {

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "core/memory/symbol.hpp"
+#include "core/memory/value.hpp"
+#include "core/module/scope.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
@@ -43,7 +46,10 @@ struct FunctionDeclarationNode : core::ast::ASTStatementNode {
   core::ast::TypeNode *return_type;
   BlockStatementNode *body;
   core::ast::Modifiers modifiers;
-  SymbolId symbol_id = SIZE_MAX;
+  SymbolId symbol_id = INVALID_SYMBOL_ID;
+  Value::NativeFunction *native_fn = nullptr;
+
+  core::ParserScope *decl_scope = nullptr;
 
   FunctionDeclarationNode(core::ast::IdentifierNode *identifier,
                           std::vector<core::ast::PatternNode *> params,
@@ -62,24 +68,25 @@ struct FunctionErrorNode : core::ast::ASTStatementNode {
 };
 
 struct MemberAccessNode : core::ast::ASTExpressionNode {
-  core::ast::ASTExpressionNode *object;
-  core::ast::ASTExpressionNode *property;
+  core::ast::ASTExpressionNode *base;
+  core::ast::IdentifierNode *field;
 
-  MemberAccessNode(core::ast::ASTExpressionNode *obj, core::ast::ASTExpressionNode *prop) : ASTExpressionNode(core::ast::NodeKind::MemberAccess), object(obj), property(prop) {}
+  MemberAccessNode(core::ast::ASTExpressionNode *b, core::ast::IdentifierNode *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::PathExpression), base(b), field(f) {}
 };
 
 struct IndexAccessNode : core::ast::ASTExpressionNode {
-  core::ast::ASTExpressionNode *base;  // objeto ou array
-  core::ast::ASTExpressionNode *index; // índice ou expressão de acesso
+  core::ast::ASTExpressionNode *base;
+  core::ast::ASTExpressionNode *index;
 
   IndexAccessNode(core::ast::ASTExpressionNode *b, core::ast::ASTExpressionNode *i) : ASTExpressionNode(core::ast::NodeKind::IndexAccess), base(b), index(i) {}
 };
 
 struct FunctionCallNode : core::ast::ASTExpressionNode {
   core::ast::ASTExpressionNode *callee;
-  std::vector<core::ast::ASTExpressionNode *> args;
-  SymbolId symbol_id = SIZE_MAX;
-  FunctionCallNode(core::ast::ASTExpressionNode *c, std::vector<core::ast::ASTExpressionNode *> a) : ASTExpressionNode(core::ast::NodeKind::FunctionCall), callee(c), args(std::move(a)) {}
+  std::vector<core::ast::ASTExpressionNode *> arguments;
+  SymbolId symbol_id = INVALID_SYMBOL_ID;
+  core::ParserScope *decl_scope = nullptr;
+  FunctionCallNode(core::ast::ASTExpressionNode *c, std::vector<core::ast::ASTExpressionNode *> a) : ASTExpressionNode(core::ast::NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
 };
 
 struct ReturnStatementNode : core::ast::ASTStatementNode {

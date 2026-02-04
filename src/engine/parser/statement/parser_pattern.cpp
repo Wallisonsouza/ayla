@@ -3,7 +3,7 @@
 core::ast::PatternNode *Parser::parse_pattern(core::ast::Modifiers mods) {
   auto start = unit.tokens.peek_slice();
 
-  auto *id_node = parse_identifier_name();
+  auto *id_node = parse_identifier();
 
   if (!id_node) {
 

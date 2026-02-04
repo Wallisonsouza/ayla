@@ -7,6 +7,7 @@
 
 #include "engine/parser/error/recover.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
+#include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 
 enum class ParserResultCode { Success, Error };
@@ -32,7 +33,7 @@ private:
   void recover_until(BoundaryFn boundary);
 
   core::ast::ASTExpressionNode *parse_assignment(core::ast::ASTExpressionNode *target);
-  core::ast::ASTExpressionNode *finish_call(core::ast::ASTExpressionNode *callee);
+  core::ast::ASTExpressionNode *parse_call_acess(core::ast::ASTExpressionNode *callee);
   core::ast::ASTExpressionNode *finish_member(core::ast::ASTExpressionNode *base);
   core::ast::ASTExpressionNode *finish_index(core::ast::ASTExpressionNode *base);
   core::ast::Modifiers parse_modifiers();
@@ -47,12 +48,15 @@ public:
   core::ast::ASTExpressionNode *parse_postfix_expression();
   core::ast::ASTExpressionNode *parse_primary_expression();
   core::ast::ASTExpressionNode *parse_binary_expression(int min_precedence, core::ast::ASTExpressionNode *lef);
+  core::ast::ASTExpressionNode *parse_object_literal();
 
   core::ast::ASTStatementNode *parse_statement();
   core::ast::ASTStatementNode *parse_import_statement();
   parser::node::ASTArrayLiteralNode *parse_array_literal();
-  core::ast::ASTStatementNode *parse_variable_declaration();
-  core::ast::ASTStatementNode *parse_function_declaration();
+
+  core::ast::ASTStatementNode *parse_variable_declaration(core::ast::Modifiers modifiers);
+  core::ast::ASTStatementNode *parse_function_declaration(core::ast::Modifiers modifiers);
+  parser::node::statement::ModuleDeclarationNode *parse_module_declaration();
   core::ast::ASTStatementNode *parse_if_statement();
   parser::node::ASTWhileStatementNode *parse_while_statemente();
 
@@ -61,9 +65,9 @@ public:
 
   core::ast::ASTExpressionNode *parse_number_literal();
   core::ast::ASTExpressionNode *parse_string_literal();
-  core::ast::IdentifierNode *parse_identifier_name();
+  core::ast::IdentifierNode *parse_identifier();
   core::ast::ASTExpressionNode *parse_grouped_expression();
-  core::ast::ASTExpressionNode *parse_path_segment(core::ast::ASTExpressionNode *base);
+  core::ast::ASTExpressionNode *parse_member_acess(core::ast::ASTExpressionNode *base);
   core::ast::ASTExpressionNode *parse_index_access(core::ast::ASTExpressionNode *base);
 
   core::ast::PatternNode *parse_pattern(core::ast::Modifiers mods);
@@ -146,5 +150,13 @@ public:
 
     report_error(DiagnosticCode::ExpectedToken, "unterminated list");
     return nullptr;
+  }
+
+  Token *expect(TokenKind kind) {
+    if (unit.tokens.check(kind)) { return unit.tokens.advance(); }
+
+    report_error(DiagnosticCode::ExpectedToken, "expected token");
+
+    return unit.tokens.advance();
   }
 };

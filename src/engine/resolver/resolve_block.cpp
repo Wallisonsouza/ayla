@@ -5,7 +5,7 @@ void Resolver::resolve_block(parser::node::BlockStatementNode *node, bool create
 
   if (create_scope) push_scope();
 
-  for (auto *stmt : node->statements) resolve(stmt);
+  for (auto *stmt : node->statements) { resolve(stmt); }
 
   if (create_scope) pop_scope();
 }

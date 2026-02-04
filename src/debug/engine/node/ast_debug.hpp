@@ -69,19 +69,20 @@ struct ASTDebug {
   void debug_identifier(const core::ast::IdentifierNode *node);
   void debug_member_access(const parser::node::MemberAccessNode *node);
   void debug_import(const parser::node::statement::ImportNode *node);
+  void debug_module_declaration(const parser::node::statement::ModuleDeclarationNode *node);
   void debug_type(const core::ast::TypeNode *node);
   void debug_variable_declaration(const core::ast::PatternNode *node);
   void debug_binary_expression(const parser::node::BinaryExpressionNode *node);
   void debug_function_call(const parser::node::FunctionCallNode *node);
   void debug_expression_statement(const core::ast::ExpressionStatementNode *node);
-
+  void debug_object_literal(const parser::node::ObjectLiteralNode *node);
+  void debug_object_field(const parser::node::ObjectFieldNode *node);
   void debug_return_statement(const parser::node::ReturnStatementNode *node);
 
-  void debug_native_function_declaration(const core::ast::NativeFunctionDeclarationNode *node);
   void debug_function_declaration(const parser::node::FunctionDeclarationNode *node);
   void debug_index_acess(const parser::node::IndexAccessNode *node);
   void debug_array_literal(const parser::node::ASTArrayLiteralNode *node);
-  void debug_path_expression(const parser::node::statement::PathExprNode *node);
+  void debug_path_expression(const parser::node::MemberAccessNode *node);
   void debug_if_statement(const parser::node::IfStatementNode *node);
   void debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node);
   void debug_block(const parser::node::BlockStatementNode *node);

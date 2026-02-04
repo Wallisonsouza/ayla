@@ -1,4 +1,6 @@
 #pragma once
+
+#include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include <string>
@@ -45,6 +47,52 @@ struct ASTParameterListNode : ListNode<core::ast::PatternNode> {
 
 struct ASTArrayLiteralNode : ListNode<core::ast::ASTExpressionNode> {
   explicit ASTArrayLiteralNode(std::vector<core::ast::ASTExpressionNode *> elems) : ListNode(core::ast::NodeKind::ArrayLiteral, std::move(elems)) {}
+};
+
+struct ObjectFieldNode : core::ast::ASTNode {
+  core::ast::ASTExpressionNode *key;
+  core::ast::ASTExpressionNode *value;
+
+  ObjectFieldNode(core::ast::ASTExpressionNode *k, core::ast::ASTExpressionNode *v) : core::ast::ASTNode(core::ast::NodeKindBase::Internal, core::ast::NodeKind::ObjectField), key(k), value(v) {}
+};
+
+struct ASTObjectFieldList : ListNode<ObjectFieldNode> {
+
+  explicit ASTObjectFieldList(std::vector<ObjectFieldNode *> elems) : ListNode(core::ast::NodeKind::ObjectFieldList, std::move(elems)) {}
+};
+
+struct MemberTable {
+  std::unordered_map<std::string, SymbolId> members;
+
+  bool add(const std::string &name, SymbolId id) {
+
+    if (has(name)) return false;
+
+    return members.emplace(name, id).second;
+  }
+
+  bool has(const std::string &name) const { return members.find(name) != members.end(); }
+
+  SymbolId get(const std::string &name) const {
+    auto it = members.find(name);
+    if (it == members.end()) return INVALID_SYMBOL_ID;
+    return it->second;
+  }
+
+  bool remove(const std::string &name) { return members.erase(name) > 0; }
+
+  void clear() { members.clear(); }
+
+  size_t size() const { return members.size(); }
+
+  auto begin() const { return members.begin(); }
+  auto end() const { return members.end(); }
+};
+
+struct ObjectLiteralNode : core::ast::ASTExpressionNode {
+  ASTObjectFieldList *field_list;
+
+  ObjectLiteralNode(ASTObjectFieldList *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::ObjectLiteral), field_list(f) {}
 };
 
 } // namespace parser::node

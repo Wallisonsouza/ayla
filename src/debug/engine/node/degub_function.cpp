@@ -26,9 +26,9 @@ void ASTDebug::debug_function_call(const parser::node::FunctionCallNode *node) {
   out << "FunctionCall\n";
 
   if (node->callee) {
-    bool callee_is_last = node->args.empty();
+    bool callee_is_last = node->arguments.empty();
     debug_labeled("Callee", node->callee, callee_is_last);
   }
 
-  if (!node->args.empty()) { debug_labeled_childrens(node->args, "Args", true); }
+  if (!node->arguments.empty()) { debug_labeled_childrens(node->arguments, "Args", true); }
 }

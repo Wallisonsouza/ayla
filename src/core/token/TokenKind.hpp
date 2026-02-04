@@ -9,6 +9,8 @@ enum class TokenKind : uint8_t {
   INVALID,
   COMMENT,
 
+  EXTERN_KEYWORD,
+  MODULE_KEYWORD,
   VALUE_KEYWORD,
   CONST_KEYWORD,
   FUNCTION_KEYWORD,
@@ -45,7 +47,7 @@ enum class TokenKind : uint8_t {
   OPEN_BRACE,  // Representa a chave esquerda '{'.
   CLOSE_BRACE, // Representa a chave direita '}'.
   SEMI_COLON,  // Representa o ponto e vírgula ';'.
-  Dot,
+  DOT,
   Alias,          // Representa um alias (como 'type alias' em algumas linguagens).
   IDENTIFIER,     // Representa nomes de variáveis, funções ou outros
                   // identificadores.

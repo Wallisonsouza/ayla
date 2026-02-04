@@ -1,3 +1,4 @@
+#include "core/node/Modifier.hpp"
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
 #include "core/token/TokenKind.hpp"
@@ -20,8 +21,6 @@ parser::node::ReturnStatementNode *Parser::parse_return_statement() {
 
   return unit.ast.create_node<parser::node::ReturnStatementNode>(value);
 }
-
-//
 
 parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
@@ -59,62 +58,48 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
   return unit.ast.create_node<parser::node::BlockStatementNode>(std::move(statements));
 }
 
-core::ast::ASTStatementNode *Parser::parse_function_declaration() {
+core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modifiers modifiers) {
+
   auto start = unit.tokens.peek_slice();
 
   if (!unit.tokens.match(TokenKind::FUNCTION_KEYWORD)) { return nullptr; }
 
-  auto *name = parse_identifier_name();
-
+  auto *name = parse_identifier();
   if (!name) {
-
     report_error(DiagnosticCode::ExpectedIdentifier, "function name");
-
     recover_until(RecoverBoundary::Function);
-
     return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
   }
 
-  auto param_list = parse_generic_list<parser::node::ASTParameterListNode, core::ast::PatternNode>(
-      // test
-      TokenKind::OPEN_PAREN,  // open
-      TokenKind::CLOSE_PAREN, // close
-      TokenKind::COMMA,       // sep
-      [&]() { return parse_pattern({}); });
+  auto param_list =
+      parse_generic_list<parser::node::ASTParameterListNode, core::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
 
   if (param_list->flags.has(NodeFlags::HasError)) {
-
     recover_until(RecoverBoundary::Function);
-
     return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
   }
 
   core::ast::TypeNode *return_type = nullptr;
 
   if (unit.tokens.match(TokenKind::ARROW)) {
-
     return_type = parse_type();
-
     if (!return_type) {
-
       report_error(DiagnosticCode::ExpectedType, "return type");
-
       recover_until(RecoverBoundary::Function);
-
       return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
     }
   }
 
-  auto body = parse_block_statement();
+  parser::node::BlockStatementNode *body = nullptr;
 
-  if (body->flags.has(NodeFlags::HasError)) {
+  if (!modifiers.has(core::ast::Modifier::Extern)) {
+    body = parse_block_statement();
 
-    recover_until(RecoverBoundary::Function);
-
-    return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+    if (body->flags.has(NodeFlags::HasError)) {
+      recover_until(RecoverBoundary::Function);
+      return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+    }
   }
 
-  return unit.ast.create_node<parser::node::FunctionDeclarationNode>(name, param_list->elements, return_type, body);
-
-  return nullptr;
+  return unit.ast.create_node<parser::node::FunctionDeclarationNode>(name, param_list->elements, return_type, body, modifiers);
 }

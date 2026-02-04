@@ -1,0 +1,38 @@
+module window {
+
+  // Cria uma nova janela com largura, altura e título
+  extern funct create(w: number, h: number, title: string) -> number
+
+  // Fecha a janela pelo ID retornado por create
+  extern funct close(id: number) -> void
+
+  // Redimensiona a janela
+  extern funct resize(id: number, w: number, h: number) -> void
+
+  // Move a janela para uma posição (x, y)
+  extern funct move(id: number, x: number, y: number) -> void
+
+  // Retorna a largura atual da janela
+  extern funct get_width(id: number) -> number
+
+  // Retorna a altura atual da janela
+  extern funct get_height(id: number) -> number
+
+  // Retorna se a janela está visível
+  extern funct is_visible(id: number) -> bool
+
+  // Mostra a janela
+  extern funct show(id: number) -> void
+
+  // Esconde a janela
+  extern funct hide(id: number) -> void
+
+  // Define o título da janela
+  extern funct set_title(id: number, title: string) -> void
+
+  // Retorna o título da janela
+  extern funct get_title(id: number) -> string
+
+  // Atualiza o conteúdo da janela (repaint)
+  extern funct update(id: number) -> void
+}

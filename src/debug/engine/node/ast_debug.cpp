@@ -4,6 +4,7 @@
 #include "core/node/Type.hpp"
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
+#include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
@@ -29,6 +30,9 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   switch (node->kind) {
 
+  case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const parser::node::ObjectLiteralNode *>(node)); break;
+  case NodeKind::ObjectField: debug_object_field(static_cast<const parser::node::ObjectFieldNode *>(node)); break;
+
   case NodeKind::NumberLiteral: debug_number_literal(static_cast<const parser::node::NumberLiteralNode *>(node)); break;
 
   case NodeKind::StringLiteral: debug_string_literal(static_cast<const parser::node::StringLiteralNode *>(node)); break;
@@ -43,6 +47,8 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   case NodeKind::Import: debug_import(static_cast<const parser::node::statement::ImportNode *>(node)); break;
 
+  case NodeKind::ModuleDeclaration: debug_module_declaration(static_cast<const parser::node::statement::ModuleDeclarationNode *>(node)); break;
+
   case NodeKind::Type: debug_type(static_cast<const TypeNode *>(node)); break;
 
   case NodeKind::VariableDeclaration: debug_variable_declaration(static_cast<const PatternNode *>(node)); break;
@@ -55,7 +61,7 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
 
   case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const parser::node::FunctionDeclarationNode *>(node)); break;
 
-  case NodeKind::PathExpression: debug_path_expression(static_cast<const parser::node::statement::PathExprNode *>(node)); break;
+  case NodeKind::PathExpression: debug_path_expression(static_cast<const parser::node::MemberAccessNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const parser::node::IfStatementNode *>(node)); break;
 

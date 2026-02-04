@@ -1,6 +1,5 @@
 #pragma once
 #include "core/memory/symbol.hpp"
-#include "core/memory/value.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
@@ -12,10 +11,15 @@
 namespace core::ast {
 
 struct ASTStatementNode : ASTNode {
+
+  bool resolved = false;
   explicit ASTStatementNode(NodeKind k) : ASTNode(NodeKindBase::Statement, k) {}
 };
 
 struct ASTExpressionNode : ASTNode {
+
+  SymbolId resolved_symbol_id = INVALID_SYMBOL_ID;
+
   explicit ASTExpressionNode(NodeKind k) : ASTNode(NodeKindBase::Expression, k) {}
 };
 
@@ -34,7 +38,6 @@ struct TypeDeclarationNode : ASTStatementNode {
 
 struct IdentifierNode : core::ast::ASTExpressionNode {
   std::string name;
-  SymbolId symbol_id = SIZE_MAX;
 
   explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ASTExpressionNode(core::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
 };
@@ -43,7 +46,7 @@ struct TypeNode : core::ast::ASTNode {
   IdentifierNode *id;
   const std::vector<TypeNode *> generics;
   bool is_primitive = false;
-  SymbolId symbol_id = SIZE_MAX;
+  SymbolId symbol_id = INVALID_SYMBOL_ID;
 
   explicit TypeNode(IdentifierNode *id, bool primitive = false) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), id(id), is_primitive(primitive) {}
 
@@ -66,7 +69,7 @@ struct PatternNode : ASTStatementNode {
   core::ast::TypeNode *type;
   core::ast::ASTExpressionNode *value;
   core::ast::Modifiers modifiers;
-  SymbolId symbol_id = SIZE_MAX;
+  SymbolId symbol_id = INVALID_SYMBOL_ID;
 
   PatternNode(core::ast::IdentifierNode *n, core::ast::TypeNode *t, core::ast::ASTExpressionNode *v, core::ast::Modifiers modifiers = {})
       : ASTStatementNode(core::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
@@ -83,15 +86,4 @@ struct PatternErrorNode : PatternNode {
   }
 };
 
-struct NativeFunctionDeclarationNode : ASTStatementNode {
-  IdentifierNode *identifier;
-  std::vector<PatternNode *> params;
-  TypeNode *return_type;
-  SymbolId symbol_id;
-
-  Value::NativeFunction callback;
-
-  NativeFunctionDeclarationNode(IdentifierNode *id, std::vector<PatternNode *> p, TypeNode *ret, Value::NativeFunction cb)
-      : ASTStatementNode(core::ast::NodeKind::NativeFunctionDeclaration), identifier(id), params(std::move(p)), return_type(ret), callback(std::move(cb)) {}
-};
 } // namespace core::ast

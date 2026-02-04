@@ -1,57 +1,22 @@
-// #pragma once
-// #include "core/memory/Arena.hpp"
-// #include "core/memory/symbol.hpp"
-// #include "core/memory/value.hpp"
-// #include <unordered_map>
-
-// struct RuntimeScope {
-
-//   std::unordered_map<SymbolId, Value *> values;
-//   RuntimeScope *parent;
-//   core::memory::Arena *arena;
-
-//   RuntimeScope(RuntimeScope *parent = nullptr) : parent(parent), arena(arena) {}
-
-//   void set(SymbolId id, Value val) {
-//     Value *stored = arena->alloc<Value>(std::move(val));
-//     values[id] = stored;
-//   }
-
-//   Value get_value(SymbolId id) const {
-
-//     if (auto it = values.find(id); it != values.end()) return *it->second;
-
-//     if (parent) return parent->get_value(id);
-
-//     return Value::Null();
-//   }
-
-//   Value *get_ref(SymbolId id) {
-
-//     if (auto it = values.find(id); it != values.end()) return it->second;
-
-//     if (parent) return parent->get_ref(id);
-
-//     return nullptr;
-//   }
-// };
-
 #pragma once
 #include "core/memory/symbol.hpp"
 #include "core/memory/value.hpp"
+#include <stdexcept>
 #include <unordered_map>
 
 struct RuntimeScope {
-  std::unordered_map<SymbolId, Value> values;
+
   RuntimeScope *parent;
+
+  std::unordered_map<SymbolId, std::shared_ptr<Value>> values;
 
   RuntimeScope(RuntimeScope *parent = nullptr) : parent(parent) {}
 
-  void set(SymbolId id, Value val) { values[id] = val; }
+  void set(SymbolId id, std::shared_ptr<Value> val) { values[id] = std::move(val); }
 
-  Value get(SymbolId id) {
-    if (values.contains(id)) return values[id];
+  std::shared_ptr<Value> get(SymbolId id) {
+    if (auto it = values.find(id); it != values.end()) return it->second;
     if (parent) return parent->get(id);
-    return Value::Null();
+    throw std::runtime_error("Undefined variable");
   }
 };

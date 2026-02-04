@@ -3,11 +3,11 @@
 
 class ScopeManager {
   core::memory::Arena arena;
-  std::vector<core::Scope *> scopes;
+  std::vector<core::ParserScope *> scopes;
 
 public:
-  core::Scope *create_scope(core::Scope *parent) {
-    auto *scope = arena.alloc<core::Scope>(parent);
+  core::ParserScope *create_scope(core::ParserScope *parent) {
+    auto *scope = arena.alloc<core::ParserScope>(parent);
     scopes.push_back(scope);
     return scope;
   }

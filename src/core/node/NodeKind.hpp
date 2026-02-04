@@ -2,7 +2,7 @@
 
 namespace core::ast {
 
-enum class NodeKindBase { Expression, Statement, Type, Pattern, Unknown };
+enum class NodeKindBase { Internal, Expression, Statement, Type, Pattern, Unknown };
 
 enum class NodeKind {
   // === Base ===
@@ -10,10 +10,14 @@ enum class NodeKind {
   NumberLiteral,
   StringLiteral,
   BooleanLiteral,
+  ObjectLiteral,
+  ObjectField,
+  ObjectFieldList,
   CharLiteral,
   NullLiteral,
   Identifier,
   PathExpression,
+  Interface,
 
   // === Statements ===
   MemberAccess,
@@ -30,6 +34,7 @@ enum class NodeKind {
   VariableDeclaration,
   FunctionDeclaration,
   OperatorDeclaration,
+  ModuleDeclaration,
 
   FunctionCall,
   FunctionParameter,

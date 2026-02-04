@@ -10,14 +10,14 @@
 struct CompilationUnit {
   LanguageContext &context;
   core::source::Source &source;
-
   SymbolManager symbols;
+  core::memory::Arena type_arena;
+
   DiagnosticEngine diagns;
   ScopeManager scopes;
 
   AST ast;
   core::token::TokenStream tokens;
 
-  explicit CompilationUnit(LanguageContext &ctx, core::source::Source &src)
-      : context(ctx), source(src), diagns(*this) {}
+  explicit CompilationUnit(LanguageContext &ctx, core::source::Source &src) : context(ctx), source(src), diagns(*this) {}
 };

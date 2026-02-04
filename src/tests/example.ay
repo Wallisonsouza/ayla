@@ -1,9 +1,0 @@
-import debug.console
-
-val a: number = 10
-
-funct add(a: number, b: number) {
-  return a + b
-}
-
-console.log(add(10, 20))
