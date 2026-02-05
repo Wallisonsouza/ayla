@@ -1,6 +1,6 @@
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_index_access(parser::node::IndexAccessNode *node) {
+void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
 
   if (node->base) resolve(node->base);
 

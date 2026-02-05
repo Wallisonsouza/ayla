@@ -1,7 +1,7 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/parser/parser.hpp"
 
-parser::node::statement::ModuleDeclarationNode *Parser::parse_module_declaration() {
+ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
 
   if (!unit.tokens.match(TokenKind::MODULE_KEYWORD)) return nullptr;
 
@@ -35,5 +35,5 @@ parser::node::statement::ModuleDeclarationNode *Parser::parse_module_declaration
     if (node) body.push_back(node);
   }
 
-  return unit.ast.create_node<parser::node::statement::ModuleDeclarationNode>(std::move(path), std::move(body));
+  return unit.ast.create_node<ayla::ast::node::ModuleDeclarationNode>(std::move(path), std::move(body));
 }

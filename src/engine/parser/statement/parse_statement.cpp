@@ -2,7 +2,7 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/parser/parser.hpp"
 
-ayla::ast::ASTStatementNode *Parser::parse_statement() {
+ayla::ast::StatementNode *Parser::parse_statement() {
   auto modifiers = parse_modifiers();
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;

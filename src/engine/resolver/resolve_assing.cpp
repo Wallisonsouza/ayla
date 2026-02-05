@@ -1,6 +1,6 @@
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_assignment(parser::node::statement::AssignmentNode *node) {
+void Resolver::resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node) {
 
   resolve(node->target);
 

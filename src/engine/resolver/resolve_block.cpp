@@ -10,6 +10,6 @@ void Resolver::resolve_block(parser::node::BlockStatementNode *node, bool create
   if (create_scope) pop_scope();
 }
 
-void Resolver::resolve_return_statement(parser::node::ReturnStatementNode *node) {
+void Resolver::resolve_return_statement(ayla::ast::node::ReturnStatementNode *node) {
   if (node->value) { resolve(node->value); }
 }

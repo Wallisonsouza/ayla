@@ -1,7 +1,8 @@
-#include "engine/parser/node/statement/ImportStatement.hpp"
-#include "engine/parser/parser.hpp"
 
-ayla::ast::ASTStatementNode *Parser::parse_import_statement() {
+#include "engine/parser/parser.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
+
+ayla::ast::StatementNode *Parser::parse_import_statement() {
 
   if (!unit.tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
 
@@ -27,7 +28,7 @@ ayla::ast::ASTStatementNode *Parser::parse_import_statement() {
     }
   }
 
-  auto *node = unit.ast.create_node<parser::node::statement::ImportNode>(std::move(path_nodes));
+  auto *node = unit.ast.create_node<ayla::ast::node::ImportStatementNode>(std::move(path_nodes));
   node->slice = unit.tokens.last_slice();
   return node;
 }

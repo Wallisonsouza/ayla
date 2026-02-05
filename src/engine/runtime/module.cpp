@@ -1,9 +1,9 @@
 #include "engine/runtime/executor.hpp"
 #include <iostream>
 
-ExecResult Executor::execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
+ExecResult Executor::execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
 
-ExecResult Executor::execute_import_node(CompilationUnit &unit, parser::node::statement::ImportNode *node) {
+ExecResult Executor::execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node) {
 
   auto module = unit.context.module_manager.get(node->resolved_module_id);
 

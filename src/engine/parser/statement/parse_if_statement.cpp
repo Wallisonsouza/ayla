@@ -3,7 +3,7 @@
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/parser/parser.hpp"
 
-ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
+ayla::ast::StatementNode *Parser::parse_if_statement() {
   if (!unit.tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
 
   auto *condition = parse_expression();
@@ -13,7 +13,7 @@ ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
 
     recover_until(RecoverBoundary::If);
 
-    return unit.ast.create_node<parser::node::IfStatementNodeError>();
+    return nullptr;
   }
 
   if (condition->kind == ayla::ast::NodeKind::Assignment) {
@@ -22,7 +22,7 @@ ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
 
     recover_until(RecoverBoundary::If);
 
-    return unit.ast.create_node<parser::node::IfStatementNodeError>();
+    return nullptr;
   }
 
   auto *then_block = parse_block_statement();
@@ -33,10 +33,10 @@ ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
 
     recover_until(RecoverBoundary::If);
 
-    return unit.ast.create_node<parser::node::IfStatementNodeError>();
+    return nullptr;
   }
 
-  ayla::ast::ASTStatementNode *else_block = nullptr;
+  ayla::ast::StatementNode *else_block = nullptr;
   if (unit.tokens.match(TokenKind::ELSE_KEYWORD)) {
     if (unit.tokens.peek(TokenKind::IF_KEYWORD)) {
       else_block = parse_if_statement();
@@ -50,7 +50,7 @@ ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
 
       recover_until(RecoverBoundary::If);
 
-      return unit.ast.create_node<parser::node::IfStatementNodeError>();
+      return nullptr;
     }
   }
 

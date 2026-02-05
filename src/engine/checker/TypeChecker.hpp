@@ -6,7 +6,6 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
@@ -29,24 +28,24 @@ struct TypeChecker {
 
   void check_variable_declaration(ayla::ast::PatternNode *node);
 
-  void check_function_declaration(parser::node::FunctionDeclarationNode *node);
+  void check_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
   void check_function_call(ayla::ast::node::CallExpressionNode *node);
 
   // Expressões
   void check_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
   void check_member_access(parser::node::MemberAccessNode *node);
-  void check_index_access(parser::node::IndexAccessNode *node);
+  void check_index_access(ayla::ast::node::IndexAccessNode *node);
 
   // Controle
   void check_if_statement(parser::node::IfStatementNode *node);
   void check_while_statement(parser::node::ASTWhileStatementNode *node);
-  void check_return_statement(parser::node::ReturnStatementNode *node);
+  void check_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
   void check_block(parser::node::BlockStatementNode *node);
 
-  void check_import_node(parser::node::statement::ImportNode *node);
-  void check_module_declaration(parser::node::statement::ModuleDeclarationNode *node);
-  void check_assignment(parser::node::statement::AssignmentNode *node);
+  void check_import_node(ayla::ast::node::ImportStatementNode *node);
+  void check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
+  void check_assignment(ayla::ast::node::AssignmentExpressionNode *node);
   void check_expression_statement(ayla::ast::ExpressionStatementNode *node);
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);

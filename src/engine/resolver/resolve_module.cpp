@@ -1,6 +1,6 @@
 #include "Resolver.hpp"
 
-void Resolver::resolve_module_declaration(parser::node::statement::ModuleDeclarationNode *node) {
+void Resolver::resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
   if (!node || node->path.empty()) return;
 
   ModuleId module_id = unit.context.module_manager.create_module_path(node->path);
@@ -19,7 +19,7 @@ void Resolver::resolve_module_declaration(parser::node::statement::ModuleDeclara
   current_scope = prev;
 }
 
-void Resolver::resolve_import_node(parser::node::statement::ImportNode *node) {
+void Resolver::resolve_import_node(ayla::ast::node::ImportStatementNode *node) {
   if (!node || node->path.empty()) return;
 
   size_t failed_index;

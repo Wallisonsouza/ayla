@@ -6,8 +6,9 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/error/recover.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "frontend/ast/statements/ModuleDeclarationNode.hpp"
+#include "frontend/ast/statements/ReturnStatementNodes.hpp"
 
 enum class ParserResultCode { Success, Error };
 
@@ -41,7 +42,7 @@ private:
   std::vector<ayla::ast::PatternNode *> parse_parameter_list();
 
 public:
-  parser::node::ReturnStatementNode *parse_return_statement();
+  ayla::ast::node::ReturnStatementNode *parse_return_statement();
   ayla::ast::ExpressionNode *parse_path_expression();
   ayla::ast::ExpressionNode *parse_expression();
   ayla::ast::ExpressionNode *parse_postfix_expression();
@@ -49,14 +50,14 @@ public:
   ayla::ast::ExpressionNode *parse_binary_expression(int min_precedence, ayla::ast::ExpressionNode *lef);
   ayla::ast::ExpressionNode *parse_object_literal();
 
-  ayla::ast::ASTStatementNode *parse_statement();
-  ayla::ast::ASTStatementNode *parse_import_statement();
+  ayla::ast::StatementNode *parse_statement();
+  ayla::ast::StatementNode *parse_import_statement();
   parser::node::ASTArrayLiteralNode *parse_array_literal();
 
-  ayla::ast::ASTStatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
-  ayla::ast::ASTStatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
-  parser::node::statement::ModuleDeclarationNode *parse_module_declaration();
-  ayla::ast::ASTStatementNode *parse_if_statement();
+  ayla::ast::StatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
+  ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
+  ayla::ast::node::ModuleDeclarationNode *parse_module_declaration();
+  ayla::ast::StatementNode *parse_if_statement();
   parser::node::ASTWhileStatementNode *parse_while_statemente();
 
   parser::node::BlockStatementNode *parse_block_statement();

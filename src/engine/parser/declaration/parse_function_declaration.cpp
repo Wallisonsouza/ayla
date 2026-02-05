@@ -6,12 +6,12 @@
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/parser/parser.hpp"
 
-parser::node::ReturnStatementNode *Parser::parse_return_statement() {
+ayla::ast::node::ReturnStatementNode *Parser::parse_return_statement() {
 
   unit.tokens.match(TokenKind::RETURN_KEYWORD);
 
   // return sem valor
-  if (unit.tokens.peek(TokenKind::CLOSE_BRACE) || unit.tokens.peek(TokenKind::NEW_LINE)) { return unit.ast.create_node<parser::node::ReturnStatementNode>(nullptr); }
+  if (unit.tokens.peek(TokenKind::CLOSE_BRACE) || unit.tokens.peek(TokenKind::NEW_LINE)) { return unit.ast.create_node<ayla::ast::node::ReturnStatementNode>(nullptr); }
 
   auto *value = parse_expression();
   if (!value) {
@@ -19,18 +19,18 @@ parser::node::ReturnStatementNode *Parser::parse_return_statement() {
     unit.tokens.advance();
   }
 
-  return unit.ast.create_node<parser::node::ReturnStatementNode>(value);
+  return unit.ast.create_node<ayla::ast::node::ReturnStatementNode>(value);
 }
 
 parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
-  std::vector<ayla::ast::ASTStatementNode *> statements;
+  std::vector<ayla::ast::StatementNode *> statements;
 
   if (!unit.tokens.match(TokenKind::OPEN_BRACE)) {
 
     report_error(DiagnosticCode::ExpectedToken, "'{' to start block");
 
-    return unit.ast.create_node<parser::node::BlockStatementNodeError>();
+    return nullptr;
   }
 
   consume_statement_separators();
@@ -52,13 +52,13 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
     report_error(DiagnosticCode::ExpectedToken, "'}' to close block");
 
-    return unit.ast.create_node<parser::node::BlockStatementNodeError>();
+    return nullptr;
   }
 
   return unit.ast.create_node<parser::node::BlockStatementNode>(std::move(statements));
 }
 
-ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
+ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
 
   auto start = unit.tokens.peek_slice();
 
@@ -68,7 +68,7 @@ ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modif
   if (!name) {
     report_error(DiagnosticCode::ExpectedIdentifier, "function name");
     recover_until(RecoverBoundary::Function);
-    return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+    return nullptr;
   }
 
   auto param_list =
@@ -76,7 +76,7 @@ ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modif
 
   if (param_list->flags.has(NodeFlags::HasError)) {
     recover_until(RecoverBoundary::Function);
-    return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+    return nullptr;
   }
 
   ayla::ast::TypeNode *return_type = nullptr;
@@ -86,7 +86,7 @@ ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modif
     if (!return_type) {
       report_error(DiagnosticCode::ExpectedType, "return type");
       recover_until(RecoverBoundary::Function);
-      return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+      return nullptr;
     }
   }
 
@@ -97,9 +97,9 @@ ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modif
 
     if (body->flags.has(NodeFlags::HasError)) {
       recover_until(RecoverBoundary::Function);
-      return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
+      return nullptr;
     }
   }
 
-  return unit.ast.create_node<parser::node::FunctionDeclarationNode>(name, param_list->elements, return_type, body, modifiers);
+  return unit.ast.create_node<ayla::ast::node::FunctionDeclarationNode>(name, param_list->elements, return_type, body, modifiers);
 }

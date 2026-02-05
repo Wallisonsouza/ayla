@@ -1,6 +1,6 @@
 #include "debug/engine/node/ast_debug.hpp"
 
-void ASTDebug::debug_function_declaration(const parser::node::FunctionDeclarationNode *node) {
+void ASTDebug::debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node) {
 
   debug_header("FunctionDeclaration");
 

@@ -2,7 +2,7 @@
 #include "engine/runtime/executor.hpp"
 
 ExecResult Executor::execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node) {
-  
+
   array elements;
 
   for (auto *el : node->elements) {
@@ -14,7 +14,7 @@ ExecResult Executor::execute_array(CompilationUnit &unit, parser::node::ASTArray
   return ExecResult::make_value(std::make_shared<Value>(Value::Array(std::move(elements))));
 }
 
-ExecResult Executor::execute_index_access(CompilationUnit &unit, parser::node::IndexAccessNode *node) {
+ExecResult Executor::execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node) {
   auto base = execute_node(unit, node->base).value;
   auto index = execute_node(unit, node->index).value;
 

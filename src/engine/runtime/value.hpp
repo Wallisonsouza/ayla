@@ -2,6 +2,7 @@
 #include "core/memory/SymbolId.hpp"
 #include "engine/runtime/array/ArrayValue.hpp"
 #include "engine/runtime/object/ObjectValue.hpp"
+#include "frontend/ast/statements/FunctionDeclarationNode.hpp"
 #include <functional>
 #include <memory>
 #include <string>
@@ -20,10 +21,10 @@ struct FunctionDeclarationNode;
 struct RuntimeScope;
 
 struct UserFunction {
-  parser::node::FunctionDeclarationNode *node;
+  ayla::ast::node::FunctionDeclarationNode *node;
   RuntimeScope *captured_scope;
 
-  UserFunction(parser::node::FunctionDeclarationNode *n, RuntimeScope *scope) : node(n), captured_scope(scope) {}
+  UserFunction(ayla::ast::node::FunctionDeclarationNode *n, RuntimeScope *scope) : node(n), captured_scope(scope) {}
 };
 
 struct Value {
@@ -40,7 +41,7 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(parser::node::FunctionDeclarationNode *node, RuntimeScope *scope) { return Value{UserFunction(node, scope)}; }
+  static Value User(ayla::ast::node::FunctionDeclarationNode *node, RuntimeScope *scope) { return Value{UserFunction(node, scope)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
 

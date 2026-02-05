@@ -4,10 +4,11 @@
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
 #include <string>
 #include <vector>
 
@@ -68,8 +69,8 @@ struct ASTDebug {
   void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
   void debug_identifier(const ayla::ast::IdentifierNode *node);
   void debug_member_access(const parser::node::MemberAccessNode *node);
-  void debug_import(const parser::node::statement::ImportNode *node);
-  void debug_module_declaration(const parser::node::statement::ModuleDeclarationNode *node);
+  void debug_import(const ayla::ast::node::ImportStatementNode *node);
+  void debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);
   void debug_type(const ayla::ast::TypeNode *node);
   void debug_variable_declaration(const ayla::ast::PatternNode *node);
   void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
@@ -77,14 +78,14 @@ struct ASTDebug {
   void debug_expression_statement(const ayla::ast::ExpressionStatementNode *node);
   void debug_object_literal(const parser::node::ObjectLiteralNode *node);
   void debug_object_field(const parser::node::ObjectFieldNode *node);
-  void debug_return_statement(const parser::node::ReturnStatementNode *node);
+  void debug_return_statement(const ayla::ast::node::ReturnStatementNode *node);
 
-  void debug_function_declaration(const parser::node::FunctionDeclarationNode *node);
-  void debug_index_acess(const parser::node::IndexAccessNode *node);
+  void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
+  void debug_index_acess(const ayla::ast::node::IndexAccessNode *node);
   void debug_array_literal(const parser::node::ASTArrayLiteralNode *node);
   void debug_path_expression(const parser::node::MemberAccessNode *node);
   void debug_if_statement(const parser::node::IfStatementNode *node);
-  void debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node);
+  void debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node);
   void debug_block(const parser::node::BlockStatementNode *node);
   void debug_while(const parser::node::ASTWhileStatementNode *node);
   void debug_children(const std::vector<const ayla::ast::AstNode *> &children);

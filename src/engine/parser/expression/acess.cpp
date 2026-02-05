@@ -1,5 +1,6 @@
 #include "engine/parser/parser.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
@@ -24,7 +25,7 @@ ayla::ast::ExpressionNode *Parser::parse_index_access(ayla::ast::ExpressionNode 
   auto *close = unit.tokens.match(TokenKind::CLOSE_BRACKET);
   if (!close) return nullptr; // erro: ']' esperado
 
-  return unit.ast.create_node<parser::node::IndexAccessNode>(base, index_expr);
+  return unit.ast.create_node<ayla::ast::node::IndexAccessNode>(base, index_expr);
 }
 
 ayla::ast::ExpressionNode *Parser::parse_call_acess(ayla::ast::ExpressionNode *base) {

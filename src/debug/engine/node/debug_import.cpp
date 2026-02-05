@@ -1,7 +1,6 @@
 #include "ast_debug.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
 
-void ASTDebug::debug_import(const parser::node::statement::ImportNode *node) {
+void ASTDebug::debug_import(const ayla::ast::node::ImportStatementNode *node) {
   out << "Import\n";
 
   size_t count = node->path.size();
@@ -9,7 +8,7 @@ void ASTDebug::debug_import(const parser::node::statement::ImportNode *node) {
   for (size_t i = 0; i < count; ++i) { debug_node(node->path[i], i == count - 1); }
 }
 
-void ASTDebug::debug_module_declaration(const parser::node::statement::ModuleDeclarationNode *node) {
+void ASTDebug::debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node) {
   out << "Module\n";
 
   for (size_t i = 0; i < node->path.size(); ++i) { debug_node(node->path[i], i == node->path.size() - 1); }

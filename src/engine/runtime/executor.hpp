@@ -4,12 +4,18 @@
 #include "core/node/Type.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/value.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
 #include "frontend/ast/expressions/BinaryExpressionNode.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/statements/FunctionDeclarationNode.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
+#include "frontend/ast/statements/ModuleDeclarationNode.hpp"
+#include "frontend/ast/statements/ReturnStatementNodes.hpp"
 #include "runtime_scope.hpp"
 
 #include <memory>
@@ -22,10 +28,10 @@ struct Executor {
 
   Executor(RuntimeScope *scope) : current_scope(scope) {}
 
-  ExecResult execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node);
-  ExecResult execute_import_node(CompilationUnit &unit, parser::node::statement::ImportNode *node);
+  ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node);
+  ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node);
   ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node);
-  ExecResult execute_index_access(CompilationUnit &unit, parser::node::IndexAccessNode *node);
+  ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node);
   ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
   ExecResult execute_member_acess(CompilationUnit &unit, parser::node::MemberAccessNode *member);
 
@@ -36,7 +42,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<ayla::ast::ExpressionStatementNode *>(node));
 
-    case ayla::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<parser::node::statement::AssignmentNode *>(node));
+    case ayla::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<ayla::ast::node::AssignmentExpressionNode *>(node));
 
     case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::IdentifierNode *>(node));
 
@@ -58,17 +64,17 @@ struct Executor {
 
     case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<parser::node::ASTArrayLiteralNode *>(node));
 
-    case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<parser::node::IndexAccessNode *>(node));
+    case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<ayla::ast::node::IndexAccessNode *>(node));
 
     case ayla::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<parser::node::ASTWhileStatementNode *>(node));
 
-    case ayla::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<parser::node::FunctionDeclarationNode *>(node));
+    case ayla::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<ayla::ast::node::FunctionDeclarationNode *>(node));
 
-    case ayla::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<parser::node::ReturnStatementNode *>(node));
+    case ayla::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<ayla::ast::node::ReturnStatementNode *>(node));
 
-    case ayla::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<parser::node::statement::ModuleDeclarationNode *>(node));
+    case ayla::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<ayla::ast::node::ModuleDeclarationNode *>(node));
 
-    case ayla::ast::NodeKind::Import: return execute_import_node(unit, static_cast<parser::node::statement::ImportNode *>(node));
+    case ayla::ast::NodeKind::Import: return execute_import_node(unit, static_cast<ayla::ast::node::ImportStatementNode *>(node));
 
     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
     }
@@ -161,7 +167,7 @@ struct Executor {
     return last;
   }
 
-  ExecResult execute_return(CompilationUnit &unit, parser::node::ReturnStatementNode *node) {
+  ExecResult execute_return(CompilationUnit &unit, ayla::ast::node::ReturnStatementNode *node) {
     if (!node->value) return ExecResult::make_return(std::make_shared<Value>(Value::Void()));
 
     return ExecResult::make_return(execute_node(unit, node->value).value);
@@ -197,7 +203,7 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_assignment(CompilationUnit &unit, parser::node::statement::AssignmentNode *node) {
+  ExecResult execute_assignment(CompilationUnit &unit, ayla::ast::node::AssignmentExpressionNode *node) {
     auto rhs = execute_node(unit, node->value).value;
 
     // a = ...
@@ -209,7 +215,7 @@ struct Executor {
 
     // a[i] = ...
     if (node->target->kind == ayla::ast::NodeKind::IndexAccess) {
-      auto *idx = static_cast<parser::node::IndexAccessNode *>(node->target);
+      auto *idx = static_cast<ayla::ast::node::IndexAccessNode *>(node->target);
 
       auto base = execute_node(unit, idx->base).value;
       auto index = execute_node(unit, idx->index).value;
@@ -228,7 +234,7 @@ struct Executor {
     throw std::runtime_error("Invalid assignment target");
   }
 
-  ExecResult execute_function_declaration(CompilationUnit &unit, parser::node::FunctionDeclarationNode *node) {
+  ExecResult execute_function_declaration(CompilationUnit &unit, ayla::ast::node::FunctionDeclarationNode *node) {
 
     current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
 

@@ -1,6 +1,7 @@
 #include "core/node/Type.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/parser.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_assignment(ayla::ast::ExpressionNode *target) {
 
@@ -16,7 +17,7 @@ ayla::ast::ExpressionNode *Parser::parse_assignment(ayla::ast::ExpressionNode *t
     // return nullptr;
   }
 
-  auto node = unit.ast.create_node<parser::node::statement::AssignmentNode>(target, value);
+  auto node = unit.ast.create_node<ayla::ast::node::AssignmentExpressionNode>(target, value);
   node->slice = start;
   return node;
 }

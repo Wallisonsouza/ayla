@@ -3,7 +3,7 @@
 #include "core/node/Type.hpp"
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/node/statement_nodes.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
@@ -42,9 +42,9 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::Identifier: debug_identifier(static_cast<const IdentifierNode *>(node)); break;
 
-  case NodeKind::Import: debug_import(static_cast<const parser::node::statement::ImportNode *>(node)); break;
+  case NodeKind::Import: debug_import(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
 
-  case NodeKind::ModuleDeclaration: debug_module_declaration(static_cast<const parser::node::statement::ModuleDeclarationNode *>(node)); break;
+  case NodeKind::ModuleDeclaration: debug_module_declaration(static_cast<const ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
   case NodeKind::Type: debug_type(static_cast<const TypeNode *>(node)); break;
 
@@ -56,19 +56,19 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ExpressionStatementNode *>(node)); break;
 
-  case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const parser::node::FunctionDeclarationNode *>(node)); break;
+  case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const ayla::ast::node::FunctionDeclarationNode *>(node)); break;
 
   case NodeKind::MemberAccess: debug_path_expression(static_cast<const parser::node::MemberAccessNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const parser::node::IfStatementNode *>(node)); break;
 
-  case NodeKind::Assignment: debug_ASSIGN_node(static_cast<const parser::node::statement::AssignmentNode *>(node)); break;
+  case NodeKind::Assignment: debug_ASSIGN_node(static_cast<const ayla::ast::node::AssignmentExpressionNode *>(node)); break;
 
   case NodeKind::BlockStatement: debug_block(static_cast<const parser::node::BlockStatementNode *>(node)); break;
 
-  case NodeKind::IndexAccess: debug_index_acess(static_cast<const parser::node::IndexAccessNode *>(node)); break;
+  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessNode *>(node)); break;
 
-  case NodeKind::ReturnStatement: debug_return_statement(static_cast<const parser::node::ReturnStatementNode *>(node)); break;
+  case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 
   case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const parser::node::ASTArrayLiteralNode *>(node)); break;
 

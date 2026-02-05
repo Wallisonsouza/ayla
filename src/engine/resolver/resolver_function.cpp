@@ -1,6 +1,6 @@
 #include "Resolver.hpp"
 
-void Resolver::resolve_function_declaration(parser::node::FunctionDeclarationNode *node) {
+void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node) {
   if (!node) return;
 
   if (current_scope->has_symbol_local(node->identifier->name)) {

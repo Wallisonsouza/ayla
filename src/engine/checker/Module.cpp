@@ -1,6 +1,6 @@
 #include "TypeChecker.hpp"
 
-void TypeChecker::check_module_declaration(parser::node::statement::ModuleDeclarationNode *node) {
+void TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
   if (!node) return;
 
   auto *module = unit.context.module_manager.get(node->resolved_module_id);
@@ -14,7 +14,7 @@ void TypeChecker::check_module_declaration(parser::node::statement::ModuleDeclar
 
     check(stmt);
 
-    if (auto *fn = dynamic_cast<parser::node::FunctionDeclarationNode *>(stmt)) {
+    if (auto *fn = dynamic_cast<ayla::ast::node::FunctionDeclarationNode *>(stmt)) {
 
       if (fn->identifier) module->type->add_member(fn->identifier->name, fn->inferred_type);
     }
@@ -29,7 +29,7 @@ void TypeChecker::check_module_declaration(parser::node::statement::ModuleDeclar
   if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
-void TypeChecker::check_import_node(parser::node::statement::ImportNode *node) {
+void TypeChecker::check_import_node(ayla::ast::node::ImportStatementNode *node) {
   if (!node) return;
 
   auto *module = unit.context.module_manager.get(node->resolved_module_id);

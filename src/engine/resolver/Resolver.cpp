@@ -2,7 +2,7 @@
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/node/statement_nodes.hpp"
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
@@ -29,7 +29,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
 
-  case ayla::ast::NodeKind::Import: resolve_import_node(static_cast<parser::node::statement::ImportNode *>(node)); break;
+  case ayla::ast::NodeKind::Import: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::IdentifierNode *>(node)); break;
 
@@ -38,16 +38,16 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::ExpressionStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
-  case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<parser::node::FunctionDeclarationNode *>(node)); break;
-  case ayla::ast::NodeKind::ModuleDeclaration: resolve_module_declaration(static_cast<parser::node::statement::ModuleDeclarationNode *>(node)); break;
+  case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
+  case ayla::ast::NodeKind::ModuleDeclaration: resolve_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ReturnStatement: resolve_return_statement(static_cast<parser::node::ReturnStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ReturnStatement: resolve_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::Assignment: resolve_assignment(static_cast<parser::node::statement::AssignmentNode *>(node)); break;
+  case ayla::ast::NodeKind::Assignment: resolve_assignment(static_cast<ayla::ast::node::AssignmentExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<parser::node::ASTArrayLiteralNode *>(node)); break;
 
-  case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<parser::node::IndexAccessNode *>(node)); break;
+  case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<ayla::ast::node::IndexAccessNode *>(node)); break;
 
   case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
 

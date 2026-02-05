@@ -1,7 +1,6 @@
 #include "TypeChecker.hpp"
 #include "core/memory/type.hpp"
 #include "core/node/Type.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
 
 void TypeChecker::check(ayla::ast::AstNode *node) {
   if (!node || node->inferred_type) return;
@@ -15,18 +14,18 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<parser::node::ASTArrayLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
-  case ayla::ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<parser::node::FunctionDeclarationNode *>(node)); break;
+  case ayla::ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionCall: check_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
   case ayla::ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
   case ayla::ast::NodeKind::MemberAccess: check_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
-  case ayla::ast::NodeKind::IndexAccess: check_index_access(static_cast<parser::node::IndexAccessNode *>(node)); break;
-  case ayla::ast::NodeKind::Assignment: check_assignment(dynamic_cast<parser::node::statement::AssignmentNode *>(node)); break;
+  case ayla::ast::NodeKind::IndexAccess: check_index_access(static_cast<ayla::ast::node::IndexAccessNode *>(node)); break;
+  case ayla::ast::NodeKind::Assignment: check_assignment(dynamic_cast<ayla::ast::node::AssignmentExpressionNode *>(node)); break;
   case ayla::ast::NodeKind::IfStatement: check_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
   case ayla::ast::NodeKind::WhileStatement: check_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
-  case ayla::ast::NodeKind::ReturnStatement: check_return_statement(static_cast<parser::node::ReturnStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
   case ayla::ast::NodeKind::BlockStatement: check_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
-  case ayla::ast::NodeKind::Import: check_import_node(static_cast<parser::node::statement::ImportNode *>(node)); break;
-  case ayla::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<parser::node::statement::ModuleDeclarationNode *>(node)); break;
+  case ayla::ast::NodeKind::Import: check_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
   default: break;
   }
@@ -115,7 +114,7 @@ void TypeChecker::check_variable_declaration(ayla::ast::PatternNode *node) {
 
 inline Type *current_function_return_type = nullptr;
 
-void TypeChecker::check_return_statement(parser::node::ReturnStatementNode *node) {
+void TypeChecker::check_return_statement(ayla::ast::node::ReturnStatementNode *node) {
   if (!node->value) return;
 
   check(node->value);
@@ -131,7 +130,7 @@ void TypeChecker::check_return_statement(parser::node::ReturnStatementNode *node
   node->inferred_type = actual;
 }
 
-void TypeChecker::check_function_declaration(parser::node::FunctionDeclarationNode *node) {
+void TypeChecker::check_function_declaration(ayla::ast::node::FunctionDeclarationNode *node) {
   if (!node) return;
 
   current_function_return_type = node->return_type ? node->return_type->inferred_type : nullptr;
@@ -202,7 +201,7 @@ void TypeChecker::check_binary_expression(ayla::ast::node::BinaryExpressionNode 
   }
 }
 
-void TypeChecker::check_index_access(parser::node::IndexAccessNode *node) {
+void TypeChecker::check_index_access(ayla::ast::node::IndexAccessNode *node) {
   if (!node || !node->base || !node->index) return;
 
   check(node->base);
@@ -296,7 +295,7 @@ void TypeChecker::check_member_access(parser::node::MemberAccessNode *node) {
   node->inferred_type = objType->get_member(node->field->name);
 }
 
-void TypeChecker::check_assignment(parser::node::statement::AssignmentNode *node) {
+void TypeChecker::check_assignment(ayla::ast::node::AssignmentExpressionNode *node) {
 
   if (!node || !node->target || !node->value) return;
 
@@ -321,7 +320,7 @@ void TypeChecker::check_assignment(parser::node::statement::AssignmentNode *node
   }
 
   case ayla::ast::NodeKind::IndexAccess: {
-    auto *idxNode = static_cast<parser::node::IndexAccessNode *>(node->target);
+    auto *idxNode = static_cast<ayla::ast::node::IndexAccessNode *>(node->target);
     targetType = idxNode->inferred_type ? idxNode->inferred_type : &BuiltinTypes::Unknown;
     break;
   }

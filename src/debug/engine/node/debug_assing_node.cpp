@@ -1,6 +1,7 @@
 #include "ast_debug.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
 
-void ASTDebug::debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node) {
+void ASTDebug::debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node) {
   out << "ASSIGN\n";
 
   if (node->target) { debug_labeled("Target", node->target, false); }

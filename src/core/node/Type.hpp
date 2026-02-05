@@ -8,26 +8,21 @@
 #include <vector>
 
 #include "frontend/ast/ExpressionNode.hpp"
+#include "frontend/ast/StatementNode.hpp"
 
 namespace ayla::ast {
 
-struct ASTStatementNode : ayla::ast::AstNode {
-
-  bool resolved = false;
-  explicit ASTStatementNode(NodeKind k) : ayla::ast::AstNode(k) {}
-};
-
-struct ExpressionStatementNode : ASTStatementNode {
+struct ExpressionStatementNode : StatementNode {
   ExpressionNode *expression;
 
-  explicit ExpressionStatementNode(ExpressionNode *expr) : ASTStatementNode(NodeKind::ExpressionStatement), expression(expr) {}
+  explicit ExpressionStatementNode(ExpressionNode *expr) : StatementNode(NodeKind::ExpressionStatement), expression(expr) {}
 };
 
-struct TypeDeclarationNode : ASTStatementNode {
+struct TypeDeclarationNode : StatementNode {
   std::string name;
   std::vector<std::string> type_params;
 
-  explicit TypeDeclarationNode(std::string n, std::vector<std::string> params = {}) : ASTStatementNode(NodeKind::TypeDeclaration), name(std::move(n)), type_params(std::move(params)) {}
+  explicit TypeDeclarationNode(std::string n, std::vector<std::string> params = {}) : StatementNode(NodeKind::TypeDeclaration), name(std::move(n)), type_params(std::move(params)) {}
 };
 
 struct IdentifierNode : ayla::ast::ExpressionNode {
@@ -58,7 +53,7 @@ struct TypeNode : ayla::ast::AstNode {
   }
 };
 
-struct PatternNode : ASTStatementNode {
+struct PatternNode : StatementNode {
   ayla::ast::IdentifierNode *identifier;
   ayla::ast::TypeNode *type;
   ayla::ast::ExpressionNode *value;
@@ -66,7 +61,7 @@ struct PatternNode : ASTStatementNode {
   SymbolId symbol_id;
 
   PatternNode(ayla::ast::IdentifierNode *n, ayla::ast::TypeNode *t, ayla::ast::ExpressionNode *v, ayla::ast::Modifiers modifiers = {})
-      : ASTStatementNode(ayla::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
+      : StatementNode(ayla::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
 };
 
 struct PatternErrorNode : PatternNode {

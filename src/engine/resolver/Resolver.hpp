@@ -5,7 +5,7 @@
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
@@ -25,7 +25,7 @@ struct Resolver {
   void resolve_top_level();
 
   void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
-  void resolve_assignment(parser::node::statement::AssignmentNode *node);
+  void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
 
   void resolve_type(ayla::ast::TypeNode *type_node);
   void resolve_array_literal(parser::node::ASTArrayLiteralNode *node);
@@ -35,7 +35,7 @@ struct Resolver {
   void resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node);
   void resolve_type_node(ayla::ast::TypeNode *node);
 
-  void resolve_index_access(parser::node::IndexAccessNode *node);
+  void resolve_index_access(ayla::ast::node::IndexAccessNode *node);
   void resolve_member_access(parser::node::MemberAccessNode *node);
 
   void resolve_identifier(ayla::ast::IdentifierNode *node);
@@ -44,14 +44,14 @@ struct Resolver {
   void resolve_while_statement(parser::node::ASTWhileStatementNode *node);
 
   void resolve_variable_declaration(ayla::ast::PatternNode *node);
-  void resolve_function_declaration(parser::node::FunctionDeclarationNode *node);
-  void resolve_module_declaration(parser::node::statement::ModuleDeclarationNode *node);
+  void resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
+  void resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
 
   void resolve_block(parser::node::BlockStatementNode *node, bool create_scope = true);
 
-  void resolve_return_statement(parser::node::ReturnStatementNode *node);
+  void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
-  void resolve_import_node(parser::node::statement::ImportNode *node);
+  void resolve_import_node(ayla::ast::node::ImportStatementNode *node);
   void resolve_expression_statement(ayla::ast::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
