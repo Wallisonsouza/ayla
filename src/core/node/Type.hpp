@@ -12,12 +12,6 @@
 
 namespace ayla::ast {
 
-struct ExpressionStatementNode : StatementNode {
-  ExpressionNode *expression;
-
-  explicit ExpressionStatementNode(ExpressionNode *expr) : StatementNode(NodeKind::ExpressionStatement), expression(expr) {}
-};
-
 struct TypeDeclarationNode : StatementNode {
   std::string name;
   std::vector<std::string> type_params;

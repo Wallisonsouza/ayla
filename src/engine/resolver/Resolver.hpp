@@ -6,7 +6,6 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 
@@ -36,12 +35,12 @@ struct Resolver {
   void resolve_type_node(ayla::ast::TypeNode *node);
 
   void resolve_index_access(ayla::ast::node::IndexAccessNode *node);
-  void resolve_member_access(parser::node::MemberAccessNode *node);
+  void resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
 
   void resolve_identifier(ayla::ast::IdentifierNode *node);
   void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
   void resolve_if_statement(ayla::ast::node::IfStatementNode *node);
-  void resolve_while_statement(parser::node::ASTWhileStatementNode *node);
+  void resolve_while_statement(ayla::ast::node::WhileStatementNode *node);
 
   void resolve_variable_declaration(ayla::ast::PatternNode *node);
   void resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
@@ -52,7 +51,7 @@ struct Resolver {
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
   void resolve_import_node(ayla::ast::node::ImportStatementNode *node);
-  void resolve_expression_statement(ayla::ast::ExpressionStatementNode *node);
+  void resolve_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);

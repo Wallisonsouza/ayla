@@ -1,6 +1,7 @@
 #include "engine/parser/parser.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
@@ -11,7 +12,7 @@ ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode 
 
   if (!field) { return nullptr; }
 
-  return unit.ast.create_node<parser::node::MemberAccessNode>(base, field);
+  return unit.ast.create_node<ayla::ast::node::MemberAccessExpressionNode>(base, field);
 }
 
 ayla::ast::ExpressionNode *Parser::parse_index_access(ayla::ast::ExpressionNode *base) {

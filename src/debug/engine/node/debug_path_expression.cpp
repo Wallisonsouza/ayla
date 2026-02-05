@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_path_expression(const parser::node::MemberAccessNode *node) {
+void ASTDebug::debug_path_expression(const ayla::ast::node::MemberAccessExpressionNode *node) {
 
   debug_header("MemberAccessNode");
 

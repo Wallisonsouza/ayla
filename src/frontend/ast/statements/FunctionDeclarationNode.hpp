@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/parser/node/statement_nodes.hpp"
+#include "core/node/Type.hpp"
 #include "frontend/ast/StatementNode.hpp"
 #include "frontend/ast/statements/BlockStatementNode.hpp"
 

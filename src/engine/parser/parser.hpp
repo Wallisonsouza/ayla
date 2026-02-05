@@ -6,9 +6,10 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/error/recover.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
+
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/WhileStatementNode.hpp"
 
 enum class ParserResultCode { Success, Error };
 
@@ -58,7 +59,7 @@ public:
   ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
   ayla::ast::node::ModuleDeclarationNode *parse_module_declaration();
   ayla::ast::StatementNode *parse_if_statement();
-  parser::node::ASTWhileStatementNode *parse_while_statemente();
+  ayla::ast::node::WhileStatementNode *parse_while_statemente();
 
   ayla::ast::node::BlockStatementNode *parse_block_statement();
   ayla::ast::PatternNode *parse_function_parameter();

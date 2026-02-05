@@ -5,19 +5,21 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/value.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
 #include "frontend/ast/expressions/BinaryExpressionNode.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "frontend/ast/statements/BlockStatementNode.hpp"
+#include "frontend/ast/statements/ExpressionStatementNode.hpp"
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
 #include "frontend/ast/statements/IfStatementNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/WhileStatementNode.hpp"
 #include "runtime_scope.hpp"
 
 #include <memory>
@@ -35,14 +37,14 @@ struct Executor {
   ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node);
   ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node);
   ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
-  ExecResult execute_member_acess(CompilationUnit &unit, parser::node::MemberAccessNode *member);
+  ExecResult execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member);
 
   ExecResult execute_node(CompilationUnit &unit, ayla::ast::AstNode *node) {
     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
 
     switch (node->kind) {
 
-    case ayla::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<ayla::ast::ExpressionStatementNode *>(node));
+    case ayla::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<ayla::ast::node::ExpressionStatementNode *>(node));
 
     case ayla::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<ayla::ast::node::AssignmentExpressionNode *>(node));
 
@@ -54,7 +56,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<ayla::ast::node::BinaryExpressionNode *>(node));
 
-    case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<parser::node::MemberAccessNode *>(node));
+    case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node));
 
     case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<ayla::ast::node::CallExpressionNode *>(node));
 
@@ -68,7 +70,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<ayla::ast::node::IndexAccessNode *>(node));
 
-    case ayla::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<parser::node::ASTWhileStatementNode *>(node));
+    case ayla::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<ayla::ast::node::WhileStatementNode *>(node));
 
     case ayla::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<ayla::ast::node::FunctionDeclarationNode *>(node));
 
@@ -133,7 +135,7 @@ struct Executor {
   }
 
   // ===================== STATEMENTS =====================
-  ExecResult execute_expression_statement(CompilationUnit &unit, ayla::ast::ExpressionStatementNode *node) {
+  ExecResult execute_expression_statement(CompilationUnit &unit, ayla::ast::node::ExpressionStatementNode *node) {
     execute_node(unit, node->expression);
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
@@ -158,12 +160,12 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_while(CompilationUnit &unit, parser::node::ASTWhileStatementNode *node) {
+  ExecResult execute_while(CompilationUnit &unit, ayla::ast::node::WhileStatementNode *node) {
 
     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
     while (execute_node(unit, node->condition).value->as_bool()) {
-      last = execute_block(unit, node->body);
+      last = execute_node(unit, node->body);
       if (last.is_return()) return last;
     }
     return last;

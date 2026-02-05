@@ -1,7 +1,6 @@
 #include "ast_debug.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
 
-void ASTDebug::debug_while(const parser::node::ASTWhileStatementNode *node) {
+void ASTDebug::debug_while(const ayla::ast::node::WhileStatementNode *node) {
 
   out << "While\n";
 

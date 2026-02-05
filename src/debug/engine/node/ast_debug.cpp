@@ -4,8 +4,6 @@
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement_nodes.hpp"
-
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 
 TreeLayout::TreeLayout(std::ostream &out) : out(out) {}
@@ -54,11 +52,11 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::FunctionCall: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
 
-  case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ExpressionStatementNode *>(node)); break;
+  case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
   case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const ayla::ast::node::FunctionDeclarationNode *>(node)); break;
 
-  case NodeKind::MemberAccess: debug_path_expression(static_cast<const parser::node::MemberAccessNode *>(node)); break;
+  case NodeKind::MemberAccess: debug_path_expression(static_cast<const ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const ayla::ast::node::IfStatementNode *>(node)); break;
 
@@ -72,7 +70,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const parser::node::ASTArrayLiteralNode *>(node)); break;
 
-  case NodeKind::WhileStatement: debug_while(static_cast<const parser::node::ASTWhileStatementNode *>(node)); break;
+  case NodeKind::WhileStatement: debug_while(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
   default: out << "<error>\n"; break;
   }
 

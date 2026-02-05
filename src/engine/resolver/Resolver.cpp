@@ -3,8 +3,6 @@
 #include "core/node/flags.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement_nodes.hpp"
-
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
@@ -21,13 +19,13 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<ayla::ast::node::IfStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::WhileStatement: resolve_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::WhileStatement: resolve_while_statement(static_cast<ayla::ast::node::WhileStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::BlockStatement: resolve_block(static_cast<ayla::ast::node::BlockStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
+  case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::Import: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
 
@@ -35,7 +33,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::ExpressionStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;

@@ -6,7 +6,6 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
-#include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 
@@ -33,12 +32,12 @@ struct TypeChecker {
 
   // Expressões
   void check_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
-  void check_member_access(parser::node::MemberAccessNode *node);
+  void check_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
   void check_index_access(ayla::ast::node::IndexAccessNode *node);
 
   // Controle
   void check_if_statement(ayla::ast::node::IfStatementNode *node);
-  void check_while_statement(parser::node::ASTWhileStatementNode *node);
+  void check_while_statement(ayla::ast::node::WhileStatementNode *node);
   void check_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
   void check_block(ayla::ast::node::BlockStatementNode *node);
@@ -46,7 +45,7 @@ struct TypeChecker {
   void check_import_node(ayla::ast::node::ImportStatementNode *node);
   void check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
   void check_assignment(ayla::ast::node::AssignmentExpressionNode *node);
-  void check_expression_statement(ayla::ast::ExpressionStatementNode *node);
+  void check_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);
     for (auto &[k, v] : ctx) { diag->context.set(k, v); }

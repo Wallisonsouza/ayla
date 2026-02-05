@@ -1,9 +1,9 @@
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
+
 #include "engine/parser/parser.hpp"
 
-parser::node::ASTWhileStatementNode *Parser::parse_while_statemente() {
+ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
 
   if (!unit.tokens.match(TokenKind::WHILE_KEYWORD)) return nullptr;
 
@@ -38,5 +38,5 @@ parser::node::ASTWhileStatementNode *Parser::parse_while_statemente() {
     return nullptr;
   }
 
-  return unit.ast.create_node<parser::node::ASTWhileStatementNode>(condition, block);
+  return unit.ast.create_node<ayla::ast::node::WhileStatementNode>(condition, block);
 }

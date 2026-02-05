@@ -1,3 +1,4 @@
+
 #include "engine/runtime/executor.hpp"
 
 ExecResult Executor::execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node) {
@@ -14,7 +15,7 @@ ExecResult Executor::execute_object(CompilationUnit &unit, parser::node::ObjectL
   return ExecResult::make_value(obj_val);
 }
 
-ExecResult Executor::execute_member_acess(CompilationUnit &unit, parser::node::MemberAccessNode *member) {
+ExecResult Executor::execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member) {
 
   //
   auto base_val = execute_node(unit, member->base).value;

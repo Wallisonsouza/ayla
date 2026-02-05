@@ -7,7 +7,7 @@ void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
   if (node->index) resolve(node->index);
 }
 
-void Resolver::resolve_member_access(parser::node::MemberAccessNode *node) {
+void Resolver::resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node) {
 
   if (node->base) { resolve(node->base); }
 
