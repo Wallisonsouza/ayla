@@ -4,10 +4,10 @@
 void ASTDebug::debug_object_literal(const parser::node::ObjectLiteralNode *node) {
   out << "Object\n";
 
-  if (node->field_list) {
-    for (size_t i = 0; i < node->field_list->elements.size(); ++i) {
-      bool is_last = (i + 1 == node->field_list->elements.size());
-      debug_node(node->field_list->elements[i], is_last);
+  if (!node->fields.empty()) {
+    for (size_t i = 0; i < node->fields.size(); ++i) {
+      bool is_last = (i + 1 == node->fields.size());
+      debug_node(node->fields[i], is_last);
     }
   }
 }

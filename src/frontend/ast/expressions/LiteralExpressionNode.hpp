@@ -24,4 +24,9 @@ struct NullLiteralNode : ExpressionNode {
   NullLiteralNode() : ExpressionNode(NodeKind::NullLiteral) {}
 };
 
+struct ASTArrayLiteralNode : ExpressionNode {
+  std::vector<ExpressionNode *> elements;
+  explicit ASTArrayLiteralNode(std::vector<ExpressionNode *> elems) : ExpressionNode(NodeKind::ArrayLiteral), elements(std::move(elems)) {}
+};
+
 } // namespace ayla::ast::node

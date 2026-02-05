@@ -7,7 +7,7 @@ ExecResult Executor::execute_object(CompilationUnit &unit, parser::node::ObjectL
 
   auto &obj = obj_val->get_object_ref();
 
-  for (auto &field : node->field_list->elements) {
+  for (auto &field : node->fields) {
     auto result = execute_node(unit, field->value);
     obj.set(field->key->resolved_symbol_id, result.value);
   }

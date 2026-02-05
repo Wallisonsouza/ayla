@@ -71,13 +71,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
     return nullptr;
   }
 
-  auto param_list =
-      parse_generic_list<parser::node::ASTParameterListNode, ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
-
-  if (param_list->flags.has(NodeFlags::HasError)) {
-    recover_until(RecoverBoundary::Function);
-    return nullptr;
-  }
+  auto params = parse_generic_list<ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
 
   ayla::ast::TypeNode *return_type = nullptr;
 
@@ -101,5 +95,5 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
     }
   }
 
-  return unit.ast.create_node<ayla::ast::node::FunctionDeclarationNode>(name, param_list->elements, return_type, body, modifiers);
+  return unit.ast.create_node<ayla::ast::node::FunctionDeclarationNode>(name, params, return_type, body, modifiers);
 }

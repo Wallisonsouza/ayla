@@ -81,7 +81,7 @@ struct ASTDebug {
 
   void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
   void debug_index_acess(const ayla::ast::node::IndexAccessNode *node);
-  void debug_array_literal(const parser::node::ASTArrayLiteralNode *node);
+  void debug_array_literal(const ayla::ast::node::ASTArrayLiteralNode *node);
   void debug_path_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
   void debug_if_statement(const ayla::ast::node::IfStatementNode *node);
   void debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node);

@@ -27,7 +27,7 @@ struct Resolver {
   void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
 
   void resolve_type(ayla::ast::TypeNode *type_node);
-  void resolve_array_literal(parser::node::ASTArrayLiteralNode *node);
+  void resolve_array_literal(ayla::ast::node::ASTArrayLiteralNode *node);
   void resolve_object_literal(parser::node::ObjectLiteralNode *node);
   void resolve_number_literal(ayla::ast::node::NumberLiteralNode *node);
   void resolve_string_literal(ayla::ast::node::StringLiteralNode *node);

@@ -36,20 +36,19 @@ ayla::ast::IdentifierNode *Parser::parse_identifier() {
 
 ayla::ast::ExpressionNode *Parser::parse_object_literal() {
 
-  auto *fieldList =
-      parse_generic_list<parser::node::ASTObjectFieldList, parser::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> parser::node::ObjectFieldNode * {
-        auto *key = parse_identifier();
-        if (!key) return nullptr;
+  auto fields = parse_generic_list<parser::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> parser::node::ObjectFieldNode * {
+    auto *key = parse_identifier();
+    if (!key) return nullptr;
 
-        unit.tokens.expect(TokenKind::COLON);
+    unit.tokens.expect(TokenKind::COLON);
 
-        auto *value = parse_expression();
-        if (!value) return nullptr;
+    auto *value = parse_expression();
+    if (!value) return nullptr;
 
-        return unit.ast.create_node<parser::node::ObjectFieldNode>(key, value);
-      });
+    return unit.ast.create_node<parser::node::ObjectFieldNode>(key, value);
+  });
 
-  if (!fieldList) return nullptr;
+  if (fields.empty()) return nullptr;
 
-  return unit.ast.create_node<parser::node::ObjectLiteralNode>(fieldList);
+  return unit.ast.create_node<parser::node::ObjectLiteralNode>(std::move(fields));
 }

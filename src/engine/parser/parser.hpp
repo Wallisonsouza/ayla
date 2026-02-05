@@ -7,6 +7,7 @@
 #include "engine/parser/error/recover.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 
+#include "engine/runtime/executor.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
 #include "frontend/ast/statements/WhileStatementNode.hpp"
@@ -53,7 +54,7 @@ public:
 
   ayla::ast::StatementNode *parse_statement();
   ayla::ast::StatementNode *parse_import_statement();
-  parser::node::ASTArrayLiteralNode *parse_array_literal();
+  ayla::ast::node::ASTArrayLiteralNode *parse_array_literal();
 
   ayla::ast::StatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
   ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
@@ -104,14 +105,14 @@ public:
     return unit.ast.create_node<ErrorNodeT>(slice);
   }
 
-  template <typename ListNodeType, typename ElementType, typename ParseFunc>
-  ListNodeType *parse_generic_list(TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
+  template <typename ElementType, typename ParseFunc> std::vector<ElementType *> parse_generic_list(TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
+
     std::vector<ElementType *> elements;
 
     if (!unit.tokens.match(open_token)) {
       auto desc = unit.context.descriptor_table.lookup_by_kind(open_token);
       report_error(DiagnosticCode::ExpectedToken, desc ? desc->name : "opening token");
-      return nullptr;
+      return {};
     }
 
     bool expect_element = true;
@@ -119,15 +120,15 @@ public:
     while (!unit.tokens.is_end()) {
       consume_statement_separators();
 
-      if (unit.tokens.match(close_token)) { return unit.ast.create_node<ListNodeType>(std::move(elements)); }
+      if (unit.tokens.match(close_token)) { return elements; }
 
       auto *current = unit.tokens.peek();
       if (!current) break;
 
       if (expect_element) {
-        auto *el = parse_element(); // agora funciona com qualquer callable
+        auto *el = parse_element();
 
-        if (!el || el->flags.has(NodeFlags::HasError)) { return nullptr; }
+        if (!el || el->flags.has(NodeFlags::HasError)) return {};
 
         elements.push_back(el);
         expect_element = false;
@@ -139,18 +140,15 @@ public:
         continue;
       }
 
-      if (current->descriptor->kind == TokenKind::OPEN_BRACE) {
-        report_error(DiagnosticCode::ExpectedToken, "expected closing token before block");
-      } else {
-        auto sep_desc = unit.context.descriptor_table.lookup_by_kind(separator_token);
-        report_error(DiagnosticCode::ExpectedToken, sep_desc ? sep_desc->name : "separator token");
-      }
+      auto sep_desc = unit.context.descriptor_table.lookup_by_kind(separator_token);
 
-      return nullptr;
+      report_error(DiagnosticCode::ExpectedToken, sep_desc ? sep_desc->name : "separator token");
+
+      return {};
     }
 
     report_error(DiagnosticCode::ExpectedToken, "unterminated list");
-    return nullptr;
+    return {};
   }
 
   Token *expect(TokenKind kind) {

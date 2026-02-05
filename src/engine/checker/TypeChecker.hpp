@@ -22,7 +22,7 @@ struct TypeChecker {
   void check_string_literal(ayla::ast::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
   void check_boolean_literal(ayla::ast::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
 
-  void check_array_literal(parser::node::ASTArrayLiteralNode *node);
+  void check_array_literal(ayla::ast::node::ASTArrayLiteralNode *node);
   void check_object_literal(parser::node::ObjectLiteralNode *node);
 
   void check_variable_declaration(ayla::ast::PatternNode *node);

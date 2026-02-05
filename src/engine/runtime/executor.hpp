@@ -34,7 +34,7 @@ struct Executor {
 
   ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node);
   ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node);
-  ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node);
+  ExecResult execute_array(CompilationUnit &unit, ayla::ast::node::ASTArrayLiteralNode *node);
   ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node);
   ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
   ExecResult execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member);
@@ -66,7 +66,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<ayla::ast::node::IfStatementNode *>(node));
 
-    case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<parser::node::ASTArrayLiteralNode *>(node));
+    case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<ayla::ast::node::ASTArrayLiteralNode *>(node));
 
     case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<ayla::ast::node::IndexAccessNode *>(node));
 

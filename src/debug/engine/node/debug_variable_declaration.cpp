@@ -20,7 +20,7 @@ void ASTDebug::debug_variable_declaration(const ayla::ast::PatternNode *node) {
   }
 }
 
-void ASTDebug::debug_array_literal(const parser::node::ASTArrayLiteralNode *node) {
+void ASTDebug::debug_array_literal(const ayla::ast::node::ASTArrayLiteralNode *node) {
   out << "ArrayLiteral\n";
 
   for (size_t i = 0; i < node->elements.size(); ++i) {

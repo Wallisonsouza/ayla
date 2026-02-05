@@ -68,7 +68,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 
-  case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const parser::node::ASTArrayLiteralNode *>(node)); break;
+  case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const ayla::ast::node::ASTArrayLiteralNode *>(node)); break;
 
   case NodeKind::WhileStatement: debug_while(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
   default: out << "<error>\n"; break;
