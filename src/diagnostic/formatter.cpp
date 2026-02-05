@@ -11,7 +11,7 @@ struct DiagnosticValueRenderer {
 
   std::string operator()(TokenKind k) const { return "'" + unit.context.descriptor_table.lookup_by_kind(k)->name + "'"; }
 
-  std::string operator()(core::ast::NodeKind k) const { return "unit.context.node_names.at(k);"; }
+  std::string operator()(ayla::ast::NodeKind k) const { return "unit.context.node_names.at(k);"; }
 };
 
 std::string render_value(const DiagnosticValue &v, const CompilationUnit &unit) { return std::visit(DiagnosticValueRenderer{unit}, v); }

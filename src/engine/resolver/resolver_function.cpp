@@ -13,7 +13,7 @@ void Resolver::resolve_function_declaration(parser::node::FunctionDeclarationNod
   current_scope->declare(node->identifier->name, sym_id);
   node->symbol_id = sym_id;
 
-  if (node->modifiers.has(core::ast::Modifier::Extern)) return;
+  if (node->modifiers.has(ayla::ast::Modifier::Extern)) return;
 
   push_scope();
 

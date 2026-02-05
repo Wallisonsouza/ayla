@@ -9,7 +9,7 @@ enum class SymbolKind { Type, Function, Variable, Field, Module };
 
 struct Type;
 
-namespace core::ast {
+namespace ayla::ast {
 struct AstNode;
 }
 

@@ -2,95 +2,94 @@
 
 #include "core/module/scope.hpp"
 #include "core/node/Modifier.hpp"
-#include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
 
 namespace parser::node {
 
-struct BlockStatementNode : core::ast::ASTStatementNode {
-  std::vector<core::ast::ASTStatementNode *> statements;
+struct BlockStatementNode : ayla::ast::ASTStatementNode {
+  std::vector<ayla::ast::ASTStatementNode *> statements;
 
-  explicit BlockStatementNode(std::vector<core::ast::ASTStatementNode *> stmts = {}) : ASTStatementNode(core::ast::NodeKind::BlockStatement), statements(std::move(stmts)) {}
+  explicit BlockStatementNode(std::vector<ayla::ast::ASTStatementNode *> stmts = {}) : ASTStatementNode(ayla::ast::NodeKind::BlockStatement), statements(std::move(stmts)) {}
 };
 
 struct BlockStatementNodeError : BlockStatementNode {
   explicit BlockStatementNodeError() : BlockStatementNode({}) { flags.set(NodeFlags::HasError); }
 };
 
-struct ASTWhileStatementNode : core::ast::ASTStatementNode {
-  core::ast::ASTExpressionNode *condition;
+struct ASTWhileStatementNode : ayla::ast::ASTStatementNode {
+  ayla::ast::ExpressionNode *condition;
   BlockStatementNode *body;
 
-  ASTWhileStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *block) : core::ast::ASTStatementNode(core::ast::NodeKind::WhileStatement), condition(cond), body(block) {}
+  ASTWhileStatementNode(ayla::ast::ExpressionNode *cond, BlockStatementNode *block) : ayla::ast::ASTStatementNode(ayla::ast::NodeKind::WhileStatement), condition(cond), body(block) {}
 };
 
-struct IfStatementNode : core::ast::ASTStatementNode {
-  core::ast::ASTExpressionNode *condition;
+struct IfStatementNode : ayla::ast::ASTStatementNode {
+  ayla::ast::ExpressionNode *condition;
   BlockStatementNode *then_block;
-  core::ast::ASTStatementNode *else_block;
+  ayla::ast::ASTStatementNode *else_block;
 
-  IfStatementNode(core::ast::ASTExpressionNode *cond, BlockStatementNode *then_b, core::ast::ASTStatementNode *else_b = nullptr)
-      : core::ast::ASTStatementNode(core::ast::NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
+  IfStatementNode(ayla::ast::ExpressionNode *cond, BlockStatementNode *then_b, ayla::ast::ASTStatementNode *else_b = nullptr)
+      : ayla::ast::ASTStatementNode(ayla::ast::NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
 };
 
 struct IfStatementNodeError : IfStatementNode {
   IfStatementNodeError() : IfStatementNode(nullptr, nullptr, nullptr) { flags.set(NodeFlags::HasError); }
 };
 
-struct FunctionDeclarationNode : core::ast::ASTStatementNode {
-  core::ast::IdentifierNode *identifier;
-  std::vector<core::ast::PatternNode *> params;
-  core::ast::TypeNode *return_type;
+struct FunctionDeclarationNode : ayla::ast::ASTStatementNode {
+  ayla::ast::IdentifierNode *identifier;
+  std::vector<ayla::ast::PatternNode *> params;
+  ayla::ast::TypeNode *return_type;
   BlockStatementNode *body;
-  core::ast::Modifiers modifiers;
+  ayla::ast::Modifiers modifiers;
   SymbolId symbol_id;
   // Value::NativeFunction *native_fn = nullptr;
 
   core::ParserScope *decl_scope = nullptr;
 
-  FunctionDeclarationNode(core::ast::IdentifierNode *identifier,
-                          std::vector<core::ast::PatternNode *> params,
-                          core::ast::TypeNode *ret_type = nullptr,
+  FunctionDeclarationNode(ayla::ast::IdentifierNode *identifier,
+                          std::vector<ayla::ast::PatternNode *> params,
+                          ayla::ast::TypeNode *ret_type = nullptr,
                           BlockStatementNode *b = nullptr,
-                          core::ast::Modifiers mods = {})
-      : ASTStatementNode(core::ast::NodeKind::FunctionDeclaration), identifier(identifier), params(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}
+                          ayla::ast::Modifiers mods = {})
+      : ASTStatementNode(ayla::ast::NodeKind::FunctionDeclaration), identifier(identifier), params(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}
 };
 
-struct FunctionErrorNode : core::ast::ASTStatementNode {
-  explicit FunctionErrorNode(const SourceSlice &slice = {}) : ASTStatementNode(core::ast::NodeKind::Error) {
+struct FunctionErrorNode : ayla::ast::ASTStatementNode {
+  explicit FunctionErrorNode(const SourceSlice &slice = {}) : ASTStatementNode(ayla::ast::NodeKind::Error) {
     this->slice = slice;
 
     flags.set(NodeFlags::HasError);
   }
 };
 
-struct MemberAccessNode : core::ast::ASTExpressionNode {
-  core::ast::ASTExpressionNode *base;
-  core::ast::IdentifierNode *field;
+struct MemberAccessNode : ayla::ast::ExpressionNode {
+  ayla::ast::ExpressionNode *base;
+  ayla::ast::IdentifierNode *field;
 
-  MemberAccessNode(core::ast::ASTExpressionNode *b, core::ast::IdentifierNode *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::MemberAccess), base(b), field(f) {}
+  MemberAccessNode(ayla::ast::ExpressionNode *b, ayla::ast::IdentifierNode *f) : ayla::ast::ExpressionNode(ayla::ast::NodeKind::MemberAccess), base(b), field(f) {}
 };
 
-struct IndexAccessNode : core::ast::ASTExpressionNode {
-  core::ast::ASTExpressionNode *base;
-  core::ast::ASTExpressionNode *index;
+struct IndexAccessNode : ayla::ast::ExpressionNode {
+  ayla::ast::ExpressionNode *base;
+  ayla::ast::ExpressionNode *index;
 
-  IndexAccessNode(core::ast::ASTExpressionNode *b, core::ast::ASTExpressionNode *i) : ASTExpressionNode(core::ast::NodeKind::IndexAccess), base(b), index(i) {}
+  IndexAccessNode(ayla::ast::ExpressionNode *b, ayla::ast::ExpressionNode *i) : ExpressionNode(ayla::ast::NodeKind::IndexAccess), base(b), index(i) {}
 };
 
-struct FunctionCallNode : core::ast::ASTExpressionNode {
-  core::ast::ASTExpressionNode *callee;
-  std::vector<core::ast::ASTExpressionNode *> arguments;
+struct FunctionCallNode : ayla::ast::ExpressionNode {
+  ayla::ast::ExpressionNode *callee;
+  std::vector<ayla::ast::ExpressionNode *> arguments;
   SymbolId symbol_id;
   core::ParserScope *decl_scope = nullptr;
-  FunctionCallNode(core::ast::ASTExpressionNode *c, std::vector<core::ast::ASTExpressionNode *> a) : ASTExpressionNode(core::ast::NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
+  FunctionCallNode(ayla::ast::ExpressionNode *c, std::vector<ayla::ast::ExpressionNode *> a) : ExpressionNode(ayla::ast::NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
 };
 
-struct ReturnStatementNode : core::ast::ASTStatementNode {
-  core::ast::ASTExpressionNode *value = nullptr;
+struct ReturnStatementNode : ayla::ast::ASTStatementNode {
+  ayla::ast::ExpressionNode *value = nullptr;
 
-  ReturnStatementNode(core::ast::ASTExpressionNode *v) : ASTStatementNode(core::ast::NodeKind::ReturnStatement), value(v) {}
+  ReturnStatementNode(ayla::ast::ExpressionNode *v) : ASTStatementNode(ayla::ast::NodeKind::ReturnStatement), value(v) {}
 };
 
 } // namespace parser::node

@@ -1,7 +1,7 @@
 #include "ast_debug.hpp"
 #include "core/node/Type.hpp"
 
-void ASTDebug::debug_expression_statement(const core::ast::ExpressionStatementNode *node) {
+void ASTDebug::debug_expression_statement(const ayla::ast::ExpressionStatementNode *node) {
 
   out << "ExpressionStatement\n";
 

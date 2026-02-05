@@ -1,11 +1,11 @@
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTStatementNode *Parser::parse_import_statement() {
-  
+ayla::ast::ASTStatementNode *Parser::parse_import_statement() {
+
   if (!unit.tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
 
-  std::vector<core::ast::IdentifierNode *> path_nodes;
+  std::vector<ayla::ast::IdentifierNode *> path_nodes;
 
   // primeiro identificador é obrigatório
   auto *name_token = unit.tokens.match(TokenKind::IDENTIFIER);
@@ -16,7 +16,7 @@ core::ast::ASTStatementNode *Parser::parse_import_statement() {
 
   while (true) {
     auto name = unit.source.buffer.get_text(name_token->slice.span);
-    path_nodes.push_back(unit.ast.create_node<core::ast::IdentifierNode>(name));
+    path_nodes.push_back(unit.ast.create_node<ayla::ast::IdentifierNode>(name));
 
     if (!unit.tokens.match(TokenKind::DOT)) break;
 

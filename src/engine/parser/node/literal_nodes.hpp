@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/memory/SymbolId.hpp"
-#include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include "frontend/ast/AstNode.hpp"
 #include <string>
@@ -9,57 +8,57 @@
 
 namespace parser::node {
 
-struct NumberLiteralNode : core::ast::ASTExpressionNode {
+struct NumberLiteralNode : ayla::ast::ExpressionNode {
   double value;
 
-  explicit NumberLiteralNode(double v) : core::ast::ASTExpressionNode(core::ast::NodeKind::NumberLiteral), value(v) {}
+  explicit NumberLiteralNode(double v) : ayla::ast::ExpressionNode(ayla::ast::NodeKind::NumberLiteral), value(v) {}
 };
 
-struct StringLiteralNode : core::ast::ASTExpressionNode {
+struct StringLiteralNode : ayla::ast::ExpressionNode {
   std::string value;
 
-  explicit StringLiteralNode(std::string v) : ASTExpressionNode(core::ast::NodeKind::StringLiteral), value(std::move(v)) {}
+  explicit StringLiteralNode(std::string v) : ExpressionNode(ayla::ast::NodeKind::StringLiteral), value(std::move(v)) {}
 };
 
-struct BoolLiteralNode : core::ast::ASTExpressionNode {
+struct BoolLiteralNode : ayla::ast::ExpressionNode {
   bool value;
 
-  explicit BoolLiteralNode(bool v) : ASTExpressionNode(core::ast::NodeKind::BooleanLiteral), value(v) {}
+  explicit BoolLiteralNode(bool v) : ExpressionNode(ayla::ast::NodeKind::BooleanLiteral), value(v) {}
 };
 
-struct CharLiteralNode : core::ast::ASTExpressionNode {
+struct CharLiteralNode : ayla::ast::ExpressionNode {
   char32_t value;
 
-  explicit CharLiteralNode(char32_t v) : ASTExpressionNode(core::ast::NodeKind::CharLiteral), value(v) {}
+  explicit CharLiteralNode(char32_t v) : ExpressionNode(ayla::ast::NodeKind::CharLiteral), value(v) {}
 };
 
-struct NullLiteralNode : core::ast::ASTExpressionNode {
-  NullLiteralNode() : ASTExpressionNode(core::ast::NodeKind::NullLiteral) {}
+struct NullLiteralNode : ayla::ast::ExpressionNode {
+  NullLiteralNode() : ExpressionNode(ayla::ast::NodeKind::NullLiteral) {}
 };
 
-template <typename T> struct ListNode : core::ast::ASTExpressionNode {
+template <typename T> struct ListNode : ayla::ast::ExpressionNode {
   std::vector<T *> elements;
-  ListNode(core::ast::NodeKind kind, std::vector<T *> elems) : ASTExpressionNode(kind), elements(std::move(elems)) {}
+  ListNode(ayla::ast::NodeKind kind, std::vector<T *> elems) : ExpressionNode(kind), elements(std::move(elems)) {}
 };
 
-struct ASTParameterListNode : ListNode<core::ast::PatternNode> {
-  explicit ASTParameterListNode(std::vector<core::ast::PatternNode *> elems) : ListNode(core::ast::NodeKind::ParameterList, std::move(elems)) {}
+struct ASTParameterListNode : ListNode<ayla::ast::PatternNode> {
+  explicit ASTParameterListNode(std::vector<ayla::ast::PatternNode *> elems) : ListNode(ayla::ast::NodeKind::ParameterList, std::move(elems)) {}
 };
 
-struct ASTArrayLiteralNode : ListNode<core::ast::ASTExpressionNode> {
-  explicit ASTArrayLiteralNode(std::vector<core::ast::ASTExpressionNode *> elems) : ListNode(core::ast::NodeKind::ArrayLiteral, std::move(elems)) {}
+struct ASTArrayLiteralNode : ListNode<ayla::ast::ExpressionNode> {
+  explicit ASTArrayLiteralNode(std::vector<ayla::ast::ExpressionNode *> elems) : ListNode(ayla::ast::NodeKind::ArrayLiteral, std::move(elems)) {}
 };
 
 struct ObjectFieldNode : ayla::ast::AstNode {
-  core::ast::ASTExpressionNode *key;
-  core::ast::ASTExpressionNode *value;
+  ayla::ast::ExpressionNode *key;
+  ayla::ast::ExpressionNode *value;
 
-  ObjectFieldNode(core::ast::ASTExpressionNode *k, core::ast::ASTExpressionNode *v) : ayla::ast::AstNode(core::ast::NodeKind::ObjectField), key(k), value(v) {}
+  ObjectFieldNode(ayla::ast::ExpressionNode *k, ayla::ast::ExpressionNode *v) : ayla::ast::AstNode(ayla::ast::NodeKind::ObjectField), key(k), value(v) {}
 };
 
 struct ASTObjectFieldList : ListNode<ObjectFieldNode> {
 
-  explicit ASTObjectFieldList(std::vector<ObjectFieldNode *> elems) : ListNode(core::ast::NodeKind::ObjectFieldList, std::move(elems)) {}
+  explicit ASTObjectFieldList(std::vector<ObjectFieldNode *> elems) : ListNode(ayla::ast::NodeKind::ObjectFieldList, std::move(elems)) {}
 };
 
 struct MemberTable {
@@ -90,10 +89,10 @@ struct MemberTable {
   auto end() const { return members.end(); }
 };
 
-struct ObjectLiteralNode : core::ast::ASTExpressionNode {
+struct ObjectLiteralNode : ayla::ast::ExpressionNode {
   ASTObjectFieldList *field_list;
 
-  ObjectLiteralNode(ASTObjectFieldList *f) : core::ast::ASTExpressionNode(core::ast::NodeKind::ObjectLiteral), field_list(f) {}
+  ObjectLiteralNode(ASTObjectFieldList *f) : ayla::ast::ExpressionNode(ayla::ast::NodeKind::ObjectLiteral), field_list(f) {}
 };
 
 } // namespace parser::node

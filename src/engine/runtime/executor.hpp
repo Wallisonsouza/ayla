@@ -1,9 +1,7 @@
 #pragma once
 #include "core/memory/symbol.hpp"
 #include "core/node/BinaryOp.hpp"
-#include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
-#include "debug/engine/node/ast_debug.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
 #include "engine/parser/node/operator_nodes.hpp"
@@ -34,41 +32,41 @@ struct Executor {
 
     switch (node->kind) {
 
-    case core::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<core::ast::ExpressionStatementNode *>(node));
+    case ayla::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<ayla::ast::ExpressionStatementNode *>(node));
 
-    case core::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<parser::node::statement::AssignmentNode *>(node));
+    case ayla::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<parser::node::statement::AssignmentNode *>(node));
 
-    case core::ast::NodeKind::Identifier: return execute_identifier(static_cast<core::ast::IdentifierNode *>(node));
+    case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::IdentifierNode *>(node));
 
-    case core::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<parser::node::NumberLiteralNode *>(node)->value)));
+    case ayla::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<parser::node::NumberLiteralNode *>(node)->value)));
 
-    case core::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<parser::node::StringLiteralNode *>(node)->value)));
+    case ayla::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<parser::node::StringLiteralNode *>(node)->value)));
 
-    case core::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<parser::node::BinaryExpressionNode *>(node));
+    case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<parser::node::BinaryExpressionNode *>(node));
 
-    case core::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<parser::node::MemberAccessNode *>(node));
+    case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<parser::node::MemberAccessNode *>(node));
 
-    case core::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<parser::node::FunctionCallNode *>(node));
+    case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<parser::node::FunctionCallNode *>(node));
 
-    case core::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<core::ast::PatternNode *>(node));
+    case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::PatternNode *>(node));
 
-    case core::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<parser::node::BlockStatementNode *>(node));
+    case ayla::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<parser::node::BlockStatementNode *>(node));
 
-    case core::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<parser::node::IfStatementNode *>(node));
+    case ayla::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<parser::node::IfStatementNode *>(node));
 
-    case core::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<parser::node::ASTArrayLiteralNode *>(node));
+    case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<parser::node::ASTArrayLiteralNode *>(node));
 
-    case core::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<parser::node::IndexAccessNode *>(node));
+    case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<parser::node::IndexAccessNode *>(node));
 
-    case core::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<parser::node::ASTWhileStatementNode *>(node));
+    case ayla::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<parser::node::ASTWhileStatementNode *>(node));
 
-    case core::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<parser::node::FunctionDeclarationNode *>(node));
+    case ayla::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<parser::node::FunctionDeclarationNode *>(node));
 
-    case core::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<parser::node::ReturnStatementNode *>(node));
+    case ayla::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<parser::node::ReturnStatementNode *>(node));
 
-    case core::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<parser::node::statement::ModuleDeclarationNode *>(node));
+    case ayla::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<parser::node::statement::ModuleDeclarationNode *>(node));
 
-    case core::ast::NodeKind::Import: return execute_import_node(unit, static_cast<parser::node::statement::ImportNode *>(node));
+    case ayla::ast::NodeKind::Import: return execute_import_node(unit, static_cast<parser::node::statement::ImportNode *>(node));
 
     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
     }
@@ -76,10 +74,6 @@ struct Executor {
 
   ExecResult execute_function_call(CompilationUnit &unit, parser::node::FunctionCallNode *node) {
 
-    ASTDebug debug;
-
-    std::cout << "aaaa";
-    debug.debug_node(node, true);
     auto callee = execute_node(unit, node->callee).value;
 
     // std::vector<Value> args;
@@ -129,7 +123,7 @@ struct Executor {
   }
 
   // ===================== STATEMENTS =====================
-  ExecResult execute_expression_statement(CompilationUnit &unit, core::ast::ExpressionStatementNode *node) {
+  ExecResult execute_expression_statement(CompilationUnit &unit, ayla::ast::ExpressionStatementNode *node) {
     execute_node(unit, node->expression);
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
@@ -176,7 +170,7 @@ struct Executor {
     auto lhs = execute_node(unit, node->lhs).value;
     auto rhs = execute_node(unit, node->rhs).value;
 
-    using BO = core::ast::BinaryOperation;
+    using BO = ayla::ast::BinaryOperation;
     switch (node->op) {
     case BO::Add: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() + rhs->get_number())));
     case BO::Subtract: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() - rhs->get_number())));
@@ -192,9 +186,9 @@ struct Executor {
   }
 
   // ===================== VARIABLES =====================
-  ExecResult execute_identifier(core::ast::IdentifierNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
+  ExecResult execute_identifier(ayla::ast::IdentifierNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
 
-  ExecResult execute_variable_declaration(CompilationUnit &unit, core::ast::PatternNode *node) {
+  ExecResult execute_variable_declaration(CompilationUnit &unit, ayla::ast::PatternNode *node) {
     auto val = node->value ? execute_node(unit, node->value).value : std::make_shared<Value>(Value::Null());
 
     current_scope->set(node->symbol_id, val);
@@ -205,14 +199,14 @@ struct Executor {
     auto rhs = execute_node(unit, node->value).value;
 
     // a = ...
-    if (node->target->kind == core::ast::NodeKind::Identifier) {
-      auto *id = static_cast<core::ast::IdentifierNode *>(node->target);
+    if (node->target->kind == ayla::ast::NodeKind::Identifier) {
+      auto *id = static_cast<ayla::ast::IdentifierNode *>(node->target);
       current_scope->set(id->resolved_symbol_id, rhs);
       return ExecResult::make_value(rhs);
     }
 
     // a[i] = ...
-    if (node->target->kind == core::ast::NodeKind::IndexAccess) {
+    if (node->target->kind == ayla::ast::NodeKind::IndexAccess) {
       auto *idx = static_cast<parser::node::IndexAccessNode *>(node->target);
 
       auto base = execute_node(unit, idx->base).value;

@@ -3,7 +3,7 @@
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTStatementNode *Parser::parse_if_statement() {
+ayla::ast::ASTStatementNode *Parser::parse_if_statement() {
   if (!unit.tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
 
   auto *condition = parse_expression();
@@ -16,7 +16,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
     return unit.ast.create_node<parser::node::IfStatementNodeError>();
   }
 
-  if (condition->kind == core::ast::NodeKind::Assignment) {
+  if (condition->kind == ayla::ast::NodeKind::Assignment) {
 
     report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 
@@ -36,7 +36,7 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
     return unit.ast.create_node<parser::node::IfStatementNodeError>();
   }
 
-  core::ast::ASTStatementNode *else_block = nullptr;
+  ayla::ast::ASTStatementNode *else_block = nullptr;
   if (unit.tokens.match(TokenKind::ELSE_KEYWORD)) {
     if (unit.tokens.peek(TokenKind::IF_KEYWORD)) {
       else_block = parse_if_statement();

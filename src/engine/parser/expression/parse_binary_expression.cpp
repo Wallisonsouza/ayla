@@ -2,7 +2,7 @@
 #include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_binary_expression(int min_precedence, core::ast::ASTExpressionNode *left) {
+ayla::ast::ExpressionNode *Parser::parse_binary_expression(int min_precedence, ayla::ast::ExpressionNode *left) {
   if (!left) return nullptr;
 
   while (true) {
@@ -32,15 +32,15 @@ core::ast::ASTExpressionNode *Parser::parse_binary_expression(int min_precedence
       right = parse_binary_expression(next_min_prec, right);
     }
 
-    core::ast::BinaryOperation op;
+    ayla::ast::BinaryOperation op;
     switch (tok->descriptor->kind) {
-    case TokenKind::PLUS: op = core::ast::BinaryOperation::Add; break;
-    case TokenKind::MINUS: op = core::ast::BinaryOperation::Subtract; break;
-    case TokenKind::STAR: op = core::ast::BinaryOperation::Multiply; break;
-    case TokenKind::SLASH: op = core::ast::BinaryOperation::Divide; break;
-    case TokenKind::EQUAL: op = core::ast::BinaryOperation::Equal; break;
-    case TokenKind::LESS: op = core::ast::BinaryOperation::Less; break;
-    case TokenKind::LESS_EQUAL: op = core::ast::BinaryOperation::LessEqual; break;
+    case TokenKind::PLUS: op = ayla::ast::BinaryOperation::Add; break;
+    case TokenKind::MINUS: op = ayla::ast::BinaryOperation::Subtract; break;
+    case TokenKind::STAR: op = ayla::ast::BinaryOperation::Multiply; break;
+    case TokenKind::SLASH: op = ayla::ast::BinaryOperation::Divide; break;
+    case TokenKind::EQUAL: op = ayla::ast::BinaryOperation::Equal; break;
+    case TokenKind::LESS: op = ayla::ast::BinaryOperation::Less; break;
+    case TokenKind::LESS_EQUAL: op = ayla::ast::BinaryOperation::LessEqual; break;
     default: return left;
     }
 

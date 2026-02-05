@@ -24,7 +24,7 @@ parser::node::ReturnStatementNode *Parser::parse_return_statement() {
 
 parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
-  std::vector<core::ast::ASTStatementNode *> statements;
+  std::vector<ayla::ast::ASTStatementNode *> statements;
 
   if (!unit.tokens.match(TokenKind::OPEN_BRACE)) {
 
@@ -58,7 +58,7 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
   return unit.ast.create_node<parser::node::BlockStatementNode>(std::move(statements));
 }
 
-core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modifiers modifiers) {
+ayla::ast::ASTStatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
 
   auto start = unit.tokens.peek_slice();
 
@@ -72,14 +72,14 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modif
   }
 
   auto param_list =
-      parse_generic_list<parser::node::ASTParameterListNode, core::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
+      parse_generic_list<parser::node::ASTParameterListNode, ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
 
   if (param_list->flags.has(NodeFlags::HasError)) {
     recover_until(RecoverBoundary::Function);
     return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
   }
 
-  core::ast::TypeNode *return_type = nullptr;
+  ayla::ast::TypeNode *return_type = nullptr;
 
   if (unit.tokens.match(TokenKind::ARROW)) {
     return_type = parse_type();
@@ -92,7 +92,7 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modif
 
   parser::node::BlockStatementNode *body = nullptr;
 
-  if (!modifiers.has(core::ast::Modifier::Extern)) {
+  if (!modifiers.has(ayla::ast::Modifier::Extern)) {
     body = parse_block_statement();
 
     if (body->flags.has(NodeFlags::HasError)) {

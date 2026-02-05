@@ -9,14 +9,14 @@ namespace core::table {
 
 class OperatorTable {
 public:
-  using FoldCallback = std::function<core::ast::ASTExpressionNode *(core::ast::ASTExpressionNode *, core::ast::ASTExpressionNode *)>;
+  using FoldCallback = std::function<ayla::ast::ExpressionNode *(ayla::ast::ExpressionNode *, ayla::ast::ExpressionNode *)>;
 
-  void register_operation(core::ast::BinaryOperation op, core::ast::TypeNode *left_type, core::ast::TypeNode *right_type, FoldCallback cb) {
+  void register_operation(ayla::ast::BinaryOperation op, ayla::ast::TypeNode *left_type, ayla::ast::TypeNode *right_type, FoldCallback cb) {
     Key key{op, left_type, right_type};
     table_[key] = cb;
   }
 
-  FoldCallback *get(core::ast::BinaryOperation op, core::ast::TypeNode *left_type, core::ast::TypeNode *right_type) {
+  FoldCallback *get(ayla::ast::BinaryOperation op, ayla::ast::TypeNode *left_type, ayla::ast::TypeNode *right_type) {
     Key key{op, left_type, right_type};
     auto it = table_.find(key);
     if (it != table_.end()) return &it->second;
@@ -25,7 +25,7 @@ public:
 
 private:
   struct Key {
-    core::ast::BinaryOperation op;
+    ayla::ast::BinaryOperation op;
     ast::TypeNode *left;
     ast::TypeNode *right;
 

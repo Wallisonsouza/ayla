@@ -1,6 +1,5 @@
 #include "ast_debug.hpp"
 #include "core/AST.hpp"
-#include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
@@ -23,7 +22,7 @@ void TreeLayout::begin_node(bool is_last) {
 void TreeLayout::end_node() { ancestors_alive.pop_back(); }
 
 void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
-  using namespace core::ast;
+  using namespace ayla::ast;
   if (!node) return;
 
   tree.begin_node(isLast);
@@ -92,7 +91,7 @@ void ASTDebug::dump_ast(const Ast &ast) {
   }
 }
 
-// void ASTDebug::debug_children(const std::vector<const core::ast::Node *>
+// void ASTDebug::debug_children(const std::vector<const ayla::ast::Node *>
 // &children) {
 
 //   size_t count = 0;

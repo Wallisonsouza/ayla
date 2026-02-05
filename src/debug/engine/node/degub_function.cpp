@@ -13,7 +13,7 @@ void ASTDebug::debug_function_declaration(const parser::node::FunctionDeclaratio
   if (node->body) { debug_node(node->body, true); }
 }
 
-// void ASTDebug::debug_funtion_parameter(const core::ast::FunctionParameterNode *node) {
+// void ASTDebug::debug_funtion_parameter(const ayla::ast::FunctionParameterNode *node) {
 
 //   debug_header("FunctionParameter");
 

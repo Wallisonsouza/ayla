@@ -1,7 +1,7 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_primary_expression() {
+ayla::ast::ExpressionNode *Parser::parse_primary_expression() {
 
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;

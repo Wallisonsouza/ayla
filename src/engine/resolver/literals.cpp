@@ -1,6 +1,6 @@
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_identifier(core::ast::IdentifierNode *node) {
+void Resolver::resolve_identifier(ayla::ast::IdentifierNode *node) {
   if (!node) return;
 
   SymbolId id = current_scope->resolve_symbol(node->name);
@@ -29,7 +29,7 @@ void Resolver::resolve_array_literal(parser::node::ASTArrayLiteralNode *node) {
   for (auto *el : node->elements) resolve(el);
 }
 
-void Resolver::resolve_type_node(core::ast::TypeNode *node) {
+void Resolver::resolve_type_node(ayla::ast::TypeNode *node) {
   if (!node || !node->identifier) return;
 
   resolve_identifier(node->identifier);

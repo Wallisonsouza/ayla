@@ -1,7 +1,7 @@
 #include "core/node/Type.hpp"
 #include "engine/resolver/Resolver.hpp"
 
-inline void Resolver::resolve_type(core::ast::TypeNode *node) {
+inline void Resolver::resolve_type(ayla::ast::TypeNode *node) {
 
   if (!node || !node->identifier) return;
 

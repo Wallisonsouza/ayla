@@ -2,7 +2,7 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTStatementNode *Parser::parse_statement() {
+ayla::ast::ASTStatementNode *Parser::parse_statement() {
   auto modifiers = parse_modifiers();
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;
@@ -17,7 +17,7 @@ core::ast::ASTStatementNode *Parser::parse_statement() {
   case TokenKind::CONST_KEYWORD: return parse_variable_declaration(modifiers);
   case TokenKind::FUNCTION_KEYWORD: return parse_function_declaration(modifiers);
   default:
-    if (auto *expr = parse_expression()) { return unit.ast.create_node<core::ast::ExpressionStatementNode>(expr); }
+    if (auto *expr = parse_expression()) { return unit.ast.create_node<ayla::ast::ExpressionStatementNode>(expr); }
     unit.tokens.advance();
     return nullptr;
   }

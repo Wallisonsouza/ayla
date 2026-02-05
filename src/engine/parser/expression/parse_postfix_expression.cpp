@@ -1,6 +1,6 @@
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_postfix_expression() {
+ayla::ast::ExpressionNode *Parser::parse_postfix_expression() {
 
   auto *expr = parse_primary_expression();
   if (!expr) return nullptr;

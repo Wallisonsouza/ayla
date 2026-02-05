@@ -19,7 +19,7 @@ void TypeChecker::check_module_declaration(parser::node::statement::ModuleDeclar
       if (fn->identifier) module->type->add_member(fn->identifier->name, fn->inferred_type);
     }
 
-    if (auto *var = dynamic_cast<core::ast::PatternNode *>(stmt)) {
+    if (auto *var = dynamic_cast<ayla::ast::PatternNode *>(stmt)) {
       if (var->identifier) module->type->add_member(var->identifier->name, var->inferred_type);
     }
   }

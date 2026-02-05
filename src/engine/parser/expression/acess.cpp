@@ -1,6 +1,6 @@
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_member_acess(core::ast::ASTExpressionNode *base) {
+ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
   auto *dot = unit.tokens.match(TokenKind::DOT);
   if (!dot) return nullptr;
@@ -12,12 +12,12 @@ core::ast::ASTExpressionNode *Parser::parse_member_acess(core::ast::ASTExpressio
   return unit.ast.create_node<parser::node::MemberAccessNode>(base, field);
 }
 
-core::ast::ASTExpressionNode *Parser::parse_index_access(core::ast::ASTExpressionNode *base) {
+ayla::ast::ExpressionNode *Parser::parse_index_access(ayla::ast::ExpressionNode *base) {
 
   auto *open = unit.tokens.match(TokenKind::OPEN_BRACKET);
   if (!open) return nullptr; // erro: '[' esperado
 
-  core::ast::ASTExpressionNode *index_expr = parse_expression();
+  ayla::ast::ExpressionNode *index_expr = parse_expression();
   if (!index_expr) return nullptr; // erro: expressão esperada dentro de '[]'
 
   auto *close = unit.tokens.match(TokenKind::CLOSE_BRACKET);
@@ -26,7 +26,7 @@ core::ast::ASTExpressionNode *Parser::parse_index_access(core::ast::ASTExpressio
   return unit.ast.create_node<parser::node::IndexAccessNode>(base, index_expr);
 }
 
-core::ast::ASTExpressionNode *Parser::parse_call_acess(core::ast::ASTExpressionNode *base) {
+ayla::ast::ExpressionNode *Parser::parse_call_acess(ayla::ast::ExpressionNode *base) {
   if (!base) return nullptr;
 
   while (true) {
@@ -34,7 +34,7 @@ core::ast::ASTExpressionNode *Parser::parse_call_acess(core::ast::ASTExpressionN
     if (!tok || tok->descriptor->kind != TokenKind::OPEN_PAREN) break;
     unit.tokens.advance(); // consumir '('
 
-    std::vector<core::ast::ASTExpressionNode *> args;
+    std::vector<ayla::ast::ExpressionNode *> args;
     while (!unit.tokens.is_end() && !unit.tokens.match(TokenKind::CLOSE_PAREN)) {
       auto *expr = parse_expression();
       if (!expr) break;

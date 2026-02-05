@@ -18,7 +18,7 @@ struct TypeChecker {
 
   void check(ayla::ast::AstNode *node);
 
-  void check_identifier(core::ast::IdentifierNode *node);
+  void check_identifier(ayla::ast::IdentifierNode *node);
   void check_number_literal(parser::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
   void check_string_literal(parser::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
   void check_boolean_literal(parser::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
@@ -26,7 +26,7 @@ struct TypeChecker {
   void check_array_literal(parser::node::ASTArrayLiteralNode *node);
   void check_object_literal(parser::node::ObjectLiteralNode *node);
 
-  void check_variable_declaration(core::ast::PatternNode *node);
+  void check_variable_declaration(ayla::ast::PatternNode *node);
 
   void check_function_declaration(parser::node::FunctionDeclarationNode *node);
   void check_function_call(parser::node::FunctionCallNode *node);
@@ -46,7 +46,7 @@ struct TypeChecker {
   void check_import_node(parser::node::statement::ImportNode *node);
   void check_module_declaration(parser::node::statement::ModuleDeclarationNode *node);
   void check_assignment(parser::node::statement::AssignmentNode *node);
-  void check_expression_statement(core::ast::ExpressionStatementNode *node);
+  void check_expression_statement(ayla::ast::ExpressionStatementNode *node);
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);
     for (auto &[k, v] : ctx) { diag->context.set(k, v); }

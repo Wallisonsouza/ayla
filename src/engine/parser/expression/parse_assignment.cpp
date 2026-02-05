@@ -2,7 +2,7 @@
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_assignment(core::ast::ASTExpressionNode *target) {
+ayla::ast::ExpressionNode *Parser::parse_assignment(ayla::ast::ExpressionNode *target) {
 
   if (!unit.tokens.match(TokenKind::ASSIGN)) { return nullptr; }
 

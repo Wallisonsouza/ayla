@@ -1,14 +1,15 @@
 #pragma once
 #include "core/memory/SymbolId.hpp"
 #include "core/node/Modifier.hpp"
-#include "core/node/NodeKind.hpp"
 #include "core/token/Location.hpp"
 #include "frontend/ast/AstNode.hpp"
 
 #include <string>
 #include <vector>
 
-namespace core::ast {
+#include "frontend/ast/ExpressionNode.hpp"
+
+namespace ayla::ast {
 
 struct ASTStatementNode : ayla::ast::AstNode {
 
@@ -16,17 +17,10 @@ struct ASTStatementNode : ayla::ast::AstNode {
   explicit ASTStatementNode(NodeKind k) : ayla::ast::AstNode(k) {}
 };
 
-struct ASTExpressionNode : ayla::ast::AstNode {
-
-  SymbolId resolved_symbol_id;
-
-  explicit ASTExpressionNode(NodeKind k) : ayla::ast::AstNode(k) {}
-};
-
 struct ExpressionStatementNode : ASTStatementNode {
-  ASTExpressionNode *expression;
+  ExpressionNode *expression;
 
-  explicit ExpressionStatementNode(ASTExpressionNode *expr) : ASTStatementNode(NodeKind::ExpressionStatement), expression(expr) {}
+  explicit ExpressionStatementNode(ExpressionNode *expr) : ASTStatementNode(NodeKind::ExpressionStatement), expression(expr) {}
 };
 
 struct TypeDeclarationNode : ASTStatementNode {
@@ -36,10 +30,10 @@ struct TypeDeclarationNode : ASTStatementNode {
   explicit TypeDeclarationNode(std::string n, std::vector<std::string> params = {}) : ASTStatementNode(NodeKind::TypeDeclaration), name(std::move(n)), type_params(std::move(params)) {}
 };
 
-struct IdentifierNode : core::ast::ASTExpressionNode {
+struct IdentifierNode : ayla::ast::ExpressionNode {
   std::string name;
 
-  explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ASTExpressionNode(core::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
+  explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ExpressionNode(ayla::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
 };
 
 struct TypeNode : ayla::ast::AstNode {
@@ -48,9 +42,9 @@ struct TypeNode : ayla::ast::AstNode {
   bool is_primitive = false;
   SymbolId symbol_id;
 
-  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ayla::ast::AstNode(core::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
+  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
 
-  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ayla::ast::AstNode(core::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
+  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
 
   static bool is_same_type(TypeNode *a, TypeNode *b) {
     if (a->is_primitive && b->is_primitive) { return a->identifier->name == b->identifier->name; }
@@ -65,19 +59,19 @@ struct TypeNode : ayla::ast::AstNode {
 };
 
 struct PatternNode : ASTStatementNode {
-  core::ast::IdentifierNode *identifier;
-  core::ast::TypeNode *type;
-  core::ast::ASTExpressionNode *value;
-  core::ast::Modifiers modifiers;
+  ayla::ast::IdentifierNode *identifier;
+  ayla::ast::TypeNode *type;
+  ayla::ast::ExpressionNode *value;
+  ayla::ast::Modifiers modifiers;
   SymbolId symbol_id;
 
-  PatternNode(core::ast::IdentifierNode *n, core::ast::TypeNode *t, core::ast::ASTExpressionNode *v, core::ast::Modifiers modifiers = {})
-      : ASTStatementNode(core::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
+  PatternNode(ayla::ast::IdentifierNode *n, ayla::ast::TypeNode *t, ayla::ast::ExpressionNode *v, ayla::ast::Modifiers modifiers = {})
+      : ASTStatementNode(ayla::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
 };
 
 struct PatternErrorNode : PatternNode {
-  PatternErrorNode(const SourceSlice &expected_slice, core::ast::Modifiers modifiers = {}) : PatternNode(nullptr, nullptr, nullptr, modifiers) {
-    this->kind = core::ast::NodeKind::Error;
+  PatternErrorNode(const SourceSlice &expected_slice, ayla::ast::Modifiers modifiers = {}) : PatternNode(nullptr, nullptr, nullptr, modifiers) {
+    this->kind = ayla::ast::NodeKind::Error;
     this->slice = expected_slice;
 
     flags.set(NodeFlags::HasError);
@@ -86,4 +80,4 @@ struct PatternErrorNode : PatternNode {
   }
 };
 
-} // namespace core::ast
+} // namespace ayla::ast

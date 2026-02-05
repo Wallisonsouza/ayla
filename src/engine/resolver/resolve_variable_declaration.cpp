@@ -1,7 +1,7 @@
 #include "Resolver.hpp"
 #include "core/memory/BuiltinTypes.hpp"
 
-void Resolver::resolve_variable_declaration(core::ast::PatternNode *node) {
+void Resolver::resolve_variable_declaration(ayla::ast::PatternNode *node) {
   if (!node || !node->identifier) return;
 
   if (current_scope->has_symbol_local(node->identifier->name)) {

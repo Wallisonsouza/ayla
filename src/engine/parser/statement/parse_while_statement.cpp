@@ -18,7 +18,7 @@ parser::node::ASTWhileStatementNode *Parser::parse_while_statemente() {
     return nullptr;
   }
 
-  if (condition->kind == core::ast::NodeKind::Assignment) {
+  if (condition->kind == ayla::ast::NodeKind::Assignment) {
 
     report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 

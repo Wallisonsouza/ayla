@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace core::ast {
+namespace ayla::ast {
 enum class BinaryOperation {
   Add,
   Subtract,
@@ -40,4 +40,4 @@ inline std::string binary_op_to_string(BinaryOperation op) {
   return "?";
 }
 
-} // namespace core::ast
+} // namespace ayla::ast

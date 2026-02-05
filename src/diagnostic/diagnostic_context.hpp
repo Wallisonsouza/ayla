@@ -1,11 +1,12 @@
 #pragma once
-#include "core/node/NodeKind.hpp"
+
 #include "core/token/TokenKind.hpp"
+#include "frontend/ast/NodeKind.hpp"
 #include <string>
 #include <unordered_map>
 #include <variant>
 
-using DiagnosticValue = std::variant<std::string, TokenKind, core::ast::NodeKind>;
+using DiagnosticValue = std::variant<std::string, TokenKind, ayla::ast::NodeKind>;
 
 struct DiagnosticContext {
   std::unordered_map<std::string, DiagnosticValue> values;

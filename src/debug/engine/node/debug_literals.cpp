@@ -3,7 +3,7 @@
 #include "engine/parser/node/literal_nodes.hpp"
 #include "utils/Utf8.hpp"
 
-void ASTDebug::debug_identifier(const core::ast::IdentifierNode *node) {
+void ASTDebug::debug_identifier(const ayla::ast::IdentifierNode *node) {
 
   out << "Identifier";
 

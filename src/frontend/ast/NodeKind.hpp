@@ -1,6 +1,6 @@
 #pragma once
 
-namespace core::ast {
+namespace ayla::ast {
 
 enum class NodeKind {
   // === Base ===
@@ -56,4 +56,4 @@ enum class NodeKind {
   ArrayLiteral
 };
 
-} // namespace core::ast
+} // namespace ayla::ast

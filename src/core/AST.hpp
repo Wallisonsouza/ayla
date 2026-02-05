@@ -17,7 +17,7 @@ public:
   template <typename T, typename... Args> T *create_error_node(const SourceSlice &slice, Args &&...args) {
     T *node = ast_arena.alloc<T>(std::forward<Args>(args)...);
 
-    node->kind = core::ast::NodeKind::Error;
+    node->kind = ayla::ast::NodeKind::Error;
 
     node->slice = slice;
     node->range = slice.range;

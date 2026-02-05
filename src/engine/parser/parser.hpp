@@ -23,7 +23,7 @@ template <typename NodeType> struct ParserResult {
 struct Parser {
   CompilationUnit &unit;
 
-  core::ast::TypeNode *parse_type();
+  ayla::ast::TypeNode *parse_type();
 
 private:
   void recover_until(RecoverBoundary boundaries);
@@ -31,45 +31,45 @@ private:
 
   void recover_until(BoundaryFn boundary);
 
-  core::ast::ASTExpressionNode *parse_assignment(core::ast::ASTExpressionNode *target);
-  core::ast::ASTExpressionNode *parse_call_acess(core::ast::ASTExpressionNode *callee);
-  core::ast::ASTExpressionNode *finish_member(core::ast::ASTExpressionNode *base);
-  core::ast::ASTExpressionNode *finish_index(core::ast::ASTExpressionNode *base);
-  core::ast::Modifiers parse_modifiers();
-  std::vector<core::ast::PatternNode *> parse_function_parameters();
+  ayla::ast::ExpressionNode *parse_assignment(ayla::ast::ExpressionNode *target);
+  ayla::ast::ExpressionNode *parse_call_acess(ayla::ast::ExpressionNode *callee);
+  ayla::ast::ExpressionNode *finish_member(ayla::ast::ExpressionNode *base);
+  ayla::ast::ExpressionNode *finish_index(ayla::ast::ExpressionNode *base);
+  ayla::ast::Modifiers parse_modifiers();
+  std::vector<ayla::ast::PatternNode *> parse_function_parameters();
 
-  std::vector<core::ast::PatternNode *> parse_parameter_list();
+  std::vector<ayla::ast::PatternNode *> parse_parameter_list();
 
 public:
   parser::node::ReturnStatementNode *parse_return_statement();
-  core::ast::ASTExpressionNode *parse_path_expression();
-  core::ast::ASTExpressionNode *parse_expression();
-  core::ast::ASTExpressionNode *parse_postfix_expression();
-  core::ast::ASTExpressionNode *parse_primary_expression();
-  core::ast::ASTExpressionNode *parse_binary_expression(int min_precedence, core::ast::ASTExpressionNode *lef);
-  core::ast::ASTExpressionNode *parse_object_literal();
+  ayla::ast::ExpressionNode *parse_path_expression();
+  ayla::ast::ExpressionNode *parse_expression();
+  ayla::ast::ExpressionNode *parse_postfix_expression();
+  ayla::ast::ExpressionNode *parse_primary_expression();
+  ayla::ast::ExpressionNode *parse_binary_expression(int min_precedence, ayla::ast::ExpressionNode *lef);
+  ayla::ast::ExpressionNode *parse_object_literal();
 
-  core::ast::ASTStatementNode *parse_statement();
-  core::ast::ASTStatementNode *parse_import_statement();
+  ayla::ast::ASTStatementNode *parse_statement();
+  ayla::ast::ASTStatementNode *parse_import_statement();
   parser::node::ASTArrayLiteralNode *parse_array_literal();
 
-  core::ast::ASTStatementNode *parse_variable_declaration(core::ast::Modifiers modifiers);
-  core::ast::ASTStatementNode *parse_function_declaration(core::ast::Modifiers modifiers);
+  ayla::ast::ASTStatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
+  ayla::ast::ASTStatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
   parser::node::statement::ModuleDeclarationNode *parse_module_declaration();
-  core::ast::ASTStatementNode *parse_if_statement();
+  ayla::ast::ASTStatementNode *parse_if_statement();
   parser::node::ASTWhileStatementNode *parse_while_statemente();
 
   parser::node::BlockStatementNode *parse_block_statement();
-  core::ast::PatternNode *parse_function_parameter();
+  ayla::ast::PatternNode *parse_function_parameter();
 
-  core::ast::ASTExpressionNode *parse_number_literal();
-  core::ast::ASTExpressionNode *parse_string_literal();
-  core::ast::IdentifierNode *parse_identifier();
-  core::ast::ASTExpressionNode *parse_grouped_expression();
-  core::ast::ASTExpressionNode *parse_member_acess(core::ast::ASTExpressionNode *base);
-  core::ast::ASTExpressionNode *parse_index_access(core::ast::ASTExpressionNode *base);
+  ayla::ast::ExpressionNode *parse_number_literal();
+  ayla::ast::ExpressionNode *parse_string_literal();
+  ayla::ast::IdentifierNode *parse_identifier();
+  ayla::ast::ExpressionNode *parse_grouped_expression();
+  ayla::ast::ExpressionNode *parse_member_acess(ayla::ast::ExpressionNode *base);
+  ayla::ast::ExpressionNode *parse_index_access(ayla::ast::ExpressionNode *base);
 
-  core::ast::PatternNode *parse_pattern(core::ast::Modifiers mods);
+  ayla::ast::PatternNode *parse_pattern(ayla::ast::Modifiers mods);
 
   void parse_program() {
 
