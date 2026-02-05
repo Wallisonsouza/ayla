@@ -1,6 +1,5 @@
 #pragma once
 #include "core/AST.hpp"
-#include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
@@ -8,6 +7,7 @@
 #include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "frontend/ast/AstNode.hpp"
 #include <string>
 #include <vector>
 
@@ -26,7 +26,7 @@ struct ASTDebug {
 
   struct LabeledChild {
     const char *label;
-    const core::ast::ASTNode *node;
+    const ayla::ast::AstNode *node;
   };
 
   debug::Color label_color = debug::Color::Blue;
@@ -56,10 +56,10 @@ struct ASTDebug {
 
   explicit ASTDebug(std::ostream &out = std::cout);
 
-  void dump_ast(const AST &ast);
-  void debug_labeled(const char *label, const core::ast::ASTNode *child, bool is_last);
+  void dump_ast(const Ast &ast);
+  void debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last);
 
-  void debug_node(const core::ast::ASTNode *node, bool is_last);
+  void debug_node(const ayla::ast::AstNode *node, bool is_last);
 
   void debug_number_literal(const parser::node::NumberLiteralNode *node);
   void debug_string_literal(const parser::node::StringLiteralNode *node);
@@ -87,7 +87,7 @@ struct ASTDebug {
   void debug_ASSIGN_node(const parser::node::statement::AssignmentNode *node);
   void debug_block(const parser::node::BlockStatementNode *node);
   void debug_while(const parser::node::ASTWhileStatementNode *node);
-  void debug_children(const std::vector<const core::ast::ASTNode *> &children);
+  void debug_children(const std::vector<const ayla::ast::AstNode *> &children);
 
   template <typename T> void debug_labeled_childrens(const std::vector<T *> &children, const std::string &label, bool is_last) {
     tree.begin_node(is_last);

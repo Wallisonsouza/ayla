@@ -29,7 +29,7 @@ struct Executor {
   ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
   ExecResult execute_member_acess(CompilationUnit &unit, parser::node::MemberAccessNode *member);
 
-  ExecResult execute_node(CompilationUnit &unit, core::ast::ASTNode *node) {
+  ExecResult execute_node(CompilationUnit &unit, ayla::ast::AstNode *node) {
     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
 
     switch (node->kind) {

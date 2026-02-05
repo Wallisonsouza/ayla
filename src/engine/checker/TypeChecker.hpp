@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/memory/BuiltinTypes.hpp"
-#include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
@@ -9,6 +8,7 @@
 #include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "frontend/ast/AstNode.hpp"
 
 struct TypeChecker {
 
@@ -16,7 +16,7 @@ struct TypeChecker {
 
   explicit TypeChecker(CompilationUnit &unit) : unit(unit) {}
 
-  void check(core::ast::ASTNode *node);
+  void check(ayla::ast::AstNode *node);
 
   void check_identifier(core::ast::IdentifierNode *node);
   void check_number_literal(parser::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }

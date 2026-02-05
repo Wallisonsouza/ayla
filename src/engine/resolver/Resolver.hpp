@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/module/scope.hpp"
-#include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
@@ -9,6 +8,7 @@
 #include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "frontend/ast/AstNode.hpp"
 
 struct Resolver {
 
@@ -17,7 +17,7 @@ struct Resolver {
 
   explicit Resolver(CompilationUnit &unit, core::ParserScope *global) : unit(unit), current_scope(global) {}
 
-  void resolve(core::ast::ASTNode *node);
+  void resolve(ayla::ast::AstNode *node);
 
   core::ParserScope *push_scope();
   void pop_scope();

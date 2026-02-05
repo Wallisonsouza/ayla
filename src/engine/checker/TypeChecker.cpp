@@ -3,7 +3,7 @@
 #include "core/node/Type.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 
-void TypeChecker::check(core::ast::ASTNode *node) {
+void TypeChecker::check(ayla::ast::AstNode *node) {
   if (!node || node->inferred_type) return;
 
   switch (node->kind) {

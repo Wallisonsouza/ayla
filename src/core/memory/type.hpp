@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core/memory/symbol.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>

@@ -1,8 +1,8 @@
 #pragma once
-#include "core/memory/symbol.hpp"
 #include "core/module/module.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
+#include "frontend/ast/AstNode.hpp"
 #include <optional>
 #include <string>
 #include <vector>
@@ -11,11 +11,11 @@ namespace parser::node::statement {
 
 struct ModuleDeclarationNode : core::ast::ASTStatementNode {
   std::vector<core::ast::IdentifierNode *> path;
-  std::vector<ASTNode *> body;
+  std::vector<AstNode *> body;
   ModuleId resolved_module_id;
   SymbolId resolved_symbol_id;
 
-  ModuleDeclarationNode(std::vector<core::ast::IdentifierNode *> p, std::vector<ASTNode *> b)
+  ModuleDeclarationNode(std::vector<core::ast::IdentifierNode *> p, std::vector<AstNode *> b)
       : core::ast::ASTStatementNode(core::ast::NodeKind::ModuleDeclaration), path(std::move(p)), body(std::move(b)) {}
 };
 
@@ -35,12 +35,11 @@ struct AssignmentNode : core::ast::ASTExpressionNode {
   AssignmentNode(core::ast::ASTExpressionNode *t, core::ast::ASTExpressionNode *v) : ASTExpressionNode(core::ast::NodeKind::Assignment), target(t), value(v) {}
 };
 
-struct InterfaceNode : core::ast::ASTNode {
+struct InterfaceNode : ayla::ast::AstNode {
   core::ast::IdentifierNode *name;
-  std::vector<core::ast::ASTNode *> members;
+  std::vector<ayla::ast::AstNode *> members;
 
-  InterfaceNode(core::ast::IdentifierNode *n, std::vector<core::ast::ASTNode *> m)
-      : core::ast::ASTNode(core::ast::NodeKindBase::Unknown, core::ast::NodeKind::Interface), name(n), members(std::move(m)) {}
+  InterfaceNode(core::ast::IdentifierNode *n, std::vector<ayla::ast::AstNode *> m) : ayla::ast::AstNode(core::ast::NodeKind::Interface), name(n), members(std::move(m)) {}
 };
 
 } // namespace parser::node::statement

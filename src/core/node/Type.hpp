@@ -1,25 +1,26 @@
 #pragma once
 #include "core/memory/SymbolId.hpp"
 #include "core/node/Modifier.hpp"
-#include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/token/Location.hpp"
+#include "frontend/ast/AstNode.hpp"
+
 #include <string>
 #include <vector>
 
 namespace core::ast {
 
-struct ASTStatementNode : ASTNode {
+struct ASTStatementNode : ayla::ast::AstNode {
 
   bool resolved = false;
-  explicit ASTStatementNode(NodeKind k) : ASTNode(NodeKindBase::Statement, k) {}
+  explicit ASTStatementNode(NodeKind k) : ayla::ast::AstNode(k) {}
 };
 
-struct ASTExpressionNode : ASTNode {
+struct ASTExpressionNode : ayla::ast::AstNode {
 
   SymbolId resolved_symbol_id;
 
-  explicit ASTExpressionNode(NodeKind k) : ASTNode(NodeKindBase::Expression, k) {}
+  explicit ASTExpressionNode(NodeKind k) : ayla::ast::AstNode(k) {}
 };
 
 struct ExpressionStatementNode : ASTStatementNode {
@@ -41,15 +42,15 @@ struct IdentifierNode : core::ast::ASTExpressionNode {
   explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ASTExpressionNode(core::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
 };
 
-struct TypeNode : core::ast::ASTNode {
+struct TypeNode : ayla::ast::AstNode {
   IdentifierNode *identifier;
   const std::vector<TypeNode *> generics;
   bool is_primitive = false;
   SymbolId symbol_id;
 
-  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
+  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ayla::ast::AstNode(core::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
 
-  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ASTNode(NodeKindBase::Type, core::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
+  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ayla::ast::AstNode(core::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
 
   static bool is_same_type(TypeNode *a, TypeNode *b) {
     if (a->is_primitive && b->is_primitive) { return a->identifier->name == b->identifier->name; }

@@ -5,7 +5,7 @@
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 
-void Resolver::resolve(core::ast::ASTNode *node) {
+void Resolver::resolve(ayla::ast::AstNode *node) {
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
 

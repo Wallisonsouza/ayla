@@ -17,7 +17,7 @@ struct CompilationUnit {
 
   ScopeManager scope_manager;
 
-  AST ast;
+  Ast ast;
 
   core::token::TokenStream tokens;
 

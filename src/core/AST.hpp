@@ -1,13 +1,13 @@
 #pragma once
 #include "core/memory/Arena.hpp"
-#include "core/node/Node.hpp"
 #include "core/token/Location.hpp"
+#include "frontend/ast/AstNode.hpp"
 #include <functional>
 #include <vector>
 
-class AST {
+class Ast {
 public:
-  AST() = default;
+  Ast() = default;
 
   template <typename T, typename... Args> T *create_node(Args &&...args) {
     T *node = ast_arena.alloc<T>(std::forward<Args>(args)...);
@@ -24,16 +24,16 @@ public:
     return node;
   }
 
-  void traverse(const std::function<void(core::ast::ASTNode *)> &fn) const {
+  void traverse(const std::function<void(ayla::ast::AstNode *)> &fn) const {
     for (auto *node : roots_) fn(node);
   }
 
   size_t size() const { return roots_.size(); }
-  const std::vector<core::ast::ASTNode *> &get_nodes() const { return roots_; }
+  const std::vector<ayla::ast::AstNode *> &get_nodes() const { return roots_; }
 
-  void add_root(core::ast::ASTNode *node) { roots_.push_back(node); }
+  void add_root(ayla::ast::AstNode *node) { roots_.push_back(node); }
 
 private:
   core::memory::Arena ast_arena;
-  std::vector<core::ast::ASTNode *> roots_;
+  std::vector<ayla::ast::AstNode *> roots_;
 };

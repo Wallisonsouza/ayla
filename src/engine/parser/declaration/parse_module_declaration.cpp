@@ -28,7 +28,7 @@ parser::node::statement::ModuleDeclarationNode *Parser::parse_module_declaration
     return nullptr;
   }
 
-  std::vector<core::ast::ASTNode *> body;
+  std::vector<ayla::ast::AstNode *> body;
 
   while (!unit.tokens.match(TokenKind::CLOSE_BRACE) && !unit.tokens.is_end()) {
     auto *node = parse_statement();

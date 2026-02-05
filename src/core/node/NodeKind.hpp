@@ -2,8 +2,6 @@
 
 namespace core::ast {
 
-enum class NodeKindBase { Internal, Expression, Statement, Type, Pattern, Unknown };
-
 enum class NodeKind {
   // === Base ===
   Unknown,

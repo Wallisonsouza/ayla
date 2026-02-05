@@ -1,5 +1,5 @@
 // #pragma once
-// #include "core/node/Node.hpp"
+// #include "frontend/ast/AstNode.hpp"
 // #include <memory>
 // #include <vector>
 

@@ -22,7 +22,7 @@ void TreeLayout::begin_node(bool is_last) {
 
 void TreeLayout::end_node() { ancestors_alive.pop_back(); }
 
-void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
+void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   using namespace core::ast;
   if (!node) return;
 
@@ -82,7 +82,7 @@ void ASTDebug::debug_node(const core::ast::ASTNode *node, bool isLast) {
   tree.end_node();
 }
 
-void ASTDebug::dump_ast(const AST &ast) {
+void ASTDebug::dump_ast(const Ast &ast) {
 
   tree.ancestors_alive.clear();
 
@@ -108,7 +108,7 @@ void ASTDebug::dump_ast(const AST &ast) {
 //   }
 // }
 
-void ASTDebug::debug_labeled(const char *label, const core::ast::ASTNode *child, bool is_last) {
+void ASTDebug::debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last) {
   tree.begin_node(is_last);
 
   debug::Console::log(label_color, label);

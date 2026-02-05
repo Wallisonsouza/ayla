@@ -1,9 +1,9 @@
 #pragma once
 
 #include "core/memory/SymbolId.hpp"
-#include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
+#include "frontend/ast/AstNode.hpp"
 #include <string>
 #include <vector>
 
@@ -50,11 +50,11 @@ struct ASTArrayLiteralNode : ListNode<core::ast::ASTExpressionNode> {
   explicit ASTArrayLiteralNode(std::vector<core::ast::ASTExpressionNode *> elems) : ListNode(core::ast::NodeKind::ArrayLiteral, std::move(elems)) {}
 };
 
-struct ObjectFieldNode : core::ast::ASTNode {
+struct ObjectFieldNode : ayla::ast::AstNode {
   core::ast::ASTExpressionNode *key;
   core::ast::ASTExpressionNode *value;
 
-  ObjectFieldNode(core::ast::ASTExpressionNode *k, core::ast::ASTExpressionNode *v) : core::ast::ASTNode(core::ast::NodeKindBase::Internal, core::ast::NodeKind::ObjectField), key(k), value(v) {}
+  ObjectFieldNode(core::ast::ASTExpressionNode *k, core::ast::ASTExpressionNode *v) : ayla::ast::AstNode(core::ast::NodeKind::ObjectField), key(k), value(v) {}
 };
 
 struct ASTObjectFieldList : ListNode<ObjectFieldNode> {
