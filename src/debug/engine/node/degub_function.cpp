@@ -22,7 +22,7 @@ void ASTDebug::debug_function_declaration(const parser::node::FunctionDeclaratio
 //   if (node->value) { debug_labeled("Value", node->value, true); }
 // }
 
-void ASTDebug::debug_function_call(const parser::node::FunctionCallNode *node) {
+void ASTDebug::debug_function_call(const ayla::ast::node::CallExpressionNode *node) {
   out << "FunctionCall\n";
 
   if (node->callee) {

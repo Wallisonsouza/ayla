@@ -4,9 +4,9 @@
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 #include <string>
 #include <vector>
@@ -61,19 +61,19 @@ struct ASTDebug {
 
   void debug_node(const ayla::ast::AstNode *node, bool is_last);
 
-  void debug_number_literal(const parser::node::NumberLiteralNode *node);
-  void debug_string_literal(const parser::node::StringLiteralNode *node);
-  void debug_bool_literal(const parser::node::BoolLiteralNode *node);
-  void debug_char_literal(const parser::node::CharLiteralNode *node);
-  void debug_null_literal(const parser::node::NullLiteralNode *node);
+  void debug_number_literal(const ayla::ast::node::NumberLiteralNode *node);
+  void debug_string_literal(const ayla::ast::node::StringLiteralNode *node);
+  void debug_bool_literal(const ayla::ast::node::BoolLiteralNode *node);
+
+  void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
   void debug_identifier(const ayla::ast::IdentifierNode *node);
   void debug_member_access(const parser::node::MemberAccessNode *node);
   void debug_import(const parser::node::statement::ImportNode *node);
   void debug_module_declaration(const parser::node::statement::ModuleDeclarationNode *node);
   void debug_type(const ayla::ast::TypeNode *node);
   void debug_variable_declaration(const ayla::ast::PatternNode *node);
-  void debug_binary_expression(const parser::node::BinaryExpressionNode *node);
-  void debug_function_call(const parser::node::FunctionCallNode *node);
+  void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
+  void debug_function_call(const ayla::ast::node::CallExpressionNode *node);
   void debug_expression_statement(const ayla::ast::ExpressionStatementNode *node);
   void debug_object_literal(const parser::node::ObjectLiteralNode *node);
   void debug_object_field(const parser::node::ObjectFieldNode *node);

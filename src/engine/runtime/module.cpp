@@ -1,4 +1,5 @@
 #include "engine/runtime/executor.hpp"
+#include <iostream>
 
 ExecResult Executor::execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
 

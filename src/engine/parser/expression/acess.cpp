@@ -1,4 +1,5 @@
 #include "engine/parser/parser.hpp"
+#include "frontend/ast/expressions/CallExpressionNode.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
@@ -46,7 +47,7 @@ ayla::ast::ExpressionNode *Parser::parse_call_acess(ayla::ast::ExpressionNode *b
       }
     }
 
-    base = unit.ast.create_node<parser::node::FunctionCallNode>(base, args);
+    base = unit.ast.create_node<ayla::ast::node::CallExpressionNode>(base, args);
   }
 
   return base;

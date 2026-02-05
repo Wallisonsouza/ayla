@@ -32,15 +32,13 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const parser::node::ObjectLiteralNode *>(node)); break;
   case NodeKind::ObjectField: debug_object_field(static_cast<const parser::node::ObjectFieldNode *>(node)); break;
 
-  case NodeKind::NumberLiteral: debug_number_literal(static_cast<const parser::node::NumberLiteralNode *>(node)); break;
+  case NodeKind::NumberLiteral: debug_number_literal(static_cast<const ayla::ast::node::NumberLiteralNode *>(node)); break;
 
-  case NodeKind::StringLiteral: debug_string_literal(static_cast<const parser::node::StringLiteralNode *>(node)); break;
+  case NodeKind::StringLiteral: debug_string_literal(static_cast<const ayla::ast::node::StringLiteralNode *>(node)); break;
 
-  case NodeKind::BooleanLiteral: debug_bool_literal(static_cast<const parser::node::BoolLiteralNode *>(node)); break;
+  case NodeKind::BooleanLiteral: debug_bool_literal(static_cast<const ayla::ast::node::BoolLiteralNode *>(node)); break;
 
-  case NodeKind::CharLiteral: debug_char_literal(static_cast<const parser::node::CharLiteralNode *>(node)); break;
-
-  case NodeKind::NullLiteral: debug_null_literal(static_cast<const parser::node::NullLiteralNode *>(node)); break;
+  case NodeKind::NullLiteral: debug_null_literal(static_cast<const ayla::ast::node::NullLiteralNode *>(node)); break;
 
   case NodeKind::Identifier: debug_identifier(static_cast<const IdentifierNode *>(node)); break;
 
@@ -52,9 +50,9 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::VariableDeclaration: debug_variable_declaration(static_cast<const PatternNode *>(node)); break;
 
-  case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const parser::node::BinaryExpressionNode *>(node)); break;
+  case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case NodeKind::FunctionCall: debug_function_call(static_cast<const parser::node::FunctionCallNode *>(node)); break;
+  case NodeKind::FunctionCall: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ExpressionStatementNode *>(node)); break;
 

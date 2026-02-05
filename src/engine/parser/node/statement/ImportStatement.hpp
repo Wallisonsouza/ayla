@@ -34,11 +34,4 @@ struct AssignmentNode : ayla::ast::ExpressionNode {
   AssignmentNode(ayla::ast::ExpressionNode *t, ayla::ast::ExpressionNode *v) : ayla::ast::ExpressionNode(ayla::ast::NodeKind::Assignment), target(t), value(v) {}
 };
 
-struct InterfaceNode : ayla::ast::AstNode {
-  ayla::ast::IdentifierNode *name;
-  std::vector<ayla::ast::AstNode *> members;
-
-  InterfaceNode(ayla::ast::IdentifierNode *n, std::vector<ayla::ast::AstNode *> m) : ayla::ast::AstNode(ayla::ast::NodeKind::Interface), name(n), members(std::move(m)) {}
-};
-
 } // namespace parser::node::statement

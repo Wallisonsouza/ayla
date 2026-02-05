@@ -1,5 +1,6 @@
 #include "core/node/Type.hpp"
 #include "engine/parser/parser.hpp"
+#include "engine/runtime/executor.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_number_literal() {
   Token *token = unit.tokens.match(TokenKind::NUMBER_LITERAL);
@@ -8,7 +9,7 @@ ayla::ast::ExpressionNode *Parser::parse_number_literal() {
   std::string text = unit.source.buffer.get_text(token->slice.span);
   try {
     double value = std::stod(text);
-    return unit.ast.create_node<parser::node::NumberLiteralNode>(value);
+    return unit.ast.create_node<ayla::ast::node::NumberLiteralNode>(value);
   } catch (const std::exception &) { return nullptr; }
 }
 
@@ -19,7 +20,7 @@ ayla::ast::ExpressionNode *Parser::parse_string_literal() {
 
   std::string text = unit.source.buffer.get_text(token->slice.span);
 
-  return unit.ast.create_node<parser::node::StringLiteralNode>(text);
+  return unit.ast.create_node<ayla::ast::node::StringLiteralNode>(text);
 }
 
 ayla::ast::IdentifierNode *Parser::parse_identifier() {

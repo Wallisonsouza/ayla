@@ -4,12 +4,14 @@
 #include "core/node/Type.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/runtime/value.hpp"
+#include "frontend/ast/expressions/BinaryExpressionNode.hpp"
+#include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "runtime_scope.hpp"
-#include <iostream>
+
 #include <memory>
 #include <stdexcept>
 #include <vector>
@@ -38,15 +40,15 @@ struct Executor {
 
     case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::IdentifierNode *>(node));
 
-    case ayla::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<parser::node::NumberLiteralNode *>(node)->value)));
+    case ayla::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<ayla::ast::node::NumberLiteralNode *>(node)->value)));
 
-    case ayla::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<parser::node::StringLiteralNode *>(node)->value)));
+    case ayla::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<ayla::ast::node::StringLiteralNode *>(node)->value)));
 
-    case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<parser::node::BinaryExpressionNode *>(node));
+    case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<ayla::ast::node::BinaryExpressionNode *>(node));
 
     case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<parser::node::MemberAccessNode *>(node));
 
-    case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<parser::node::FunctionCallNode *>(node));
+    case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<ayla::ast::node::CallExpressionNode *>(node));
 
     case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::PatternNode *>(node));
 
@@ -72,7 +74,7 @@ struct Executor {
     }
   }
 
-  ExecResult execute_function_call(CompilationUnit &unit, parser::node::FunctionCallNode *node) {
+  ExecResult execute_function_call(CompilationUnit &unit, ayla::ast::node::CallExpressionNode *node) {
 
     auto callee = execute_node(unit, node->callee).value;
 
@@ -166,7 +168,7 @@ struct Executor {
   }
 
   // ===================== BINARY =====================
-  ExecResult execute_binary(CompilationUnit &unit, parser::node::BinaryExpressionNode *node) {
+  ExecResult execute_binary(CompilationUnit &unit, ayla::ast::node::BinaryExpressionNode *node) {
     auto lhs = execute_node(unit, node->lhs).value;
     auto rhs = execute_node(unit, node->rhs).value;
 

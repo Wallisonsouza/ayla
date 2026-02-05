@@ -9,15 +9,15 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   switch (node->kind) {
   case ayla::ast::NodeKind::ExpressionStatement: check_expression_statement(static_cast<ayla::ast::ExpressionStatementNode *>(node)); break;
   case ayla::ast::NodeKind::Identifier: check_identifier(static_cast<ayla::ast::IdentifierNode *>(node)); break;
-  case ayla::ast::NodeKind::NumberLiteral: check_number_literal(static_cast<parser::node::NumberLiteralNode *>(node)); break;
-  case ayla::ast::NodeKind::StringLiteral: check_string_literal(static_cast<parser::node::StringLiteralNode *>(node)); break;
-  case ayla::ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<parser::node::BoolLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::NumberLiteral: check_number_literal(static_cast<ayla::ast::node::NumberLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::StringLiteral: check_string_literal(static_cast<ayla::ast::node::StringLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ayla::ast::node::BoolLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<parser::node::ASTArrayLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<parser::node::FunctionDeclarationNode *>(node)); break;
-  case ayla::ast::NodeKind::FunctionCall: check_function_call(static_cast<parser::node::FunctionCallNode *>(node)); break;
-  case ayla::ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<parser::node::BinaryExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::FunctionCall: check_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
   case ayla::ast::NodeKind::MemberAccess: check_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
   case ayla::ast::NodeKind::IndexAccess: check_index_access(static_cast<parser::node::IndexAccessNode *>(node)); break;
   case ayla::ast::NodeKind::Assignment: check_assignment(dynamic_cast<parser::node::statement::AssignmentNode *>(node)); break;
@@ -151,7 +151,7 @@ void TypeChecker::check_function_declaration(parser::node::FunctionDeclarationNo
   current_function_return_type = nullptr;
 }
 
-void TypeChecker::check_function_call(parser::node::FunctionCallNode *node) {
+void TypeChecker::check_function_call(ayla::ast::node::CallExpressionNode *node) {
   if (!node) return;
 
   check(node->callee);
@@ -175,7 +175,7 @@ void TypeChecker::check_function_call(parser::node::FunctionCallNode *node) {
 // Expressões
 //---------------------------
 
-void TypeChecker::check_binary_expression(parser::node::BinaryExpressionNode *node) {
+void TypeChecker::check_binary_expression(ayla::ast::node::BinaryExpressionNode *node) {
   if (!node) return;
 
   check(node->lhs);

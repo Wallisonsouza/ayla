@@ -13,11 +13,11 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   switch (node->kind) {
 
-  case ayla::ast::NodeKind::NumberLiteral: resolve_number_literal(static_cast<parser::node::NumberLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::NumberLiteral: resolve_number_literal(static_cast<ayla::ast::node::NumberLiteralNode *>(node)); break;
 
-  case ayla::ast::NodeKind::StringLiteral: resolve_string_literal(static_cast<parser::node::StringLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::StringLiteral: resolve_string_literal(static_cast<ayla::ast::node::StringLiteralNode *>(node)); break;
 
-  case ayla::ast::NodeKind::BooleanLiteral: resolve_boolean_literal(static_cast<parser::node::BoolLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::BooleanLiteral: resolve_boolean_literal(static_cast<ayla::ast::node::BoolLiteralNode *>(node)); break;
 
   case ayla::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
 
@@ -25,7 +25,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::BlockStatement: resolve_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<parser::node::BinaryExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
 
@@ -33,7 +33,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::IdentifierNode *>(node)); break;
 
-  case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<parser::node::FunctionCallNode *>(node)); break;
+  case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::ExpressionStatementNode *>(node)); break;
 

@@ -14,7 +14,7 @@ void Resolver::resolve_member_access(parser::node::MemberAccessNode *node) {
   // if (node->field) { resolve(node->field); }
 }
 
-void Resolver::resolve_function_call(parser::node::FunctionCallNode *node) {
+void Resolver::resolve_function_call(ayla::ast::node::CallExpressionNode *node) {
 
   if (node->callee) resolve(node->callee);
 

@@ -78,14 +78,6 @@ struct IndexAccessNode : ayla::ast::ExpressionNode {
   IndexAccessNode(ayla::ast::ExpressionNode *b, ayla::ast::ExpressionNode *i) : ExpressionNode(ayla::ast::NodeKind::IndexAccess), base(b), index(i) {}
 };
 
-struct FunctionCallNode : ayla::ast::ExpressionNode {
-  ayla::ast::ExpressionNode *callee;
-  std::vector<ayla::ast::ExpressionNode *> arguments;
-  SymbolId symbol_id;
-  core::ParserScope *decl_scope = nullptr;
-  FunctionCallNode(ayla::ast::ExpressionNode *c, std::vector<ayla::ast::ExpressionNode *> a) : ExpressionNode(ayla::ast::NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
-};
-
 struct ReturnStatementNode : ayla::ast::ASTStatementNode {
   ayla::ast::ExpressionNode *value = nullptr;
 

@@ -13,11 +13,11 @@ void Resolver::resolve_identifier(ayla::ast::IdentifierNode *node) {
   node->resolved_symbol_id = id;
 }
 
-void Resolver::resolve_number_literal(parser::node::NumberLiteralNode *node) {}
+void Resolver::resolve_number_literal(ayla::ast::node::NumberLiteralNode *node) {}
 
-void Resolver::resolve_string_literal(parser::node::StringLiteralNode *node) {}
+void Resolver::resolve_string_literal(ayla::ast::node::StringLiteralNode *node) {}
 
-void Resolver::resolve_boolean_literal(parser::node::BoolLiteralNode *node) {}
+void Resolver::resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node) {}
 
 void Resolver::resolve_object_literal(parser::node::ObjectLiteralNode *node) {
   for (auto *field : node->field_list->elements) {

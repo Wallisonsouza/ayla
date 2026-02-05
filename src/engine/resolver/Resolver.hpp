@@ -5,9 +5,9 @@
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 
 struct Resolver {
@@ -24,22 +24,22 @@ struct Resolver {
 
   void resolve_top_level();
 
-  void resolve_function_call(parser::node::FunctionCallNode *node);
+  void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
   void resolve_assignment(parser::node::statement::AssignmentNode *node);
 
   void resolve_type(ayla::ast::TypeNode *type_node);
   void resolve_array_literal(parser::node::ASTArrayLiteralNode *node);
   void resolve_object_literal(parser::node::ObjectLiteralNode *node);
-  void resolve_number_literal(parser::node::NumberLiteralNode *node);
-  void resolve_string_literal(parser::node::StringLiteralNode *node);
-  void resolve_boolean_literal(parser::node::BoolLiteralNode *node);
+  void resolve_number_literal(ayla::ast::node::NumberLiteralNode *node);
+  void resolve_string_literal(ayla::ast::node::StringLiteralNode *node);
+  void resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node);
   void resolve_type_node(ayla::ast::TypeNode *node);
 
   void resolve_index_access(parser::node::IndexAccessNode *node);
   void resolve_member_access(parser::node::MemberAccessNode *node);
 
   void resolve_identifier(ayla::ast::IdentifierNode *node);
-  void resolve_binary_expression(parser::node::BinaryExpressionNode *node);
+  void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
   void resolve_if_statement(parser::node::IfStatementNode *node);
   void resolve_while_statement(parser::node::ASTWhileStatementNode *node);
 

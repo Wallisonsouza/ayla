@@ -1,8 +1,7 @@
 #include "ast_debug.hpp"
 #include "core/node/BinaryOp.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
 
-void ASTDebug::debug_binary_expression(const parser::node::BinaryExpressionNode *node) {
+void ASTDebug::debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node) {
 
   debug_header("BinaryExpression: " + ayla::ast::binary_op_to_string(node->op));
 

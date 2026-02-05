@@ -5,9 +5,10 @@
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
+
 #include "engine/parser/node/statement/ImportStatement.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
+#include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 
 struct TypeChecker {
@@ -19,9 +20,9 @@ struct TypeChecker {
   void check(ayla::ast::AstNode *node);
 
   void check_identifier(ayla::ast::IdentifierNode *node);
-  void check_number_literal(parser::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
-  void check_string_literal(parser::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
-  void check_boolean_literal(parser::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
+  void check_number_literal(ayla::ast::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
+  void check_string_literal(ayla::ast::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
+  void check_boolean_literal(ayla::ast::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
 
   void check_array_literal(parser::node::ASTArrayLiteralNode *node);
   void check_object_literal(parser::node::ObjectLiteralNode *node);
@@ -29,10 +30,10 @@ struct TypeChecker {
   void check_variable_declaration(ayla::ast::PatternNode *node);
 
   void check_function_declaration(parser::node::FunctionDeclarationNode *node);
-  void check_function_call(parser::node::FunctionCallNode *node);
+  void check_function_call(ayla::ast::node::CallExpressionNode *node);
 
   // Expressões
-  void check_binary_expression(parser::node::BinaryExpressionNode *node);
+  void check_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
   void check_member_access(parser::node::MemberAccessNode *node);
   void check_index_access(parser::node::IndexAccessNode *node);
 
