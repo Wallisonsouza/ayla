@@ -60,7 +60,7 @@ public:
   ayla::ast::StatementNode *parse_if_statement();
   parser::node::ASTWhileStatementNode *parse_while_statemente();
 
-  parser::node::BlockStatementNode *parse_block_statement();
+  ayla::ast::node::BlockStatementNode *parse_block_statement();
   ayla::ast::PatternNode *parse_function_parameter();
 
   ayla::ast::ExpressionNode *parse_number_literal();

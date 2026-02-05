@@ -19,11 +19,11 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::BooleanLiteral: resolve_boolean_literal(static_cast<ayla::ast::node::BoolLiteralNode *>(node)); break;
 
-  case ayla::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<ayla::ast::node::IfStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::WhileStatement: resolve_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::BlockStatement: resolve_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::BlockStatement: resolve_block(static_cast<ayla::ast::node::BlockStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
 

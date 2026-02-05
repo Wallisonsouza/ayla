@@ -2,6 +2,7 @@
 #include "core/node/flags.hpp"
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/parser/parser.hpp"
+#include "frontend/ast/statements/IfStatementNode.hpp"
 
 ayla::ast::StatementNode *Parser::parse_if_statement() {
   if (!unit.tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
@@ -54,5 +55,5 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
     }
   }
 
-  return unit.ast.create_node<parser::node::IfStatementNode>(condition, then_block, else_block);
+  return unit.ast.create_node<ayla::ast::node::IfStatementNode>(condition, then_block, else_block);
 }

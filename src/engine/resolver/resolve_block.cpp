@@ -1,7 +1,7 @@
 #include "engine/parser/node/statement_nodes.hpp"
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_block(parser::node::BlockStatementNode *node, bool create_scope) {
+void Resolver::resolve_block(ayla::ast::node::BlockStatementNode *node, bool create_scope) {
 
   if (create_scope) push_scope();
 

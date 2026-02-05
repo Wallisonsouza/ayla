@@ -37,11 +37,11 @@ struct TypeChecker {
   void check_index_access(ayla::ast::node::IndexAccessNode *node);
 
   // Controle
-  void check_if_statement(parser::node::IfStatementNode *node);
+  void check_if_statement(ayla::ast::node::IfStatementNode *node);
   void check_while_statement(parser::node::ASTWhileStatementNode *node);
   void check_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
-  void check_block(parser::node::BlockStatementNode *node);
+  void check_block(ayla::ast::node::BlockStatementNode *node);
 
   void check_import_node(ayla::ast::node::ImportStatementNode *node);
   void check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);

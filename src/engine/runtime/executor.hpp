@@ -12,7 +12,9 @@
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/statements/BlockStatementNode.hpp"
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
+#include "frontend/ast/statements/IfStatementNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
@@ -58,9 +60,9 @@ struct Executor {
 
     case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::PatternNode *>(node));
 
-    case ayla::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<parser::node::BlockStatementNode *>(node));
+    case ayla::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<ayla::ast::node::BlockStatementNode *>(node));
 
-    case ayla::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<parser::node::IfStatementNode *>(node));
+    case ayla::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<ayla::ast::node::IfStatementNode *>(node));
 
     case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<parser::node::ASTArrayLiteralNode *>(node));
 
@@ -136,7 +138,7 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_block(CompilationUnit &unit, parser::node::BlockStatementNode *block) {
+  ExecResult execute_block(CompilationUnit &unit, ayla::ast::node::BlockStatementNode *block) {
 
     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
@@ -147,9 +149,9 @@ struct Executor {
     return last;
   }
 
-  ExecResult execute_if(CompilationUnit &unit, parser::node::IfStatementNode *node) {
+  ExecResult execute_if(CompilationUnit &unit, ayla::ast::node::IfStatementNode *node) {
     auto cond = execute_node(unit, node->condition);
-    if (cond.value->as_bool()) return execute_block(unit, node->then_block);
+    if (cond.value->as_bool()) return execute_node(unit, node->then_block);
 
     if (node->else_block) return execute_node(unit, node->else_block);
 

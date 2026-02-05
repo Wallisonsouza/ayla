@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_block(const parser::node::BlockStatementNode *node) {
+void ASTDebug::debug_block(const ayla::ast::node::BlockStatementNode *node) {
 
   debug_header("BlockExpression");
 

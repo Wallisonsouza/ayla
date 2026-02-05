@@ -20,10 +20,10 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::MemberAccess: check_member_access(static_cast<parser::node::MemberAccessNode *>(node)); break;
   case ayla::ast::NodeKind::IndexAccess: check_index_access(static_cast<ayla::ast::node::IndexAccessNode *>(node)); break;
   case ayla::ast::NodeKind::Assignment: check_assignment(dynamic_cast<ayla::ast::node::AssignmentExpressionNode *>(node)); break;
-  case ayla::ast::NodeKind::IfStatement: check_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::IfStatement: check_if_statement(static_cast<ayla::ast::node::IfStatementNode *>(node)); break;
   case ayla::ast::NodeKind::WhileStatement: check_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
   case ayla::ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
-  case ayla::ast::NodeKind::BlockStatement: check_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::BlockStatement: check_block(static_cast<ayla::ast::node::BlockStatementNode *>(node)); break;
   case ayla::ast::NodeKind::Import: check_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
   case ayla::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
@@ -226,11 +226,11 @@ void TypeChecker::check_index_access(ayla::ast::node::IndexAccessNode *node) {
 // Controle
 //---------------------------
 
-void TypeChecker::check_if_statement(parser::node::IfStatementNode *node) {
+void TypeChecker::check_if_statement(ayla::ast::node::IfStatementNode *node) {
   check(node->condition);
   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(DiagnosticCode::TypeMismatch, node->condition->slice);
 
-  check_block(node->then_block);
+  check(node->then_block);
   if (node->else_block) check(node->else_block);
 
   node->inferred_type = &BuiltinTypes::Unknown;
@@ -249,7 +249,7 @@ void TypeChecker::check_while_statement(parser::node::ASTWhileStatementNode *nod
 // Blocos
 //---------------------------
 
-void TypeChecker::check_block(parser::node::BlockStatementNode *node) {
+void TypeChecker::check_block(ayla::ast::node::BlockStatementNode *node) {
   if (!node) return;
 
   for (auto *stmt : node->statements) check(stmt);

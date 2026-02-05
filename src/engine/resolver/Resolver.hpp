@@ -40,14 +40,14 @@ struct Resolver {
 
   void resolve_identifier(ayla::ast::IdentifierNode *node);
   void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
-  void resolve_if_statement(parser::node::IfStatementNode *node);
+  void resolve_if_statement(ayla::ast::node::IfStatementNode *node);
   void resolve_while_statement(parser::node::ASTWhileStatementNode *node);
 
   void resolve_variable_declaration(ayla::ast::PatternNode *node);
   void resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
   void resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
 
-  void resolve_block(parser::node::BlockStatementNode *node, bool create_scope = true);
+  void resolve_block(ayla::ast::node::BlockStatementNode *node, bool create_scope = true);
 
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 

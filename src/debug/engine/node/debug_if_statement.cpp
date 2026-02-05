@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_if_statement(const parser::node::IfStatementNode *node) {
+void ASTDebug::debug_if_statement(const ayla::ast::node::IfStatementNode *node) {
 
   out << "If\n";
 

@@ -22,7 +22,7 @@ ayla::ast::node::ReturnStatementNode *Parser::parse_return_statement() {
   return unit.ast.create_node<ayla::ast::node::ReturnStatementNode>(value);
 }
 
-parser::node::BlockStatementNode *Parser::parse_block_statement() {
+ayla::ast::node::BlockStatementNode *Parser::parse_block_statement() {
 
   std::vector<ayla::ast::StatementNode *> statements;
 
@@ -55,7 +55,7 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
     return nullptr;
   }
 
-  return unit.ast.create_node<parser::node::BlockStatementNode>(std::move(statements));
+  return unit.ast.create_node<ayla::ast::node::BlockStatementNode>(std::move(statements));
 }
 
 ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
@@ -90,7 +90,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
     }
   }
 
-  parser::node::BlockStatementNode *body = nullptr;
+  ayla::ast::node::BlockStatementNode *body = nullptr;
 
   if (!modifiers.has(ayla::ast::Modifier::Extern)) {
     body = parse_block_statement();

@@ -84,9 +84,9 @@ struct ASTDebug {
   void debug_index_acess(const ayla::ast::node::IndexAccessNode *node);
   void debug_array_literal(const parser::node::ASTArrayLiteralNode *node);
   void debug_path_expression(const parser::node::MemberAccessNode *node);
-  void debug_if_statement(const parser::node::IfStatementNode *node);
+  void debug_if_statement(const ayla::ast::node::IfStatementNode *node);
   void debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node);
-  void debug_block(const parser::node::BlockStatementNode *node);
+  void debug_block(const ayla::ast::node::BlockStatementNode *node);
   void debug_while(const parser::node::ASTWhileStatementNode *node);
   void debug_children(const std::vector<const ayla::ast::AstNode *> &children);
 
