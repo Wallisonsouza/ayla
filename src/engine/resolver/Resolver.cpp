@@ -1,7 +1,5 @@
 #include "Resolver.hpp"
-
 #include "core/node/flags.hpp"
-#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
@@ -36,7 +34,9 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::node::VariableDeclarationNode *>(node)); break;
+
   case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
+
   case ayla::ast::NodeKind::ModuleDeclaration: resolve_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
   case ayla::ast::NodeKind::ReturnStatement: resolve_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
@@ -55,9 +55,6 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   }
 }
 
-core::ParserScope *Resolver::push_scope() {
-  current_scope = unit.scope_manager.create_scope(current_scope);
-  return current_scope;
-}
+void Resolver::push_scope() { current_scope = unit.scope_manager.create_scope(current_scope); }
 
 void Resolver::pop_scope() { current_scope = current_scope->parent; }
