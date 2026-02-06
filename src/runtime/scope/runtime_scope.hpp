@@ -1,8 +1,10 @@
 #pragma once
 
-#include "engine/runtime/value.hpp"
+#include "core/memory/SymbolId.hpp"
+#include "runtime/value/value.hpp"
 #include <stdexcept>
 #include <unordered_map>
+#include <vector>
 
 struct RuntimeScope {
 

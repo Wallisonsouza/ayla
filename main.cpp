@@ -1,9 +1,8 @@
 #include "diagnostic/formatter.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/Engine.hpp"
-#include "engine/runtime/executor.hpp"
-#include "engine/runtime/runtime_scope.hpp"
 #include "language/argon_main.hpp"
+#include "runtime/interpreter/executor.hpp"
 #include <iostream>
 #include <ostream>
 #include <string>

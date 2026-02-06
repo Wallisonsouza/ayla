@@ -5,22 +5,20 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/error/recover.hpp"
 
-#include "engine/runtime/executor.hpp"
+#include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
+#include "frontend/ast/expressions/BinaryExpressionNode.hpp"
+#include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
+#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/statements/ExpressionStatementNode.hpp"
+#include "frontend/ast/statements/IfStatementNode.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
 #include "frontend/ast/statements/VariableDeclarationNode.hpp"
 #include "frontend/ast/statements/WhileStatementNode.hpp"
-
-enum class ParserResultCode { Success, Error };
-
-template <typename NodeType> struct ParserResult {
-  ParserResultCode code;
-  NodeType *node;
-
-  static ParserResult success(NodeType *n) { return ParserResult{ParserResultCode::Success, n}; }
-
-  static ParserResult error() { return ParserResult{ParserResultCode::Error, nullptr}; }
-};
 
 struct Parser {
   CompilationUnit &unit;

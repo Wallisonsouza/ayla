@@ -3,7 +3,6 @@
 #include "core/node/BinaryOp.hpp"
 #include "engine/CompilationUnit.hpp"
 
-#include "engine/runtime/value.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
 #include "frontend/ast/expressions/BinaryExpressionNode.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
@@ -19,7 +18,7 @@
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
 #include "frontend/ast/statements/VariableDeclarationNode.hpp"
 #include "frontend/ast/statements/WhileStatementNode.hpp"
-#include "runtime_scope.hpp"
+#include "runtime/scope/runtime_scope.hpp"
 
 #include <memory>
 #include <stdexcept>

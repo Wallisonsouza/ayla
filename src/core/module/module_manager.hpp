@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/module/module.hpp"
+#include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>

@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_variable_declaration(const ayla::ast::PatternNode *node) {
+void ASTDebug::debug_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node) {
 
   out << "VariableDeclaration\n";
 

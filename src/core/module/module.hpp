@@ -3,8 +3,7 @@
 #include "core/memory/SymbolId.hpp"
 #include "core/memory/type.hpp"
 #include "core/module/scope.hpp"
-#include "engine/runtime/runtime_scope.hpp"
-#include "engine/runtime/value.hpp"
+#include "runtime/scope/runtime_scope.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>

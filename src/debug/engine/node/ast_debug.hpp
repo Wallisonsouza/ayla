@@ -3,9 +3,20 @@
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 
-#include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
+#include "frontend/ast/expressions/BinaryExpressionNode.hpp"
+#include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
+#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/statements/ExpressionStatementNode.hpp"
+#include "frontend/ast/statements/IfStatementNode.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
+#include "frontend/ast/statements/ModuleDeclarationNode.hpp"
+#include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
+#include "frontend/ast/statements/WhileStatementNode.hpp"
 #include <string>
 #include <vector>
 
@@ -69,7 +80,7 @@ struct ASTDebug {
   void debug_import(const ayla::ast::node::ImportStatementNode *node);
   void debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);
   void debug_type(const ayla::ast::TypeNode *node);
-  void debug_variable_declaration(const ayla::ast::PatternNode *node);
+  void debug_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node);
   void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
   void debug_function_call(const ayla::ast::node::CallExpressionNode *node);
   void debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);

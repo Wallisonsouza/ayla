@@ -1,14 +1,24 @@
 #pragma once
 
 #include "core/memory/BuiltinTypes.hpp"
-
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
-
-#include "engine/runtime/executor.hpp"
-#include "frontend/ast/AstNode.hpp"
-#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 #include <iostream>
+
+#include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/expressions/AssignmentExpression.hpp"
+#include "frontend/ast/expressions/BinaryExpressionNode.hpp"
+#include "frontend/ast/expressions/CallExpressionNode.hpp"
+#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
+#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/statements/ExpressionStatementNode.hpp"
+#include "frontend/ast/statements/IfStatementNode.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
+#include "frontend/ast/statements/ModuleDeclarationNode.hpp"
+#include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
+#include "frontend/ast/statements/WhileStatementNode.hpp"
 
 struct TypeChecker {
 

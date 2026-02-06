@@ -1,6 +1,5 @@
 #include "ast_debug.hpp"
 #include "core/AST.hpp"
-
 #include "debug/console/console.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
@@ -45,7 +44,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::Type: debug_type(static_cast<const TypeNode *>(node)); break;
 
-  case NodeKind::VariableDeclaration: debug_variable_declaration(static_cast<const PatternNode *>(node)); break;
+  case NodeKind::VariableDeclaration: debug_variable_declaration(static_cast<const node::VariableDeclarationNode *>(node)); break;
 
   case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const ayla::ast::node::BinaryExpressionNode *>(node)); break;
 

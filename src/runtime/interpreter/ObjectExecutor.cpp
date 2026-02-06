@@ -1,5 +1,4 @@
-
-#include "engine/runtime/executor.hpp"
+#include "runtime/interpreter/executor.hpp"
 
 ExecResult Executor::execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node) {
 

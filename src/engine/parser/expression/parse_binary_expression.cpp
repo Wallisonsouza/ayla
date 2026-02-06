@@ -1,6 +1,5 @@
 #include "core/node/BinaryOp.hpp"
 #include "engine/parser/parser.hpp"
-#include "engine/runtime/executor.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_binary_expression(int min_precedence, ayla::ast::ExpressionNode *left) {
   if (!left) return nullptr;

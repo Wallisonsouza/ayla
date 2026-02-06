@@ -1,8 +1,4 @@
 #include "TypeChecker.hpp"
-#include "core/memory/type.hpp"
-
-#include "engine/runtime/executor.hpp"
-#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 
 void TypeChecker::check(ayla::ast::AstNode *node) {
   if (!node) return;

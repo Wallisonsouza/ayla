@@ -1,6 +1,4 @@
-
 #include "engine/parser/parser.hpp"
-#include "engine/runtime/executor.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_number_literal() {
   Token *token = unit.tokens.match(TokenKind::NUMBER_LITERAL);

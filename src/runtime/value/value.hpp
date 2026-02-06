@@ -1,8 +1,8 @@
 #pragma once
 #include "core/memory/SymbolId.hpp"
-#include "engine/runtime/array/ArrayValue.hpp"
-#include "engine/runtime/object/ObjectValue.hpp"
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
+#include "runtime/value/ArrayValue.hpp"
+#include "runtime/value/ObjectValue.hpp"
 #include <functional>
 #include <memory>
 #include <string>
