@@ -1,6 +1,5 @@
 #pragma once
 #include "core/AST.hpp"
-#include "core/node/Type.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 

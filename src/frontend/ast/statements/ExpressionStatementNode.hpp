@@ -9,6 +9,8 @@ struct ExpressionStatementNode : StatementNode {
   ExpressionNode *expression;
 
   explicit ExpressionStatementNode(ExpressionNode *expr) : StatementNode(NodeKind::ExpressionStatement), expression(expr) {}
+
+  void accept(AstVisitor &v) override { v.visit(this); }
 };
 
 } // namespace ayla::ast::node

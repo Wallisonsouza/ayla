@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 #include "core/AST.hpp"
-#include "core/node/Type.hpp"
+
 #include "debug/console/console.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}

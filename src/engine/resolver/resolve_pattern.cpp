@@ -1,6 +1,5 @@
 #include "Resolver.hpp"
 #include "core/memory/BuiltinTypes.hpp"
-#include "core/node/Type.hpp"
 
 void Resolver::resolve_pattern(ayla::ast::PatternNode *pat) {
   if (!pat) return;

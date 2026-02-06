@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/node/Modifier.hpp"
-#include "core/node/Type.hpp"
+#include "frontend/ast/PatternNode.hpp"
 #include "frontend/ast/StatementNode.hpp"
 #include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 #include "frontend/ast/statements/BlockStatementNode.hpp"
@@ -18,5 +18,7 @@ struct FunctionDeclarationNode : StatementNode {
 
   FunctionDeclarationNode(IdentifierExpressionNode *identifier, std::vector<PatternNode *> params, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, Modifiers mods = {})
       : StatementNode(NodeKind::FunctionDeclaration), identifier(identifier), params(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}
+
+  void accept(AstVisitor &v) override { v.visit(this); }
 };
 } // namespace ayla::ast::node

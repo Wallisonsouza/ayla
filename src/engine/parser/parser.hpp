@@ -1,6 +1,5 @@
 #pragma once
 #include "core/node/Modifier.hpp"
-#include "core/node/Type.hpp"
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"

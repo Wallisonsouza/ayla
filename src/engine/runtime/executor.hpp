@@ -1,7 +1,6 @@
 #pragma once
 #include "core/memory/symbol.hpp"
 #include "core/node/BinaryOp.hpp"
-#include "core/node/Type.hpp"
 #include "engine/CompilationUnit.hpp"
 
 #include "engine/runtime/value.hpp"

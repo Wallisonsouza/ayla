@@ -12,5 +12,7 @@ struct ImportStatementNode : StatementNode {
   SymbolId resolved_symbol_id;
 
   explicit ImportStatementNode(std::vector<IdentifierExpressionNode *> p) : StatementNode(NodeKind::Import), path(std::move(p)) {}
+
+  void accept(AstVisitor &v) override { v.visit(this); }
 };
 } // namespace ayla::ast::node

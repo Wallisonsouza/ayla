@@ -10,6 +10,8 @@ struct WhileStatementNode : StatementNode {
   StatementNode *body;
 
   WhileStatementNode(ExpressionNode *cond, StatementNode *block) : StatementNode(NodeKind::WhileStatement), condition(cond), body(block) {}
+
+  void accept(AstVisitor &v) override { v.visit(this); }
 };
 
 } // namespace ayla::ast::node
