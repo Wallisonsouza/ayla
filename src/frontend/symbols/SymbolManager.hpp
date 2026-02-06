@@ -1,6 +1,6 @@
 #pragma once
+#include "Symbol.hpp"
 #include "SymbolId.hpp"
-#include "core/memory/symbol.hpp"
 #include <deque>
 #include <stdexcept>
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/memory/SymbolId.hpp"
 #include "frontend/ast/AstNode.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 
 namespace ayla::ast {
 

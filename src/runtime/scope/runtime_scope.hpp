@@ -1,7 +1,8 @@
 #pragma once
 
-#include "core/memory/SymbolId.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/value.hpp"
+
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>

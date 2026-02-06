@@ -5,6 +5,7 @@
 #include "frontend/ast/StatementNode.hpp"
 #include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 #include "frontend/ast/statements/BlockStatementNode.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 
 namespace ayla::ast::node {
 

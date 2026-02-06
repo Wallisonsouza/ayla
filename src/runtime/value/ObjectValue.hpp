@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/memory/SymbolId.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 #include <memory>
 #include <unordered_map>
 

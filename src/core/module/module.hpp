@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/memory/SymbolId.hpp"
 #include "core/memory/type.hpp"
 #include "core/module/scope.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/scope/runtime_scope.hpp"
 #include <string>
 #include <unordered_map>

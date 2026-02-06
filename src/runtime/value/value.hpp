@@ -1,6 +1,7 @@
 #pragma once
-#include "core/memory/SymbolId.hpp"
+
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/ArrayValue.hpp"
 #include "runtime/value/ObjectValue.hpp"
 #include <functional>

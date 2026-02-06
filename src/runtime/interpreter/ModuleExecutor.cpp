@@ -21,7 +21,7 @@ ExecResult Executor::execute_import_node(CompilationUnit &unit, ayla::ast::node:
   }
 
   // for (auto &[name, id] : pscope->table) {
-  //   Symbol *sym = unit.context.symbol_manager.get(id);
+  //   Symbol *sym = unit.context.SymbolManager.get(id);
   //   if (sym) {
   //     std::cout << "symbol: " << name << " kind: " << (int)sym->kind << "\n";
   //   } else {

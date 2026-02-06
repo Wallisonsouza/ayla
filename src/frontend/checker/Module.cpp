@@ -26,7 +26,7 @@ void TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarationNod
 
   // node->inferred_type = module->type;
 
-  // if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
+  // if (auto *sym = unit.context.SymbolManager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
 void TypeChecker::check_import_node(ayla::ast::node::ImportStatementNode *node) {

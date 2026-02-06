@@ -1,9 +1,10 @@
 #pragma once
-#include "core/memory/symbol_manager.hpp"
+
 #include "core/module/module_manager.hpp"
 #include "core/module/scope.hpp"
 #include "core/table/PrecedenceTable.hpp"
 #include "core/table/TokenTable.hpp"
+#include "frontend/symbols/SymbolManager.hpp"
 #include "language/BackendRegistry.hpp"
 
 struct LanguageContext {

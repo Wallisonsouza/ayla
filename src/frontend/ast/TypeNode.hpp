@@ -1,5 +1,6 @@
 #include "frontend/ast/AstNode.hpp"
 #include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
+#include "frontend/symbols/SymbolId.hpp"
 
 namespace ayla::ast {
 
