@@ -1,7 +1,6 @@
 #include "Resolver.hpp"
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
@@ -43,11 +42,11 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::Assignment: resolve_assignment(static_cast<ayla::ast::node::AssignmentExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<ayla::ast::node::ASTArrayLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<ayla::ast::node::ArrayLiteralNode *>(node)); break;
 
   case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<ayla::ast::node::IndexAccessNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node)); break;
 
   case ayla::ast::NodeKind::Type: resolve_type_node(static_cast<ayla::ast::TypeNode *>(node)); break;
 

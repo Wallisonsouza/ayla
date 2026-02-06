@@ -3,7 +3,6 @@
 #include "core/node/Type.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
@@ -75,13 +74,13 @@ struct ASTDebug {
   void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
   void debug_function_call(const ayla::ast::node::CallExpressionNode *node);
   void debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);
-  void debug_object_literal(const parser::node::ObjectLiteralNode *node);
-  void debug_object_field(const parser::node::ObjectFieldNode *node);
+  void debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node);
+  void debug_object_field(const ayla::ast::node::ObjectFieldNode *node);
   void debug_return_statement(const ayla::ast::node::ReturnStatementNode *node);
 
   void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
   void debug_index_acess(const ayla::ast::node::IndexAccessNode *node);
-  void debug_array_literal(const ayla::ast::node::ASTArrayLiteralNode *node);
+  void debug_array_literal(const ayla::ast::node::ArrayLiteralNode *node);
   void debug_path_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
   void debug_if_statement(const ayla::ast::node::IfStatementNode *node);
   void debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node);

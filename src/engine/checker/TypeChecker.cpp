@@ -12,8 +12,8 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::NumberLiteral: check_number_literal(static_cast<ayla::ast::node::NumberLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::StringLiteral: check_string_literal(static_cast<ayla::ast::node::StringLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ayla::ast::node::BoolLiteralNode *>(node)); break;
-  case ayla::ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<ayla::ast::node::ASTArrayLiteralNode *>(node)); break;
-  case ayla::ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<parser::node::ObjectLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<ayla::ast::node::ArrayLiteralNode *>(node)); break;
+  case ayla::ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node)); break;
   case ayla::ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionCall: check_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
@@ -51,7 +51,7 @@ void TypeChecker::check_expression_statement(ayla::ast::node::ExpressionStatemen
   check(node->expression);
 }
 
-void TypeChecker::check_array_literal(ayla::ast::node::ASTArrayLiteralNode *node) {
+void TypeChecker::check_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
   if (!node) return;
 
   Type *elementType = nullptr;
@@ -70,7 +70,7 @@ void TypeChecker::check_array_literal(ayla::ast::node::ASTArrayLiteralNode *node
   node->inferred_type = unit.type_arena.alloc<ArrayType>(elementType);
 }
 
-void TypeChecker::check_object_literal(parser::node::ObjectLiteralNode *node) {
+void TypeChecker::check_object_literal(ayla::ast::node::ObjectLiteralNode *node) {
   if (!node) return;
 
   auto *objType = unit.type_arena.alloc<ObjectType>();

@@ -36,7 +36,7 @@ ayla::ast::IdentifierNode *Parser::parse_identifier() {
 
 ayla::ast::ExpressionNode *Parser::parse_object_literal() {
 
-  auto fields = parse_generic_list<parser::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> parser::node::ObjectFieldNode * {
+  auto fields = parse_generic_list<ayla::ast::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> ayla::ast::node::ObjectFieldNode * {
     auto *key = parse_identifier();
     if (!key) return nullptr;
 
@@ -45,10 +45,10 @@ ayla::ast::ExpressionNode *Parser::parse_object_literal() {
     auto *value = parse_expression();
     if (!value) return nullptr;
 
-    return unit.ast.create_node<parser::node::ObjectFieldNode>(key, value);
+    return unit.ast.create_node<ayla::ast::node::ObjectFieldNode>(key, value);
   });
 
   if (fields.empty()) return nullptr;
 
-  return unit.ast.create_node<parser::node::ObjectLiteralNode>(std::move(fields));
+  return unit.ast.create_node<ayla::ast::node::ObjectLiteralNode>(std::move(fields));
 }

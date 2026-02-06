@@ -19,13 +19,13 @@ void Resolver::resolve_string_literal(ayla::ast::node::StringLiteralNode *node) 
 
 void Resolver::resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node) {}
 
-void Resolver::resolve_object_literal(parser::node::ObjectLiteralNode *node) {
+void Resolver::resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node) {
   for (auto *field : node->fields) {
     if (field->value) resolve(field->value);
   }
 }
 
-void Resolver::resolve_array_literal(ayla::ast::node::ASTArrayLiteralNode *node) {
+void Resolver::resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
   for (auto *el : node->elements) resolve(el);
 }
 

@@ -1,7 +1,7 @@
 
 #include "engine/runtime/executor.hpp"
 
-ExecResult Executor::execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node) {
+ExecResult Executor::execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node) {
 
   auto obj_val = std::make_shared<Value>(Value::Object());
 

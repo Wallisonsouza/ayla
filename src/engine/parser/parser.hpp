@@ -5,7 +5,6 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/error/recover.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
@@ -54,7 +53,7 @@ public:
 
   ayla::ast::StatementNode *parse_statement();
   ayla::ast::StatementNode *parse_import_statement();
-  ayla::ast::node::ASTArrayLiteralNode *parse_array_literal();
+  ayla::ast::node::ArrayLiteralNode *parse_array_literal();
 
   ayla::ast::StatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
   ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);

@@ -2,7 +2,6 @@
 
 #include "core/memory/SymbolId.hpp"
 #include "frontend/ast/AstNode.hpp"
-#include "frontend/ast/NodeKind.hpp"
 
 namespace ayla::ast {
 

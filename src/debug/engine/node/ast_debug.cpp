@@ -2,7 +2,6 @@
 #include "core/AST.hpp"
 #include "core/node/Type.hpp"
 #include "debug/console/console.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 
@@ -27,8 +26,8 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   switch (node->kind) {
 
-  case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const parser::node::ObjectLiteralNode *>(node)); break;
-  case NodeKind::ObjectField: debug_object_field(static_cast<const parser::node::ObjectFieldNode *>(node)); break;
+  case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const ayla::ast::node::ObjectLiteralNode *>(node)); break;
+  case NodeKind::ObjectField: debug_object_field(static_cast<const ayla::ast::node::ObjectFieldNode *>(node)); break;
 
   case NodeKind::NumberLiteral: debug_number_literal(static_cast<const ayla::ast::node::NumberLiteralNode *>(node)); break;
 
@@ -68,7 +67,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 
-  case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const ayla::ast::node::ASTArrayLiteralNode *>(node)); break;
+  case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const ayla::ast::node::ArrayLiteralNode *>(node)); break;
 
   case NodeKind::WhileStatement: debug_while(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
   default: out << "<error>\n"; break;

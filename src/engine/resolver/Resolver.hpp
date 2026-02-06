@@ -4,7 +4,6 @@
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
@@ -27,8 +26,8 @@ struct Resolver {
   void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
 
   void resolve_type(ayla::ast::TypeNode *type_node);
-  void resolve_array_literal(ayla::ast::node::ASTArrayLiteralNode *node);
-  void resolve_object_literal(parser::node::ObjectLiteralNode *node);
+  void resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node);
+  void resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node);
   void resolve_number_literal(ayla::ast::node::NumberLiteralNode *node);
   void resolve_string_literal(ayla::ast::node::StringLiteralNode *node);
   void resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node);

@@ -1,7 +1,6 @@
 #include "ast_debug.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
-void ASTDebug::debug_object_literal(const parser::node::ObjectLiteralNode *node) {
+void ASTDebug::debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node) {
   out << "Object\n";
 
   if (!node->fields.empty()) {
@@ -12,7 +11,7 @@ void ASTDebug::debug_object_literal(const parser::node::ObjectLiteralNode *node)
   }
 }
 
-void ASTDebug::debug_object_field(const parser::node::ObjectFieldNode *node) {
+void ASTDebug::debug_object_field(const ayla::ast::node::ObjectFieldNode *node) {
   out << "Field\n";
 
   if (node->key) { debug_node(node->key, false); }

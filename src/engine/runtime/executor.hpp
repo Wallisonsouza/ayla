@@ -3,7 +3,6 @@
 #include "core/node/BinaryOp.hpp"
 #include "core/node/Type.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 
 #include "engine/runtime/value.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
@@ -34,9 +33,9 @@ struct Executor {
 
   ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node);
   ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node);
-  ExecResult execute_array(CompilationUnit &unit, ayla::ast::node::ASTArrayLiteralNode *node);
+  ExecResult execute_array(CompilationUnit &unit, ayla::ast::node::ArrayLiteralNode *node);
   ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node);
-  ExecResult execute_object(CompilationUnit &unit, parser::node::ObjectLiteralNode *node);
+  ExecResult execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node);
   ExecResult execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member);
 
   ExecResult execute_node(CompilationUnit &unit, ayla::ast::AstNode *node) {
@@ -66,7 +65,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<ayla::ast::node::IfStatementNode *>(node));
 
-    case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<ayla::ast::node::ASTArrayLiteralNode *>(node));
+    case ayla::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<ayla::ast::node::ArrayLiteralNode *>(node));
 
     case ayla::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<ayla::ast::node::IndexAccessNode *>(node));
 
