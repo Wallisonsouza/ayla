@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core/memory/type.hpp"
 #include "core/node/flags.hpp"
 #include "core/token/Location.hpp"
 #include "frontend/ast/NodeKind.hpp"
@@ -11,8 +10,6 @@ struct AstNode {
   NodeKind kind;
   SourceSlice slice;
   NodeFlag flags;
-
-  Type *inferred_type;
 
   virtual ~AstNode() = default;
 

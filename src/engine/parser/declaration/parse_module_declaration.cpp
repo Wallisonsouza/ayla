@@ -5,7 +5,7 @@ ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
 
   if (!unit.tokens.match(TokenKind::MODULE_KEYWORD)) return nullptr;
 
-  std::vector<ayla::ast::IdentifierNode *> path;
+  std::vector<ayla::ast::node::IdentifierExpressionNode *> path;
 
   auto *id = parse_identifier();
   if (!id) {

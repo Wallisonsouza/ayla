@@ -1,6 +1,7 @@
 #pragma once
 
 #include "frontend/ast/StatementNode.hpp"
+#include <vector>
 
 namespace ayla::ast::node {
 

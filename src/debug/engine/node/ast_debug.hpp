@@ -65,7 +65,7 @@ struct ASTDebug {
   void debug_bool_literal(const ayla::ast::node::BoolLiteralNode *node);
 
   void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
-  void debug_identifier(const ayla::ast::IdentifierNode *node);
+  void debug_identifier(const ayla::ast::node::IdentifierExpressionNode *node);
   void debug_member_access(const ayla::ast::node::MemberAccessExpressionNode *node);
   void debug_import(const ayla::ast::node::ImportStatementNode *node);
   void debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);

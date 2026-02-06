@@ -11,10 +11,10 @@ struct ExecutionUnit {
   Lexer lexer;
   Parser parser;
   Resolver resolver;
-  TypeChecker checker;
+  // TypeChecker checker;
 
 public:
-  ExecutionUnit(CompilationUnit &unit) : comp_unit(unit), lexer(unit), parser(unit), resolver(unit, &unit.context.root_scope), checker(unit) {}
+  ExecutionUnit(CompilationUnit &unit) : comp_unit(unit), lexer(unit), parser(unit), resolver(unit, &unit.context.root_scope) {}
 
   void execute() {
 
@@ -25,7 +25,5 @@ public:
     parser.parse_program();
 
     for (auto &node : comp_unit.ast.get_nodes()) { resolver.resolve(node); }
-
-    for (auto &node : comp_unit.ast.get_nodes()) { checker.check(node); }
   }
 };

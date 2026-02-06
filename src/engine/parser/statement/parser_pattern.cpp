@@ -1,36 +1,13 @@
+#include "core/node/Type.hpp"
 #include "engine/parser/parser.hpp"
 
-ayla::ast::PatternNode *Parser::parse_pattern(ayla::ast::Modifiers mods) {
-  auto start = unit.tokens.peek_slice();
+ayla::ast::PatternNode *Parser::parse_pattern() {
+  auto *id = parse_identifier();
+  if (!id) return nullptr;
 
-  auto *id_node = parse_identifier();
+  ayla::ast::TypeNode *type = nullptr;
 
-  if (!id_node) {
+  if (unit.tokens.match(TokenKind::COLON)) { type = parse_type(); }
 
-    auto *tok = unit.tokens.peek();
-    std::string found = tok ? tok->descriptor->name : "EOF";
-    report_error(DiagnosticCode::ExpectedIdentifier, "Expected parameter name");
-
-    return unit.ast.create_node<ayla::ast::PatternErrorNode>(start, mods);
-  }
-
-  ayla::ast::TypeNode *type_node = nullptr;
-  if (unit.tokens.match(TokenKind::COLON)) {
-    type_node = parse_type();
-    if (!type_node) {
-      report_error(DiagnosticCode::ExpectedType, "type");
-      return unit.ast.create_node<ayla::ast::PatternErrorNode>(start, mods);
-    }
-  }
-
-  ayla::ast::ExpressionNode *value_node = nullptr;
-  if (unit.tokens.match(TokenKind::ASSIGN)) {
-    value_node = parse_expression();
-    if (!value_node) {
-      report_error(DiagnosticCode::ExpectedExpression, "expression after '='");
-      return unit.ast.create_node<ayla::ast::PatternErrorNode>(start, mods);
-    }
-  }
-
-  return unit.ast.create_node<ayla::ast::PatternNode>(id_node, type_node, value_node, mods);
+  return unit.ast.create_node<ayla::ast::IdentifierPatternNode>(id, type);
 }

@@ -1,7 +1,7 @@
 #include "ast_debug.hpp"
 #include "core/node/Type.hpp"
 
-void ASTDebug::debug_identifier(const ayla::ast::IdentifierNode *node) {
+void ASTDebug::debug_identifier(const ayla::ast::node::IdentifierExpressionNode *node) {
 
   out << "Identifier";
 

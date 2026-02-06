@@ -23,12 +23,12 @@ ayla::ast::ExpressionNode *Parser::parse_string_literal() {
   return unit.ast.create_node<ayla::ast::node::StringLiteralNode>(text);
 }
 
-ayla::ast::IdentifierNode *Parser::parse_identifier() {
+ayla::ast::node::IdentifierExpressionNode *Parser::parse_identifier() {
 
   Token *token = unit.tokens.match(TokenKind::IDENTIFIER);
   if (!token) return nullptr;
 
-  auto *node = unit.ast.create_node<ayla::ast::IdentifierNode>(unit.source.buffer.get_text(token->slice.span));
+  auto *node = unit.ast.create_node<ayla::ast::node::IdentifierExpressionNode>(unit.source.buffer.get_text(token->slice.span));
   node->slice = token->slice;
 
   return node;

@@ -18,6 +18,7 @@
 #include "frontend/ast/statements/ImportStatementNode.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 #include "frontend/ast/statements/WhileStatementNode.hpp"
 #include "runtime_scope.hpp"
 
@@ -47,7 +48,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<ayla::ast::node::AssignmentExpressionNode *>(node));
 
-    case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::IdentifierNode *>(node));
+    case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node));
 
     case ayla::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<ayla::ast::node::NumberLiteralNode *>(node)->value)));
 
@@ -59,7 +60,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<ayla::ast::node::CallExpressionNode *>(node));
 
-    case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::PatternNode *>(node));
+    case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::node::VariableDeclarationNode *>(node));
 
     case ayla::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<ayla::ast::node::BlockStatementNode *>(node));
 
@@ -197,12 +198,22 @@ struct Executor {
   }
 
   // ===================== VARIABLES =====================
-  ExecResult execute_identifier(ayla::ast::IdentifierNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
+  ExecResult execute_identifier(ayla::ast::node::IdentifierExpressionNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
 
-  ExecResult execute_variable_declaration(CompilationUnit &unit, ayla::ast::PatternNode *node) {
-    auto val = node->value ? execute_node(unit, node->value).value : std::make_shared<Value>(Value::Null());
+  ExecResult execute_variable_declaration(CompilationUnit &unit, ayla::ast::node::VariableDeclarationNode *node) {
 
-    current_scope->set(node->symbol_id, val);
+    std::shared_ptr<Value> val;
+
+    if (node->initializer) {
+      val = execute_node(unit, node->initializer).value;
+    } else {
+      val = std::make_shared<Value>(Value::Null());
+    }
+
+    auto *id_pattern = static_cast<ayla::ast::IdentifierPatternNode *>(node->pattern);
+
+    current_scope->set(id_pattern->symbol_id, val);
+
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
@@ -211,7 +222,7 @@ struct Executor {
 
     // a = ...
     if (node->target->kind == ayla::ast::NodeKind::Identifier) {
-      auto *id = static_cast<ayla::ast::IdentifierNode *>(node->target);
+      auto *id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(node->target);
       current_scope->set(id->resolved_symbol_id, rhs);
       return ExecResult::make_value(rhs);
     }

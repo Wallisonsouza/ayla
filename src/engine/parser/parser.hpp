@@ -9,6 +9,7 @@
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 #include "frontend/ast/statements/WhileStatementNode.hpp"
 
 enum class ParserResultCode { Success, Error };
@@ -55,7 +56,7 @@ public:
   ayla::ast::StatementNode *parse_import_statement();
   ayla::ast::node::ArrayLiteralNode *parse_array_literal();
 
-  ayla::ast::StatementNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
+  ayla::ast::node::VariableDeclarationNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
   ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
   ayla::ast::node::ModuleDeclarationNode *parse_module_declaration();
   ayla::ast::StatementNode *parse_if_statement();
@@ -66,12 +67,12 @@ public:
 
   ayla::ast::ExpressionNode *parse_number_literal();
   ayla::ast::ExpressionNode *parse_string_literal();
-  ayla::ast::IdentifierNode *parse_identifier();
+  ayla::ast::node::IdentifierExpressionNode *parse_identifier();
   ayla::ast::ExpressionNode *parse_grouped_expression();
   ayla::ast::ExpressionNode *parse_member_acess(ayla::ast::ExpressionNode *base);
   ayla::ast::ExpressionNode *parse_index_access(ayla::ast::ExpressionNode *base);
 
-  ayla::ast::PatternNode *parse_pattern(ayla::ast::Modifiers mods);
+  ayla::ast::PatternNode *parse_pattern();
 
   void parse_program() {
 

@@ -15,6 +15,7 @@ enum class NodeKind {
   NullLiteral,
   Identifier,
   Interface,
+  IdentifierPattern,
 
   // === Statements ===
   MemberAccess,

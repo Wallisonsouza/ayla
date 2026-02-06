@@ -1,5 +1,4 @@
 #include "core/node/Modifier.hpp"
-#include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
 #include "core/token/TokenKind.hpp"
 
@@ -70,7 +69,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
     return nullptr;
   }
 
-  auto params = parse_generic_list<ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
+  auto params = parse_generic_list<ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern(); });
 
   ayla::ast::TypeNode *return_type = nullptr;
 

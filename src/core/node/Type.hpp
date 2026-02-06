@@ -1,39 +1,21 @@
 #pragma once
 #include "core/memory/SymbolId.hpp"
-#include "core/node/Modifier.hpp"
-#include "core/token/Location.hpp"
 #include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 
-#include <string>
 #include <vector>
-
-#include "frontend/ast/ExpressionNode.hpp"
-#include "frontend/ast/StatementNode.hpp"
 
 namespace ayla::ast {
 
-struct TypeDeclarationNode : StatementNode {
-  std::string name;
-  std::vector<std::string> type_params;
-
-  explicit TypeDeclarationNode(std::string n, std::vector<std::string> params = {}) : StatementNode(NodeKind::TypeDeclaration), name(std::move(n)), type_params(std::move(params)) {}
-};
-
-struct IdentifierNode : ayla::ast::ExpressionNode {
-  std::string name;
-
-  explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ExpressionNode(ayla::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
-};
-
 struct TypeNode : ayla::ast::AstNode {
-  IdentifierNode *identifier;
+  node::IdentifierExpressionNode *identifier;
   const std::vector<TypeNode *> generics;
   bool is_primitive = false;
   SymbolId symbol_id;
 
-  explicit TypeNode(IdentifierNode *id, bool primitive = false) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
+  explicit TypeNode(node::IdentifierExpressionNode *id, bool primitive = false) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), is_primitive(primitive) {}
 
-  TypeNode(IdentifierNode *id, std::vector<TypeNode *> g) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
+  TypeNode(node::IdentifierExpressionNode *id, std::vector<TypeNode *> g) : ayla::ast::AstNode(ayla::ast::NodeKind::Type), identifier(id), generics(std::move(g)) {}
 
   static bool is_same_type(TypeNode *a, TypeNode *b) {
     if (a->is_primitive && b->is_primitive) { return a->identifier->name == b->identifier->name; }
@@ -47,26 +29,16 @@ struct TypeNode : ayla::ast::AstNode {
   }
 };
 
-struct PatternNode : StatementNode {
-  ayla::ast::IdentifierNode *identifier;
-  ayla::ast::TypeNode *type;
-  ayla::ast::ExpressionNode *value;
-  ayla::ast::Modifiers modifiers;
-  SymbolId symbol_id;
-
-  PatternNode(ayla::ast::IdentifierNode *n, ayla::ast::TypeNode *t, ayla::ast::ExpressionNode *v, ayla::ast::Modifiers modifiers = {})
-      : StatementNode(ayla::ast::NodeKind::VariableDeclaration), identifier(n), type(t), value(v), modifiers(modifiers) {}
+struct PatternNode : AstNode {
+  using AstNode::AstNode;
 };
 
-struct PatternErrorNode : PatternNode {
-  PatternErrorNode(const SourceSlice &expected_slice, ayla::ast::Modifiers modifiers = {}) : PatternNode(nullptr, nullptr, nullptr, modifiers) {
-    this->kind = ayla::ast::NodeKind::Error;
-    this->slice = expected_slice;
+struct IdentifierPatternNode : PatternNode {
+  node::IdentifierExpressionNode *identifier;
+  SymbolId symbol_id;
+  TypeNode *type_annotation;
 
-    flags.set(NodeFlags::HasError);
-
-    this->slice = expected_slice;
-  }
+  IdentifierPatternNode(node::IdentifierExpressionNode *identifier, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), identifier(identifier), type_annotation(type) {}
 };
 
 } // namespace ayla::ast

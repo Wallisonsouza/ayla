@@ -1,6 +1,7 @@
 #include "Resolver.hpp"
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
@@ -28,13 +29,13 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::Import: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::IdentifierNode *>(node)); break;
+  case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::PatternNode *>(node)); break;
+  case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::node::VariableDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::ModuleDeclaration: resolve_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 

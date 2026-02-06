@@ -1,14 +1,21 @@
-#include "core/node/flags.hpp"
 #include "engine/parser/parser.hpp"
 
-ayla::ast::StatementNode *Parser::parse_variable_declaration(ayla::ast::Modifiers modifiers) {
-  auto mods = parse_modifiers();
+ayla::ast::node::VariableDeclarationNode *Parser::parse_variable_declaration(ayla::ast::Modifiers modifiers) {
 
-  if (!unit.tokens.match(TokenKind::VALUE_KEYWORD) && !unit.tokens.match(TokenKind::CONST_KEYWORD)) { return nullptr; }
+  bool is_const = unit.tokens.match(TokenKind::CONST_KEYWORD);
 
-  auto *pattern = parse_pattern(mods);
+  if (!is_const) {
+    if (!unit.tokens.match(TokenKind::VALUE_KEYWORD)) return nullptr;
+  }
 
-  if (pattern->flags.has(NodeFlags::HasError)) { recover_until(RecoverBoundary::Variable); }
+  // pattern
+  auto *pattern = parse_pattern();
+  if (!pattern) return nullptr;
 
-  return pattern;
+  // initializer opcional
+  ayla::ast::ExpressionNode *init = nullptr;
+
+  if (unit.tokens.match(TokenKind::ASSIGN)) { init = parse_expression(); }
+
+  return unit.ast.create_node<ayla::ast::node::VariableDeclarationNode>(pattern, init, modifiers);
 }

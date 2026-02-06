@@ -7,6 +7,7 @@
 
 #include "engine/runtime/executor.hpp"
 #include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/statements/VariableDeclarationNode.hpp"
 
 struct Resolver {
 
@@ -22,6 +23,8 @@ struct Resolver {
 
   void resolve_top_level();
 
+  void resolve_pattern(ayla::ast::PatternNode *pat);
+
   void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
   void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
 
@@ -36,12 +39,12 @@ struct Resolver {
   void resolve_index_access(ayla::ast::node::IndexAccessNode *node);
   void resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
 
-  void resolve_identifier(ayla::ast::IdentifierNode *node);
+  void resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node);
   void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
   void resolve_if_statement(ayla::ast::node::IfStatementNode *node);
   void resolve_while_statement(ayla::ast::node::WhileStatementNode *node);
 
-  void resolve_variable_declaration(ayla::ast::PatternNode *node);
+  void resolve_variable_declaration(ayla::ast::node::VariableDeclarationNode *node);
   void resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
   void resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
 

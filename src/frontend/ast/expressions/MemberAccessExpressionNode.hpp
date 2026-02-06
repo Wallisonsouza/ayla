@@ -1,15 +1,15 @@
 #pragma once
 
-#include "core/node/Type.hpp"
 #include "frontend/ast/ExpressionNode.hpp"
+#include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 
 namespace ayla::ast::node {
 
 struct MemberAccessExpressionNode : ExpressionNode {
   ExpressionNode *base;
-  IdentifierNode *field;
+  IdentifierExpressionNode *field;
 
-  MemberAccessExpressionNode(ExpressionNode *b, IdentifierNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), field(f) {}
+  MemberAccessExpressionNode(ExpressionNode *b, IdentifierExpressionNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), field(f) {}
 };
 
 } // namespace ayla::ast::node

@@ -25,7 +25,7 @@ struct ModuleManager {
     return id;
   }
 
-  ModuleId create_module_path(const std::vector<ayla::ast::IdentifierNode *> &path) {
+  ModuleId create_module_path(const std::vector<ayla::ast::node::IdentifierExpressionNode *> &path) {
 
     if (path.empty()) return SIZE_MAX;
 
@@ -64,7 +64,7 @@ struct ModuleManager {
 
   Module *get(ModuleId id) { return &modules[id]; }
 
-  ModuleId find_path(std::vector<ayla::ast::IdentifierNode *> &path, size_t &failed_index) {
+  ModuleId find_path(std::vector<ayla::ast::node::IdentifierExpressionNode *> &path, size_t &failed_index) {
     failed_index = SIZE_MAX;
 
     if (path.empty()) return SIZE_MAX;

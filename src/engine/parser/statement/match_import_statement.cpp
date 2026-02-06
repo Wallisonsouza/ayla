@@ -6,7 +6,7 @@ ayla::ast::StatementNode *Parser::parse_import_statement() {
 
   if (!unit.tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
 
-  std::vector<ayla::ast::IdentifierNode *> path_nodes;
+  std::vector<ayla::ast::node::IdentifierExpressionNode *> path_nodes;
 
   // primeiro identificador é obrigatório
   auto *name_token = unit.tokens.match(TokenKind::IDENTIFIER);
@@ -17,7 +17,7 @@ ayla::ast::StatementNode *Parser::parse_import_statement() {
 
   while (true) {
     auto name = unit.source.buffer.get_text(name_token->slice.span);
-    path_nodes.push_back(unit.ast.create_node<ayla::ast::IdentifierNode>(name));
+    path_nodes.push_back(unit.ast.create_node<ayla::ast::node::IdentifierExpressionNode>(name));
 
     if (!unit.tokens.match(TokenKind::DOT)) break;
 

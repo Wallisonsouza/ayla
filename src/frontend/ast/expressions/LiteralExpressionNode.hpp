@@ -1,4 +1,5 @@
 #include "frontend/ast/ExpressionNode.hpp"
+#include <string>
 
 namespace ayla::ast::node {
 

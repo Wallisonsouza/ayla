@@ -1,6 +1,6 @@
 #include "engine/resolver/Resolver.hpp"
 
-void Resolver::resolve_identifier(ayla::ast::IdentifierNode *node) {
+void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
   SymbolId id = current_scope->resolve_symbol(node->name);
