@@ -28,7 +28,7 @@ public:
     for (auto &node : comp_unit.ast.get_nodes()) { resolver.resolve(node); }
 
     for (auto &node : comp_unit.ast.get_nodes()) {
-      // degub.debug_node(node, true);
+      degub.debug_node(node, true);
       checker.check(node);
     }
   }

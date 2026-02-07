@@ -26,6 +26,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   switch (node->kind) {
 
   case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const ayla::ast::node::ObjectLiteralNode *>(node)); break;
+  
   case NodeKind::ObjectField: debug_object_field(static_cast<const ayla::ast::node::ObjectFieldNode *>(node)); break;
 
   case NodeKind::NumberLiteral: debug_number_literal(static_cast<const ayla::ast::node::NumberLiteralNode *>(node)); break;

@@ -52,6 +52,8 @@ struct Executor {
 
     case ayla::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<ayla::ast::node::StringLiteralNode *>(node)->value)));
 
+    case ayla::ast::NodeKind::BooleanLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(static_cast<ayla::ast::node::BoolLiteralNode *>(node)->value)));
+
     case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<ayla::ast::node::BinaryExpressionNode *>(node));
 
     case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node));

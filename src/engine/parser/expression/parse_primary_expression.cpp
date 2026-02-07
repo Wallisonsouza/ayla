@@ -14,6 +14,9 @@ ayla::ast::ExpressionNode *Parser::parse_primary_expression() {
 
   case TokenKind::IDENTIFIER: return parse_identifier();
 
+  case TokenKind::TRUE_KEYWORD:
+  case TokenKind::FALSE_KEYWORD: return parse_bool_literal();
+
   case TokenKind::OPEN_PAREN: return parse_grouped_expression();
 
   case TokenKind::OPEN_BRACE: return parse_object_literal();

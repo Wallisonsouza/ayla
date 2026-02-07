@@ -1,5 +1,14 @@
+import glfw
 import console
 
-val is_init = 10
 
-console.log(is_init)
+val test = true
+
+
+val b = test
+
+while b {
+
+  console.log("aaaaaaaaA")
+  
+}

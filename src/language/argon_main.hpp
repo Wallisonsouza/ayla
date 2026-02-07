@@ -13,7 +13,8 @@ inline LanguageContext create_context() {
 
   create_module_glfw(context);
   create_module_console(context);
-
+  context.descriptor_table.add(TokenKind::TRUE_KEYWORD, "true", TokenGroup::Keyword);
+  context.descriptor_table.add(TokenKind::FALSE_KEYWORD, "false", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::EXTERN_KEYWORD, "extern", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
@@ -79,7 +80,6 @@ inline LanguageContext create_context() {
 
   context.descriptor_table.add(TokenKind::NUMBER_LITERAL, TokenGroup::Literal);
   context.descriptor_table.add(TokenKind::STRING_LITERAL, TokenGroup::Literal);
-  context.descriptor_table.add(TokenKind::BoolLiteral, TokenGroup::Literal);
   context.descriptor_table.add(TokenKind::CharLiteral, TokenGroup::Literal);
   context.descriptor_table.add(TokenKind::NullLiteral, TokenGroup::Literal);
   context.descriptor_table.add(TokenKind::NEW_LINE, "\\n", TokenGroup::Whitespace);

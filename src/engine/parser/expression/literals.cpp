@@ -1,4 +1,5 @@
 #include "engine/parser/parser.hpp"
+#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_number_literal() {
   Token *token = unit.tokens.match(TokenKind::NUMBER_LITERAL);
@@ -19,6 +20,19 @@ ayla::ast::ExpressionNode *Parser::parse_string_literal() {
   std::string text = unit.source.buffer.get_text(token->slice.span);
 
   return unit.ast.create_node<ayla::ast::node::StringLiteralNode>(text);
+}
+
+ayla::ast::ExpressionNode *Parser::parse_bool_literal() {
+
+  Token *token = unit.tokens.advance();
+  if (!token) return nullptr;
+
+  bool value = (token->descriptor->kind == TokenKind::TRUE_KEYWORD);
+
+  auto *node = unit.ast.create_node<ayla::ast::node::BoolLiteralNode>(value);
+  node->slice = token->slice;
+
+  return node;
 }
 
 ayla::ast::node::IdentifierExpressionNode *Parser::parse_identifier() {

@@ -19,6 +19,8 @@ enum class TokenKind : uint8_t {
   ELSE_KEYWORD,   // Representa a palavra-chave 'else'.
   RETURN_KEYWORD, // Representa a palavra-chave 'return'.
   WHILE_KEYWORD,
+  TRUE_KEYWORD,
+  FALSE_KEYWORD,
 
   OPEN_BRACKET,
   CLOSE_BRACKET,
@@ -55,7 +57,6 @@ enum class TokenKind : uint8_t {
   STRING_LITERAL, // Representa um literal de string, como "texto".
   NullLiteral,    // Representa o valor nulo 'null'.
   CharLiteral,    // Representa um literal de caractere, como 'a'.
-  BoolLiteral,    // Representa um literal booleano: true ou false.
   EndOfFile,      // Representa o fim do arquivo, usado para indicar que não há mais
   NEW_LINE,
   Type, // mais tokens a serem lidos.

@@ -4,6 +4,7 @@
 #include "debug/console/console.hpp"
 
 #include "frontend/ast/AstNode.hpp"
+#include "frontend/ast/PatternNode.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
 #include "frontend/ast/expressions/BinaryExpressionNode.hpp"
 #include "frontend/ast/expressions/CallExpressionNode.hpp"
@@ -97,6 +98,7 @@ struct ASTDebug {
   void debug_block(const ayla::ast::node::BlockStatementNode *node);
   void debug_while(const ayla::ast::node::WhileStatementNode *node);
   void debug_children(const std::vector<const ayla::ast::AstNode *> &children);
+  void debug_pattern(const ayla::ast::PatternNode *node);
 
   template <typename T> void debug_labeled_childrens(const std::vector<T *> &children, const std::string &label, bool is_last) {
     tree.begin_node(is_last);

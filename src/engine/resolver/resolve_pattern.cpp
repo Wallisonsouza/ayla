@@ -5,13 +5,10 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat) {
   if (!pat) return;
 
   switch (pat->kind) {
-
   case ayla::ast::NodeKind::IdentifierPattern: {
-
     auto *pattern = static_cast<ayla::ast::IdentifierPatternNode *>(pat);
 
     if (current_scope->has_symbol_local(pattern->identifier->name)) {
-
       report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
       return;
     }
@@ -21,6 +18,8 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat) {
     current_scope->declare(pattern->identifier->name, sym);
 
     pattern->symbol_id = sym;
+
+    pattern->identifier->resolved_symbol_id = sym;
 
     if (pattern->type_annotation) resolve_type_node(pattern->type_annotation);
 
