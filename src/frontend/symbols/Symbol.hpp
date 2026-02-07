@@ -1,6 +1,5 @@
 #pragma once
 
-#include "frontend/ast/AstNode.hpp"
 #include <cstddef>
 #include <string>
 

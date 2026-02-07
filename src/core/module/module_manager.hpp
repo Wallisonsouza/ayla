@@ -14,50 +14,35 @@ struct ModuleManager {
   std::vector<Module> modules;
   std::unordered_map<std::string, ModuleId> root_modules;
 
-  ModuleId create_module(const std::string &name, ModuleId parent_id = SIZE_MAX) {
+  ModuleId get_or_create_module(const std::string &name, ModuleId parent_id = SIZE_MAX) {
+
+    if (parent_id == SIZE_MAX) {
+      auto it = root_modules.find(name);
+      if (it != root_modules.end()) return it->second;
+    } else {
+      auto &children = modules[parent_id].children;
+      auto it = children.find(name);
+      if (it != children.end()) return it->second;
+    }
+
     ModuleId id = modules.size();
     modules.emplace_back(name, parent_id);
-    if (parent_id == SIZE_MAX) {
+
+    if (parent_id == SIZE_MAX)
       root_modules[name] = id;
-    } else {
+    else
       modules[parent_id].children[name] = id;
-    }
+
     return id;
   }
 
-  ModuleId create_module_path(const std::vector<ayla::ast::node::IdentifierExpressionNode *> &path) {
+  ModuleId get_or_create_module_path(const std::vector<ayla::ast::node::IdentifierExpressionNode *> &path) {
 
     if (path.empty()) return SIZE_MAX;
 
     ModuleId current = SIZE_MAX;
 
-    for (auto *id_node : path) {
-      ModuleId next = SIZE_MAX;
-      const std::string &name = id_node->name;
-
-      if (current == SIZE_MAX) {
-        // raiz
-        auto it = root_modules.find(name);
-        if (it != root_modules.end()) next = it->second;
-      } else {
-        // filhos
-        auto &children = modules[current].children;
-        auto it = children.find(name);
-        if (it != children.end()) next = it->second;
-      }
-
-      if (next == SIZE_MAX) {
-
-        next = modules.size();
-        modules.emplace_back(name, current);
-        if (current == SIZE_MAX)
-          root_modules[name] = next;
-        else
-          modules[current].children[name] = next;
-      }
-
-      current = next;
-    }
+    for (auto *id_node : path) { current = get_or_create_module(id_node->name, current); }
 
     return current;
   }

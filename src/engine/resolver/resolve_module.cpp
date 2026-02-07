@@ -1,9 +1,10 @@
 #include "Resolver.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
 
 void Resolver::resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
   if (!node || node->path.empty()) return;
 
-  ModuleId module_id = unit.context.module_manager.create_module_path(node->path);
+  ModuleId module_id = unit.context.module_manager.get_or_create_module_path(node->path);
   auto module = unit.context.module_manager.get(module_id);
   node->resolved_module_id = module_id;
 
@@ -30,18 +31,21 @@ void Resolver::resolve_import_node(ayla::ast::node::ImportStatementNode *node) {
     return;
   }
 
+  node->resolved_module_id = module_id;
+
   auto module = unit.context.module_manager.get(module_id);
 
   std::string local_name = node->alias.value_or(node->path.back()->name);
 
-  // Registrar no escopo atual, não dentro do próprio módulo
   if (current_scope->has_symbol_local(local_name)) {
     report_error(DiagnosticCode::RedeclaredIdentifier, node->slice, {{"name", local_name}});
     return;
   }
 
   SymbolId sym_id = unit.context.symbol_manager.create_symbol(local_name, SymbolKind::Module, Visibility::Public, true, node);
+
   unit.context.symbol_manager.get(sym_id)->module_id = module_id;
+
   current_scope->declare(local_name, sym_id);
 
   node->resolved_symbol_id = sym_id;

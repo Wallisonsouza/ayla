@@ -1,4 +1,6 @@
+#include "diagnostic/diagnostic_code.hpp"
 #include "engine/resolver/Resolver.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
 
 void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
 
@@ -8,10 +10,14 @@ void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
 }
 
 void Resolver::resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node) {
+  if (!node || !node->base || !node->field) return;
 
-  if (node->base) { resolve(node->base); }
+  resolve(node->base);
 
-  // if (node->field) { resolve(node->field); }
+  if (!node->base->resolved_symbol_id.is_valid()) {
+    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    return;
+  }
 }
 
 void Resolver::resolve_function_call(ayla::ast::node::CallExpressionNode *node) {

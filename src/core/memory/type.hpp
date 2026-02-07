@@ -36,7 +36,7 @@ struct ObjectType : Type {
 
   Type *get_member(const std::string &name) const {
     auto it = members.find(name);
-    return (it == members.end()) ? nullptr : it->second;
+    return it == members.end() ? nullptr : it->second;
   }
 
   void add_member(const std::string &name, Type *type) { members[name] = type; }

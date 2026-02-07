@@ -64,8 +64,6 @@ struct TypeChecker {
   void check_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-
-    std::cout << "errri";
     auto *diag = unit.diagns.create(code, slice);
     for (auto &[k, v] : ctx) { diag->context.set(k, v); }
   }

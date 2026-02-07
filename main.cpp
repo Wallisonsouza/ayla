@@ -13,6 +13,7 @@ int main() {
   auto engine = Engine(context);
 
   std::vector<std::string> scripts = {
+      "/home/wallison/Documentos/git/ayla/src/tests/window_module.ay",
       "/home/wallison/Documentos/git/ayla/src/tests/main.ay",
   };
 

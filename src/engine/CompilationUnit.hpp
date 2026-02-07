@@ -11,8 +11,6 @@ struct CompilationUnit {
   LanguageContext &context;
   core::source::Source &source;
 
-  core::memory::Arena type_arena;
-
   DiagnosticEngine diagns;
 
   ScopeManager scope_manager;

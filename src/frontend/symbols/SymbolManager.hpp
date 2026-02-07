@@ -1,6 +1,7 @@
 #pragma once
-#include "Symbol.hpp"
 #include "SymbolId.hpp"
+#include "frontend/symbols/Symbol.hpp"
+
 #include <deque>
 #include <stdexcept>
 

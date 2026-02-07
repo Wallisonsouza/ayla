@@ -3,7 +3,9 @@
 #include "core/memory/type.hpp"
 #include "core/module/scope.hpp"
 #include "frontend/symbols/SymbolId.hpp"
-#include "runtime/scope/runtime_scope.hpp"
+#include "runtime/value/ObjectValue.hpp"
+#include "runtime/value/value.hpp"
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -19,9 +21,10 @@ struct Module {
   ModuleInitFn on_module_init;
   bool initialized = false;
   std::string name;
-  RuntimeScope runtime_scope;
   core::ParserScope *parser_scope;
   ModuleType *type;
+
+  std::shared_ptr<Value> module_object;
 
   void ensure_initialized() {
     if (initialized) return;
@@ -32,7 +35,7 @@ struct Module {
   ModuleId parent = SIZE_MAX;
   std::unordered_map<std::string, ModuleId> children;
 
-  explicit Module(std::string n, ModuleId p = SIZE_MAX) : name(std::move(n)), parent(p) {}
+  explicit Module(std::string n, ModuleId p = SIZE_MAX) : name(std::move(n)), parent(p) { module_object = std::make_shared<Value>(Value::Object()); }
 
   void add_child(const std::string &child_name, ModuleId child_id) { children[child_name] = child_id; }
 
@@ -47,6 +50,8 @@ struct Module {
 
     if (!sym_id.is_valid()) { throw std::runtime_error("Symbol '" + name + "' not found in module parser_scope"); }
 
-    runtime_scope.set(sym_id, std::make_shared<Value>(Value::Native(std::forward<Fn>(fn))));
+    auto val = std::make_shared<Value>(Value::Native(std::forward<Fn>(fn)));
+
+    module_object->get_object_ref().set(name, val);
   }
 };

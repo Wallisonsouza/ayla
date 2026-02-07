@@ -1,4 +1,8 @@
 #include "TypeChecker.hpp"
+#include "core/node/BinaryOp.hpp"
+#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/statements/ImportStatementNode.hpp"
+#include <iostream>
 
 void TypeChecker::check(ayla::ast::AstNode *node) {
   if (!node) return;
@@ -22,7 +26,7 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::WhileStatement: check_while_statement(static_cast<ayla::ast::node::WhileStatementNode *>(node)); break;
   case ayla::ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
   case ayla::ast::NodeKind::BlockStatement: check_block(static_cast<ayla::ast::node::BlockStatementNode *>(node)); break;
-  case ayla::ast::NodeKind::Import: check_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ImportStatement: check_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
   case ayla::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::Pattern: check_pattern(static_cast<ayla::ast::PatternNode *>(node)); break;
 
@@ -65,13 +69,14 @@ void TypeChecker::check_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
 
   if (!elementType) elementType = &BuiltinTypes::Unknown;
 
-  node->inferred_type = unit.type_arena.alloc<ArrayType>(elementType);
+  node->inferred_type = unit.context.type_arena.alloc<ArrayType>(elementType);
 }
 
 void TypeChecker::check_object_literal(ayla::ast::node::ObjectLiteralNode *node) {
   if (!node) return;
 
-  auto *objType = unit.type_arena.alloc<ObjectType>();
+  auto *objType = unit.context.type_arena.alloc<ObjectType>();
+
   for (auto *field : node->fields) {
     check(field->value);
 
@@ -142,10 +147,6 @@ void TypeChecker::check_pattern(ayla::ast::PatternNode *node) {
   }
 }
 
-//---------------------------
-// Funções
-//---------------------------
-
 inline Type *current_function_return_type = nullptr;
 
 void TypeChecker::check_return_statement(ayla::ast::node::ReturnStatementNode *node) {
@@ -173,7 +174,7 @@ void TypeChecker::check_function_declaration(ayla::ast::node::FunctionDeclaratio
 
   if (node->body) check_block(node->body);
 
-  auto *ft = unit.type_arena.alloc<FunctionType>();
+  auto *ft = unit.context.type_arena.alloc<FunctionType>();
   for (auto *param : node->params) ft->params.push_back(param->inferred_type);
 
   ft->return_type = node->return_type ? node->return_type->inferred_type : (current_function_return_type ? current_function_return_type : &BuiltinTypes::Unknown);
@@ -190,18 +191,18 @@ void TypeChecker::check_function_call(ayla::ast::node::CallExpressionNode *node)
   check(node->callee);
   for (auto *arg : node->arguments) { check(arg); }
 
-  // Type *funcType = node->callee ? node->callee->inferred_type : nullptr;
+  Type *funcType = node->callee ? node->callee->inferred_type : nullptr;
 
-  // if (!funcType || funcType->kind != TypeKind::Function) {
-  //   report_error(DiagnosticCode::UndeclaredSymbol, node->callee->slice);
-  //   node->inferred_type = &BuiltinTypes::Unknown;
-  //   return;
-  // }
+  if (!funcType || funcType->kind != TypeKind::Function) {
+    report_error(DiagnosticCode::UndeclaredSymbol, node->callee->slice);
+    node->inferred_type = &BuiltinTypes::Unknown;
+    return;
+  }
 
-  // auto *ft = static_cast<FunctionType *>(funcType);
-  // if (ft->params.size() != node->arguments.size()) { report_error(DiagnosticCode::InvalidArguments, node->callee->slice); }
+  auto *ft = static_cast<FunctionType *>(funcType);
+  if (ft->params.size() != node->arguments.size()) { report_error(DiagnosticCode::InvalidArguments, node->callee->slice); }
 
-  // node->inferred_type = ft->return_type;
+  node->inferred_type = ft->return_type;
 }
 
 //---------------------------
@@ -209,6 +210,7 @@ void TypeChecker::check_function_call(ayla::ast::node::CallExpressionNode *node)
 //---------------------------
 
 void TypeChecker::check_binary_expression(ayla::ast::node::BinaryExpressionNode *node) {
+
   if (!node) return;
 
   check(node->lhs);
@@ -217,20 +219,56 @@ void TypeChecker::check_binary_expression(ayla::ast::node::BinaryExpressionNode 
   Type *l = node->lhs ? node->lhs->inferred_type : &BuiltinTypes::Unknown;
   Type *r = node->rhs ? node->rhs->inferred_type : &BuiltinTypes::Unknown;
 
-  // Simples exemplo: números + números, boolean && boolean
   switch (node->op) {
+
+  // ------------------
+  // Aritméticos
+  // ------------------
   case ayla::ast::BinaryOperation::Add:
   case ayla::ast::BinaryOperation::Subtract:
   case ayla::ast::BinaryOperation::Multiply:
   case ayla::ast::BinaryOperation::Divide:
-    if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) report_error(DiagnosticCode::TypeMismatch, node->slice);
+
+    if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+
     node->inferred_type = &BuiltinTypes::Number;
     break;
+
+  // ------------------
+  // Lógicos
+  // ------------------
   case ayla::ast::BinaryOperation::And:
   case ayla::ast::BinaryOperation::Or:
-    if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) report_error(DiagnosticCode::TypeMismatch, node->slice);
+
+    if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
+
+  // ------------------
+  // Comparação
+  // ------------------
+  case ayla::ast::BinaryOperation::Less:
+  case ayla::ast::BinaryOperation::LessEqual:
+  case ayla::ast::BinaryOperation::Greater:
+  case ayla::ast::BinaryOperation::GreaterEqual:
+
+    if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+
+    node->inferred_type = &BuiltinTypes::Boolean;
+    break;
+
+  // ------------------
+  // Igualdade
+  // ------------------
+  case ayla::ast::BinaryOperation::Equal:
+  case ayla::ast::BinaryOperation::NotEqual:
+
+    if (l != r) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+
+    node->inferred_type = &BuiltinTypes::Boolean;
+    break;
+
   default: node->inferred_type = &BuiltinTypes::Unknown; break;
   }
 }
@@ -256,10 +294,6 @@ void TypeChecker::check_index_access(ayla::ast::node::IndexAccessNode *node) {
   node->inferred_type = arrType->element_type;
 }
 
-//---------------------------
-// Controle
-//---------------------------
-
 void TypeChecker::check_if_statement(ayla::ast::node::IfStatementNode *node) {
   check(node->condition);
   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(DiagnosticCode::TypeMismatch, node->condition->slice);
@@ -279,10 +313,6 @@ void TypeChecker::check_while_statement(ayla::ast::node::WhileStatementNode *nod
   node->inferred_type = &BuiltinTypes::Unknown;
 }
 
-//---------------------------
-// Blocos
-//---------------------------
-
 void TypeChecker::check_block(ayla::ast::node::BlockStatementNode *node) {
   if (!node) return;
 
@@ -291,42 +321,27 @@ void TypeChecker::check_block(ayla::ast::node::BlockStatementNode *node) {
   node->inferred_type = &BuiltinTypes::Unknown;
 }
 
-//---------------------------
-// Imports
-//---------------------------
-
-//---------------------------
-// Módulos
-//---------------------------
-
 void TypeChecker::check_member_access(ayla::ast::node::MemberAccessExpressionNode *node) {
-  if (!node || !node->base || !node->field) return;
-
   check(node->base);
-
   Type *baseType = node->base->inferred_type;
 
-  if (!baseType) {
-    report_error(DiagnosticCode::UnknownType, node->base->slice);
-    node->inferred_type = &BuiltinTypes::Unknown;
-    return;
-  }
-
-  if (baseType->kind != TypeKind::Object) {
-    report_error(DiagnosticCode::InvalidMemberAccess, node->field->slice, {{"base_type", baseType->to_string()}});
+  if (!baseType || baseType->kind != TypeKind::Object) {
+    report_error(DiagnosticCode::InvalidMemberAccess, node->field->slice);
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
   auto *objType = static_cast<ObjectType *>(baseType);
 
-  if (!objType->has_member(node->field->name)) {
+  Type *fieldType = objType->get_member(node->field->name);
+
+  if (!fieldType) {
     report_error(DiagnosticCode::MemberNotFound, node->field->slice, {{"member", node->field->name}});
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
-  node->inferred_type = objType->get_member(node->field->name);
+  node->inferred_type = fieldType;
 }
 
 void TypeChecker::check_assignment(ayla::ast::node::AssignmentExpressionNode *node) {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
-#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/ArrayValue.hpp"
 #include "runtime/value/ObjectValue.hpp"
 #include <functional>
@@ -95,7 +94,7 @@ struct Value {
     return false;
   }
 
-  std::shared_ptr<Value> get_property(const SymbolId &name) {
+  std::shared_ptr<Value> get_property(const std::string &name) {
     auto &obj = std::get<ObjectValue>(data).fields;
 
     auto it = obj.find(name);

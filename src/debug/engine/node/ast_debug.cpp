@@ -38,7 +38,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::Identifier: debug_identifier(static_cast<const ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 
-  case NodeKind::Import: debug_import(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
+  case NodeKind::ImportStatement: debug_import(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
 
   case NodeKind::ModuleDeclaration: debug_module_declaration(static_cast<const ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 

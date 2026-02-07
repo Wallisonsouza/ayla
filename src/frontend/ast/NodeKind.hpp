@@ -26,7 +26,7 @@ enum class NodeKind {
   ForStatement,
   ReturnStatement,
   ExpressionStatement,
-  Import,
+  ImportStatement,
 
   // === Declarations ===
   VariableDeclaration,

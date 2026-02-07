@@ -2,8 +2,8 @@
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
-#include "language/window/GLFWBackend.hpp"
-#include "language/window/module_window.hpp"
+#include "stdlib/Console.hpp"
+#include "stdlib/Glfw.hpp"
 
 namespace ayla::language {
 
@@ -11,9 +11,8 @@ inline LanguageContext create_context() {
 
   auto context = LanguageContext();
 
-  context.backends.set<WindowBackend>(std::make_shared<GLFWBackend>());
-
-  create_module_window(context);
+  create_module_glfw(context);
+  create_module_console(context);
 
   context.descriptor_table.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::EXTERN_KEYWORD, "extern", TokenGroup::Keyword);

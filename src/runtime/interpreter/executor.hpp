@@ -76,7 +76,7 @@ struct Executor {
 
     case ayla::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<ayla::ast::node::ModuleDeclarationNode *>(node));
 
-    case ayla::ast::NodeKind::Import: return execute_import_node(unit, static_cast<ayla::ast::node::ImportStatementNode *>(node));
+    case ayla::ast::NodeKind::ImportStatement: return execute_import_node(unit, static_cast<ayla::ast::node::ImportStatementNode *>(node));
 
     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
     }
@@ -86,49 +86,21 @@ struct Executor {
 
     auto callee = execute_node(unit, node->callee).value;
 
-    // std::vector<Value> args;
-    // for (auto *arg_node : node->arguments) {
+    std::vector<Value> args;
+    for (auto *arg_node : node->arguments) {
 
-    //   debug.debug_node(arg_node, true);
-    //   auto v = execute_node(unit, arg_node).value;
-    //   args.push_back(*v);
-    // }
+      auto v = execute_node(unit, arg_node).value;
+      args.push_back(*v);
+    }
 
-    // if (callee->is_native_function()) {
-    //   auto &fn = callee->get_native();
-    //   Value result = fn(args);
-    //   return ExecResult::make_value(std::make_shared<Value>(std::move(result)));
-    // }
+    if (callee->is_native_function()) {
 
-    // if (callee->is_user_function()) {
-    //   auto &uf = callee->get_user_function();
+      auto &fn = callee->get_native();
 
-    //   // 3️⃣ novo escopo
-    //   RuntimeScope local_scope(uf.captured_scope);
-    //   RuntimeScope *prev = current_scope;
-    //   current_scope = &local_scope;
+      return ExecResult::make_value(std::make_shared<Value>(std::move(fn(args))));
+    }
 
-    //   // 4️⃣ bind parâmetros
-    //   for (size_t i = 0; i < uf.node->params.size(); ++i) {
-    //     auto param_id = uf.node->params[i]->symbol_id;
-
-    //     std::shared_ptr<Value> val = i < args.size() ? std::make_shared<Value>(args[i]) : std::make_shared<Value>(Value::Null());
-
-    //     local_scope.set(param_id, val);
-    //   }
-
-    //   // 5️⃣ executar corpo
-    //   auto result = execute_block(unit, uf.node->body);
-
-    //   // 6️⃣ restaurar escopo
-    //   current_scope = prev;
-
-    //   if (result.is_return()) return ExecResult::make_value(result.value);
-
-    //   return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
-    // }
-
-    // throw std::runtime_error("Trying to call non-function");
+    throw std::runtime_error("Trying to call non-function");
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
@@ -252,6 +224,7 @@ struct Executor {
 
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
+
   // ===================== ENTRY =====================
   void execute_ast(CompilationUnit &unit) {
     if (!unit.diagns.all().empty()) return;
