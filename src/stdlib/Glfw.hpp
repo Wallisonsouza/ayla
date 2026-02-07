@@ -59,11 +59,11 @@ inline void create_module_glfw(LanguageContext &ctx) {
       return Value::Void();
     });
 
-    // make_context_current
-    m.add_native_function("make_context_current", [](const std::vector<Value> &args) {
-      auto win = (GLFWwindow *)(uint64_t)args[0].get_number();
-      glfwMakeContextCurrent(win);
-      return Value::Void();
-    });
+    // // make_context_current
+    // m.add_native_function("make_context_current", [](const std::vector<Value> &args) {
+    //   auto win = (GLFWwindow *)(uint64_t)args[0].get_number();
+    //   glfwMakeContextCurrent(win);
+    //   return Value::Void();
+    // });
   };
 }

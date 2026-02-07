@@ -14,9 +14,6 @@ ExecResult Executor::execute_import_node(CompilationUnit &unit, ayla::ast::node:
 
   module->ensure_initialized();
 
-  std::cout << module->type << std::endl;
-
-  if (module->type) std::cout << module->type->members.size();
 
   current_scope->set(node->resolved_symbol_id, module->module_object);
 
