@@ -13,8 +13,9 @@ int main() {
   auto engine = Engine(context);
 
   std::vector<std::string> scripts = {
-      "/home/wallison/Documentos/git/ayla/src/tests/window_module.ay",
-      "/home/wallison/Documentos/git/ayla/src/tests/main.ay",
+      "/home/wallison/Documentos/git/ayla/src/stdlib/console.ayla",
+      "/home/wallison/Documentos/git/ayla/src/stdlib/glfw.ayla",
+      "/home/wallison/Documentos/git/ayla/main.ay",
   };
 
   for (auto &path : scripts) {

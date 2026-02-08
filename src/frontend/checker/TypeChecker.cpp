@@ -2,7 +2,6 @@
 #include "core/node/BinaryOp.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
-#include <iostream>
 
 void TypeChecker::check(ayla::ast::AstNode *node) {
   if (!node) return;

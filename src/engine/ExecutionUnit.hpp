@@ -1,5 +1,6 @@
 
 #include "debug/engine/node/ast_debug.hpp"
+#include "debug/engine/token/dump_tokens.hpp"
 #include "engine/CompilationUnit.hpp"
 
 #include "engine/lexer/lexer.hpp"
@@ -23,13 +24,15 @@ public:
 
     ASTDebug degub;
 
-    parser.parse_program();
+    debug::engine::dump_tokens(comp_unit.tokens);
 
-    for (auto &node : comp_unit.ast.get_nodes()) { resolver.resolve(node); }
+    parser.parse_program();
 
     for (auto &node : comp_unit.ast.get_nodes()) {
       degub.debug_node(node, true);
-      checker.check(node);
+      resolver.resolve(node);
     }
+
+    // for (auto &node : comp_unit.ast.get_nodes()) { checker.check(node); }
   }
 };

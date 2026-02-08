@@ -1,4 +1,5 @@
 #include "Resolver.hpp"
+
 void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node) {
 
   if (!node) return;

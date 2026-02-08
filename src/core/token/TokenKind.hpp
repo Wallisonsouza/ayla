@@ -29,7 +29,8 @@ enum class TokenKind : uint8_t {
   SINGLE_QUOTE, // Representa uma aspa simples '\''.
   COLON,        // Representa o caractere ':'.
   ARROW,
-  PLUS,   // Representa o operador de adição '+'.
+  PLUS, // Representa o operador de adição '+'.
+  NOT,
   MINUS,  // Representa o operador de subtração '-'.
   STAR,   // Representa o operador de multiplicação '*'.
   SLASH,  // Representa o operador de divisão '/'.

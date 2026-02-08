@@ -1,18 +1,17 @@
 #include "frontend/ast/AstNode.hpp"
-#include "frontend/ast/expressions/IdentifierExpressionNode.hpp"
 #include "frontend/symbols/SymbolId.hpp"
 
 namespace ayla::ast {
 
 struct TypeNode : AstNode {
-  node::IdentifierExpressionNode *identifier;
-  const std::vector<TypeNode *> generics;
-  bool is_primitive = false;
+  std::string name;
   SymbolId symbol_id;
+  std::vector<TypeNode *> generics;
+  bool is_primitive = false;
 
-  explicit TypeNode(node::IdentifierExpressionNode *id, bool primitive = false) : AstNode(NodeKind::Type), identifier(id), is_primitive(primitive) {}
+  TypeNode(std::string name_, bool primitive = false) : AstNode(NodeKind::Type), name(std::move(name_)), is_primitive(primitive) {}
 
-  TypeNode(node::IdentifierExpressionNode *id, std::vector<TypeNode *> g) : AstNode(NodeKind::Type), identifier(id), generics(std::move(g)) {}
+  TypeNode(std::string name_, std::vector<TypeNode *> g) : AstNode(NodeKind::Type), name(std::move(name_)), generics(std::move(g)) {}
 
   void accept(AstVisitor &v) override { v.visit(this); }
 };

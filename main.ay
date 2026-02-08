@@ -1,0 +1,4 @@
+import console
+
+
+console.log(10 + 10)

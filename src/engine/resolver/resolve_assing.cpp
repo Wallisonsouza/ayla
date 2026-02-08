@@ -2,7 +2,7 @@
 
 void Resolver::resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node) {
 
-  resolve(node->target);
+  if (node->target) { resolve(node->target); }
 
-  resolve(node->value);
+  if (node->value) { resolve(node->value); }
 }

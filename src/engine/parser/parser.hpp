@@ -5,6 +5,7 @@
 #include "engine/CompilationUnit.hpp"
 #include "engine/parser/error/recover.hpp"
 
+#include "frontend/ast/ExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "frontend/ast/statements/ModuleDeclarationNode.hpp"
 #include "frontend/ast/statements/ReturnStatementNodes.hpp"
@@ -39,6 +40,7 @@ public:
   ayla::ast::ExpressionNode *parse_primary_expression();
   ayla::ast::ExpressionNode *parse_binary_expression(int min_precedence, ayla::ast::ExpressionNode *lef);
   ayla::ast::ExpressionNode *parse_object_literal();
+  ayla::ast::ExpressionNode *parse_unary_expression();
 
   ayla::ast::StatementNode *parse_statement();
   ayla::ast::StatementNode *parse_import_statement();

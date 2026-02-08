@@ -2,12 +2,15 @@
 #include <string>
 
 namespace ayla::ast {
+
 enum class BinaryOperation {
   Add,
   Subtract,
   Multiply,
   Divide,
   Modulo,
+  Assign,
+  Arrow,
 
   And,
   Or,

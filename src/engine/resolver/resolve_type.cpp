@@ -1,19 +1,16 @@
-
 #include "engine/resolver/Resolver.hpp"
 
-inline void Resolver::resolve_type(ayla::ast::TypeNode *node) {
+void Resolver::resolve_type_node(ayla::ast::TypeNode *node) {
+  if (!node) return;
 
-  if (!node || !node->identifier) return;
+  // SymbolId sym_id = current_scope->resolve_symbol(node->name);
 
-  resolve(node->identifier);
+  // if (!sym_id.is_valid()) {
+  //   report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"name", node->name}});
+  //   return;
+  // }
 
-  auto sym = current_scope->resolve_symbol(node->identifier->name);
-  if (!sym.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->identifier->slice, {{"name", node->identifier->name}});
-    return;
-  }
+  // node->symbol_id = sym_id;
 
-  node->symbol_id = sym;
-
-  for (auto *generic : node->generics) { resolve_type(generic); }
+  // for (auto *generic : node->generics) { resolve_type_node(generic); }
 }

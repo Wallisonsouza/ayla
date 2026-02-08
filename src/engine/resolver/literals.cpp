@@ -30,20 +30,3 @@ void Resolver::resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node) 
 void Resolver::resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
   for (auto *el : node->elements) resolve(el);
 }
-
-void Resolver::resolve_type_node(ayla::ast::TypeNode *node) {
-  if (!node || !node->identifier) return;
-
-  resolve_identifier(node->identifier);
-
-  SymbolId sym_id = current_scope->resolve_symbol(node->identifier->name);
-
-  if (!sym_id.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->identifier->slice, {{"name", node->identifier->name}});
-    return;
-  }
-
-  node->symbol_id = sym_id;
-
-  for (auto *generic : node->generics) { resolve_type_node(generic); }
-}

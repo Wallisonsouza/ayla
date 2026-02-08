@@ -1,0 +1,44 @@
+module glfw {
+
+    // Inicializa GLFW
+    extern funct init() -> bool
+
+    // Finaliza GLFW
+    extern funct terminate() -> void
+
+    // Cria uma janela (width, height, title) -> retorna ponteiro da janela como number
+    extern funct create_window(width: number, height: number, title: string) -> number
+
+    // Destroi uma janela
+    extern funct destroy_window(window: number) -> void
+
+    // Retorna true se a janela deve ser fechada
+    extern funct window_should_close(window: number) -> bool
+
+    // Define se a janela deve ser fechada
+    extern funct set_window_should_close(window: number, value: bool) -> void
+
+    // Processa eventos do sistema
+    extern funct poll_events() -> void
+
+    // Troca os buffers da janela
+    extern funct swap_buffers(window: number) -> void
+
+    // Mostra a janela (visível)
+    extern funct show_window(window: number) -> void
+
+    // Esconde a janela
+    extern funct hide_window(window: number) -> void
+
+    // Define o título da janela
+    extern funct set_window_title(window: number, title: string) -> void
+
+    // Retorna a largura da janela
+    extern funct get_window_width(window: number) -> number
+
+    // Retorna a altura da janela
+    extern funct get_window_height(window: number) -> number
+
+    // Define a janela como contexto atual de OpenGL
+    extern funct make_context_current(window: number) -> void
+}

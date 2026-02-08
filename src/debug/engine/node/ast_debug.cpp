@@ -1,6 +1,7 @@
 #include "ast_debug.hpp"
 #include "core/AST.hpp"
 #include "debug/console/console.hpp"
+#include "frontend/ast/PatternNode.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 
@@ -25,8 +26,11 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   switch (node->kind) {
 
+  case NodeKind::Pattern:
+  case NodeKind::IdentifierPattern: debug_pattern(static_cast<const PatternNode *>(node)); break;
+
   case NodeKind::ObjectLiteral: debug_object_literal(static_cast<const ayla::ast::node::ObjectLiteralNode *>(node)); break;
-  
+
   case NodeKind::ObjectField: debug_object_field(static_cast<const ayla::ast::node::ObjectFieldNode *>(node)); break;
 
   case NodeKind::NumberLiteral: debug_number_literal(static_cast<const ayla::ast::node::NumberLiteralNode *>(node)); break;
@@ -85,22 +89,6 @@ void ASTDebug::dump_ast(const Ast &ast) {
     debug_node(ast.get_nodes()[i], is_last);
   }
 }
-
-// void ASTDebug::debug_children(const std::vector<const ayla::ast::Node *>
-// &children) {
-
-//   size_t count = 0;
-//   for (auto *c : children)
-//     if (c) ++count;
-
-//   size_t printed = 0;
-//   for (auto *c : children) {
-//     if (!c) continue;
-//     ++printed;
-//     bool is_last = (printed == count);
-//     debug_node(c, is_last);
-//   }
-// }
 
 void ASTDebug::debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last) {
   tree.begin_node(is_last);
