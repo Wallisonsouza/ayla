@@ -2,6 +2,7 @@
 #include "core/AST.hpp"
 #include "debug/console/console.hpp"
 #include "frontend/ast/PatternNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 
@@ -74,6 +75,8 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const ayla::ast::node::ArrayLiteralNode *>(node)); break;
 
   case NodeKind::WhileStatement: debug_while(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
+
+  case NodeKind::UnaryExpression: debug_unary_expression(static_cast<const ayla::ast::node::UnaryExpressionNode *>(node)); break;
   default: out << "<error>\n"; break;
   }
 

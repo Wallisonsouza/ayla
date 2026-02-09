@@ -1,6 +1,7 @@
 #include "TypeChecker.hpp"
 #include "core/node/BinaryOp.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
 
 void TypeChecker::check(ayla::ast::AstNode *node) {
@@ -28,7 +29,7 @@ void TypeChecker::check(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::ImportStatement: check_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
   case ayla::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
   case ayla::ast::NodeKind::Pattern: check_pattern(static_cast<ayla::ast::PatternNode *>(node)); break;
-
+  case ayla::ast::NodeKind::UnaryExpression: check_unary_expression(static_cast<ayla::ast::node::UnaryExpressionNode *>(node)); break;
   default: break;
   }
 }
@@ -169,12 +170,12 @@ void TypeChecker::check_function_declaration(ayla::ast::node::FunctionDeclaratio
 
   current_function_return_type = node->return_type ? node->return_type->inferred_type : nullptr;
 
-  for (auto *param : node->params) check_pattern(param);
+  for (auto *param : node->parameters) check_pattern(param);
 
   if (node->body) check_block(node->body);
 
   auto *ft = unit.context.type_arena.alloc<FunctionType>();
-  for (auto *param : node->params) ft->params.push_back(param->inferred_type);
+  for (auto *param : node->parameters) ft->params.push_back(param->inferred_type);
 
   ft->return_type = node->return_type ? node->return_type->inferred_type : (current_function_return_type ? current_function_return_type : &BuiltinTypes::Unknown);
 
@@ -271,6 +272,8 @@ void TypeChecker::check_binary_expression(ayla::ast::node::BinaryExpressionNode 
   default: node->inferred_type = &BuiltinTypes::Unknown; break;
   }
 }
+
+void TypeChecker::check_unary_expression(ayla::ast::node::UnaryExpressionNode *node) {}
 
 void TypeChecker::check_index_access(ayla::ast::node::IndexAccessNode *node) {
   if (!node || !node->base || !node->index) return;

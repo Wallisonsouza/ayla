@@ -6,7 +6,7 @@ void ASTDebug::debug_function_declaration(const ayla::ast::node::FunctionDeclara
 
   if (node->identifier) { debug_node(node->identifier, false); }
 
-  if (!node->params.empty()) { debug_labeled_childrens(node->params, "Args", node->return_type == nullptr && node->body == nullptr); }
+  if (!node->parameters.empty()) { debug_labeled_childrens(node->parameters, "Args", node->return_type == nullptr && node->body == nullptr); }
 
   if (node->return_type) { debug_labeled("ReturnType", node->return_type, node->body == nullptr); }
 

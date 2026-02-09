@@ -14,6 +14,11 @@ struct ModuleManager {
   std::vector<Module> modules;
   std::unordered_map<std::string, ModuleId> root_modules;
 
+  Module *get_or_create_module_ptr(const std::string &name) {
+    auto id = get_or_create_module(name);
+    return get(id);
+  }
+
   ModuleId get_or_create_module(const std::string &name, ModuleId parent_id = SIZE_MAX) {
 
     if (parent_id == SIZE_MAX) {

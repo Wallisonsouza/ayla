@@ -3,14 +3,30 @@
 ExecResult Executor::execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node) {
 
   auto obj_val = std::make_shared<Value>(Value::Object());
-
   auto &obj = obj_val->get_object_ref();
 
-  for (auto &field : node->fields) {
-    auto result = execute_node(unit, field->value);
+  for (size_t i = 0; i < node->fields.size(); ++i) {
+    auto &field = node->fields[i];
 
-    auto symbol = unit.context.symbol_manager.get(field->key->resolved_symbol_id);
-    obj.set(symbol->name, result.value);
+    std::string key_str;
+
+    if (field->key->kind == ayla::ast::NodeKind::Identifier) {
+      auto *id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(field->key);
+
+      key_str = id->name;
+
+    } else {
+
+      auto key_res = execute_node(unit, field->key);
+
+      if (!key_res.value) { throw std::runtime_error("Object key evaluated to null"); }
+
+      key_str = key_res.value->convert_to_string();
+    }
+
+    auto val_res = execute_node(unit, field->value);
+
+    obj.set(key_str, val_res.value);
   }
 
   return ExecResult::make_value(obj_val);

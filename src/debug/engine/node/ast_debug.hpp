@@ -11,6 +11,7 @@
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 #include "frontend/ast/statements/ExpressionStatementNode.hpp"
 #include "frontend/ast/statements/IfStatementNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
@@ -83,6 +84,7 @@ struct ASTDebug {
   void debug_type(const ayla::ast::TypeNode *node);
   void debug_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node);
   void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
+  void debug_unary_expression(const ayla::ast::node::UnaryExpressionNode *node);
   void debug_function_call(const ayla::ast::node::CallExpressionNode *node);
   void debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);
   void debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node);

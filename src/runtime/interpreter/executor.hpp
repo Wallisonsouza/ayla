@@ -9,6 +9,7 @@
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 #include "frontend/ast/statements/BlockStatementNode.hpp"
 #include "frontend/ast/statements/ExpressionStatementNode.hpp"
 #include "frontend/ast/statements/FunctionDeclarationNode.hpp"
@@ -26,9 +27,9 @@
 
 struct Executor {
 
-  RuntimeScope *current_scope;
+  std::shared_ptr<RuntimeScope> current_scope;
 
-  Executor(RuntimeScope *scope) : current_scope(scope) {}
+  Executor(std::shared_ptr<RuntimeScope> scope) : current_scope(scope) {}
 
   ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node);
   ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node);
@@ -48,13 +49,19 @@ struct Executor {
 
     case ayla::ast::NodeKind::Identifier: return execute_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node));
 
+    // literals
     case ayla::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<ayla::ast::node::NumberLiteralNode *>(node)->value)));
 
     case ayla::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<ayla::ast::node::StringLiteralNode *>(node)->value)));
 
     case ayla::ast::NodeKind::BooleanLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(static_cast<ayla::ast::node::BoolLiteralNode *>(node)->value)));
 
+    case ayla::ast::NodeKind::ObjectLiteral: return execute_object(unit, static_cast<ayla::ast::node::ObjectLiteralNode *>(node));
+
+    // exps
     case ayla::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<ayla::ast::node::BinaryExpressionNode *>(node));
+
+    case ayla::ast::NodeKind::UnaryExpression: return execute_unary(unit, static_cast<ayla::ast::node::UnaryExpressionNode *>(node));
 
     case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node));
 
@@ -85,25 +92,47 @@ struct Executor {
   }
 
   ExecResult execute_function_call(CompilationUnit &unit, ayla::ast::node::CallExpressionNode *node) {
-
     auto callee = execute_node(unit, node->callee).value;
 
-    std::vector<Value> args;
-    for (auto *arg_node : node->arguments) {
+    if (!callee) throw std::runtime_error("Null callee");
 
-      auto v = execute_node(unit, arg_node).value;
-      args.push_back(*v);
-    }
+    std::vector<std::shared_ptr<Value>> args;
+
+    for (auto *arg_node : node->arguments) { args.push_back(execute_node(unit, arg_node).value); }
 
     if (callee->is_native_function()) {
+      std::vector<Value> raw;
+
+      for (auto &a : args) raw.push_back(*a);
 
       auto &fn = callee->get_native();
+      return ExecResult::make_value(std::make_shared<Value>(fn(raw)));
+    }
 
-      return ExecResult::make_value(std::make_shared<Value>(std::move(fn(args))));
+    if (callee->is_user_function()) {
+      auto &ufn = callee->get_user_function();
+      auto *decl = ufn.node;
+
+      auto local = std::make_shared<RuntimeScope>(ufn.captured_scope);
+
+      for (size_t i = 0; i < decl->parameters.size(); ++i) {
+        auto *param = static_cast<ayla::ast::IdentifierPatternNode *>(decl->parameters[i]);
+        if (i < args.size()) {
+          local->set(param->symbol_id, args[i]);
+        } else {
+          local->set(param->symbol_id, std::make_shared<Value>(Value::Null()));
+        }
+      }
+
+      Executor subExec(local);
+      auto result = subExec.execute_node(unit, decl->body);
+
+      if (result.is_return()) return ExecResult::make_value(result.value);
+
+      return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
     }
 
     throw std::runtime_error("Trying to call non-function");
-    return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
   // ===================== STATEMENTS =====================
@@ -169,6 +198,17 @@ struct Executor {
     }
   }
 
+  ExecResult execute_unary(CompilationUnit &unit, ayla::ast::node::UnaryExpressionNode *node) {
+
+    auto operand = execute_node(unit, node->operand).value;
+
+    switch (node->op) {
+    case ayla::UnaryOperation::NOT: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(!operand->get_boolean())));
+
+    default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
+    }
+  }
+
   // ===================== VARIABLES =====================
   ExecResult execute_identifier(ayla::ast::node::IdentifierExpressionNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
 
@@ -189,17 +229,44 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
+  void set_in_scope_chain(std::shared_ptr<RuntimeScope> scope, SymbolId id, std::shared_ptr<Value> val) {
+    if (scope->values.find(id) != scope->values.end()) {
+      scope->values[id] = val;
+      return;
+    }
+    if (scope->parent) {
+      set_in_scope_chain(scope->parent, id, val);
+      return;
+    }
+
+    scope->values[id] = val;
+  }
+
   ExecResult execute_assignment(CompilationUnit &unit, ayla::ast::node::AssignmentExpressionNode *node) {
     auto rhs = execute_node(unit, node->value).value;
 
     // a = ...
     if (node->target->kind == ayla::ast::NodeKind::Identifier) {
       auto *id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(node->target);
-      current_scope->set(id->resolved_symbol_id, rhs);
+      set_in_scope_chain(current_scope, id->resolved_symbol_id, rhs);
+      return ExecResult::make_value(rhs);
+    }
+    if (node->target->kind == ayla::ast::NodeKind::MemberAccess) {
+      auto *mem = static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node->target);
+
+      auto base = execute_node(unit, mem->base).value;
+
+      if (!base || !base->is_object()) throw std::runtime_error("Member assignment on non-object");
+
+      auto &obj = base->get_object_ref();
+
+      const std::string &field_name = mem->field->name;
+
+      obj.set(field_name, rhs);
+
       return ExecResult::make_value(rhs);
     }
 
-    // a[i] = ...
     if (node->target->kind == ayla::ast::NodeKind::IndexAccess) {
       auto *idx = static_cast<ayla::ast::node::IndexAccessNode *>(node->target);
 

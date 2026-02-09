@@ -57,33 +57,4 @@ struct AstVisitor {
   virtual void visit(PatternNode *node) = 0;
 };
 
-struct Parser : ayla::ast::AstVisitor {
-
-  void visit(node::ExpressionStatementNode *node) override;
-  void visit(TypeNode *node) override;
-  void visit(node::ImportStatementNode *node) override;
-  void visit(node::ObjectFieldNode *node) override;
-  void visit(node::NullLiteralNode *node) override;
-  void visit(node::ModuleDeclarationNode *node) override;
-  void visit(node::VariableDeclarationNode *node) override;
-  void visit(node::FunctionDeclarationNode *node) override;
-  void visit(node::BinaryExpressionNode *node) override;
-  void visit(node::IdentifierExpressionNode *node) override;
-  void visit(node::NumberLiteralNode *node) override;
-  void visit(node::StringLiteralNode *node) override;
-  void visit(node::BoolLiteralNode *node) override;
-  void visit(node::ArrayLiteralNode *node) override;
-  void visit(node::ObjectLiteralNode *node) override;
-  void visit(node::MemberAccessExpressionNode *node) override;
-  void visit(node::IndexAccessNode *node) override;
-  void visit(node::BlockStatementNode *node) override;
-  void visit(node::IfStatementNode *node) override;
-  void visit(node::WhileStatementNode *node) override;
-  void visit(node::ReturnStatementNode *node) override;
-  void visit(node::AssignmentExpressionNode *node) override;
-  void visit(node::CallExpressionNode *node) override;
-  void visit(PatternNode *node) override;
-
-}; // namespace ayla::ast
-
 } // namespace ayla::ast

@@ -11,6 +11,7 @@
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 #include "frontend/ast/statements/ExpressionStatementNode.hpp"
 #include "frontend/ast/statements/IfStatementNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
@@ -50,6 +51,7 @@ struct Resolver {
 
   void resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node);
   void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
+  void resolve_unary_expression(ayla::ast::node::UnaryExpressionNode *node);
   void resolve_if_statement(ayla::ast::node::IfStatementNode *node);
   void resolve_while_statement(ayla::ast::node::WhileStatementNode *node);
 

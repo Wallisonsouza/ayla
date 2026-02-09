@@ -21,7 +21,7 @@ void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclaration
   push_scope();
 
   // --- Bind dos parâmetros (AGORA PATTERNS) ---
-  for (auto *param : node->params) { resolve_pattern(param); }
+  for (auto *param : node->parameters) { resolve_pattern(param); }
 
   if (node->body) resolve_block(node->body, false);
 

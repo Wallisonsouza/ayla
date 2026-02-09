@@ -1,0 +1,5 @@
+module convert {
+  extern funct parse_number(text: string) -> number
+  extern funct parse_bool(text: string) -> bool
+  extern funct to_string(n: number) -> string
+}

@@ -9,3 +9,10 @@ void ASTDebug::debug_binary_expression(const ayla::ast::node::BinaryExpressionNo
 
   if (node->rhs) { debug_labeled("Right", node->rhs, true); }
 }
+
+void ASTDebug::debug_unary_expression(const ayla::ast::node::UnaryExpressionNode *node) {
+
+  debug_header("UnaryExpression: ");
+
+  if (node->operand) { debug_labeled("Operand", node->operand, true); }
+}

@@ -11,14 +11,14 @@ namespace ayla::ast::node {
 
 struct FunctionDeclarationNode : StatementNode {
   IdentifierExpressionNode *identifier;
-  std::vector<PatternNode *> params;
+  std::vector<PatternNode *> parameters;
   TypeNode *return_type;
   BlockStatementNode *body;
   Modifiers modifiers;
   SymbolId symbol_id;
 
   FunctionDeclarationNode(IdentifierExpressionNode *identifier, std::vector<PatternNode *> params, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, Modifiers mods = {})
-      : StatementNode(NodeKind::FunctionDeclaration), identifier(identifier), params(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}
+      : StatementNode(NodeKind::FunctionDeclaration), identifier(identifier), parameters(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}
 
   void accept(AstVisitor &v) override { v.visit(this); }
 };

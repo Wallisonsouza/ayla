@@ -1,4 +1,5 @@
 #pragma once
+
 #include "core/memory/Arena.hpp"
 #include "core/token/Location.hpp"
 #include "frontend/ast/AstNode.hpp"

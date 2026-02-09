@@ -3,19 +3,20 @@
 #include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/value.hpp"
 
+#include <memory>
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
 
 struct RuntimeScope {
 
-  RuntimeScope *parent;
+  std::shared_ptr<RuntimeScope> parent;
 
   std::unordered_map<SymbolId, std::shared_ptr<Value>> values;
 
   std::vector<RuntimeScope *> imports;
 
-  RuntimeScope(RuntimeScope *parent = nullptr) : parent(parent) {}
+  RuntimeScope(std::shared_ptr<RuntimeScope> parent = nullptr) : parent(parent) {}
 
   void set(SymbolId id, std::shared_ptr<Value> val) { values[id] = std::move(val); }
 

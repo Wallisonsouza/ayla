@@ -1,8 +1,9 @@
 #include "engine/parser/parser.hpp"
+#include "frontend/ast/ExpressionNode.hpp"
 
 ayla::ast::ExpressionNode *Parser::parse_expression() {
+  auto *lhs = parse_unary_expression();
 
-  auto *lhs = parse_postfix_expression();
   if (!lhs) return nullptr;
 
   if (auto *assign = parse_assignment(lhs)) return assign;

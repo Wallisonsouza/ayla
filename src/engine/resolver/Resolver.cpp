@@ -1,5 +1,6 @@
 #include "Resolver.hpp"
 #include "core/node/flags.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
@@ -50,6 +51,8 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node)); break;
 
   case ayla::ast::NodeKind::Type: resolve_type_node(static_cast<ayla::ast::TypeNode *>(node)); break;
+
+  case ayla::ast::NodeKind::UnaryExpression: resolve_unary_expression(static_cast<ayla::ast::node::UnaryExpressionNode *>(node)); break;
 
   default: break;
   }

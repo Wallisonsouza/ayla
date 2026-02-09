@@ -4,7 +4,9 @@
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
 #include "stdlib/Console.hpp"
+#include "stdlib/Convert.hpp"
 #include "stdlib/Glfw.hpp"
+#include "stdlib/IO.hpp"
 
 namespace ayla::language {
 
@@ -14,6 +16,8 @@ inline LanguageContext create_context() {
 
   create_module_console(context);
   create_module_glfw(context);
+  create_module_io(context);
+  create_module_convert(context);
 
   context.descriptor_table.add(TokenKind::TRUE_KEYWORD, "true", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::FALSE_KEYWORD, "false", TokenGroup::Keyword);
@@ -47,24 +51,19 @@ inline LanguageContext create_context() {
   context.descriptor_table.add(TokenKind::LESS_EQUAL, "<=", TokenGroup::Operator);
   context.descriptor_table.add(TokenKind::GREATER, ">", TokenGroup::Operator);
   context.descriptor_table.add(TokenKind::GREATER_EQUAL, ">=", TokenGroup::Operator);
-
   context.precedence_table.add_right(TokenKind::ASSIGN, 1, ast::BinaryOperation::Assign);
   context.precedence_table.add_right(TokenKind::ARROW, 2, ast::BinaryOperation::Arrow);
-
   context.precedence_table.add_left(TokenKind::EQUAL, 5, ast::BinaryOperation::Equal);
   context.precedence_table.add_left(TokenKind::NOT_EQUAL, 5, ast::BinaryOperation::NotEqual);
   context.precedence_table.add_left(TokenKind::LESS, 6, ast::BinaryOperation::Less);
   context.precedence_table.add_left(TokenKind::LESS_EQUAL, 6, ast::BinaryOperation::LessEqual);
   context.precedence_table.add_left(TokenKind::GREATER, 6, ast::BinaryOperation::Greater);
   context.precedence_table.add_left(TokenKind::GREATER_EQUAL, 6, ast::BinaryOperation::GreaterEqual);
-
-  // additive
   context.precedence_table.add_left(TokenKind::PLUS, 10, ast::BinaryOperation::Add);
   context.precedence_table.add_left(TokenKind::MINUS, 10, ast::BinaryOperation::Subtract);
   context.precedence_table.add_left(TokenKind::STAR, 20, ast::BinaryOperation::Multiply);
   context.precedence_table.add_left(TokenKind::SLASH, 20, ast::BinaryOperation::Divide);
 
-  
   // punctuaction
   context.descriptor_table.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
   context.descriptor_table.add(TokenKind::COLON, ":", TokenGroup::Punctuation);

@@ -1,0 +1,5 @@
+module io {
+  extern funct print(msg: string) -> void
+  extern funct println(msg: string) -> void
+  extern funct read_line() -> string
+}

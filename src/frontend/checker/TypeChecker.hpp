@@ -3,7 +3,6 @@
 #include "core/memory/BuiltinTypes.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
-#include <iostream>
 
 #include "frontend/ast/AstNode.hpp"
 #include "frontend/ast/expressions/AssignmentExpression.hpp"
@@ -12,6 +11,7 @@
 #include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
 #include "frontend/ast/expressions/LiteralExpressionNode.hpp"
 #include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
+#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 #include "frontend/ast/statements/ExpressionStatementNode.hpp"
 #include "frontend/ast/statements/IfStatementNode.hpp"
 #include "frontend/ast/statements/ImportStatementNode.hpp"
@@ -48,6 +48,7 @@ struct TypeChecker {
 
   // Expressões
   void check_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
+  void check_unary_expression(ayla::ast::node::UnaryExpressionNode *node);
   void check_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
   void check_index_access(ayla::ast::node::IndexAccessNode *node);
 

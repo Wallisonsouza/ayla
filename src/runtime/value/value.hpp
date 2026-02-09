@@ -22,9 +22,9 @@ struct RuntimeScope;
 
 struct UserFunction {
   ayla::ast::node::FunctionDeclarationNode *node;
-  RuntimeScope *captured_scope;
+  std::shared_ptr<RuntimeScope> captured_scope;
 
-  UserFunction(ayla::ast::node::FunctionDeclarationNode *n, RuntimeScope *scope) : node(n), captured_scope(scope) {}
+  UserFunction(ayla::ast::node::FunctionDeclarationNode *n, std::shared_ptr<RuntimeScope> scope) : node(n), captured_scope(scope) {}
 };
 
 struct Value {
@@ -41,7 +41,7 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(ayla::ast::node::FunctionDeclarationNode *node, RuntimeScope *scope) { return Value{UserFunction(node, scope)}; }
+  static Value User(ayla::ast::node::FunctionDeclarationNode *node, std::shared_ptr<RuntimeScope> scope) { return Value{UserFunction(node, scope)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
 
@@ -56,6 +56,7 @@ struct Value {
   UserFunction &get_user_function() { return std::get<UserFunction>(data); }
 
   std::string convert_to_string() const {
+
     if (std::holds_alternative<double>(data)) return std::to_string(std::get<double>(data));
 
     if (std::holds_alternative<bool>(data)) return std::get<bool>(data) ? "true" : "false";
@@ -72,6 +73,23 @@ struct Value {
         if (i + 1 < arr.size()) out += ", ";
       }
       out += "]";
+      return out;
+    }
+
+    if (std::holds_alternative<ObjectValue>(data)) {
+      const auto &obj = std::get<ObjectValue>(data).fields;
+
+      std::string out = "{";
+      size_t i = 0;
+
+      for (const auto &[key, val] : obj) {
+        out += key + ": ";
+        out += val ? val->convert_to_string() : "null";
+
+        if (++i < obj.size()) out += ", ";
+      }
+
+      out += "}";
       return out;
     }
 
