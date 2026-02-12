@@ -4,7 +4,6 @@
 #include "core/module/module_manager.hpp"
 #include "core/table/PrecedenceTable.hpp"
 #include "core/table/TokenTable.hpp"
-#include "language/BackendRegistry.hpp"
 #include "semantic/scope/scope.hpp"
 #include "semantic/symbols/SymbolManager.hpp"
 #include "semantic/types/type.hpp"
@@ -20,7 +19,6 @@ struct LanguageContext {
   SymbolManager symbol_manager;
   core::ParserScope root_scope;
   core::memory::Arena type_arena;
-  BackendRegistry backends;
 
   explicit LanguageContext() : root_scope(nullptr) {}
 };
