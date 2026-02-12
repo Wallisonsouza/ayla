@@ -1,9 +1,0 @@
-import io
-import convert
-
-val obj = {
-  a: 10,
-  b: 20
-}
-
-io.print(obj.b)

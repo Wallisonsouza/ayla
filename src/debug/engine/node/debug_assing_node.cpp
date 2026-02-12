@@ -1,5 +1,5 @@
+#include "ast/expressions/AssignmentExpression.hpp"
 #include "ast_debug.hpp"
-#include "frontend/ast/expressions/AssignmentExpression.hpp"
 
 void ASTDebug::debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node) {
   out << "ASSIGN\n";

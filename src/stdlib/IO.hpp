@@ -11,7 +11,8 @@ inline void create_module_io(LanguageContext &ctx) {
 
   module->on_module_init = [](Module &m) {
     m.add_native_function("print", [](const std::vector<Value> &args) {
-      std::cout << args[0].convert_to_string();
+      for (auto &arg : args) { std::cout << arg.convert_to_string(); }
+
       return Value::Void();
     });
 

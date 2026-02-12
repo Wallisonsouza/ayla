@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ast/AstNode.hpp"
 #include "core/memory/Arena.hpp"
 #include "core/token/Location.hpp"
-#include "frontend/ast/AstNode.hpp"
 #include <functional>
 #include <vector>
 

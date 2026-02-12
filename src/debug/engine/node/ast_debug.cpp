@@ -1,8 +1,8 @@
 #include "ast_debug.hpp"
+#include "ast/PatternNode.hpp"
+#include "ast/expressions/UnaryExpressionNode.hpp"
 #include "core/AST.hpp"
 #include "debug/console/console.hpp"
-#include "frontend/ast/PatternNode.hpp"
-#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 

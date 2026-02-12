@@ -3,10 +3,13 @@
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
+#include "semantic/checker/TypeChecker.hpp"
+#include "semantic/types/type.hpp"
 #include "stdlib/Console.hpp"
 #include "stdlib/Convert.hpp"
 #include "stdlib/Glfw.hpp"
 #include "stdlib/IO.hpp"
+#include <memory>
 
 namespace ayla::language {
 
@@ -18,6 +21,14 @@ inline LanguageContext create_context() {
   create_module_glfw(context);
   create_module_io(context);
   create_module_convert(context);
+
+  context.type_table["number"] = std::make_shared<Type>(BuiltinTypes::Number);
+
+  context.type_table["string"] = std::make_shared<Type>(BuiltinTypes::String);
+
+  context.type_table["bool"] = std::make_shared<Type>(BuiltinTypes::Boolean);
+
+  context.type_table["void"] = std::make_shared<Type>(BuiltinTypes::Void);
 
   context.descriptor_table.add(TokenKind::TRUE_KEYWORD, "true", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::FALSE_KEYWORD, "false", TokenGroup::Keyword);

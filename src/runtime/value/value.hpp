@@ -1,6 +1,6 @@
 #pragma once
 
-#include "frontend/ast/statements/FunctionDeclarationNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
 #include "runtime/value/ArrayValue.hpp"
 #include "runtime/value/ObjectValue.hpp"
 #include <functional>

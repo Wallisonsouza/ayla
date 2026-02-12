@@ -1,0 +1,24 @@
+#pragma once
+
+#include "ast/AstVisitor.hpp"
+#include "ast/NodeKind.hpp"
+#include "core/node/flags.hpp"
+#include "core/token/Location.hpp"
+
+struct Type;
+
+namespace ayla::ast {
+
+struct AstNode {
+  NodeKind kind;
+  SourceSlice slice;
+  NodeFlag flags;
+  Type *inferred_type = nullptr;
+  virtual ~AstNode() = default;
+  virtual void accept(AstVisitor &v) = 0;
+
+protected:
+  explicit AstNode(NodeKind k) : kind(k) {}
+};
+
+} // namespace ayla::ast

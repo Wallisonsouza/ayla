@@ -1,7 +1,7 @@
 #pragma once
 
-#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/value.hpp"
+#include "semantic/symbols/SymbolId.hpp"
 
 #include <memory>
 #include <stdexcept>

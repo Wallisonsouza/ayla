@@ -3,22 +3,22 @@
 #include "core/node/BinaryOp.hpp"
 #include "engine/CompilationUnit.hpp"
 
-#include "frontend/ast/expressions/AssignmentExpression.hpp"
-#include "frontend/ast/expressions/BinaryExpressionNode.hpp"
-#include "frontend/ast/expressions/CallExpressionNode.hpp"
-#include "frontend/ast/expressions/IndexAcessExpressionNode.hpp"
-#include "frontend/ast/expressions/LiteralExpressionNode.hpp"
-#include "frontend/ast/expressions/MemberAccessExpressionNode.hpp"
-#include "frontend/ast/expressions/UnaryExpressionNode.hpp"
-#include "frontend/ast/statements/BlockStatementNode.hpp"
-#include "frontend/ast/statements/ExpressionStatementNode.hpp"
-#include "frontend/ast/statements/FunctionDeclarationNode.hpp"
-#include "frontend/ast/statements/IfStatementNode.hpp"
-#include "frontend/ast/statements/ImportStatementNode.hpp"
-#include "frontend/ast/statements/ModuleDeclarationNode.hpp"
-#include "frontend/ast/statements/ReturnStatementNodes.hpp"
-#include "frontend/ast/statements/VariableDeclarationNode.hpp"
-#include "frontend/ast/statements/WhileStatementNode.hpp"
+#include "ast/expressions/AssignmentExpression.hpp"
+#include "ast/expressions/BinaryExpressionNode.hpp"
+#include "ast/expressions/CallExpressionNode.hpp"
+#include "ast/expressions/IndexAcessExpressionNode.hpp"
+#include "ast/expressions/LiteralExpressionNode.hpp"
+#include "ast/expressions/MemberAccessExpressionNode.hpp"
+#include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
+#include "ast/statements/ExpressionStatementNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
+#include "ast/statements/IfStatementNode.hpp"
+#include "ast/statements/ImportStatementNode.hpp"
+#include "ast/statements/ModuleDeclarationNode.hpp"
+#include "ast/statements/ReturnStatementNodes.hpp"
+#include "ast/statements/VariableDeclarationNode.hpp"
+#include "ast/statements/WhileStatementNode.hpp"
 #include "runtime/scope/runtime_scope.hpp"
 
 #include <memory>
@@ -31,12 +31,95 @@ struct Executor {
 
   Executor(std::shared_ptr<RuntimeScope> scope) : current_scope(scope) {}
 
-  ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node);
-  ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node);
-  ExecResult execute_array(CompilationUnit &unit, ayla::ast::node::ArrayLiteralNode *node);
-  ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node);
-  ExecResult execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node);
-  ExecResult execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member);
+  ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
+
+  ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node) {
+
+    auto module = unit.context.module_manager.get(node->resolved_module_id);
+
+    if (!module) throw std::runtime_error("Module not found");
+
+    module->ensure_initialized();
+
+    current_scope->set(node->resolved_symbol_id, module->module_object);
+
+    return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
+  }
+
+  ExecResult execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node) {
+
+    auto obj_val = std::make_shared<Value>(Value::Object());
+    auto &obj = obj_val->get_object_ref();
+
+    for (size_t i = 0; i < node->fields.size(); ++i) {
+      auto &field = node->fields[i];
+
+      std::string key_str;
+
+      if (field->key->kind == ayla::ast::NodeKind::Identifier) {
+        auto *id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(field->key);
+
+        key_str = id->name;
+
+      } else {
+
+        auto key_res = execute_node(unit, field->key);
+
+        if (!key_res.value) { throw std::runtime_error("Object key evaluated to null"); }
+
+        key_str = key_res.value->convert_to_string();
+      }
+
+      auto val_res = execute_node(unit, field->value);
+
+      obj.set(key_str, val_res.value);
+    }
+
+    return ExecResult::make_value(obj_val);
+  }
+
+  ExecResult execute_member_acess(CompilationUnit &unit, ayla::ast::node::MemberAccessExpressionNode *member) {
+
+    auto base_res = execute_node(unit, member->base);
+    auto base_val = base_res.value;
+
+    if (!base_val || !base_val->is_object()) { throw std::runtime_error("Invalid member access on non-object"); }
+
+    auto &obj = base_val->get_object_ref();
+
+    const std::string &field_name = member->field->name;
+
+    if (!obj.has(field_name)) { throw std::runtime_error("Field not found: " + field_name); }
+
+    return ExecResult::make_value(obj.get(field_name));
+  }
+
+  ExecResult execute_array(CompilationUnit &unit, ayla::ast::node::ArrayLiteralNode *node) {
+
+    array elements;
+
+    for (auto *el : node->elements) {
+      auto v = execute_node(unit, el);
+      if (v.is_return()) return v;
+      elements.push_back(v.value);
+    }
+
+    return ExecResult::make_value(std::make_shared<Value>(Value::Array(std::move(elements))));
+  }
+
+  ExecResult execute_index_access(CompilationUnit &unit, ayla::ast::node::IndexAccessNode *node) {
+    auto base = execute_node(unit, node->base).value;
+    auto index = execute_node(unit, node->index).value;
+
+    if (!base->is_array()) throw std::runtime_error("Index access on non-array");
+
+    size_t i = static_cast<size_t>(index->get_number());
+    auto &arr = base->get_array();
+
+    if (i >= arr.size()) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
+
+    return ExecResult::make_value(arr[i]);
+  }
 
   ExecResult execute_node(CompilationUnit &unit, ayla::ast::AstNode *node) {
     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/memory/type.hpp"
-#include "core/module/scope.hpp"
-#include "frontend/symbols/SymbolId.hpp"
 #include "runtime/value/ObjectValue.hpp"
 #include "runtime/value/value.hpp"
+#include "semantic/scope/scope.hpp"
+#include "semantic/symbols/SymbolId.hpp"
+#include "semantic/types/type.hpp"
 #include <memory>
 #include <string>
 #include <unordered_map>

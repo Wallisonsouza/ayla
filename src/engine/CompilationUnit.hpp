@@ -1,10 +1,10 @@
 #pragma once
 #include "core/AST.hpp"
-#include "core/managers/scope_manager.hpp"
 #include "core/source/Source.hpp"
 #include "core/token/token_stream.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/language_context.hpp"
+#include "semantic/scope/scope_manager.hpp"
 
 struct CompilationUnit {
 

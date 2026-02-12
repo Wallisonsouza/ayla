@@ -1,6 +1,6 @@
+#include "ast/NodeKind.hpp"
+#include "ast/PatternNode.hpp"
 #include "ast_debug.hpp"
-#include "frontend/ast/NodeKind.hpp"
-#include "frontend/ast/PatternNode.hpp"
 
 void ASTDebug::debug_pattern(const ayla::ast::PatternNode *node) {
 

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ast/NodeKind.hpp"
 #include "core/token/TokenKind.hpp"
-#include "frontend/ast/NodeKind.hpp"
 #include <string>
 #include <unordered_map>
 #include <variant>

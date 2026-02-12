@@ -3,17 +3,17 @@
 #include "debug/engine/token/dump_tokens.hpp"
 #include "engine/CompilationUnit.hpp"
 
-#include "engine/lexer/lexer.hpp"
-#include "engine/parser/parser.hpp"
-#include "engine/resolver/Resolver.hpp"
-#include "frontend/checker/TypeChecker.hpp"
+#include "semantic/checker/TypeChecker.hpp"
+#include "semantic/resolver/Resolver.hpp"
+#include "syntax/lexer/lexer.hpp"
+#include "syntax/parser/parser.hpp"
 
 struct ExecutionUnit {
   CompilationUnit &comp_unit;
   Lexer lexer;
   Parser parser;
   Resolver resolver;
-  TypeChecker checker;
+  ayla::TypeChecker checker;
 
 public:
   ExecutionUnit(CompilationUnit &unit) : comp_unit(unit), lexer(unit), parser(unit), resolver(unit, &unit.context.root_scope), checker(unit) {}
@@ -28,11 +28,8 @@ public:
 
     parser.parse_program();
 
-    for (auto &node : comp_unit.ast.get_nodes()) {
-      degub.debug_node(node, true);
-      resolver.resolve(node);
-    }
+    for (auto &node : comp_unit.ast.get_nodes()) { resolver.resolve(node); }
 
-    // for (auto &node : comp_unit.ast.get_nodes()) { checker.check(node); }
+    for (auto &node : comp_unit.ast.get_nodes()) { checker.check(node); }
   }
 };

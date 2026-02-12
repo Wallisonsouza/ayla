@@ -1,0 +1,9 @@
+import glfw
+import io
+import convert
+
+mut val a = 10
+
+ a = 50
+
+io.print(a)
