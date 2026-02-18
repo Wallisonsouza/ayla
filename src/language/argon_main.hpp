@@ -7,6 +7,7 @@
 #include "semantic/types/type.hpp"
 #include "stdlib/Console.hpp"
 #include "stdlib/Convert.hpp"
+
 #include "stdlib/Glfw.hpp"
 #include "stdlib/IO.hpp"
 #include <memory>

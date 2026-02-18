@@ -1,8 +1,9 @@
 #pragma once
 
-#include "ast/statements/FunctionDeclarationNode.hpp"
+#include "runtime/Instruction.hpp"
 #include "runtime/value/ArrayValue.hpp"
 #include "runtime/value/ObjectValue.hpp"
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <string>
@@ -20,18 +21,24 @@ struct FunctionDeclarationNode;
 
 struct RuntimeScope;
 
-struct UserFunction {
-  ayla::ast::node::FunctionDeclarationNode *node;
+struct FunctionValue {
+  size_t bytecode_index;
+  std::vector<SymbolId> param_ids;
   std::shared_ptr<RuntimeScope> captured_scope;
+  FunctionValue(size_t bytecode_index, std::vector<SymbolId> param_ids_, std::shared_ptr<RuntimeScope> captured_scope_)
+      : bytecode_index(bytecode_index), param_ids(std::move(param_ids_)), captured_scope(std::move(captured_scope_)) {}
+  FunctionValue() = default;
+};
 
-  UserFunction(ayla::ast::node::FunctionDeclarationNode *n, std::shared_ptr<RuntimeScope> scope) : node(n), captured_scope(scope) {}
+struct ModuleValue {
+  size_t index;
 };
 
 struct Value {
 
   using NativeFunction = std::function<Value(const std::vector<Value> &)>;
 
-  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, UserFunction, ArrayValue, ObjectValue>;
+  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, FunctionValue, ArrayValue, ObjectValue, ModuleValue>;
 
   Storage data;
 
@@ -41,9 +48,12 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(ayla::ast::node::FunctionDeclarationNode *node, std::shared_ptr<RuntimeScope> scope) { return Value{UserFunction(node, scope)}; }
+  static Value User(size_t bytecode, std::vector<SymbolId> param_ids_, std::shared_ptr<RuntimeScope> captured_scope_) {
+    return Value{FunctionValue(bytecode, std::move(param_ids_), std::move(captured_scope_))};
+  }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
+  static Value Module(size_t index) { return Value{.data = ModuleValue{.index = index}}; }
 
   double get_number() const { return std::get<double>(data); }
 
@@ -53,7 +63,7 @@ struct Value {
 
   const NativeFunction &get_native() const { return std::get<NativeFunction>(data); }
 
-  UserFunction &get_user_function() { return std::get<UserFunction>(data); }
+  FunctionValue &get_user_function() { return std::get<FunctionValue>(data); }
 
   std::string convert_to_string() const {
 
@@ -135,7 +145,7 @@ struct Value {
 
   array &get_array() { return std::get<ArrayValue>(data).elements; }
 
-  bool is_user_function() const { return std::holds_alternative<UserFunction>(data); }
+  bool is_user_function() const { return std::holds_alternative<FunctionValue>(data); }
   bool is_native_function() const { return std::holds_alternative<NativeFunction>(data); }
 };
 

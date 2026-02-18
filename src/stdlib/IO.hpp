@@ -6,12 +6,11 @@
 
 inline void create_module_io(LanguageContext &ctx) {
 
-  auto module_id = ctx.module_manager.get_or_create_module("io");
-  auto module = ctx.module_manager.get(module_id);
+  auto module = ctx.module_manager.get_or_create_module_ptr("io");
 
   module->on_module_init = [](Module &m) {
     m.add_native_function("print", [](const std::vector<Value> &args) {
-      for (auto &arg : args) { std::cout << arg.convert_to_string(); }
+      for (auto &arg : args) { std::cout << arg.convert_to_string() << std::endl; }
 
       return Value::Void();
     });

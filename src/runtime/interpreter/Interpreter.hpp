@@ -21,15 +21,11 @@
 #include "ast/statements/WhileStatementNode.hpp"
 #include "runtime/scope/runtime_scope.hpp"
 
-#include <memory>
-#include <stdexcept>
-#include <vector>
-
-struct Executor {
+struct Interpreter {
 
   std::shared_ptr<RuntimeScope> current_scope;
 
-  Executor(std::shared_ptr<RuntimeScope> scope) : current_scope(scope) {}
+  Interpreter(std::shared_ptr<RuntimeScope> scope) : current_scope(scope) {}
 
   ExecResult execute_module_declaration(CompilationUnit &unit, ayla::ast::node::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
 
@@ -146,9 +142,9 @@ struct Executor {
 
     case ayla::ast::NodeKind::UnaryExpression: return execute_unary(unit, static_cast<ayla::ast::node::UnaryExpressionNode *>(node));
 
-    case ayla::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node));
+    case ayla::ast::NodeKind::MemberAccessExpression: return execute_member_acess(unit, static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node));
 
-    case ayla::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<ayla::ast::node::CallExpressionNode *>(node));
+    case ayla::ast::NodeKind::CallExpression: return execute_function_call(unit, static_cast<ayla::ast::node::CallExpressionNode *>(node));
 
     case ayla::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<ayla::ast::node::VariableDeclarationNode *>(node));
 
@@ -193,26 +189,26 @@ struct Executor {
     }
 
     if (callee->is_user_function()) {
-      auto &ufn = callee->get_user_function();
-      auto *decl = ufn.node;
+      // auto &ufn = callee->get_user_function();
+      // auto *decl = ufn.node;
 
-      auto local = std::make_shared<RuntimeScope>(ufn.captured_scope);
+      // auto local = std::make_shared<RuntimeScope>(ufn.captured_scope);
 
-      for (size_t i = 0; i < decl->parameters.size(); ++i) {
-        auto *param = static_cast<ayla::ast::IdentifierPatternNode *>(decl->parameters[i]);
-        if (i < args.size()) {
-          local->set(param->symbol_id, args[i]);
-        } else {
-          local->set(param->symbol_id, std::make_shared<Value>(Value::Null()));
-        }
-      }
+      // for (size_t i = 0; i < decl->parameters.size(); ++i) {
+      //   auto *param = static_cast<ayla::ast::IdentifierPatternNode *>(decl->parameters[i]);
+      //   if (i < args.size()) {
+      //     local->set(param->symbol_id, args[i]);
+      //   } else {
+      //     local->set(param->symbol_id, std::make_shared<Value>(Value::Null()));
+      //   }
+      // }
 
-      Executor subExec(local);
-      auto result = subExec.execute_node(unit, decl->body);
+      // Interpreter subExec(local);
+      // auto result = subExec.execute_node(unit, decl->body);
 
-      if (result.is_return()) return ExecResult::make_value(result.value);
+      // if (result.is_return()) return ExecResult::make_value(result.value);
 
-      return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
+      // return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
     }
 
     throw std::runtime_error("Trying to call non-function");
@@ -334,7 +330,8 @@ struct Executor {
       set_in_scope_chain(current_scope, id->resolved_symbol_id, rhs);
       return ExecResult::make_value(rhs);
     }
-    if (node->target->kind == ayla::ast::NodeKind::MemberAccess) {
+
+    if (node->target->kind == ayla::ast::NodeKind::MemberAccessExpression) {
       auto *mem = static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node->target);
 
       auto base = execute_node(unit, mem->base).value;
@@ -372,14 +369,16 @@ struct Executor {
 
   ExecResult execute_function_declaration(CompilationUnit &unit, ayla::ast::node::FunctionDeclarationNode *node) {
 
-    current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
+    // current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
 
+    // return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
   // ===================== ENTRY =====================
   void execute_ast(CompilationUnit &unit) {
-    if (!unit.diagns.all().empty()) return;
+
+    // if (!unit.diagns.all().empty()) return;
     for (auto *n : unit.ast.get_nodes()) execute_node(unit, n);
   }
 };

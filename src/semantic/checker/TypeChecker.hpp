@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ast/statements/FunctionDeclarationNode.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/types/BuiltinTypes.hpp"

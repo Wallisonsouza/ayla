@@ -1,5 +1,6 @@
 #pragma once
 #include "ast/statements/ExpressionStatementNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/token/Location.hpp"

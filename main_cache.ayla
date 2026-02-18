@@ -2,11 +2,18 @@ import glfw
 import io
 import convert
 
+
+val window_config = {
+  width: 400,
+  height: 600,
+  name: "window_test"
+}
+
 if !glfw.init() {
   io.print("GLFW init error")
 }
 
-val win = glfw.create_window(400, 600, "test")
+val win = glfw.create_window(window_config.width, window_config.height, window_config.name)
 
 glfw.make_context_current(win)
 

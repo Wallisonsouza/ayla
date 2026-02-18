@@ -54,13 +54,13 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case NodeKind::FunctionCall: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
+  case NodeKind::CallExpression: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
   case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const ayla::ast::node::FunctionDeclarationNode *>(node)); break;
 
-  case NodeKind::MemberAccess: debug_path_expression(static_cast<const ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
+  case NodeKind::MemberAccessExpression: debug_path_expression(static_cast<const ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const ayla::ast::node::IfStatementNode *>(node)); break;
 

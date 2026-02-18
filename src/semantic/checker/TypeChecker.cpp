@@ -15,9 +15,9 @@ void TypeChecker::check(ast::AstNode *node) {
   case ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ast::node::ObjectLiteralNode *>(node)); break;
   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::node::VariableDeclarationNode *>(node)); break;
   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::node::FunctionDeclarationNode *>(node)); break;
-  case ast::NodeKind::FunctionCall: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
+  case ast::NodeKind::CallExpression: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::node::BinaryExpressionNode *>(node)); break;
-  case ast::NodeKind::MemberAccess: check_member_access(static_cast<ast::node::MemberAccessExpressionNode *>(node)); break;
+  case ast::NodeKind::MemberAccessExpression: check_member_access(static_cast<ast::node::MemberAccessExpressionNode *>(node)); break;
   case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessNode *>(node)); break;
   case ast::NodeKind::Assignment: check_assignment(dynamic_cast<ast::node::AssignmentExpressionNode *>(node)); break;
   case ast::NodeKind::IfStatement: check_if_statement(static_cast<ast::node::IfStatementNode *>(node)); break;
@@ -368,7 +368,7 @@ void TypeChecker::check_assignment(ast::node::AssignmentExpressionNode *node) {
     break;
   }
 
-  case ast::NodeKind::MemberAccess: {
+  case ast::NodeKind::MemberAccessExpression: {
     auto *memNode = static_cast<ast::node::MemberAccessExpressionNode *>(node->target);
     targetType = memNode->inferred_type ? memNode->inferred_type : &BuiltinTypes::Unknown;
     break;

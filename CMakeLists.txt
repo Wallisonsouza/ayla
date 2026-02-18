@@ -4,18 +4,28 @@ project(ayla LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file(GLOB_RECURSE  SOURCES
+# ===================== SOURCES =====================
+file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
+
+
 
 add_executable(ayla
     main.cpp
     ${SOURCES}
 )
 
+
 target_include_directories(ayla PRIVATE
     ${PROJECT_SOURCE_DIR}/src
+
 )
+
+# ===================== RAYLIB =====================
+find_package(raylib REQUIRED)
+target_link_libraries(ayla PRIVATE raylib)
+
 
 # ===================== ICU =====================
 find_package(ICU REQUIRED COMPONENTS uc i18n)
@@ -25,14 +35,9 @@ target_link_libraries(ayla PRIVATE ICU::uc ICU::i18n)
 find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(ayla PRIVATE glfw)
 
-
-
-
-
+# ===================== RUN TARGET =====================
 add_custom_target(run
     COMMAND ayla
     DEPENDS ayla
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
-
-

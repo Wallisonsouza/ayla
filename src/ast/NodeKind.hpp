@@ -18,7 +18,7 @@ enum class NodeKind {
   IdentifierPattern,
 
   // === Statements ===
-  MemberAccess,
+
   IndexAccess,
   BlockStatement,
   IfStatement,
@@ -34,12 +34,12 @@ enum class NodeKind {
   OperatorDeclaration,
   ModuleDeclaration,
 
-  FunctionCall,
   FunctionParameter,
   NativeFunctionDeclaration,
   TypeDeclaration,
   ParameterDeclaration,
 
+  MemberAccessExpression,
   CallExpression,
   BinaryExpression,
   UnaryExpression,

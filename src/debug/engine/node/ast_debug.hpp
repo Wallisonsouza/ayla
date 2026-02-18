@@ -1,4 +1,6 @@
 #pragma once
+#include "ast/statements/BlockStatementNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
 #include "core/AST.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
@@ -19,6 +21,7 @@
 #include "ast/statements/ReturnStatementNodes.hpp"
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
+
 #include <string>
 #include <vector>
 

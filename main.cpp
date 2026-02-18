@@ -1,41 +1,30 @@
-#include "diagnostic/formatter.hpp"
-#include "engine/CompilationUnit.hpp"
-#include "engine/Engine.hpp"
+#include "engine/Session.hpp"
 #include "language/argon_main.hpp"
-#include "runtime/bytecode/ByteCode.hpp"
-#include "runtime/bytecode/Serealizer.hpp"
-#include "runtime/interpreter/executor.hpp"
-#include <iostream>
-#include <memory>
-#include <ostream>
-#include <string>
+#include "pipeline/passes/CheckPass.hpp"
+#include "pipeline/passes/LexPass.hpp"
+#include "pipeline/passes/ParsePass.hpp"
+#include "pipeline/passes/ResolvePass.hpp"
+#include "runtime/interpreter/Interpreter.hpp"
 
 int main() {
 
   auto context = ayla::language::create_context();
-  auto engine = Engine(context);
 
-  std::vector<std::string> scripts = {
-      "/home/wallison/Documentos/git/ayla/src/stdlib/Convert.ayla", "/home/wallison/Documentos/git/ayla/src/stdlib/IO.ayla", "/home/wallison/Documentos/git/ayla/src/stdlib/console.ayla",
-      "/home/wallison/Documentos/git/ayla/src/stdlib/glfw.ayla",    "/home/wallison/Documentos/git/ayla/main.ayla",
-  };
+  CompilationSession session(context);
 
-  for (auto &path : scripts) {
-    try {
-      auto exec = engine.create_execution(path);
-      exec->execute();
+  session.add_pass(std::make_unique<LexPass>());
+  session.add_pass(std::make_unique<ParsePass>());
+  session.add_pass(std::make_unique<ResolvePass>());
+  // session.add_pass(std::make_unique<CheckPass>());
 
-      // auto bytecode = BytecodeGenerator();
-      // bytecode.generate_ast(exec->comp_unit.ast.get_nodes());
+  session.add_source("/home/wallison/Documentos/git/ayla/main.ayla");
 
-      for (auto &diag : exec->comp_unit.diagns.all()) { print(*diag, exec->comp_unit); }
+  session.run_pipeline();
 
-      auto scope = std::make_shared<RuntimeScope>();
-      Executor interpreter(scope);
-      interpreter.execute_ast(exec->comp_unit);
+  // auto scope = std::make_shared<RuntimeScope>();
+  // Interpreter interpreter(scope);
 
-    } catch (const std::exception &e) { std::cerr << "Erro ao executar " << path << ": " << e.what() << std::endl; }
-  }
+  // interpreter.execute_ast(session.entry_unit());
 
   return 0;
 }

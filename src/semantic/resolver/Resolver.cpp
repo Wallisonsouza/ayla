@@ -24,13 +24,13 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::MemberAccessExpression: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ImportStatement: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
 
   case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::CallExpression: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
 

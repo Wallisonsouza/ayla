@@ -1,9 +1,3 @@
-import glfw
-import io
-import convert
+val store = 10
 
-mut val a = 10
-
- a = 50
-
-io.print(a)
+ store = 20

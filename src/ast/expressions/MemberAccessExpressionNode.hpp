@@ -9,7 +9,7 @@ struct MemberAccessExpressionNode : ExpressionNode {
   ExpressionNode *base;
   IdentifierExpressionNode *field;
 
-  MemberAccessExpressionNode(ExpressionNode *b, IdentifierExpressionNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), field(f) {}
+  MemberAccessExpressionNode(ExpressionNode *b, IdentifierExpressionNode *f) : ExpressionNode(NodeKind::MemberAccessExpression), base(b), field(f) {}
 
   void accept(AstVisitor &v) override { v.visit(this); }
 };

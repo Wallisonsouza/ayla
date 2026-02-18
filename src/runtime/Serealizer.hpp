@@ -1,5 +1,9 @@
-#include "runtime/bytecode/ByteCode.hpp"
+#include "engine/language_context.hpp"
+#include "runtime/ByteCode.hpp"
+#include "runtime/Instruction.hpp"
+#include "runtime/value/value.hpp"
 #include <iostream>
+#include <vector>
 
 inline std::string opcode_to_string(OpCode op) {
   switch (op) {
@@ -33,21 +37,37 @@ inline std::string opcode_to_string(OpCode op) {
   case OpCode::RETURN: return "RETURN";
   case OpCode::IMPORT: return "IMPORT";
   case OpCode::MODULE: return "MODULE";
+  case OpCode::POP: return "POP";
   }
   return "UNKNOWN";
 }
 
-inline std::string serialize_instruction(const Instruction &instr) {
+inline std::string serialize_instruction(LanguageContext &context, std::vector<Value> pool, const Instruction &instr) {
   std::string s = opcode_to_string(instr.op);
 
-  if (instr.var_id.value != 0) s += " var_id=" + std::to_string(instr.var_id.value);
-  if (instr.operand.is_number()) s += " value=" + std::to_string(instr.operand.get_number());
+  if (instr.var_id.has_value()) {
+
+    auto val = instr.var_id.value();
+    if (val.is_valid()) {
+      auto symbol = context.symbol_manager.get(val);
+      s += " " + std::to_string(instr.var_id->value);
+    }
+  }
+
+  if (instr.const_index.has_value()) {
+    auto &val = pool[instr.const_index.value()];
+    s += " " + val.convert_to_string();
+  }
+
   if (!instr.name.empty()) s += " name=" + instr.name;
   if (instr.jump_target != 0) s += " jump_target=" + std::to_string(instr.jump_target);
 
   return s;
 }
 
-inline void serialize_bytecode(const std::vector<Instruction> &code) {
-  for (size_t i = 0; i < code.size(); ++i) { std::cout << i << ": " << serialize_instruction(code[i]) << "\n"; }
+inline void serialize_bytecode(LanguageContext &context, const BytecodeGenerator &byte_code) {
+
+  auto &code = byte_code.code;
+
+  for (size_t i = 0; i < code.size(); ++i) { std::cout << i << ": " << serialize_instruction(context, byte_code.constant_pool, code[i]) << "\n"; }
 }
