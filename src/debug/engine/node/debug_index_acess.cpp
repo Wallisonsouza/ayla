@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
 
-void ASTDebug::debug_index_acess(const ayla::ast::node::IndexAccessNode *node) {
+void ASTDebug::debug_index_acess(const ayla::ast::node::IndexAccessExpressionNode *node) {
 
   debug_header("IndexAcess");
 

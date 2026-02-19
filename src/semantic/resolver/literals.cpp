@@ -1,31 +1,19 @@
 #include "semantic/resolver/Resolver.hpp"
 
-void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node) {
-  if (!node) return;
+void Resolver::resolve_number_literal(ayla::ast::node::NumberLiteralNode *node) { node->local_slot = current_scope->allocate_temporary(); }
 
-  SymbolId id = current_scope->resolve_symbol(node->name);
+void Resolver::resolve_string_literal(ayla::ast::node::StringLiteralNode *node) { node->local_slot = current_scope->allocate_temporary(); }
 
-  if (!id.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
-    return;
-  }
-
-  node->resolved_symbol_id = id;
-  node->local_slot = current_scope->resolve_slot(id).value_or(0);
-}
-
-void Resolver::resolve_number_literal(ayla::ast::node::NumberLiteralNode *node) {}
-
-void Resolver::resolve_string_literal(ayla::ast::node::StringLiteralNode *node) {}
-
-void Resolver::resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node) {}
+void Resolver::resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node) { node->local_slot = current_scope->allocate_temporary(); }
 
 void Resolver::resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node) {
+  node->local_slot = current_scope->allocate_temporary();
   for (auto *field : node->fields) {
     if (field->value) resolve(field->value);
   }
 }
 
 void Resolver::resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
+  node->local_slot = current_scope->allocate_temporary();
   for (auto *el : node->elements) resolve(el);
 }

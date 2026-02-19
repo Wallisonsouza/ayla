@@ -4,7 +4,6 @@
 #include "pipeline/Pipeline.hpp"
 #include "runtime/AylaVM.hpp"
 #include "runtime/ByteCode.hpp"
-#include "runtime/ByteCodeDebug.hpp"
 
 #include <memory>
 #include <vector>

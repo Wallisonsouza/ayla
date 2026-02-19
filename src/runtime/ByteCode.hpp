@@ -156,11 +156,20 @@ struct BytecodeGenerator {
       uint16_t D = alloc_reg();
       OpCode op = OpCode::ADD;
       switch (bin->op) {
-      case ayla::ast::BinaryOperation::Add: op = OpCode::ADD; break;
-      case ayla::ast::BinaryOperation::Subtract: op = OpCode::SUB; break;
-      case ayla::ast::BinaryOperation::Multiply: op = OpCode::MUL; break;
-      case ayla::ast::BinaryOperation::Divide: op = OpCode::DIV; break;
-      default: break;
+      case ayla::ast::BinaryOperation::Add:
+        op = OpCode::ADD;
+        break;
+      case ayla::ast::BinaryOperation::Subtract:
+        op = OpCode::SUB;
+        break;
+      case ayla::ast::BinaryOperation::Multiply:
+        op = OpCode::MUL;
+        break;
+      case ayla::ast::BinaryOperation::Divide:
+        op = OpCode::DIV;
+        break;
+      default:
+        break;
       }
       emit(Instruction::ABC(op, D, L, R));
       return D;
@@ -183,7 +192,8 @@ struct BytecodeGenerator {
       emit(Instruction::AB(OpCode::LOADK, dst, k));
       return dst;
     }
-    default: throw std::runtime_error("Unhandled expression node kind");
+    default:
+      throw std::runtime_error("Unhandled expression node kind");
     }
   }
 
@@ -271,7 +281,8 @@ struct BytecodeGenerator {
       emit(Instruction::LoadK(dst, k));
       break;
     }
-    default: break;
+    default:
+      break;
     }
   }
 

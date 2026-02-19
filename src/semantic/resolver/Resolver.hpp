@@ -37,8 +37,8 @@ struct Resolver {
 
   void resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers modifier);
 
-  void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
-  void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
+  void resolve_call_exp(ayla::ast::node::CallExpressionNode *node);
+  void resolve_assign_exp(ayla::ast::node::AssignmentExpressionNode *node);
 
   void resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node);
   void resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node);
@@ -47,12 +47,12 @@ struct Resolver {
   void resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node);
   void resolve_type_node(ayla::ast::TypeNode *node);
 
-  void resolve_index_access(ayla::ast::node::IndexAccessNode *node);
-  void resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
+  void resolve_index_exp(ayla::ast::node::IndexAccessExpressionNode *node);
+  void resolve_member_exp(ayla::ast::node::MemberAccessExpressionNode *node);
 
-  void resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node);
-  void resolve_binary_expression(ayla::ast::node::BinaryExpressionNode *node);
-  void resolve_unary_expression(ayla::ast::node::UnaryExpressionNode *node);
+  void resolve_identifier_exp(ayla::ast::node::IdentifierExpressionNode *node);
+  void resolve_binary_exp(ayla::ast::node::BinaryExpressionNode *node);
+  void resolve_unary_exp(ayla::ast::node::UnaryExpressionNode *node);
   void resolve_if_statement(ayla::ast::node::IfStatementNode *node);
   void resolve_while_statement(ayla::ast::node::WhileStatementNode *node);
 
@@ -60,7 +60,7 @@ struct Resolver {
   void resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node);
   void resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode *node);
 
-  void resolve_block(ayla::ast::node::BlockStatementNode *node, bool create_scope = true);
+  void resolve_block_statement(ayla::ast::node::BlockStatementNode *node, bool create_scope = true);
 
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 

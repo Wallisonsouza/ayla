@@ -1,4 +1,5 @@
 #pragma once
+#include "ast/StatementNode.hpp"
 #include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "core/module/module.hpp"
 

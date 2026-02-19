@@ -11,8 +11,8 @@ AllowShortBlocksOnASingleLine: true
 # Permite if, else, loops, case e expressões curtas em uma linha
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortCaseExpressionOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseExpressionOnASingleLine: false
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: true
 AllowShortLambdasOnASingleLine: true

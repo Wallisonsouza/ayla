@@ -81,6 +81,7 @@ struct ParserScope {
     return ResolvedRef{ResolvedKind::Global, 0};
   }
 
+  uint32_t allocate_temporary() { return next_slot++; }
   bool has_symbol_local(const std::string &name) const { return table.find(name) != table.end(); }
 };
 

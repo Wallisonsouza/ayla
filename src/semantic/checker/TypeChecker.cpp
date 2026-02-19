@@ -18,7 +18,7 @@ void TypeChecker::check(ast::AstNode *node) {
   case ast::NodeKind::CallExpression: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::node::BinaryExpressionNode *>(node)); break;
   case ast::NodeKind::MemberAccessExpression: check_member_access(static_cast<ast::node::MemberAccessExpressionNode *>(node)); break;
-  case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessNode *>(node)); break;
+  case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessExpressionNode *>(node)); break;
   case ast::NodeKind::Assignment: check_assignment(dynamic_cast<ast::node::AssignmentExpressionNode *>(node)); break;
   case ast::NodeKind::IfStatement: check_if_statement(static_cast<ast::node::IfStatementNode *>(node)); break;
   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::node::WhileStatementNode *>(node)); break;
@@ -279,7 +279,7 @@ void TypeChecker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
   check(node->operand);
 }
 
-void TypeChecker::check_index_access(ast::node::IndexAccessNode *node) {
+void TypeChecker::check_index_access(ast::node::IndexAccessExpressionNode *node) {
   if (!node || !node->base || !node->index) return;
 
   check(node->base);
@@ -375,7 +375,7 @@ void TypeChecker::check_assignment(ast::node::AssignmentExpressionNode *node) {
   }
 
   case ast::NodeKind::IndexAccess: {
-    auto *idxNode = static_cast<ast::node::IndexAccessNode *>(node->target);
+    auto *idxNode = static_cast<ast::node::IndexAccessExpressionNode *>(node->target);
     targetType = idxNode->inferred_type ? idxNode->inferred_type : &BuiltinTypes::Unknown;
     break;
   }

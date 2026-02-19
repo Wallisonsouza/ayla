@@ -20,12 +20,22 @@ struct FunctionDeclarationNode;
 
 struct RuntimeScope;
 
-struct Function {
+struct FunctionValue {
+
+  bool is_native = false;
+  std::function<Value(const std::vector<Value> &)> native_func;
 
   size_t bytecode_index;
   size_t arity;
-  Function(size_t bytecode_index, size_t arity) : bytecode_index(bytecode_index), arity(arity) {}
-  Function() = default;
+  FunctionValue(size_t bytecode_index, size_t arity) : bytecode_index(bytecode_index), arity(arity) {}
+  FunctionValue() = default;
+
+  static FunctionValue Native(std::function<Value(const std::vector<Value> &)> func) {
+    FunctionValue val;
+    val.is_native = true;
+    val.native_func = std::move(func);
+    return val;
+  }
 };
 
 struct ModuleValue {
@@ -34,9 +44,7 @@ struct ModuleValue {
 
 struct Value {
 
-  using NativeFunction = std::function<Value(const std::vector<Value> &)>;
-
-  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, Function, ArrayValue, ObjectValue, ModuleValue>;
+  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, FunctionValue, ArrayValue, ObjectValue, ModuleValue>;
 
   Storage data;
 
@@ -45,8 +53,8 @@ struct Value {
   static Value String(std::string s) { return Value{std::move(s)}; }
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
-  static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(size_t bytecode, size_t argc) { return Value{Function(bytecode, argc)}; }
+  static Value Native(std::function<Value(const std::vector<Value> &)> func) { return Value{FunctionValue::Native(std::move(func))}; }
+  static Value User(size_t bytecode, size_t argc) { return Value{FunctionValue(bytecode, argc)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
   static Value Module(size_t index) { return Value{.data = ModuleValue{.index = index}}; }
@@ -57,9 +65,7 @@ struct Value {
 
   const std::string &get_string() const { return std::get<std::string>(data); }
 
-  const NativeFunction &get_native() const { return std::get<NativeFunction>(data); }
-
-  Function &get_user_function() { return std::get<Function>(data); }
+  FunctionValue &get_function() { return std::get<FunctionValue>(data); }
 
   std::string convert_to_string() const {
 
@@ -68,8 +74,6 @@ struct Value {
     if (std::holds_alternative<bool>(data)) return std::get<bool>(data) ? "true" : "false";
 
     if (std::holds_alternative<std::string>(data)) return std::get<std::string>(data);
-
-    if (std::holds_alternative<NativeFunction>(data)) return "<native function>";
 
     if (std::holds_alternative<ArrayValue>(data)) {
       const auto &arr = std::get<ArrayValue>(data).elements;
@@ -113,7 +117,6 @@ struct Value {
 
     if (std::holds_alternative<NullValue>(data)) return false;
     if (std::holds_alternative<VoidValue>(data)) return false;
-    if (std::holds_alternative<NativeFunction>(data)) return true;
 
     return false;
   }
@@ -141,8 +144,8 @@ struct Value {
 
   array &get_array() { return std::get<ArrayValue>(data).elements; }
 
-  bool is_user_function() const { return std::holds_alternative<Function>(data); }
-  bool is_native_function() const { return std::holds_alternative<NativeFunction>(data); }
+  bool is_user_function() const { return std::holds_alternative<FunctionValue>(data) && !std::get<FunctionValue>(data).is_native; }
+  bool is_native_function() const { return std::holds_alternative<FunctionValue>(data) && std::get<FunctionValue>(data).is_native; }
 };
 
 struct ExecResult {

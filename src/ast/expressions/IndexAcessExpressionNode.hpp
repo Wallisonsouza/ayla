@@ -4,11 +4,11 @@
 
 namespace ayla::ast::node {
 
-struct IndexAccessNode : ExpressionNode {
+struct IndexAccessExpressionNode : ExpressionNode {
   ExpressionNode *base;
   ExpressionNode *index;
 
-  IndexAccessNode(ExpressionNode *b, ExpressionNode *i) : ExpressionNode(NodeKind::IndexAccess), base(b), index(i) {}
+  IndexAccessExpressionNode(ExpressionNode *b, ExpressionNode *i) : ExpressionNode(NodeKind::IndexAccess), base(b), index(i) {}
 
   void accept(AstVisitor &v) override { v.visit(this); }
 };

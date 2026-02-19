@@ -11,7 +11,7 @@ struct BoolLiteralNode;
 struct ArrayLiteralNode;
 struct ObjectLiteralNode;
 struct MemberAccessExpressionNode;
-struct IndexAccessNode;
+struct IndexAccessExpressionNode;
 struct BlockStatementNode;
 struct IfStatementNode;
 struct WhileStatementNode;
@@ -47,7 +47,7 @@ struct AstVisitor {
   virtual void visit(node::ArrayLiteralNode *node) = 0;
   virtual void visit(node::ObjectLiteralNode *node) = 0;
   virtual void visit(node::MemberAccessExpressionNode *node) = 0;
-  virtual void visit(node::IndexAccessNode *node) = 0;
+  virtual void visit(node::IndexAccessExpressionNode *node) = 0;
   virtual void visit(node::BlockStatementNode *node) = 0;
   virtual void visit(node::IfStatementNode *node) = 0;
   virtual void visit(node::WhileStatementNode *node) = 0;

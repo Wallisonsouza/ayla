@@ -45,7 +45,6 @@ struct StackFrame {
 struct AylaVM {
   std::vector<StackFrame> call_stack;
   const GenModule *module = nullptr;
-  const CodeFunction *current_function = nullptr;
 
   ValueArena arena;
   bool debug = true;
@@ -54,53 +53,50 @@ struct AylaVM {
     if (debug) std::cout << msg << "\n";
   }
 
-  //////////////////////////////////////////////////////
-  // Inicializa registradores com null
-  //////////////////////////////////////////////////////
-  void init_registers(StackFrame &frame) {
-    for (auto &idx : frame.registers)
-      if (idx == SIZE_MAX) idx = arena.alloc_null();
+  size_t safe_register(const StackFrame &frame, size_t idx) {
+    if (idx >= frame.registers.size()) return arena.alloc_null();
+    size_t reg_idx = frame.registers[idx];
+    if (reg_idx >= arena.buffer.size()) return arena.alloc_null();
+    return reg_idx;
   }
 
-  //////////////////////////////////////////////////////
-  // EXECUÇÃO DE MÓDULO
-  //////////////////////////////////////////////////////
   void execute(const GenModule &m) {
     module = &m;
     if (module->functions.empty()) return;
 
     const size_t main_idx = module->functions.size() - 1;
-    current_function = &module->functions[main_idx];
+    const CodeFunction &main_fn = module->functions[main_idx];
 
     StackFrame frame;
     frame.function_idx = main_idx;
-    frame.registers.resize(current_function->local_count, SIZE_MAX);
-    call_stack.push_back(std::move(frame));
+    frame.ip = 0;
+    frame.registers.resize(main_fn.local_count, SIZE_MAX);
 
+    call_stack.push_back(std::move(frame));
     run();
   }
 
-  //////////////////////////////////////////////////////
-  // LOOP PRINCIPAL
-  //////////////////////////////////////////////////////
+private:
   void run() {
     while (!call_stack.empty()) {
-      auto &frame = call_stack.back();
-      init_registers(frame);
+      StackFrame &frame = call_stack.back();
+      const CodeFunction &fn = module->functions[frame.function_idx];
 
       // fim do frame
-      if (frame.ip >= current_function->code.size()) {
+      if (frame.ip >= fn.code.size()) {
         handle_return(frame);
         continue;
       }
 
-      const Instruction &instr = current_function->code[frame.ip++];
+      const Instruction &instr = fn.code[frame.ip++];
       frame.debug_print(arena);
+
+      instr.debug_print();
 
       switch (instr.op) {
       case OpCode::LOADK: frame.registers[instr.A] = arena.alloc(module->constants[instr.K]); break;
 
-      case OpCode::MOVE: frame.registers[instr.A] = frame.registers[instr.B]; break;
+      case OpCode::MOVE: frame.registers[instr.A] = safe_register(frame, instr.B); break;
 
       case OpCode::ADD:
       case OpCode::SUB:
@@ -116,74 +112,54 @@ struct AylaVM {
     }
   }
 
-private:
-  //////////////////////////////////////////////////////
-  // OPERADORES BINÁRIOS
-  //////////////////////////////////////////////////////
   void execute_binary_op(StackFrame &frame, const Instruction &instr) {
-    size_t lhs_idx = frame.get_register(instr.B);
-    size_t rhs_idx = frame.get_register(instr.C);
+    size_t lhs_idx = safe_register(frame, instr.B);
+    size_t rhs_idx = safe_register(frame, instr.C);
 
     double a = arena.get(lhs_idx).get_number();
     double b = arena.get(rhs_idx).get_number();
-
     double result = (instr.op == OpCode::ADD) ? a + b : (instr.op == OpCode::SUB) ? a - b : (instr.op == OpCode::MUL) ? a * b : a / b;
 
     frame.registers[instr.A] = arena.alloc(Value(result));
   }
 
-  //////////////////////////////////////////////////////
-  // CHAMADA DE FUNÇÃO
-  //////////////////////////////////////////////////////
   void execute_call(StackFrame &frame, const Instruction &instr) {
-    size_t fn_idx = frame.get_register(instr.B);
+    size_t fn_idx = safe_register(frame, instr.B);
     Value &fn_val = arena.get(fn_idx);
 
     if (fn_val.is_user_function()) {
-      auto user_fn = fn_val.get_user_function();
-      const CodeFunction &fn = module->functions[user_fn.bytecode_index];
+      auto function = fn_val.get_function();
+      const CodeFunction &fn = module->functions[function.bytecode_index];
 
       StackFrame new_frame;
       new_frame.return_ip = frame.ip;
-      new_frame.function_idx = user_fn.bytecode_index;
+      new_frame.function_idx = function.bytecode_index;
       new_frame.registers.resize(fn.local_count, SIZE_MAX);
 
-      init_registers(new_frame);
-
-      // copia argumentos
-      for (uint16_t i = 0; i < instr.C; ++i) new_frame.registers[i] = frame.registers[instr.B + 1 + i];
+      // copiar argumentos de forma segura
+      for (uint16_t i = 0; i < instr.C && i < frame.registers.size(); ++i) { new_frame.registers[i] = frame.registers[instr.B + 1 + i]; }
 
       call_stack.push_back(std::move(new_frame));
-      current_function = &fn;
     } else if (fn_val.is_native_function()) {
+      auto function = fn_val.get_function();
       std::vector<Value> args;
-      for (uint16_t i = 0; i < instr.C; ++i) { args.push_back(arena.get(frame.registers[instr.B + 1 + i])); }
+      for (uint16_t i = 0; i < instr.C && i < frame.registers.size(); ++i) args.push_back(arena.get(frame.registers[instr.B + 1 + i]));
 
-      auto func = fn_val.get_native();
-      auto value = func(args);
-
-      size_t ret_idx = arena.alloc(value);
-      frame.registers[instr.A] = ret_idx;
+      Value ret = function.native_func(args);
+      frame.registers[instr.A] = arena.alloc(ret);
     } else {
       throw std::runtime_error("Expected UserFunction or NativeFunction in CALL");
     }
   }
 
-  //////////////////////////////////////////////////////
-  // RETORNO DE FUNÇÃO
-  //////////////////////////////////////////////////////
   void handle_return(StackFrame &frame, size_t ret_idx = 0) {
-    size_t ret_val_idx = frame.registers.empty() ? arena.alloc_null() : frame.get_register(ret_idx);
+    size_t ret_val_idx = frame.registers.empty() ? arena.alloc_null() : safe_register(frame, ret_idx);
 
     call_stack.pop_back();
     if (call_stack.empty()) return;
 
     StackFrame &caller = call_stack.back();
-    current_function = &module->functions[caller.function_idx];
-
     size_t dst = ret_idx < caller.registers.size() ? ret_idx : 0;
     caller.registers[dst] = ret_val_idx;
-
-    log("[DEBUG] RETURN: R[" + std::to_string(dst) + "] = " + arena.get(ret_val_idx).convert_to_string());
   }
 };

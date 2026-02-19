@@ -68,7 +68,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::BlockStatement: debug_block(static_cast<const ayla::ast::node::BlockStatementNode *>(node)); break;
 
-  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessNode *>(node)); break;
+  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
 
   case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 

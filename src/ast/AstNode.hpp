@@ -14,6 +14,7 @@ struct AstNode {
   SourceSlice slice;
   NodeFlag flags;
   Type *inferred_type = nullptr;
+  uint16_t local_slot = UINT16_MAX;
   virtual ~AstNode() = default;
   virtual void accept(AstVisitor &v) = 0;
 

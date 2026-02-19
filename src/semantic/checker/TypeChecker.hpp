@@ -52,7 +52,7 @@ struct TypeChecker {
   void check_binary_expression(ast::node::BinaryExpressionNode *node);
   void check_unary_expression(ast::node::UnaryExpressionNode *node);
   void check_member_access(ast::node::MemberAccessExpressionNode *node);
-  void check_index_access(ast::node::IndexAccessNode *node);
+  void check_index_access(ast::node::IndexAccessExpressionNode *node);
 
   // Controle
   void check_if_statement(ast::node::IfStatementNode *node);
