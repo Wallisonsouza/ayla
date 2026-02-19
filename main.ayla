@@ -1,3 +1,5 @@
-val store = 10
+val a1 = 10
+val a2 = 20
 
- store = 20
+val sum = a1 + a2
+

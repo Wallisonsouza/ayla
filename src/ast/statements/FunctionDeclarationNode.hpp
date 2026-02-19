@@ -16,6 +16,7 @@ struct FunctionDeclarationNode : StatementNode {
   BlockStatementNode *body;
   Modifiers modifiers;
   SymbolId symbol_id;
+  uint32_t local_slot;
 
   FunctionDeclarationNode(IdentifierExpressionNode *identifier, std::vector<PatternNode *> params, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, Modifiers mods = {})
       : StatementNode(NodeKind::FunctionDeclaration), identifier(identifier), parameters(std::move(params)), return_type(ret_type), body(b), modifiers(mods) {}

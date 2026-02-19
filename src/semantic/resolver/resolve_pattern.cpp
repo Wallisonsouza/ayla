@@ -21,8 +21,10 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers
     current_scope->declare(pattern->identifier->name, sybol_id);
 
     pattern->symbol_id = sybol_id;
+    pattern->local_slot = current_scope->resolve_slot(sybol_id).value_or(0);
 
-    pattern->identifier->resolved_symbol_id = sybol_id;
+    pattern->identifier->resolved_symbol_id = pattern->symbol_id;
+    pattern->identifier->local_slot = pattern->local_slot;
 
     if (pattern->type_annotation) resolve_type_node(pattern->type_annotation);
 

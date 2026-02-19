@@ -8,6 +8,7 @@ namespace ayla::ast {
 struct ExpressionNode : AstNode {
 
   SymbolId resolved_symbol_id;
+  uint32_t local_slot;
   explicit ExpressionNode(NodeKind k) : AstNode(k) {}
 };
 

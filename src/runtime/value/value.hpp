@@ -1,6 +1,5 @@
 #pragma once
 
-#include "runtime/Instruction.hpp"
 #include "runtime/value/ArrayValue.hpp"
 #include "runtime/value/ObjectValue.hpp"
 #include <cstddef>
@@ -21,13 +20,12 @@ struct FunctionDeclarationNode;
 
 struct RuntimeScope;
 
-struct FunctionValue {
+struct Function {
+
   size_t bytecode_index;
-  std::vector<SymbolId> param_ids;
-  std::shared_ptr<RuntimeScope> captured_scope;
-  FunctionValue(size_t bytecode_index, std::vector<SymbolId> param_ids_, std::shared_ptr<RuntimeScope> captured_scope_)
-      : bytecode_index(bytecode_index), param_ids(std::move(param_ids_)), captured_scope(std::move(captured_scope_)) {}
-  FunctionValue() = default;
+  size_t arity;
+  Function(size_t bytecode_index, size_t arity) : bytecode_index(bytecode_index), arity(arity) {}
+  Function() = default;
 };
 
 struct ModuleValue {
@@ -38,7 +36,7 @@ struct Value {
 
   using NativeFunction = std::function<Value(const std::vector<Value> &)>;
 
-  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, FunctionValue, ArrayValue, ObjectValue, ModuleValue>;
+  using Storage = std::variant<double, bool, std::string, NullValue, VoidValue, NativeFunction, Function, ArrayValue, ObjectValue, ModuleValue>;
 
   Storage data;
 
@@ -48,9 +46,7 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(size_t bytecode, std::vector<SymbolId> param_ids_, std::shared_ptr<RuntimeScope> captured_scope_) {
-    return Value{FunctionValue(bytecode, std::move(param_ids_), std::move(captured_scope_))};
-  }
+  static Value User(size_t bytecode, size_t argc) { return Value{Function(bytecode, argc)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
   static Value Module(size_t index) { return Value{.data = ModuleValue{.index = index}}; }
@@ -63,7 +59,7 @@ struct Value {
 
   const NativeFunction &get_native() const { return std::get<NativeFunction>(data); }
 
-  FunctionValue &get_user_function() { return std::get<FunctionValue>(data); }
+  Function &get_user_function() { return std::get<Function>(data); }
 
   std::string convert_to_string() const {
 
@@ -145,7 +141,7 @@ struct Value {
 
   array &get_array() { return std::get<ArrayValue>(data).elements; }
 
-  bool is_user_function() const { return std::holds_alternative<FunctionValue>(data); }
+  bool is_user_function() const { return std::holds_alternative<Function>(data); }
   bool is_native_function() const { return std::holds_alternative<NativeFunction>(data); }
 };
 

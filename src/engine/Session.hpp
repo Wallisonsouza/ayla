@@ -1,11 +1,11 @@
 #include "core/source/SourceManager.hpp"
-#include "debug/engine/node/ast_debug.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/compilation_unit_manager.hpp"
 #include "pipeline/Pipeline.hpp"
+#include "runtime/AylaVM.hpp"
 #include "runtime/ByteCode.hpp"
-#include "runtime/Serealizer.hpp"
-#include <iostream>
+#include "runtime/ByteCodeDebug.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -22,7 +22,6 @@ public:
 
   CompilationUnit &add_source(const std::string &path) {
     auto &src = source_manager.load(path);
-
     return comp_manager.create(context, src);
   }
 
@@ -30,12 +29,19 @@ public:
 
   void run_pipeline() {
 
+    for (auto &unit : comp_manager.units) { pipeline.run(*unit); }
+
+    auto ptr = std::make_shared<GenModule>();
+
+    auto byte_code = BytecodeGenerator(ptr.get());
+
     for (auto &unit : comp_manager.units) {
-      pipeline.run(*unit);
-      BytecodeGenerator byteCode;
-      byteCode.generate_ast(unit->ast.get_nodes());
-      serialize_bytecode(context, byteCode);
+      byte_code.generate_ast(unit->ast.get_nodes());
+      byte_code.finalize_script();
     }
+
+    AylaVM vm;
+    vm.execute(*ptr);
   }
 
   CompilationUnit &entry_unit() { return *comp_manager.units.front(); }

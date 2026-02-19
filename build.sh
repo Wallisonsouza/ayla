@@ -11,7 +11,7 @@ cd build
 # Gera arquivos de build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
-MAX_THREADS=12
+MAX_THREADS=14
 THREADS=$(nproc)
 if [ "$THREADS" -gt "$MAX_THREADS" ]; then
     THREADS=$MAX_THREADS
