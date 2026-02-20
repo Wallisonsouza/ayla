@@ -39,8 +39,9 @@ public:
       byte_code.finalize_script();
     }
 
-    AylaVM vm;
-    vm.execute(*ptr);
+    byte_code.print_bytecode();
+    // AylaVM vm;
+    // vm.execute(*ptr);
   }
 
   CompilationUnit &entry_unit() { return *comp_manager.units.front(); }

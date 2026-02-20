@@ -38,7 +38,7 @@ void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclaration
   current_scope->declare(node->identifier->name, sym_id);
   node->symbol_id = sym_id;
 
-  node->local_slot = current_scope->resolve_slot(sym_id).value_or(current_scope->allocate_temporary());
+  node->local_slot = current_scope->resolve_slot(sym_id).value_or(0);
 
   if (node->modifiers.has(ayla::ast::Modifier::Extern)) return;
 

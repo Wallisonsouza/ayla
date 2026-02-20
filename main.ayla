@@ -1,5 +1,11 @@
-val a1 = 10
-val a2 = 20
+funct test(a,b)  {
 
-val sum = a1 + a2
+  return a + b ;
+
+}
+
+
+val a = test(100, 50);
+
+return a
 

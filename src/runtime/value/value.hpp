@@ -144,8 +144,7 @@ struct Value {
 
   array &get_array() { return std::get<ArrayValue>(data).elements; }
 
-  bool is_user_function() const { return std::holds_alternative<FunctionValue>(data) && !std::get<FunctionValue>(data).is_native; }
-  bool is_native_function() const { return std::holds_alternative<FunctionValue>(data) && std::get<FunctionValue>(data).is_native; }
+  bool is_function() const { return std::holds_alternative<FunctionValue>(data); }
 };
 
 struct ExecResult {

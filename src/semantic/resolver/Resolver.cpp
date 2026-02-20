@@ -133,7 +133,7 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers
 
     // Slot da variável: se não houver, aloca temporário
     pattern->symbol_id = symbol_id;
-    pattern->local_slot = current_scope->resolve_slot(symbol_id).value_or(current_scope->allocate_temporary());
+    pattern->local_slot = current_scope->resolve_slot(symbol_id).value_or(0);
 
     // Atualiza a expressão identificadora associada
     pattern->identifier->resolved_symbol_id = pattern->symbol_id;

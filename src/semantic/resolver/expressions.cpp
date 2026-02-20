@@ -38,8 +38,6 @@ void Resolver::resolve_index_exp(ayla::ast::node::IndexAccessExpressionNode *nod
 
   resolve(node->base);
   resolve(node->index);
-
-  node->local_slot = current_scope->allocate_temporary();
 }
 
 void Resolver::resolve_member_exp(ayla::ast::node::MemberAccessExpressionNode *node) {
@@ -51,26 +49,21 @@ void Resolver::resolve_member_exp(ayla::ast::node::MemberAccessExpressionNode *n
     report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
     return;
   }
-
-  node->local_slot = current_scope->allocate_temporary();
 }
 
 void Resolver::resolve_call_exp(ayla::ast::node::CallExpressionNode *node) {
   if (!node) return;
   resolve(node->callee);
   for (auto *arg : node->arguments) resolve(arg);
-  node->local_slot = current_scope->allocate_temporary();
 }
 
 void Resolver::resolve_binary_exp(ayla::ast::node::BinaryExpressionNode *node) {
   if (!node) return;
   resolve(node->lhs);
   resolve(node->rhs);
-  node->local_slot = current_scope->allocate_temporary();
 }
 
 void Resolver::resolve_unary_exp(ayla::ast::node::UnaryExpressionNode *node) {
   if (!node) return;
   resolve(node->operand);
-  node->local_slot = current_scope->allocate_temporary();
 }

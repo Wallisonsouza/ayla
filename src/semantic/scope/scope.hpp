@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 enum class ResolvedKind { Local, Upvalue, Global };
 
@@ -20,69 +21,73 @@ struct ParserScope {
   std::unordered_map<std::string, SymbolId> table;
   std::unordered_map<SymbolId, uint32_t> slots;
   bool is_function_scope = false;
+
   uint32_t next_slot = 0;
+  uint32_t base_slot = 0;
 
   explicit ParserScope(ParserScope *p = nullptr) : parent(p) {}
 
+  // =====================================
+  // DECLARA UMA VARIÁVEL PERMANENTE
+  // =====================================
   uint32_t declare(const std::string &name, SymbolId id) {
     table.insert_or_assign(name, id);
 
-    uint32_t slot = next_slot++;
+    uint32_t slot = base_slot++;
     slots[id] = slot;
 
     return slot;
   }
 
+  // =====================================
+  // RESOLVE SIMBOLO POR NOME
+  // =====================================
   SymbolId resolve_symbol(const std::string &name) const {
     const ParserScope *scope = this;
-
     while (scope) {
       auto it = scope->table.find(name);
       if (it != scope->table.end()) return it->second;
-
       scope = scope->parent;
     }
-
     return SymbolId();
   }
 
   std::optional<uint32_t> resolve_slot(SymbolId id) const {
     const ParserScope *scope = this;
-
     while (scope) {
       auto it = scope->slots.find(id);
       if (it != scope->slots.end()) return it->second;
-
       scope = scope->parent;
     }
-
     return std::nullopt;
   }
 
   std::optional<ResolvedRef> resolve_ref(SymbolId id) const {
     const ParserScope *scope = this;
-
     bool crossed_function = false;
 
     while (scope) {
       auto it = scope->slots.find(id);
-
       if (it != scope->slots.end()) {
         if (!crossed_function) return ResolvedRef{ResolvedKind::Local, it->second};
-
         return ResolvedRef{ResolvedKind::Upvalue, it->second};
       }
-
       if (scope->is_function_scope) crossed_function = true;
-
       scope = scope->parent;
     }
-
     return ResolvedRef{ResolvedKind::Global, 0};
   }
 
-  uint32_t allocate_temporary() { return next_slot++; }
   bool has_symbol_local(const std::string &name) const { return table.find(name) != table.end(); }
+
+  // =====================================
+  // RESET DE SCOPE PARA FUNÇÃO
+  // =====================================
+  void enter_function_scope() {
+    is_function_scope = true;
+    base_slot = 0;         // variáveis locais começam do zero
+    next_slot = base_slot; // temporários começam após variáveis locais
+  }
 };
 
 } // namespace core

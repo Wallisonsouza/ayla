@@ -30,7 +30,9 @@ struct TypeChecker {
 
   void check(ast::AstNode *node);
 
-  void check_identifier(ast::node::IdentifierExpressionNode *node);
+  Type *current_function_return_type = nullptr;
+
+  void check_id_expression(ast::node::IdentifierExpressionNode *node);
 
   void check_number_literal(ast::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
 
@@ -46,24 +48,24 @@ struct TypeChecker {
 
   void check_function_declaration(ast::node::FunctionDeclarationNode *node);
   void check_variable_declaration(ast::node::VariableDeclarationNode *node);
-  void check_function_call(ast::node::CallExpressionNode *node);
+  void check_call_expression(ast::node::CallExpressionNode *node);
 
   // Expressões
   void check_binary_expression(ast::node::BinaryExpressionNode *node);
   void check_unary_expression(ast::node::UnaryExpressionNode *node);
-  void check_member_access(ast::node::MemberAccessExpressionNode *node);
-  void check_index_access(ast::node::IndexAccessExpressionNode *node);
+  void check_member_expression(ast::node::MemberAccessExpressionNode *node);
+  void check_index_expression(ast::node::IndexAccessExpressionNode *node);
 
   // Controle
   void check_if_statement(ast::node::IfStatementNode *node);
   void check_while_statement(ast::node::WhileStatementNode *node);
   void check_return_statement(ast::node::ReturnStatementNode *node);
 
-  void check_block(ast::node::BlockStatementNode *node);
+  void check_block_statement(ast::node::BlockStatementNode *node);
 
-  void check_import_node(ast::node::ImportStatementNode *node);
+  void check_import_statement(ast::node::ImportStatementNode *node);
   void check_module_declaration(ast::node::ModuleDeclarationNode *node);
-  void check_assignment(ast::node::AssignmentExpressionNode *node);
+  void check_assign_expression(ast::node::AssignmentExpressionNode *node);
   void check_expression_statement(ast::node::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {

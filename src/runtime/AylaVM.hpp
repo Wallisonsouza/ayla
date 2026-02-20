@@ -89,25 +89,33 @@ private:
       }
 
       const Instruction &instr = fn.code[frame.ip++];
-      frame.debug_print(arena);
-
-      instr.debug_print();
 
       switch (instr.op) {
-      case OpCode::LOADK: frame.registers[instr.A] = arena.alloc(module->constants[instr.K]); break;
+      case OpCode::LOADK:
+        frame.registers[instr.A] = arena.alloc(module->constants[instr.K]);
+        break;
 
-      case OpCode::MOVE: frame.registers[instr.A] = safe_register(frame, instr.B); break;
+      case OpCode::MOVE:
+        frame.registers[instr.A] = safe_register(frame, instr.B);
+        break;
 
       case OpCode::ADD:
       case OpCode::SUB:
       case OpCode::MUL:
-      case OpCode::DIV: execute_binary_op(frame, instr); break;
+      case OpCode::DIV:
+        execute_binary_op(frame, instr);
+        break;
 
-      case OpCode::CALL: execute_call(frame, instr); break;
+      case OpCode::CALL:
+        execute_call(frame, instr);
+        break;
 
-      case OpCode::RETURN: handle_return(frame, instr.A); break;
+      case OpCode::RETURN:
+        handle_return(frame, instr.A);
+        break;
 
-      default: throw std::runtime_error("Unhandled opcode");
+      default:
+        throw std::runtime_error("Unhandled opcode");
       }
     }
   }
@@ -121,35 +129,35 @@ private:
     double result = (instr.op == OpCode::ADD) ? a + b : (instr.op == OpCode::SUB) ? a - b : (instr.op == OpCode::MUL) ? a * b : a / b;
 
     frame.registers[instr.A] = arena.alloc(Value(result));
+
+    std::cout << result;
   }
 
   void execute_call(StackFrame &frame, const Instruction &instr) {
-    size_t fn_idx = safe_register(frame, instr.B);
+    size_t fn_reg = instr.B;
+    size_t fn_idx = safe_register(frame, fn_reg);
     Value &fn_val = arena.get(fn_idx);
 
-    if (fn_val.is_user_function()) {
-      auto function = fn_val.get_function();
-      const CodeFunction &fn = module->functions[function.bytecode_index];
+    if (!fn_val.is_function()) throw std::runtime_error("Expected user function in CALL");
 
-      StackFrame new_frame;
-      new_frame.return_ip = frame.ip;
-      new_frame.function_idx = function.bytecode_index;
-      new_frame.registers.resize(fn.local_count, SIZE_MAX);
+    auto function = fn_val.get_function();
+    const CodeFunction &fn = module->functions[function.bytecode_index];
 
-      // copiar argumentos de forma segura
-      for (uint16_t i = 0; i < instr.C && i < frame.registers.size(); ++i) { new_frame.registers[i] = frame.registers[instr.B + 1 + i]; }
+    StackFrame new_frame;
+    new_frame.return_ip = frame.ip;
+    new_frame.function_idx = function.bytecode_index;
+    new_frame.ip = 0;
+    new_frame.registers.resize(fn.local_count, SIZE_MAX);
 
-      call_stack.push_back(std::move(new_frame));
-    } else if (fn_val.is_native_function()) {
-      auto function = fn_val.get_function();
-      std::vector<Value> args;
-      for (uint16_t i = 0; i < instr.C && i < frame.registers.size(); ++i) args.push_back(arena.get(frame.registers[instr.B + 1 + i]));
+    for (uint16_t i = 0; i < instr.C; i++) {
+      size_t arg_reg = fn_reg + 1 + i;
 
-      Value ret = function.native_func(args);
-      frame.registers[instr.A] = arena.alloc(ret);
-    } else {
-      throw std::runtime_error("Expected UserFunction or NativeFunction in CALL");
+      if (arg_reg >= frame.registers.size()) break;
+
+      new_frame.registers[i] = safe_register(frame, arg_reg);
     }
+
+    call_stack.push_back(std::move(new_frame));
   }
 
   void handle_return(StackFrame &frame, size_t ret_idx = 0) {
