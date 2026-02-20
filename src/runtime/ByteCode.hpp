@@ -16,11 +16,11 @@
 
 #include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ExpressionStatementNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
 #include "ast/statements/VariableDeclarationNode.hpp"
 
-#include "debug/engine/node/ast_debug.hpp"
 #include "runtime/Instruction.hpp"
 #include "runtime/value/value.hpp"
 #include "semantic/symbols/SymbolId.hpp"
@@ -46,33 +46,32 @@ struct Frame {
   }
 };
 
-//////////////////////////////////////////////////////
-// FUNCTION
-//////////////////////////////////////////////////////
-
 struct CodeFunction {
+  static constexpr uint8_t MAX_REGISTERS = 250;
+
   uint32_t arity = 0;
   uint32_t local_count = 0;
 
   std::vector<Instruction> code;
-  uint16_t next_reg = 0;
-  uint16_t max_reg = 0;
+  uint8_t next_reg = 0;
+  uint8_t max_reg = 0;
 
   Frame frame;
 
-  uint16_t alloc_reg() {
-    uint16_t r = next_reg++;
+  uint8_t alloc_reg() {
+    if (next_reg >= MAX_REGISTERS) throw std::runtime_error("Exceeded maximum number of registers in function");
+    uint8_t r = next_reg++;
     if (next_reg > max_reg) max_reg = next_reg;
     return r;
   }
 
-  uint16_t alloc_local(SymbolId sym) {
-    uint16_t r = alloc_reg();
+  uint8_t alloc_local(SymbolId sym) {
+    uint8_t r = alloc_reg();
     frame.locals.push_back({sym, r, frame.depth});
     return r;
   }
 
-  std::optional<uint16_t> resolve_local(SymbolId sym) {
+  std::optional<uint8_t> resolve_local(SymbolId sym) {
     for (int i = (int)frame.locals.size() - 1; i >= 0; --i)
       if (frame.locals[i].symbol == sym) return frame.locals[i].reg;
     return std::nullopt;
@@ -84,14 +83,9 @@ struct CodeFunction {
   void finalize() { local_count = max_reg; }
 };
 
-//////////////////////////////////////////////////////
-// MODULE
-//////////////////////////////////////////////////////
-
 struct GenModule {
   std::vector<Value> constants;
   std::vector<CodeFunction> functions;
-  std::vector<Instruction> sections;
 };
 
 struct BytecodeGenerator {
@@ -121,7 +115,7 @@ struct BytecodeGenerator {
   //////////////////////////////////////////////////////
 
   uint16_t gen_expr(ayla::ast::AstNode *node) {
-    uint16_t dst = current_function->alloc_reg();
+    auto dst = current_function->alloc_reg();
     return gen_expr_into(node, dst);
   }
 
@@ -186,25 +180,25 @@ struct BytecodeGenerator {
     }
 
     case NK::CallExpression: {
-      auto *call = static_cast<ayla::ast::node::CallExpressionNode *>(node);
-      uint8_t arg_count = call->arguments.size();
+      // auto *call = static_cast<ayla::ast::node::CallExpressionNode *>(node);
+      // uint8_t arg_count = call->arguments.size();
 
-      uint16_t func_reg = current_function->alloc_reg();
-      gen_expr_into(call->callee, func_reg);
+      // uint16_t func_reg = current_function->alloc_reg();
+      // gen_expr_into(call->callee, func_reg);
 
-      std::vector<uint16_t> arg_regs(arg_count);
-      for (size_t i = 0; i < arg_count; ++i) {
-        arg_regs[i] = current_function->alloc_reg();
-        gen_expr_into(call->arguments[i], arg_regs[i]);
-      }
+      // std::vector<uint16_t> arg_regs(arg_count);
+      // for (size_t i = 0; i < arg_count; ++i) {
+      //   arg_regs[i] = current_function->alloc_reg();
+      //   gen_expr_into(call->arguments[i], arg_regs[i]);
+      // }
 
-      // CALL(func_reg, num_args=arg_count, retorno=1 registrador começando em func_reg)
-      emit(Instruction::CALL(func_reg, func_reg, arg_count));
+      // // CALL(func_reg, num_args=arg_count, retorno=1 registrador começando em func_reg)
+      // emit(Instruction::CALL(func_reg, func_reg, arg_count));
 
-      // se dst não é o mesmo que o registrador da função, mover resultado
-      if (dst != func_reg) emit(Instruction::MOVE(dst, func_reg));
+      // // se dst não é o mesmo que o registrador da função, mover resultado
+      // if (dst != func_reg) emit(Instruction::MOVE(dst, func_reg));
 
-      return dst;
+      // return dst;
     }
 
     default:
@@ -224,7 +218,7 @@ struct BytecodeGenerator {
     case NK::VariableDeclaration: {
       auto *var = static_cast<ayla::ast::node::VariableDeclarationNode *>(node);
       auto *id = static_cast<ayla::ast::IdentifierPatternNode *>(var->pattern);
-      uint16_t r = current_function->alloc_local(id->symbol_id);
+      auto r = current_function->alloc_local(id->symbol_id);
       if (var->initializer) gen_expr_into(var->initializer, r);
       break;
     }

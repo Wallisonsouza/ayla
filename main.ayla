@@ -1,11 +1,16 @@
-funct test(a,b)  {
 
-  return a + b ;
 
+
+
+
+
+
+funct test(a, b)  {
+  val test = a + b
+
+  val tes2 = test + 100
+
+  return a
 }
 
-
-val a = test(100, 50);
-
-return a
 
