@@ -1,28 +1,28 @@
-import glfw
-import io
-import convert
+// import glfw
+// import io
+// import convert
 
 
-val window_config = {
-  width: 400,
-  height: 600,
-  name: "window_test"
-}
+// val window_config = {
+//   width: 400,
+//   height: 600,
+//   name: "window_test"
+// }
 
-if !glfw.init() {
-  io.print("GLFW init error")
-}
+// if !glfw.init() {
+//   io.print("GLFW init error")
+// }
 
-val win = glfw.create_window(window_config.width, window_config.height, window_config.name)
+// val win = glfw.create_window(window_config.width, window_config.height, window_config.name)
 
-glfw.make_context_current(win)
+// glfw.make_context_current(win)
 
 
-while !glfw.window_should_close(win) {
+// while !glfw.window_should_close(win) {
 
-  glfw.swap_buffers(win)
-  glfw.poll_events()
-}
+//   glfw.swap_buffers(win)
+//   glfw.poll_events()
+// }
 
-glfw.destroy_window(win)
-glfw.terminate()
+// glfw.destroy_window(win)
+// glfw.terminate()

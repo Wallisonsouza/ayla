@@ -1,14 +1,14 @@
-#include "TypeChecker.hpp"
+#include "semantic/checker/type_checker.hpp"
 
 namespace ayla {
-void TypeChecker::check(ast::AstNode *node) {
+void Checker::check(ast::AstNode *node) {
   if (!node) return;
 
   switch (node->kind) {
   case ast::NodeKind::ExpressionStatement:
     check_expression_statement(static_cast<ast::node::ExpressionStatementNode *>(node));
     break;
-  case ast::NodeKind::Identifier:
+  case ast::NodeKind::IdentifierExpression:
     check_id_expression(static_cast<ast::node::IdentifierExpressionNode *>(node));
     break;
   case ast::NodeKind::NumberLiteral:
@@ -41,10 +41,10 @@ void TypeChecker::check(ast::AstNode *node) {
   case ast::NodeKind::MemberAccessExpression:
     check_member_expression(static_cast<ast::node::MemberAccessExpressionNode *>(node));
     break;
-  case ast::NodeKind::IndexAccess:
+  case ast::NodeKind::IndexAccessExpression:
     check_index_expression(static_cast<ast::node::IndexAccessExpressionNode *>(node));
     break;
-  case ast::NodeKind::Assignment:
+  case ast::NodeKind::AssignmentExpression:
     check_assign_expression(dynamic_cast<ast::node::AssignmentExpressionNode *>(node));
     break;
   case ast::NodeKind::IfStatement:
@@ -75,33 +75,5 @@ void TypeChecker::check(ast::AstNode *node) {
     break;
   }
 }
-
-void TypeChecker::check_pattern(ast::PatternNode *node) {
-  if (!node) return;
-
-  if (auto *idPattern = dynamic_cast<ast::IdentifierPatternNode *>(node)) {
-
-    if (idPattern->type_annotation) check(idPattern->type_annotation);
-
-    Type *finalType = nullptr;
-
-    // Se existir type annotation
-    if (idPattern->type_annotation)
-      finalType = idPattern->type_annotation->inferred_type;
-    else if (idPattern->identifier && idPattern->identifier->inferred_type)
-      finalType = idPattern->identifier->inferred_type;
-    else
-      finalType = &BuiltinTypes::Unknown;
-
-    idPattern->inferred_type = finalType;
-
-    // Atualiza o símbolo
-    if (auto *sym = unit.context.symbol_manager.get(idPattern->symbol_id)) sym->type = finalType;
-  }
-}
-
-//---------------------------
-// Expressões
-//---------------------------
 
 } // namespace ayla

@@ -48,7 +48,7 @@ struct Module {
 
     SymbolId sym_id = parser_scope->resolve_symbol(name);
 
-    if (!sym_id.is_valid()) { throw std::runtime_error("Symbol '" + name + "' not found in module parser_scope"); }
+    if (!sym_id.is_valid()) { throw std::runtime_error("Symbol '" + name + "' not found in module " + this->name); }
 
     auto val = std::make_shared<Value>(Value::Native(std::forward<Fn>(fn)));
 

@@ -1,7 +1,8 @@
-#include "semantic/checker/TypeChecker.hpp"
+#include "semantic/checker/type_checker.hpp"
+
 namespace ayla {
 
-void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
+void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
 
   if (!node) return;
 
@@ -13,9 +14,6 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
 
   switch (node->op) {
 
-  // ------------------
-  // Aritméticos
-  // ------------------
   case ast::BinaryOperation::Add:
   case ast::BinaryOperation::Subtract:
   case ast::BinaryOperation::Multiply:
@@ -26,9 +24,6 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
     node->inferred_type = &BuiltinTypes::Number;
     break;
 
-  // ------------------
-  // Lógicos
-  // ------------------
   case ast::BinaryOperation::And:
   case ast::BinaryOperation::Or:
 
@@ -37,9 +32,6 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
 
-  // ------------------
-  // Comparação
-  // ------------------
   case ast::BinaryOperation::Less:
   case ast::BinaryOperation::LessEqual:
   case ast::BinaryOperation::Greater:
@@ -50,9 +42,6 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
 
-  // ------------------
-  // Igualdade
-  // ------------------
   case ast::BinaryOperation::Equal:
   case ast::BinaryOperation::NotEqual:
 
@@ -67,13 +56,13 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
   }
 }
 
-void TypeChecker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
+void Checker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
   if (!node) return;
 
   check(node->operand);
 }
 
-void TypeChecker::check_index_expression(ast::node::IndexAccessExpressionNode *node) {
+void Checker::check_index_expression(ast::node::IndexAccessExpressionNode *node) {
   if (!node || !node->base || !node->index) return;
 
   check(node->base);
@@ -94,7 +83,7 @@ void TypeChecker::check_index_expression(ast::node::IndexAccessExpressionNode *n
   node->inferred_type = arrType->element_type;
 }
 
-void TypeChecker::check_member_expression(ast::node::MemberAccessExpressionNode *node) {
+void Checker::check_member_expression(ast::node::MemberAccessExpressionNode *node) {
   check(node->base);
   Type *baseType = node->base->inferred_type;
 
@@ -117,7 +106,7 @@ void TypeChecker::check_member_expression(ast::node::MemberAccessExpressionNode 
   node->inferred_type = fieldType;
 }
 
-void TypeChecker::check_assign_expression(ast::node::AssignmentExpressionNode *node) {
+void Checker::check_assign_expression(ast::node::AssignmentExpressionNode *node) {
 
   if (!node || !node->target || !node->value) return;
 
@@ -128,7 +117,7 @@ void TypeChecker::check_assign_expression(ast::node::AssignmentExpressionNode *n
   Type *valueType = node->value->inferred_type ? node->value->inferred_type : &BuiltinTypes::Unknown;
 
   switch (node->target->kind) {
-  case ast::NodeKind::Identifier: {
+  case ast::NodeKind::IdentifierExpression: {
 
     auto *id_node = static_cast<ast::node::IdentifierExpressionNode *>(node->target);
     targetType = id_node->inferred_type ? id_node->inferred_type : &BuiltinTypes::Unknown;
@@ -141,7 +130,7 @@ void TypeChecker::check_assign_expression(ast::node::AssignmentExpressionNode *n
     break;
   }
 
-  case ast::NodeKind::IndexAccess: {
+  case ast::NodeKind::IndexAccessExpression: {
     auto *idxNode = static_cast<ast::node::IndexAccessExpressionNode *>(node->target);
     targetType = idxNode->inferred_type ? idxNode->inferred_type : &BuiltinTypes::Unknown;
     break;
@@ -159,7 +148,7 @@ void TypeChecker::check_assign_expression(ast::node::AssignmentExpressionNode *n
   }
 }
 
-void TypeChecker::check_call_expression(ast::node::CallExpressionNode *node) {
+void Checker::check_call_expression(ast::node::CallExpressionNode *node) {
   if (!node) return;
 
   check(node->callee);
@@ -179,7 +168,7 @@ void TypeChecker::check_call_expression(ast::node::CallExpressionNode *node) {
   node->inferred_type = ft->return_type;
 }
 
-void TypeChecker::check_id_expression(ast::node::IdentifierExpressionNode *node) {
+void Checker::check_id_expression(ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
   auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id);

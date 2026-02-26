@@ -22,11 +22,6 @@ target_include_directories(ayla PRIVATE
 
 )
 
-# ===================== RAYLIB =====================
-find_package(raylib REQUIRED)
-target_link_libraries(ayla PRIVATE raylib)
-
-
 # ===================== ICU =====================
 find_package(ICU REQUIRED COMPONENTS uc i18n)
 target_link_libraries(ayla PRIVATE ICU::uc ICU::i18n)

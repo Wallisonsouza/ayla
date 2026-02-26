@@ -4,6 +4,7 @@
 #include "core/token/token_stream.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/language_context.hpp"
+#include "runtime/ByteCode.hpp"
 #include "semantic/scope/scope_manager.hpp"
 
 struct CompilationUnit {
@@ -14,6 +15,7 @@ struct CompilationUnit {
   DiagnosticEngine diagns;
 
   ScopeManager scope_manager;
+  ayla::compiler::ModuleBuilder module;
 
   Ast ast;
 

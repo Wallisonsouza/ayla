@@ -13,13 +13,13 @@ enum class NodeKind {
   ObjectFieldList,
   CharLiteral,
   NullLiteral,
-  Identifier,
+  IdentifierExpression,
   Interface,
   IdentifierPattern,
 
   // === Statements ===
 
-  IndexAccess,
+  IndexAccessExpression,
   BlockStatement,
   IfStatement,
   WhileStatement,
@@ -44,13 +44,12 @@ enum class NodeKind {
   BinaryExpression,
   UnaryExpression,
   LiteralExpression,
-  AssignmentExpression,
 
   // === Types ===
   Type,
   TypeReference,
   GenericType,
-  Assignment,
+  AssignmentExpression,
   Pattern,
   Error,
   ParameterList,

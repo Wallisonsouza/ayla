@@ -22,11 +22,11 @@
 #include "ast/statements/WhileStatementNode.hpp"
 
 namespace ayla {
-struct TypeChecker {
+struct Checker {
 
   CompilationUnit &unit;
 
-  explicit TypeChecker(CompilationUnit &unit) : unit(unit) {}
+  explicit Checker(CompilationUnit &unit) : unit(unit) {}
 
   void check(ast::AstNode *node);
 

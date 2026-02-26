@@ -64,7 +64,7 @@ struct Resolver {
 
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
-  void resolve_import_node(ayla::ast::node::ImportStatementNode *node);
+  void resolve_import_statement(ayla::ast::node::ImportStatementNode *node);
   void resolve_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {

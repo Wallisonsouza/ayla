@@ -1,6 +1,8 @@
-#include "semantic/checker/TypeChecker.hpp"
+#include "ast/expressions/LiteralExpressionNode.hpp"
+#include "semantic/checker/type_checker.hpp"
+
 namespace ayla {
-void TypeChecker::check_array_literal(ast::node::ArrayLiteralNode *node) {
+void Checker::check_array_literal(ast::node::ArrayLiteralNode *node) {
   if (!node) return;
 
   Type *elementType = nullptr;
@@ -19,7 +21,7 @@ void TypeChecker::check_array_literal(ast::node::ArrayLiteralNode *node) {
   node->inferred_type = unit.context.type_arena.alloc<ArrayType>(elementType);
 }
 
-void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
+void Checker::check_object_literal(ast::node::ObjectLiteralNode *node) {
   if (!node) return;
 
   auto *objType = unit.context.type_arena.alloc<ObjectType>();
@@ -27,7 +29,7 @@ void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
   for (auto *field : node->fields) {
     check(field->value);
 
-    if (!field->key || field->key->kind != ast::NodeKind::Identifier) continue;
+    if (!field->key || field->key->kind != ast::NodeKind::IdentifierExpression) continue;
     auto *key = static_cast<ast::node::IdentifierExpressionNode *>(field->key);
 
     if (objType->has_member(key->name)) {
@@ -41,4 +43,5 @@ void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
 
   node->inferred_type = objType;
 }
+
 } // namespace ayla

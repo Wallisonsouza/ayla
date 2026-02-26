@@ -1,9 +1,8 @@
-#include "semantic/checker/TypeChecker.hpp"
+#include "semantic/checker/type_checker.hpp"
 
 namespace ayla {
 
-// declarations
-void TypeChecker::check_function_declaration(ast::node::FunctionDeclarationNode *node) {
+void Checker::check_function_declaration(ast::node::FunctionDeclarationNode *node) {
   if (!node) return;
 
   current_function_return_type = node->return_type ? node->return_type->inferred_type : nullptr;
@@ -23,7 +22,7 @@ void TypeChecker::check_function_declaration(ast::node::FunctionDeclarationNode 
   current_function_return_type = nullptr;
 }
 
-void ayla::TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
+void ayla::Checker::check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
   if (!node) return;
 
   auto *module = unit.context.module_manager.get(node->resolved_module_id);
@@ -48,7 +47,7 @@ void ayla::TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarat
   if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
-void TypeChecker::check_variable_declaration(ast::node::VariableDeclarationNode *node) {
+void Checker::check_variable_declaration(ast::node::VariableDeclarationNode *node) {
   if (!node) return;
 
   if (node->initializer) { check(node->initializer); }
@@ -75,7 +74,7 @@ void TypeChecker::check_variable_declaration(ast::node::VariableDeclarationNode 
 }
 
 // statements
-void TypeChecker::check_if_statement(ast::node::IfStatementNode *node) {
+void Checker::check_if_statement(ast::node::IfStatementNode *node) {
   check(node->condition);
   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(DiagnosticCode::TypeMismatch, node->condition->slice);
 
@@ -85,7 +84,7 @@ void TypeChecker::check_if_statement(ast::node::IfStatementNode *node) {
   node->inferred_type = &BuiltinTypes::Unknown;
 }
 
-void TypeChecker::check_while_statement(ast::node::WhileStatementNode *node) {
+void Checker::check_while_statement(ast::node::WhileStatementNode *node) {
   check(node->condition);
   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(DiagnosticCode::TypeMismatch, node->condition->slice);
 
@@ -94,7 +93,7 @@ void TypeChecker::check_while_statement(ast::node::WhileStatementNode *node) {
   node->inferred_type = &BuiltinTypes::Unknown;
 }
 
-void TypeChecker::check_block_statement(ast::node::BlockStatementNode *node) {
+void Checker::check_block_statement(ast::node::BlockStatementNode *node) {
   if (!node) return;
 
   for (auto *stmt : node->statements) check(stmt);
@@ -102,12 +101,12 @@ void TypeChecker::check_block_statement(ast::node::BlockStatementNode *node) {
   node->inferred_type = &BuiltinTypes::Unknown;
 }
 
-void TypeChecker::check_expression_statement(ast::node::ExpressionStatementNode *node) {
+void Checker::check_expression_statement(ast::node::ExpressionStatementNode *node) {
   if (!node || !node->expression) return;
   check(node->expression);
 }
 
-void TypeChecker::check_return_statement(ast::node::ReturnStatementNode *node) {
+void Checker::check_return_statement(ast::node::ReturnStatementNode *node) {
   if (!node->value) return;
 
   check(node->value);
@@ -123,7 +122,7 @@ void TypeChecker::check_return_statement(ast::node::ReturnStatementNode *node) {
   node->inferred_type = actual;
 }
 
-void ayla::TypeChecker::check_import_statement(ayla::ast::node::ImportStatementNode *node) {
+void ayla::Checker::check_import_statement(ayla::ast::node::ImportStatementNode *node) {
 
   if (!node) return;
 

@@ -1,16 +1,5 @@
 
 
-
-
-
-
-
-funct test(a, b)  {
-  val test = a + b
-
-  val tes2 = test + 100
-
-  return a
+funct test(a, b) {
+  return a + b
 }
-
-

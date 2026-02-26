@@ -14,10 +14,6 @@ enum class ValueKind { Number, Boolean, String, Null, Void, NativeFunction };
 struct NullValue {};
 struct VoidValue {};
 
-namespace parser::node {
-struct FunctionDeclarationNode;
-}
-
 struct RuntimeScope;
 
 struct FunctionValue {
@@ -54,7 +50,7 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(std::function<Value(const std::vector<Value> &)> func) { return Value{FunctionValue::Native(std::move(func))}; }
-  static Value User(size_t bytecode, size_t argc) { return Value{FunctionValue(bytecode, argc)}; }
+  static Value Function(size_t bytecode, size_t argc) { return Value{FunctionValue(bytecode, argc)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
   static Value Module(size_t index) { return Value{.data = ModuleValue{.index = index}}; }
@@ -102,6 +98,7 @@ struct Value {
       out += "}";
       return out;
     }
+    if (std::holds_alternative<FunctionValue>(data)) { return "<function>"; }
 
     return "void";
   }

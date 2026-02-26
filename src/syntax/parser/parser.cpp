@@ -46,7 +46,8 @@ ayla::ast::Modifiers Parser::parse_modifiers() {
       mods.add(ayla::ast::Modifier::Extern);
       unit.tokens.advance();
       break;
-    default: return mods;
+    default:
+      return mods;
     }
   }
 
@@ -391,7 +392,8 @@ ayla::ast::ExpressionNode *Parser::parse_postfix_expression() {
       if (!expr) return nullptr;
       break;
 
-    default: return expr;
+    default:
+      return expr;
     }
   }
 
@@ -405,22 +407,30 @@ ayla::ast::ExpressionNode *Parser::parse_primary_expression() {
 
   switch (tok->descriptor->kind) {
 
-  case TokenKind::NUMBER_LITERAL: return parse_number_literal();
+  case TokenKind::NUMBER_LITERAL:
+    return parse_number_literal();
 
-  case TokenKind::STRING_LITERAL: return parse_string_literal();
+  case TokenKind::STRING_LITERAL:
+    return parse_string_literal();
 
-  case TokenKind::IDENTIFIER: return parse_identifier();
+  case TokenKind::IDENTIFIER:
+    return parse_identifier();
 
   case TokenKind::TRUE_KEYWORD:
-  case TokenKind::FALSE_KEYWORD: return parse_bool_literal();
+  case TokenKind::FALSE_KEYWORD:
+    return parse_bool_literal();
 
-  case TokenKind::OPEN_PAREN: return parse_grouped_expression();
+  case TokenKind::OPEN_PAREN:
+    return parse_grouped_expression();
 
-  case TokenKind::OPEN_BRACE: return parse_object_literal();
+  case TokenKind::OPEN_BRACE:
+    return parse_object_literal();
 
-  case TokenKind::OPEN_BRACKET: return parse_array_literal();
+  case TokenKind::OPEN_BRACKET:
+    return parse_array_literal();
 
-  default: return nullptr;
+  default:
+    return nullptr;
   }
 }
 
@@ -437,7 +447,8 @@ ayla::ast::ExpressionNode *Parser::parse_unary_expression() {
 
     // case TokenKind::MINUS: op = ayla::UnaryOperation::NEGATE; break;
 
-  default: return parse_postfix_expression();
+  default:
+    return parse_postfix_expression();
   }
 
   unit.tokens.advance();
@@ -498,7 +509,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
     return nullptr;
   }
 
-  if (condition->kind == ayla::ast::NodeKind::Assignment) {
+  if (condition->kind == ayla::ast::NodeKind::AssignmentExpression) {
 
     report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 
@@ -544,14 +555,21 @@ ayla::ast::StatementNode *Parser::parse_statement() {
   if (!tok) return nullptr;
 
   switch (tok->descriptor->kind) {
-  case TokenKind::MODULE_KEYWORD: return parse_module_declaration();
-  case TokenKind::IMPORT_KEYWORD: return parse_import_statement();
-  case TokenKind::IF_KEYWORD: return parse_if_statement();
-  case TokenKind::WHILE_KEYWORD: return parse_while_statemente();
-  case TokenKind::RETURN_KEYWORD: return parse_return_statement();
+  case TokenKind::MODULE_KEYWORD:
+    return parse_module_declaration();
+  case TokenKind::IMPORT_KEYWORD:
+    return parse_import_statement();
+  case TokenKind::IF_KEYWORD:
+    return parse_if_statement();
+  case TokenKind::WHILE_KEYWORD:
+    return parse_while_statemente();
+  case TokenKind::RETURN_KEYWORD:
+    return parse_return_statement();
   case TokenKind::VALUE_KEYWORD:
-  case TokenKind::CONST_KEYWORD: return parse_variable_declaration(modifiers);
-  case TokenKind::FUNCTION_KEYWORD: return parse_function_declaration(modifiers);
+  case TokenKind::CONST_KEYWORD:
+    return parse_variable_declaration(modifiers);
+  case TokenKind::FUNCTION_KEYWORD:
+    return parse_function_declaration(modifiers);
   default:
     if (auto *expr = parse_expression()) { return unit.ast.create_node<ayla::ast::node::ExpressionStatementNode>(expr); }
     unit.tokens.advance();
@@ -584,7 +602,7 @@ ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
     return nullptr;
   }
 
-  if (condition->kind == ayla::ast::NodeKind::Assignment) {
+  if (condition->kind == ayla::ast::NodeKind::AssignmentExpression) {
 
     report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 

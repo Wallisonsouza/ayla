@@ -6,7 +6,7 @@
 namespace ayla::ast::node {
 
 struct BlockStatementNode : StatementNode {
-  const std::vector<StatementNode *> statements;
+  std::vector<StatementNode *> statements;
 
   explicit BlockStatementNode(std::vector<StatementNode *> stmts = {}) : StatementNode(NodeKind::BlockStatement), statements(std::move(stmts)) {}
 
