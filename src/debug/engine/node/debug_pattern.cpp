@@ -1,5 +1,3 @@
-#include "ast/NodeKind.hpp"
-#include "ast/PatternNode.hpp"
 #include "ast_debug.hpp"
 
 void ASTDebug::debug_pattern(const ayla::ast::PatternNode *node) {
@@ -15,6 +13,7 @@ void ASTDebug::debug_pattern(const ayla::ast::PatternNode *node) {
     debug_node(pattern->type_annotation, true);
   }
 
-  default: break;
+  default:
+    break;
   }
 }

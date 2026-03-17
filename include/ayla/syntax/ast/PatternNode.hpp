@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ast/AstNode.hpp"
-#include "ast/TypeNode.hpp"
-#include "ast/expressions/IdentifierExpressionNode.hpp"
+#include "AstNode.hpp"
+#include "TypeNode.hpp"
+#include "expressions/IdentifierExpressionNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 
 namespace ayla::ast {

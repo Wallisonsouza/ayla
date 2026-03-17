@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ast/ExpressionNode.hpp"
-#include "ast/StatementNode.hpp"
+#include "ayla/syntax/ast/ExpressionNode.hpp"
+#include "ayla/syntax/ast/StatementNode.hpp"
 
 namespace ayla::ast::node {
 

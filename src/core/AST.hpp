@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/AstNode.hpp"
+#include "ayla/syntax/ast/AstNode.hpp"
 #include "core/memory/Arena.hpp"
 #include <functional>
 #include <vector>

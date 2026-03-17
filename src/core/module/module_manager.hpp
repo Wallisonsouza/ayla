@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/expressions/IdentifierExpressionNode.hpp"
+#include "ayla/syntax/ast/expressions/IdentifierExpressionNode.hpp"
 #include "core/module/module.hpp"
 #include <string>
 #include <unordered_map>

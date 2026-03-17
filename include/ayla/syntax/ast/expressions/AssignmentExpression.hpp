@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/ExpressionNode.hpp"
+#include "ayla/syntax/ast/ExpressionNode.hpp"
 
 namespace ayla::ast::node {
 

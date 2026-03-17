@@ -1,9 +1,8 @@
 #pragma once
 
-#include "ast/PatternNode.hpp"
-#include "ast/StatementNode.hpp"
-#include "ast/expressions/IdentifierExpressionNode.hpp"
-#include "ast/statements/BlockStatementNode.hpp"
+#include "ayla/syntax/ast/PatternNode.hpp"
+#include "ayla/syntax/ast/StatementNode.hpp"
+#include "ayla/syntax/ast/expressions/IdentifierExpressionNode.hpp"
 #include "core/node/Modifier.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 

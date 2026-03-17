@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/AstNode.hpp"
+#include "AstNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 
 namespace ayla::ast {

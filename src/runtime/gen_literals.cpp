@@ -1,5 +1,4 @@
 #include "ByteCode.hpp"
-#include "ast/expressions/LiteralExpressionNode.hpp"
 #include "runtime/Instruction.hpp"
 
 namespace ayla::compiler {

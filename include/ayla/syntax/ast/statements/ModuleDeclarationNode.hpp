@@ -1,6 +1,6 @@
 #pragma once
-#include "ast/StatementNode.hpp"
-#include "ast/expressions/IdentifierExpressionNode.hpp"
+
+#include "ayla/syntax/ast/StatementNode.hpp"
 #include "core/module/module.hpp"
 
 namespace ayla::ast::node {

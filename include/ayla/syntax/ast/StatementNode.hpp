@@ -1,5 +1,5 @@
 #pragma once
-#include "ast/AstNode.hpp"
+#include "AstNode.hpp"
 
 namespace ayla::ast {
 struct StatementNode : AstNode {

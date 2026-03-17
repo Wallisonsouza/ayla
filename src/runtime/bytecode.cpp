@@ -1,5 +1,4 @@
 #include "runtime/ByteCode.hpp"
-#include "ast/statements/ModuleDeclarationNode.hpp"
 
 namespace ayla::compiler {
 uint8_t BytecodeGenerator::gen_expressions(ayla::ast::AstNode *node, uint8_t dst) {

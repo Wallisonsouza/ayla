@@ -1,4 +1,4 @@
-#include "ast/AstNode.hpp"
+#include "AstNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 #include <string>
 

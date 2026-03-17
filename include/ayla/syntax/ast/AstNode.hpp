@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ast/AstVisitor.hpp"
-#include "ast/NodeKind.hpp"
+#include "AstVisitor.hpp"
+#include "NodeKind.hpp"
 #include "ayla/source/source_location.hpp"
 #include "core/node/flags.hpp"
 

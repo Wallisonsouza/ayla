@@ -1,5 +1,5 @@
 #pragma once
-#include "ast/ExpressionNode.hpp"
+#include "ayla/syntax/ast/ExpressionNode.hpp"
 #include "core/node/BinaryOp.hpp"
 
 namespace ayla::ast::node {
