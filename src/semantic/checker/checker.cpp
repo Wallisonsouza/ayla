@@ -1,7 +1,7 @@
-#include "semantic/checker/type_checker.hpp"
+#include "ayla/semantic/checker/checker.hpp"
 
 namespace ayla {
-void Checker::check(ast::AstNode *node) {
+void ayla::semantic::Checker::check(ast::AstNode *node) {
   if (!node) return;
 
   switch (node->kind) {

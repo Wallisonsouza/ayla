@@ -1,13 +1,12 @@
-#include "semantic/resolver/Resolver.hpp"
-#include <iostream>
+#include "ayla/semantic/resolver/resolver.hpp"
 
-void Resolver::resolve_identifier_exp(ayla::ast::node::IdentifierExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_identifier_exp(ayla::ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
   SymbolId id = current_scope->resolve_symbol(node->name);
 
   if (!id.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    // report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
     return;
   }
 
@@ -15,7 +14,7 @@ void Resolver::resolve_identifier_exp(ayla::ast::node::IdentifierExpressionNode 
   node->local_slot = current_scope->resolve_slot(id).value_or(0);
 }
 
-void Resolver::resolve_assign_exp(ayla::ast::node::AssignmentExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_assign_exp(ayla::ast::node::AssignmentExpressionNode *node) {
   if (!node) return;
 
   // Resolve a target (já tem slot se for variável local)
@@ -34,36 +33,36 @@ void Resolver::resolve_assign_exp(ayla::ast::node::AssignmentExpressionNode *nod
   node->local_slot = node->target->local_slot; // o destino é onde o valor vai
 }
 
-void Resolver::resolve_index_exp(ayla::ast::node::IndexAccessExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_index_exp(ayla::ast::node::IndexAccessExpressionNode *node) {
 
   resolve(node->base);
   resolve(node->index);
 }
 
-void Resolver::resolve_member_exp(ayla::ast::node::MemberAccessExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_member_exp(ayla::ast::node::MemberAccessExpressionNode *node) {
   if (!node || !node->base || !node->field) return;
 
   resolve(node->base);
 
   if (!node->base->resolved_symbol_id.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    // report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
     return;
   }
 }
 
-void Resolver::resolve_call_exp(ayla::ast::node::CallExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_call_exp(ayla::ast::node::CallExpressionNode *node) {
   if (!node) return;
   resolve(node->callee);
   for (auto *arg : node->arguments) resolve(arg);
 }
 
-void Resolver::resolve_binary_exp(ayla::ast::node::BinaryExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_binary_exp(ayla::ast::node::BinaryExpressionNode *node) {
   if (!node) return;
   resolve(node->lhs);
   resolve(node->rhs);
 }
 
-void Resolver::resolve_unary_exp(ayla::ast::node::UnaryExpressionNode *node) {
+void ayla::semantic::Resolver::resolve_unary_exp(ayla::ast::node::UnaryExpressionNode *node) {
   if (!node) return;
   resolve(node->operand);
 }

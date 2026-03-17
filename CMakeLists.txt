@@ -19,9 +19,8 @@ add_executable(ayla
 
 target_include_directories(ayla PRIVATE
     ${PROJECT_SOURCE_DIR}/src
-
+    ${PROJECT_SOURCE_DIR}/include
 )
-
 # ===================== ICU =====================
 find_package(ICU REQUIRED COMPONENTS uc i18n)
 target_link_libraries(ayla PRIVATE ICU::uc ICU::i18n)

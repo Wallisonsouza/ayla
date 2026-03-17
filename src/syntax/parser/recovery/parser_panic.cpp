@@ -1,5 +1,7 @@
+#include "ayla/syntax/parser/parser.hpp"
+#include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
-#include "syntax/parser/parser.hpp"
+#include "syntax/parser/recovery/recover.hpp"
 #include <cstdint>
 #include <unordered_map>
 
@@ -19,7 +21,7 @@ static const std::unordered_map<TokenKind, RecoverBoundary> token_boundaries = {
     {TokenKind::COLON, RecoverBoundary::Function},
 };
 
-void Parser::recover_until(RecoverBoundary boundaries) {
+void ayla::syntax::Parser::recover_until(RecoverBoundary boundaries) {
   while (!unit.tokens.is_end()) {
     auto *tok = unit.tokens.peek();
     if (!tok || !tok->descriptor) {

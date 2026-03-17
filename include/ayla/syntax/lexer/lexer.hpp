@@ -1,28 +1,25 @@
 #pragma once
 
-#include "core/source/TextStream.hpp"
+#include "ayla/stream/text_stream.hpp"
 #include "core/token/Token.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "utils/Unicode.hpp"
 
+namespace ayla::syntax {
 struct Lexer {
 private:
   CompilationUnit &unit;
-  core::source::TextStream stream;
+  ayla::stream::TextStream stream;
 
   Token *match_token() {
 
-    if (auto t = match_string())
-      return t;
+    if (auto t = match_string()) return t;
 
-    if (auto t = match_number())
-      return t;
+    if (auto t = match_number()) return t;
 
-    if (auto t = match_identifier())
-      return t;
+    if (auto t = match_identifier()) return t;
 
-    if (auto t = match_operator())
-      return t;
+    if (auto t = match_operator()) return t;
 
     return nullptr;
   }
@@ -36,7 +33,7 @@ public:
   Token *match_operator();
   Token mathch_comment();
 
-  void skip_whitespace_and_comments(core::source::TextStream &stream) {
+  void skip_whitespace_and_comments(ayla::stream::TextStream &stream) {
     while (!stream.eof()) {
       char32_t c = stream.peek();
 
@@ -49,8 +46,7 @@ public:
       // Comentário de linha //
       if (c == U'/' && stream.peek_n(1) == U'/') {
         stream.advance_n(2);
-        while (stream.peek() != U'\n' && !stream.eof())
-          stream.advance();
+        while (stream.peek() != U'\n' && !stream.eof()) stream.advance();
         continue;
       }
 
@@ -80,8 +76,7 @@ public:
 
         auto state = stream.get_state();
 
-        auto desc =
-            unit.context.descriptor_table.lookup_by_kind(TokenKind::NEW_LINE);
+        auto desc = unit.context.descriptor_table.lookup_by_kind(TokenKind::NEW_LINE);
         unit.tokens.create_token<Token>(desc, stream.slice_from(state));
       }
 
@@ -89,9 +84,7 @@ public:
       auto *token = match_token();
 
       if (!token) {
-        auto slice =
-            SourceSlice{.range = start_state.range_to(stream.get_state()),
-                        .span = start_state.span_to(stream.get_state())};
+        auto slice = SourceSlice{.range = start_state.range_to(stream.get_state()), .span = start_state.span_to(stream.get_state())};
         // unit.diagnostics.emit({DiagnosticCode::UnexpectedToken, slice},
         // unit);
         stream.advance();
@@ -99,3 +92,5 @@ public:
     }
   }
 };
+
+} // namespace ayla::syntax

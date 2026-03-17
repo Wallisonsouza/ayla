@@ -1,6 +1,6 @@
-#include "lexer.hpp"
+#include "ayla/syntax/lexer/lexer.hpp"
 
-Token *Lexer::match_string() {
+Token *ayla::syntax::Lexer::match_string() {
   char32_t quote = stream.peek();
 
   if (quote != U'"' && quote != U'\'') { return nullptr; }

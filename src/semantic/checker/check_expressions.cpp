@@ -1,8 +1,8 @@
-#include "semantic/checker/type_checker.hpp"
+#include "ayla/semantic/checker/checker.hpp"
 
 namespace ayla {
 
-void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
+void ayla::semantic::Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
 
   if (!node) return;
 
@@ -19,7 +19,7 @@ void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
   case ast::BinaryOperation::Multiply:
   case ast::BinaryOperation::Divide:
 
-    if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+    // if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
     node->inferred_type = &BuiltinTypes::Number;
     break;
@@ -27,7 +27,7 @@ void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
   case ast::BinaryOperation::And:
   case ast::BinaryOperation::Or:
 
-    if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+    // if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
@@ -37,7 +37,7 @@ void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
   case ast::BinaryOperation::Greater:
   case ast::BinaryOperation::GreaterEqual:
 
-    if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+    // if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
@@ -45,7 +45,7 @@ void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
   case ast::BinaryOperation::Equal:
   case ast::BinaryOperation::NotEqual:
 
-    if (l != r) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
+    // if (l != r) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
     node->inferred_type = &BuiltinTypes::Boolean;
     break;
@@ -56,13 +56,13 @@ void Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
   }
 }
 
-void Checker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
+void ayla::semantic::Checker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
   if (!node) return;
 
   check(node->operand);
 }
 
-void Checker::check_index_expression(ast::node::IndexAccessExpressionNode *node) {
+void ayla::semantic::Checker::check_index_expression(ast::node::IndexAccessExpressionNode *node) {
   if (!node || !node->base || !node->index) return;
 
   check(node->base);
@@ -72,23 +72,23 @@ void Checker::check_index_expression(ast::node::IndexAccessExpressionNode *node)
   Type *indexType = node->index->inferred_type;
 
   if (!baseType || baseType->kind != TypeKind::Array) {
-    report_error(DiagnosticCode::TypeMismatch, node->slice);
+    // report_error(DiagnosticCode::TypeMismatch, node->slice);
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
-  if (indexType != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->index->slice); }
+  // if (indexType != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->index->slice); }
 
   auto *arrType = static_cast<ArrayType *>(baseType);
   node->inferred_type = arrType->element_type;
 }
 
-void Checker::check_member_expression(ast::node::MemberAccessExpressionNode *node) {
+void ayla::semantic::Checker::check_member_expression(ast::node::MemberAccessExpressionNode *node) {
   check(node->base);
   Type *baseType = node->base->inferred_type;
 
   if (!baseType || baseType->kind != TypeKind::Object) {
-    report_error(DiagnosticCode::InvalidMemberAccess, node->field->slice);
+    // report_error(DiagnosticCode::InvalidMemberAccess, node->field->slice);
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
@@ -98,7 +98,7 @@ void Checker::check_member_expression(ast::node::MemberAccessExpressionNode *nod
   Type *fieldType = objType->get_member(node->field->name);
 
   if (!fieldType) {
-    report_error(DiagnosticCode::MemberNotFound, node->field->slice, {{"member", node->field->name}});
+    // report_error(DiagnosticCode::MemberNotFound, node->field->slice, {{"member", node->field->name}});
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
@@ -106,7 +106,7 @@ void Checker::check_member_expression(ast::node::MemberAccessExpressionNode *nod
   node->inferred_type = fieldType;
 }
 
-void Checker::check_assign_expression(ast::node::AssignmentExpressionNode *node) {
+void ayla::semantic::Checker::check_assign_expression(ast::node::AssignmentExpressionNode *node) {
 
   if (!node || !node->target || !node->value) return;
 
@@ -144,11 +144,11 @@ void Checker::check_assign_expression(ast::node::AssignmentExpressionNode *node)
   node->inferred_type = targetType;
 
   if (targetType != &BuiltinTypes::Unknown && valueType != &BuiltinTypes::Unknown) {
-    if (targetType != valueType) { report_error(DiagnosticCode::TypeMismatch, node->slice, {{"expected", "targetType->name"}, {"found", "valueType->name"}}); }
+    // if (targetType != valueType) { report_error(DiagnosticCode::TypeMismatch, node->slice, {{"expected", "targetType->name"}, {"found", "valueType->name"}}); }
   }
 }
 
-void Checker::check_call_expression(ast::node::CallExpressionNode *node) {
+void ayla::semantic::Checker::check_call_expression(ast::node::CallExpressionNode *node) {
   if (!node) return;
 
   check(node->callee);
@@ -157,24 +157,24 @@ void Checker::check_call_expression(ast::node::CallExpressionNode *node) {
   Type *funcType = node->callee ? node->callee->inferred_type : nullptr;
 
   if (!funcType || funcType->kind != TypeKind::Function) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->callee->slice);
+    // report_error(DiagnosticCode::UndeclaredSymbol, node->callee->slice);
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
   auto *ft = static_cast<FunctionType *>(funcType);
-  if (ft->params.size() != node->arguments.size()) { report_error(DiagnosticCode::InvalidArguments, node->callee->slice); }
+  // if (ft->params.size() != node->arguments.size()) { report_error(DiagnosticCode::InvalidArguments, node->callee->slice); }
 
   node->inferred_type = ft->return_type;
 }
 
-void Checker::check_id_expression(ast::node::IdentifierExpressionNode *node) {
+void ayla::semantic::Checker::check_id_expression(ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
   auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id);
 
   if (!sym) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"expected", node->name}});
+    // report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"expected", node->name}});
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }

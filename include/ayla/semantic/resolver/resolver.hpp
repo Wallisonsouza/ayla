@@ -21,6 +21,8 @@
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 
+namespace ayla::semantic {
+
 struct Resolver {
 
   core::ParserScope *current_scope;
@@ -66,10 +68,5 @@ struct Resolver {
 
   void resolve_import_statement(ayla::ast::node::ImportStatementNode *node);
   void resolve_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
-
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-    auto *diag = unit.diagns.create(code, slice);
-
-    for (auto &[k, v] : ctx) { diag->context.set(k, v); }
-  }
 };
+} // namespace ayla::semantic

@@ -1,8 +1,7 @@
-#include "ast/expressions/LiteralExpressionNode.hpp"
-#include "semantic/checker/type_checker.hpp"
 
+#include "ayla/semantic/checker/checker.hpp"
 namespace ayla {
-void Checker::check_array_literal(ast::node::ArrayLiteralNode *node) {
+void ayla::semantic::Checker::check_array_literal(ast::node::ArrayLiteralNode *node) {
   if (!node) return;
 
   Type *elementType = nullptr;
@@ -21,7 +20,7 @@ void Checker::check_array_literal(ast::node::ArrayLiteralNode *node) {
   node->inferred_type = unit.context.type_arena.alloc<ArrayType>(elementType);
 }
 
-void Checker::check_object_literal(ast::node::ObjectLiteralNode *node) {
+void ayla::semantic::Checker::check_object_literal(ast::node::ObjectLiteralNode *node) {
   if (!node) return;
 
   auto *objType = unit.context.type_arena.alloc<ObjectType>();
@@ -33,7 +32,7 @@ void Checker::check_object_literal(ast::node::ObjectLiteralNode *node) {
     auto *key = static_cast<ast::node::IdentifierExpressionNode *>(field->key);
 
     if (objType->has_member(key->name)) {
-      report_error(DiagnosticCode::RedeclaredIdentifier, key->slice);
+      // report_error(DiagnosticCode::RedeclaredIdentifier, key->slice);
       continue;
     }
 

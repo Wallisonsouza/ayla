@@ -1,29 +1,30 @@
-#pragma once
-#include "Diagnostic.hpp"
-#include "core/memory/Arena.hpp"
+// #pragma once
+// #include "Diagnostic.hpp"
+// #include "core/memory/Arena.hpp"
+// #include "core/token/Location.hpp"
 
-#include <vector>
+// #include <vector>
 
-struct CompilationUnit;
+// struct CompilationUnit;
 
-class DiagnosticEngine {
-  const CompilationUnit &unit;
-  core::memory::Arena arena_;
-  std::vector<Diagnostic *> diagnostics_;
+// class DiagnosticEngine {
+//   const CompilationUnit &unit;
+//   core::memory::Arena arena_;
+//   std::vector<Diagnostic *> diagnostics_;
 
-public:
-  explicit DiagnosticEngine(const CompilationUnit &unit) : unit(unit) {}
+// public:
+//   explicit DiagnosticEngine(const CompilationUnit &unit) : unit(unit) {}
 
-  Diagnostic *create(DiagnosticCode code, const SourceSlice &slice) {
-    auto *diag = arena_.alloc<Diagnostic>();
-    diag->origin = DiagnosticOrigin::Parser;
-    diag->code = code;
-    diag->slice = slice;
-    diag->context = DiagnosticContext{};
+//   Diagnostic *create(DiagnosticCode code, const SourceSlice &slice) {
+//     auto *diag = arena_.alloc<Diagnostic>();
+//     diag->origin = DiagnosticOrigin::Parser;
+//     diag->code = code;
+//     diag->slice = slice;
+//     diag->context = DiagnosticContext{};
 
-    diagnostics_.push_back(diag);
-    return diag;
-  }
+//     diagnostics_.push_back(diag);
+//     return diag;
+//   }
 
-  const std::vector<Diagnostic *> &all() const { return diagnostics_; }
-};
+//   const std::vector<Diagnostic *> &all() const { return diagnostics_; }
+// };

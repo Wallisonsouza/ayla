@@ -3,7 +3,8 @@
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
-#include "semantic/checker/type_checker.hpp"
+
+#include "semantic/types/BuiltinTypes.hpp"
 #include "semantic/types/type.hpp"
 #include "stdlib/Console.hpp"
 #include "stdlib/Convert.hpp"

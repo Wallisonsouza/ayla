@@ -2,8 +2,8 @@
 
 #include "ast/AstVisitor.hpp"
 #include "ast/NodeKind.hpp"
+#include "ayla/source/source_location.hpp"
 #include "core/node/flags.hpp"
-#include "core/token/Location.hpp"
 
 struct Type;
 

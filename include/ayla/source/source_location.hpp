@@ -1,6 +1,7 @@
 #pragma once
 
-#include "core/source/Span.hpp"
+#include "ayla/source/source_span.hpp"
+
 #include <cstddef>
 
 struct Location {
@@ -16,7 +17,7 @@ struct SourceRange {
 
 struct SourceSlice {
   SourceRange range;
-  core::source::Span span;
+  ayla::source::SourceSpan span;
 };
 
 inline SourceSlice operator+(const SourceSlice &a, const SourceSlice &b) {

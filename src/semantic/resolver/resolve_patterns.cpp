@@ -1,6 +1,6 @@
-#include "semantic/resolver/Resolver.hpp"
+#include "ayla/semantic/resolver/resolver.hpp"
 
-void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers modifier) {
+void ayla::semantic::Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers modifier) {
   if (!pat) return;
 
   switch (pat->kind) {
@@ -9,7 +9,7 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers
 
     // Verifica redeclaração
     if (current_scope->has_symbol_local(pattern->identifier->name)) {
-      report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
+      // report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
       return;
     }
 

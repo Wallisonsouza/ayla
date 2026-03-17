@@ -1,7 +1,6 @@
-#include "syntax/parser/parser.hpp"
-#include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ayla/syntax/parser/parser.hpp"
 
-ayla::ast::node::VariableDeclarationNode *Parser::parse_variable_declaration(ayla::ast::Modifiers modifiers) {
+ayla::ast::node::VariableDeclarationNode *ayla::syntax::Parser::parse_variable_declaration(ayla::ast::Modifiers modifiers) {
 
   bool is_const = unit.tokens.match(TokenKind::CONST_KEYWORD);
 
@@ -21,7 +20,7 @@ ayla::ast::node::VariableDeclarationNode *Parser::parse_variable_declaration(ayl
   return unit.ast.create_node<ayla::ast::node::VariableDeclarationNode>(pattern, init, modifiers);
 }
 
-ayla::ast::Modifiers Parser::parse_modifiers() {
+ayla::ast::Modifiers ayla::syntax::Parser::parse_modifiers() {
   ayla::ast::Modifiers mods;
 
   while (auto *tok = unit.tokens.peek()) {
@@ -54,7 +53,7 @@ ayla::ast::Modifiers Parser::parse_modifiers() {
   return mods;
 }
 
-ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
+ayla::ast::node::ModuleDeclarationNode *ayla::syntax::Parser::parse_module_declaration() {
 
   if (!unit.tokens.match(TokenKind::MODULE_KEYWORD)) return nullptr;
 
@@ -62,7 +61,7 @@ ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
 
   auto *id = parse_identifier();
   if (!id) {
-    report_error(DiagnosticCode::ExpectedIdentifier, "module name");
+    // report_error(DiagnosticCode::ExpectedIdentifier, "module name");
     return nullptr;
   }
   path.push_back(id);
@@ -70,14 +69,14 @@ ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
   while (unit.tokens.match(TokenKind::DOT)) {
     auto *next_id = parse_identifier();
     if (!next_id) {
-      report_error(DiagnosticCode::ExpectedIdentifier, "submodule name after '.'");
+      // report_error(DiagnosticCode::ExpectedIdentifier, "submodule name after '.'");
       break;
     }
     path.push_back(next_id);
   }
 
   if (!unit.tokens.match(TokenKind::OPEN_BRACE)) {
-    report_error(DiagnosticCode::ExpectedToken, "'{' to start module body");
+    // report_error(DiagnosticCode::ExpectedToken, "'{' to start module body");
     return nullptr;
   }
 
@@ -91,7 +90,7 @@ ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
   return unit.ast.create_node<ayla::ast::node::ModuleDeclarationNode>(std::move(path), std::move(body));
 }
 
-ayla::ast::node::ReturnStatementNode *Parser::parse_return_statement() {
+ayla::ast::node::ReturnStatementNode *ayla::syntax::Parser::parse_return_statement() {
 
   unit.tokens.match(TokenKind::RETURN_KEYWORD);
 
@@ -100,20 +99,20 @@ ayla::ast::node::ReturnStatementNode *Parser::parse_return_statement() {
 
   auto *value = parse_expression();
   if (!value) {
-    report_error(DiagnosticCode::ExpectedToken, "expected expression after 'return'");
+    // report_error(DiagnosticCode::ExpectedToken, "expected expression after 'return'");
     unit.tokens.advance();
   }
 
   return unit.ast.create_node<ayla::ast::node::ReturnStatementNode>(value);
 }
 
-ayla::ast::node::BlockStatementNode *Parser::parse_block_statement() {
+ayla::ast::node::BlockStatementNode *ayla::syntax::Parser::parse_block_statement() {
 
   std::vector<ayla::ast::StatementNode *> statements;
 
   if (!unit.tokens.match(TokenKind::OPEN_BRACE)) {
 
-    report_error(DiagnosticCode::ExpectedToken, "'{' to start block");
+    // report_error(DiagnosticCode::ExpectedToken, "'{' to start block");
 
     return nullptr;
   }
@@ -135,7 +134,7 @@ ayla::ast::node::BlockStatementNode *Parser::parse_block_statement() {
   // '}'
   if (!unit.tokens.match(TokenKind::CLOSE_BRACE)) {
 
-    report_error(DiagnosticCode::ExpectedToken, "'}' to close block");
+    // report_error(DiagnosticCode::ExpectedToken, "'}' to close block");
 
     return nullptr;
   }
@@ -143,7 +142,7 @@ ayla::ast::node::BlockStatementNode *Parser::parse_block_statement() {
   return unit.ast.create_node<ayla::ast::node::BlockStatementNode>(std::move(statements));
 }
 
-ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
+ayla::ast::StatementNode *ayla::syntax::Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
 
   auto start = unit.tokens.peek_slice();
 
@@ -151,7 +150,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
 
   auto *name = parse_identifier();
   if (!name) {
-    report_error(DiagnosticCode::ExpectedIdentifier, "function name");
+    // report_error(DiagnosticCode::ExpectedIdentifier, "function name");
     recover_until(RecoverBoundary::Function);
     return nullptr;
   }
@@ -163,7 +162,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
   if (unit.tokens.match(TokenKind::ARROW)) {
     return_type = parse_type();
     if (!return_type) {
-      report_error(DiagnosticCode::ExpectedType, "return type");
+      // report_error(DiagnosticCode::ExpectedType, "return type");
       recover_until(RecoverBoundary::Function);
       return nullptr;
     }
@@ -183,7 +182,7 @@ ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifier
   return unit.ast.create_node<ayla::ast::node::FunctionDeclarationNode>(name, params, return_type, body, modifiers);
 }
 
-ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
   auto *dot = unit.tokens.match(TokenKind::DOT);
   if (!dot) return nullptr;
@@ -195,7 +194,7 @@ ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode 
   return unit.ast.create_node<ayla::ast::node::MemberAccessExpressionNode>(base, field);
 }
 
-ayla::ast::ExpressionNode *Parser::parse_index_access(ayla::ast::ExpressionNode *base) {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_index_access(ayla::ast::ExpressionNode *base) {
 
   auto *open = unit.tokens.match(TokenKind::OPEN_BRACKET);
   if (!open) return nullptr; // erro: '[' esperado
@@ -209,7 +208,7 @@ ayla::ast::ExpressionNode *Parser::parse_index_access(ayla::ast::ExpressionNode 
   return unit.ast.create_node<ayla::ast::node::IndexAccessExpressionNode>(base, index_expr);
 }
 
-ayla::ast::ExpressionNode *Parser::parse_call_acess(ayla::ast::ExpressionNode *base) {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_call_acess(ayla::ast::ExpressionNode *base) {
   if (!base) return nullptr;
 
   while (true) {
@@ -235,7 +234,7 @@ ayla::ast::ExpressionNode *Parser::parse_call_acess(ayla::ast::ExpressionNode *b
   return base;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_number_literal() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_number_literal() {
   Token *token = unit.tokens.match(TokenKind::NUMBER_LITERAL);
   if (!token) return nullptr;
 
@@ -246,7 +245,7 @@ ayla::ast::ExpressionNode *Parser::parse_number_literal() {
   } catch (const std::exception &) { return nullptr; }
 }
 
-ayla::ast::ExpressionNode *Parser::parse_string_literal() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_string_literal() {
 
   Token *token = unit.tokens.match(TokenKind::STRING_LITERAL);
   if (!token) return nullptr;
@@ -256,7 +255,7 @@ ayla::ast::ExpressionNode *Parser::parse_string_literal() {
   return unit.ast.create_node<ayla::ast::node::StringLiteralNode>(text);
 }
 
-ayla::ast::ExpressionNode *Parser::parse_bool_literal() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_bool_literal() {
 
   Token *token = unit.tokens.advance();
   if (!token) return nullptr;
@@ -269,7 +268,7 @@ ayla::ast::ExpressionNode *Parser::parse_bool_literal() {
   return node;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_object_literal() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_object_literal() {
 
   auto fields = parse_generic_list<ayla::ast::node::ObjectFieldNode>(TokenKind::OPEN_BRACE, TokenKind::CLOSE_BRACE, TokenKind::COMMA, [&]() -> ayla::ast::node::ObjectFieldNode * {
     auto *key = parse_identifier();
@@ -288,7 +287,7 @@ ayla::ast::ExpressionNode *Parser::parse_object_literal() {
   return unit.ast.create_node<ayla::ast::node::ObjectLiteralNode>(std::move(fields));
 }
 
-ayla::ast::ExpressionNode *Parser::parse_assignment(ayla::ast::ExpressionNode *target) {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_assignment(ayla::ast::ExpressionNode *target) {
 
   if (!unit.tokens.match(TokenKind::ASSIGN)) { return nullptr; }
 
@@ -307,7 +306,7 @@ ayla::ast::ExpressionNode *Parser::parse_assignment(ayla::ast::ExpressionNode *t
   return node;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_binary_expression(int min_bp, ayla::ast::ExpressionNode *left) {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_binary_expression(int min_bp, ayla::ast::ExpressionNode *left) {
   if (!left) return nullptr;
 
   while (true) {
@@ -331,7 +330,7 @@ ayla::ast::ExpressionNode *Parser::parse_binary_expression(int min_bp, ayla::ast
   return left;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_expression() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_expression() {
   auto *lhs = parse_unary_expression();
 
   if (!lhs) return nullptr;
@@ -341,7 +340,7 @@ ayla::ast::ExpressionNode *Parser::parse_expression() {
   return parse_binary_expression(0, lhs);
 }
 
-ayla::ast::ExpressionNode *Parser::parse_grouped_expression() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_grouped_expression() {
 
   auto *open = unit.tokens.match(TokenKind::OPEN_PAREN);
   if (!open) return nullptr;
@@ -355,7 +354,7 @@ ayla::ast::ExpressionNode *Parser::parse_grouped_expression() {
   return expr;
 }
 
-ayla::ast::node::IdentifierExpressionNode *Parser::parse_identifier() {
+ayla::ast::node::IdentifierExpressionNode *ayla::syntax::Parser::parse_identifier() {
 
   Token *token = unit.tokens.match(TokenKind::IDENTIFIER);
   if (!token) return nullptr;
@@ -366,7 +365,7 @@ ayla::ast::node::IdentifierExpressionNode *Parser::parse_identifier() {
   return node;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_postfix_expression() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_postfix_expression() {
 
   auto *expr = parse_primary_expression();
   if (!expr) return nullptr;
@@ -400,7 +399,7 @@ ayla::ast::ExpressionNode *Parser::parse_postfix_expression() {
   return expr;
 }
 
-ayla::ast::ExpressionNode *Parser::parse_primary_expression() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_primary_expression() {
 
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;
@@ -434,7 +433,7 @@ ayla::ast::ExpressionNode *Parser::parse_primary_expression() {
   }
 }
 
-ayla::ast::ExpressionNode *Parser::parse_unary_expression() {
+ayla::ast::ExpressionNode *ayla::syntax::Parser::parse_unary_expression() {
   auto *tok = unit.tokens.peek();
   if (!tok) return parse_postfix_expression();
 
@@ -458,14 +457,14 @@ ayla::ast::ExpressionNode *Parser::parse_unary_expression() {
   return unit.ast.create_node<ayla::ast::node::UnaryExpressionNode>(op, operand);
 }
 
-ayla::ast::node::ArrayLiteralNode *Parser::parse_array_literal() {
+ayla::ast::node::ArrayLiteralNode *ayla::syntax::Parser::parse_array_literal() {
 
   auto elements = parse_generic_list<ayla::ast::ExpressionNode>(TokenKind::OPEN_BRACKET, TokenKind::CLOSE_BRACKET, TokenKind::COMMA, [&]() { return parse_expression(); });
 
   return unit.ast.create_node<ayla::ast::node::ArrayLiteralNode>(std::move(elements));
 }
 
-ayla::ast::StatementNode *Parser::parse_import_statement() {
+ayla::ast::StatementNode *ayla::syntax::Parser::parse_import_statement() {
 
   if (!unit.tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
 
@@ -474,7 +473,7 @@ ayla::ast::StatementNode *Parser::parse_import_statement() {
   // primeiro identificador é obrigatório
   auto *name_token = unit.tokens.match(TokenKind::IDENTIFIER);
   if (!name_token) {
-    report_error(DiagnosticCode::ExpectedToken, "expected module name after 'import'", unit.tokens.peek_slice());
+    // report_error(DiagnosticCode::ExpectedToken, "expected module name after 'import'", unit.tokens.peek_slice());
     return nullptr;
   }
 
@@ -486,7 +485,7 @@ ayla::ast::StatementNode *Parser::parse_import_statement() {
 
     name_token = unit.tokens.match(TokenKind::IDENTIFIER);
     if (!name_token) {
-      report_error(DiagnosticCode::ExpectedToken, "expected identifier after '.' in import path", unit.tokens.peek_slice());
+      // report_error(DiagnosticCode::ExpectedToken, "expected identifier after '.' in import path", unit.tokens.peek_slice());
       break;
     }
   }
@@ -496,13 +495,13 @@ ayla::ast::StatementNode *Parser::parse_import_statement() {
   return node;
 }
 
-ayla::ast::StatementNode *Parser::parse_if_statement() {
+ayla::ast::StatementNode *ayla::syntax::Parser::parse_if_statement() {
   if (!unit.tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
 
   auto *condition = parse_expression();
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::ConditionMissing, "expected condition after 'if'");
+    // report_error(DiagnosticCode::ConditionMissing, "expected condition after 'if'");
 
     recover_until(RecoverBoundary::If);
 
@@ -511,7 +510,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
 
   if (condition->kind == ayla::ast::NodeKind::AssignmentExpression) {
 
-    report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
+    // report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 
     recover_until(RecoverBoundary::If);
 
@@ -522,7 +521,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
 
   if (then_block->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::BlockError, "error in then block");
+    // report_error(DiagnosticCode::BlockError, "error in then block");
 
     recover_until(RecoverBoundary::If);
 
@@ -539,7 +538,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
 
     if (else_block && else_block->flags.has(NodeFlags::HasError)) {
 
-      report_error(DiagnosticCode::BlockError, "error in else block");
+      // report_error(DiagnosticCode::BlockError, "error in else block");
 
       recover_until(RecoverBoundary::If);
 
@@ -549,7 +548,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
 
   return unit.ast.create_node<ayla::ast::node::IfStatementNode>(condition, then_block, else_block);
 }
-ayla::ast::StatementNode *Parser::parse_statement() {
+ayla::ast::StatementNode *ayla::syntax::Parser::parse_statement() {
   auto modifiers = parse_modifiers();
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;
@@ -577,7 +576,7 @@ ayla::ast::StatementNode *Parser::parse_statement() {
   }
 }
 
-ayla::ast::TypeNode *Parser::parse_type() {
+ayla::ast::TypeNode *ayla::syntax::Parser::parse_type() {
   auto identifier = parse_identifier();
   if (!identifier) return nullptr;
 
@@ -587,7 +586,7 @@ ayla::ast::TypeNode *Parser::parse_type() {
   return unit.ast.create_node<ayla::ast::TypeNode>(type_name, generic_args);
 }
 
-ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
+ayla::ast::node::WhileStatementNode *ayla::syntax::Parser::parse_while_statemente() {
 
   if (!unit.tokens.match(TokenKind::WHILE_KEYWORD)) return nullptr;
 
@@ -595,7 +594,7 @@ ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
 
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::ConditionMissing, "expected condition after 'while'");
+    // report_error(DiagnosticCode::ConditionMissing, "expected condition after 'while'");
 
     recover_until(RecoverBoundary::If);
 
@@ -604,7 +603,7 @@ ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
 
   if (condition->kind == ayla::ast::NodeKind::AssignmentExpression) {
 
-    report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
+    // report_error(DiagnosticCode::ConditionAssignment, "assignment is not allowed in if condition");
 
     recover_until(RecoverBoundary::If);
 
@@ -615,7 +614,7 @@ ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
 
   if (block->flags.has(NodeFlags::HasError)) {
 
-    report_error(DiagnosticCode::BlockError, "error in while block");
+    // report_error(DiagnosticCode::BlockError, "error in while block");
 
     recover_until(RecoverBoundary::If);
 
@@ -625,7 +624,7 @@ ayla::ast::node::WhileStatementNode *Parser::parse_while_statemente() {
   return unit.ast.create_node<ayla::ast::node::WhileStatementNode>(condition, block);
 }
 
-ayla::ast::PatternNode *Parser::parse_pattern() {
+ayla::ast::PatternNode *ayla::syntax::Parser::parse_pattern() {
   auto *id = parse_identifier();
   if (!id) return nullptr;
 

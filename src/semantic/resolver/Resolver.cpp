@@ -1,8 +1,6 @@
-#include "Resolver.hpp"
-#include "ast/expressions/UnaryExpressionNode.hpp"
-#include "core/node/flags.hpp"
+#include "ayla/semantic/resolver/resolver.hpp"
 
-void Resolver::resolve(ayla::ast::AstNode *node) {
+void ayla::semantic::Resolver::resolve(ayla::ast::AstNode *node) {
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
 
@@ -90,9 +88,9 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
     resolve_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node));
     break;
 
-  case ayla::ast::NodeKind::Type:
-    resolve_type_node(static_cast<ayla::ast::TypeNode *>(node));
-    break;
+    // case ayla::ast::NodeKind::Type:
+    //   resolve_type_node(static_cast<ayla::ast::TypeNode *>(node));
+    //   break;
 
   case ayla::ast::NodeKind::UnaryExpression:
     resolve_unary_exp(static_cast<ayla::ast::node::UnaryExpressionNode *>(node));
@@ -103,8 +101,8 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   }
 }
 
-void Resolver::push_scope() { current_scope = unit.scope_manager.create_scope(current_scope); }
+void ayla::semantic::Resolver::push_scope() { current_scope = unit.scope_manager.create_scope(current_scope); }
 
-void Resolver::pop_scope() { current_scope = current_scope->parent; }
+void ayla::semantic::Resolver::pop_scope() { current_scope = current_scope->parent; }
 
 // blocos e funções

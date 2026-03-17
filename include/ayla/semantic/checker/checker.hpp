@@ -21,7 +21,7 @@
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 
-namespace ayla {
+namespace ayla::semantic {
 struct Checker {
 
   CompilationUnit &unit;
@@ -67,10 +67,5 @@ struct Checker {
   void check_module_declaration(ast::node::ModuleDeclarationNode *node);
   void check_assign_expression(ast::node::AssignmentExpressionNode *node);
   void check_expression_statement(ast::node::ExpressionStatementNode *node);
-
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-    auto *diag = unit.diagns.create(code, slice);
-    for (auto &[k, v] : ctx) { diag->context.set(k, v); }
-  }
 };
-} // namespace ayla
+} // namespace ayla::semantic

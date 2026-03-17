@@ -1,6 +1,6 @@
-#include "lexer.hpp"
+#include "ayla/syntax/lexer/lexer.hpp"
 
-Token *Lexer::match_identifier() {
+Token *ayla::syntax::Lexer::match_identifier() {
 
   auto start = stream.get_state();
   char32_t c = stream.peek();

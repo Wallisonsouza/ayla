@@ -1,11 +1,11 @@
 #pragma once
 
-#include "SourceBuffer.hpp"
+#include "ayla/source/source_buffer.hpp"
 #include "utils/TextLoader.hpp"
 #include <string>
 #include <utility>
 
-namespace core::source {
+namespace ayla::source {
 
 struct Source {
   std::string path;
@@ -14,4 +14,4 @@ struct Source {
   Source(std::string p) : path(std::move(p)), buffer(utils::TextLoader::load_file(path)) {}
 };
 
-} // namespace core::source
+} // namespace ayla::source

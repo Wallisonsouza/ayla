@@ -1,6 +1,6 @@
-#include "semantic/resolver/Resolver.hpp"
+#include "ayla/semantic/resolver/resolver.hpp"
 
-void Resolver::resolve_type_node(ayla::ast::TypeNode *node) {
+void ayla::semantic::Resolver::resolve_type_node(ayla::ast::TypeNode *node) {
   if (!node) return;
 
   // SymbolId sym_id = current_scope->resolve_symbol(node->name);

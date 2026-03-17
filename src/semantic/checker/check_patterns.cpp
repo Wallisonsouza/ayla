@@ -1,8 +1,8 @@
-#include "semantic/checker/type_checker.hpp"
 
+#include "ayla/semantic/checker/checker.hpp"
 namespace ayla {
 
-void Checker::check_pattern(ast::PatternNode *node) {
+void ayla::semantic::Checker::check_pattern(ast::PatternNode *node) {
   if (!node) return;
 
   if (auto *idPattern = dynamic_cast<ast::IdentifierPatternNode *>(node)) {

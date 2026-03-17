@@ -1,6 +1,6 @@
-#include "lexer.hpp"
+#include "ayla/syntax/lexer/lexer.hpp"
 
-Token *Lexer::match_operator() {
+Token *ayla::syntax::Lexer::match_operator() {
   auto start = stream.get_state();
 
   const auto *node = unit.context.descriptor_table.trie().root();
@@ -11,12 +11,10 @@ Token *Lexer::match_operator() {
 
   while (true) {
     char32_t c = stream.peek_n(offset);
-    if (!c)
-      break;
+    if (!c) break;
 
     node = node->child(c);
-    if (!node)
-      break;
+    if (!node) break;
 
     offset++;
 
@@ -26,8 +24,7 @@ Token *Lexer::match_operator() {
     }
   }
 
-  if (!best)
-    return nullptr;
+  if (!best) return nullptr;
 
   stream.advance_n(best_len);
   auto slice = stream.slice_from(start);
