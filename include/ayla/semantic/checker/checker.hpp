@@ -1,6 +1,5 @@
 #pragma once
 
-#include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/types/BuiltinTypes.hpp"
 

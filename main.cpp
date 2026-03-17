@@ -1,3 +1,4 @@
+#include "ayla/syntax/ast/AstNode.hpp"
 #include "engine/Session.hpp"
 #include "language/argon_main.hpp"
 #include "pipeline/passes/ByteCodePass.hpp"

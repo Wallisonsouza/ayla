@@ -4,56 +4,6 @@ namespace ayla {
 
 void ayla::semantic::Checker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
 
-  if (!node) return;
-
-  check(node->lhs);
-  check(node->rhs);
-
-  Type *l = node->lhs ? node->lhs->inferred_type : &BuiltinTypes::Unknown;
-  Type *r = node->rhs ? node->rhs->inferred_type : &BuiltinTypes::Unknown;
-
-  switch (node->op) {
-
-  case ast::BinaryOperation::Add:
-  case ast::BinaryOperation::Subtract:
-  case ast::BinaryOperation::Multiply:
-  case ast::BinaryOperation::Divide:
-
-    // if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
-
-    node->inferred_type = &BuiltinTypes::Number;
-    break;
-
-  case ast::BinaryOperation::And:
-  case ast::BinaryOperation::Or:
-
-    // if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
-
-    node->inferred_type = &BuiltinTypes::Boolean;
-    break;
-
-  case ast::BinaryOperation::Less:
-  case ast::BinaryOperation::LessEqual:
-  case ast::BinaryOperation::Greater:
-  case ast::BinaryOperation::GreaterEqual:
-
-    // if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
-
-    node->inferred_type = &BuiltinTypes::Boolean;
-    break;
-
-  case ast::BinaryOperation::Equal:
-  case ast::BinaryOperation::NotEqual:
-
-    // if (l != r) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
-
-    node->inferred_type = &BuiltinTypes::Boolean;
-    break;
-
-  default:
-    node->inferred_type = &BuiltinTypes::Unknown;
-    break;
-  }
 }
 
 void ayla::semantic::Checker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
