@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ayla-compilation/unit.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
@@ -8,13 +9,12 @@
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
-#include "engine/CompilationUnit.hpp"
 
 struct TypeChecker {
 
-  CompilationUnit &unit;
+  ayla::compilation::Unit &unit;
 
-  explicit TypeChecker(CompilationUnit &unit) : unit(unit) {}
+  explicit TypeChecker(ayla::compilation::Unit &unit) : unit(unit) {}
 
   void check(core::ast::ASTNode *node);
 

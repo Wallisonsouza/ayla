@@ -1,10 +1,18 @@
 #pragma once
-#include "core/memory/Arena.hpp"
-#include "engine/CompilationUnit.hpp"
+
+#include "ayla-compilation/unit.hpp"
+#include "core/source/Source.hpp"
 
 class CompilationUnitManager {
-  core::memory::Arena arena;
 
 public:
-  CompilationUnit *create_compilation_unit(LanguageContext &ctx, core::source::Source &src) { return arena.alloc<CompilationUnit>(ctx, src); }
+  std::vector<std::unique_ptr<ayla::compilation::Unit>> units;
+
+  ayla::compilation::Unit &create(ayla::compilation::Context &ctx, core::source::Source &src) {
+    auto unit = std::make_unique<ayla::compilation::Unit>(ctx, src);
+    auto &ref = *unit;
+
+    units.push_back(std::move(unit));
+    return ref;
+  }
 };

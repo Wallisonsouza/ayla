@@ -1,4 +1,5 @@
 #pragma once
+#include "ayla-compilation/unit.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
@@ -8,14 +9,13 @@
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
-#include "engine/CompilationUnit.hpp"
 
 struct Resolver {
 
   core::ParserScope *current_scope;
-  CompilationUnit &unit;
+  ayla::compilation::Unit &unit;
 
-  explicit Resolver(CompilationUnit &unit, core::ParserScope *global) : unit(unit), current_scope(global) {}
+  explicit Resolver(ayla::compilation::Unit &unit, core::ParserScope *global) : unit(unit), current_scope(global) {}
 
   void resolve(core::ast::ASTNode *node);
 
@@ -57,8 +57,8 @@ struct Resolver {
   void resolve_expression_statement(core::ast::ExpressionStatementNode *node);
 
   void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-    auto *diag = unit.diagns.create(code, slice);
+    // auto *diag = unit.diagns.create(code, slice);
 
-    for (auto &[k, v] : ctx) { diag->context.set(k, v); }
+    // for (auto &[k, v] : ctx) { diag->context.set(k, v); }
   }
 };

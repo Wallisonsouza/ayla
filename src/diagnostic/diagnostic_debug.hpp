@@ -49,24 +49,18 @@ struct CutLine {
 // ------------------------------------------------------------
 // UTF-8 helpers
 // ------------------------------------------------------------
-inline const char *compute_display_start(const char *line_ptr,
-                                         const char *span_begin,
-                                         size_t context = 10) {
+inline const char *compute_display_start(const char *line_ptr, const char *span_begin, size_t context = 10) {
   const char *p = span_begin;
   size_t back = 0;
 
   while (p > line_ptr && back < context) {
-    do {
-      --p;
-    } while (((*p) & 0b11000000) == 0b10000000);
+    do { --p; } while (((*p) & 0b11000000) == 0b10000000);
     ++back;
   }
   return p;
 }
 
-inline const char *compute_display_end(const char *line_end,
-                                       const char *span_end,
-                                       size_t context = 10) {
+inline const char *compute_display_end(const char *line_end, const char *span_end, size_t context = 10) {
   const char *p = span_end;
   size_t forward = 0;
 
@@ -81,9 +75,7 @@ inline const char *compute_display_end(const char *line_end,
 // ------------------------------------------------------------
 // Corte de linha com ...
 // ------------------------------------------------------------
-inline CutLine cut_line(std::string_view line, const core::source::Span &span,
-                        std::string_view cut_prefix = "...",
-                        std::string_view cut_suffix = "...") {
+inline CutLine cut_line(std::string_view line, const core::source::Span &span, std::string_view cut_prefix = "...", std::string_view cut_suffix = "...") {
   const char *line_ptr = line.data();
   const char *line_end = line_ptr + line.size();
 
@@ -98,23 +90,18 @@ inline CutLine cut_line(std::string_view line, const core::source::Span &span,
 
   out.text.append(out.start, out.end);
 
-  if (out.end != line_end)
-    out.text += cut_suffix;
+  if (out.end != line_end) out.text += cut_suffix;
 
   return out;
 }
 
-inline bool is_multiline(const SourceSlice &slice) {
-  return slice.range.begin.line != slice.range.end.line;
-}
+inline bool is_multiline(const SourceSlice &slice) { return slice.range.begin.line != slice.range.end.line; }
 
 // ------------------------------------------------------------
 // Ponteiros (~, ^, path genérico)
 // ------------------------------------------------------------
-inline std::string fill_line(const char *display_start, const char *display_end,
-                             const char *span_begin, const char *span_end,
-                             int prefix_offset, std::string_view fill = " ",
-                             std::string_view mark = "~") {
+inline std::string
+fill_line(const char *display_start, const char *display_end, const char *span_begin, const char *span_end, int prefix_offset, std::string_view fill = " ", std::string_view mark = "~") {
   std::string out;
   const char *p = display_start;
 
@@ -124,11 +111,9 @@ inline std::string fill_line(const char *display_start, const char *display_end,
     int w = utils::Unicode::char_width(cp);
 
     if (p >= span_begin && p < span_end) {
-      for (int i = 0; i < w; ++i)
-        out += mark;
+      for (int i = 0; i < w; ++i) out += mark;
     } else {
-      for (int i = 0; i < w; ++i)
-        out += fill;
+      for (int i = 0; i < w; ++i) out += fill;
     }
 
     p += len;
@@ -140,19 +125,14 @@ inline std::string fill_line(const char *display_start, const char *display_end,
 // ------------------------------------------------------------
 // Diagnóstico principal
 // ------------------------------------------------------------
-inline void print_diagnostic(const std::string &title, std::string &message,
-                             const std::string &help, const SourceSlice &slice,
-                             const core::source::Source &source) {
+inline void print_diagnostic(const std::string &title, std::string &message, const std::string &help, const SourceSlice &slice, const core::source::Source &source) {
   constexpr std::string_view CUT = "...";
 
   // Cabeçalho do erro
   debug::Console::log(ERR_LABEL, "[", title, "] ", ERR_TEXT, message);
 
   // Linha de localização
-  debug::Console::log(ARROW, "--> ", LINE_INFO, "line ", LINE_INFO,
-                      std::to_string(slice.range.begin.line), LINE_INFO,
-                      " col ", LINE_INFO,
-                      std::to_string(slice.range.begin.column), LINE_INFO, "..",
+  debug::Console::log(ARROW, "--> ", LINE_INFO, "line ", LINE_INFO, std::to_string(slice.range.begin.line), LINE_INFO, " col ", LINE_INFO, std::to_string(slice.range.begin.column), LINE_INFO, "..",
                       LINE_INFO, std::to_string(slice.range.end.column));
 
   debug::Console::log(debug::Color::BrightBlack, source.path);
@@ -169,21 +149,16 @@ inline void print_diagnostic(const std::string &title, std::string &message,
   debug::Console::log(LINE_NO, ln.str(), SEP, " | ", CODE_TEXT, cut.text);
 
   // Imprime os tildes cobrindo todo o slice
-  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", TILDE,
-                      fill_line(cut.start, cut.end, slice.span.begin,
-                                slice.span.end, cut.prefix_offset));
+  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", TILDE, fill_line(cut.start, cut.end, slice.span.begin, slice.span.end, cut.prefix_offset));
 
   // Caret no final do slice
-  int caret_pos =
-      static_cast<int>(slice.span.end - cut.start) + cut.prefix_offset - 1;
-  if (caret_pos < 0)
-    caret_pos = 0;
+  int caret_pos = static_cast<int>(slice.span.end - cut.start) + cut.prefix_offset - 1;
+  if (caret_pos < 0) caret_pos = 0;
 
   std::string caret_line(caret_pos, ' ');
   caret_line += "^";
 
-  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", CARET,
-                      caret_line, HELP_TEXT, " help: ", help);
+  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", CARET, caret_line, HELP_TEXT, " help: ", help);
 
   std::cout << std::endl;
 }

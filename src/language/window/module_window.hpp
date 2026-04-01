@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/language_context.hpp"
+#include "ayla-compilation/context.hpp"
 #include "language/window/WindowBackend.hpp"
 
-inline void create_module_window(LanguageContext &ctx) {
+inline void create_module_window(ayla::compilation::Context &ctx) {
 
   auto module_id = ctx.module_manager.create_module("window");
   auto module = ctx.module_manager.get(module_id);

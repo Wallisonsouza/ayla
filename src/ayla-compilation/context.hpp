@@ -5,13 +5,15 @@
 #include "core/table/TokenTable.hpp"
 #include "language/BackendRegistry.hpp"
 
-struct LanguageContext {
-  
+namespace ayla::compilation {
+struct Context {
+
   core::table::DescriptorTable descriptor_table;
   core::table::PrecedenceTable precedence_table;
   core::ModuleManager module_manager;
   core::ParserScope root_scope;
   BackendRegistry backends;
 
-  LanguageContext() : root_scope(nullptr) {}
+  Context() : root_scope(nullptr) {}
 };
+} // namespace ayla::compilation

@@ -1,15 +1,15 @@
 #pragma once
+#include "ayla-compilation/context.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
-#include "engine/language_context.hpp"
 #include "language/window/GLFWBackend.hpp"
 #include "language/window/module_window.hpp"
 
 namespace ayla::language {
 
-inline LanguageContext create_context() {
+inline ayla::compilation::Context create_context() {
 
-  auto context = LanguageContext();
+  auto context = ayla::compilation::Context();
 
   context.backends.set<WindowBackend>(std::make_shared<GLFWBackend>());
 

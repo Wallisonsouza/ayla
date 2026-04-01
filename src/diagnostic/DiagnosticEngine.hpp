@@ -4,15 +4,17 @@
 
 #include <vector>
 
-struct CompilationUnit;
+namespace ayla::compilation {
+struct Unit;
+}
 
 class DiagnosticEngine {
-  const CompilationUnit &unit;
+  const ayla::compilation::Unit &unit;
   core::memory::Arena arena_;
   std::vector<Diagnostic *> diagnostics_;
 
 public:
-  explicit DiagnosticEngine(const CompilationUnit &unit) : unit(unit) {}
+  explicit DiagnosticEngine(const ayla::compilation::Unit &unit) : unit(unit) {}
 
   Diagnostic *create(DiagnosticCode code, const SourceSlice &slice) {
     auto *diag = arena_.alloc<Diagnostic>();

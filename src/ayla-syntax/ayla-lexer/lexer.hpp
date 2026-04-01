@@ -1,13 +1,13 @@
 #pragma once
 
+#include "ayla-compilation/unit.hpp"
 #include "core/source/TextStream.hpp"
 #include "core/token/Token.hpp"
-#include "engine/CompilationUnit.hpp"
 #include "utils/Unicode.hpp"
 
 struct Lexer {
 private:
-  CompilationUnit &unit;
+  ayla::compilation::Unit &unit;
   core::source::TextStream stream;
 
   Token *match_token() {
@@ -24,7 +24,7 @@ private:
   }
 
 public:
-  Lexer(CompilationUnit &unit) : unit(unit), stream(unit.source.buffer) {};
+  Lexer(ayla::compilation::Unit &unit) : unit(unit), stream(unit.source.buffer) {};
 
   Token *match_identifier();
   Token *match_string();

@@ -1,36 +1,25 @@
-#include "diagnostic/formatter.hpp"
-#include "engine/CompilationUnit.hpp"
-#include "engine/Engine.hpp"
-#include "engine/runtime/executor.hpp"
-#include "engine/runtime/runtime_scope.hpp"
+#include "ayla-compilation/session.hpp"
+#include "ayla-pipeline/lexer_pass.hpp"
+#include "ayla-pipeline/parser_pass.hpp"
+#include "ayla-pipeline/resolver_pass.hpp"
 #include "language/argon_main.hpp"
-#include <iostream>
-#include <ostream>
 #include <string>
 
 int main() {
 
   auto context = ayla::language::create_context();
-  auto engine = Engine(context);
 
-  std::vector<std::string> scripts = {
-      "/home/wallison/Documentos/c++/ayla-lang/src/tests/window_module.ay",
-      "/home/wallison/Documentos/c++/ayla-lang/src/tests/main.ay",
-  };
+  ayla::compilation::Session session(context);
 
-  for (auto &path : scripts) {
-    try {
-      auto exec = engine.create_execution(path);
-      exec->execute();
+  session.add_pass(std::make_unique<LexerPass>());
+  session.add_pass(std::make_unique<ParsePass>());
+  session.add_pass(std::make_unique<ResolvePass>());
 
-      for (auto &diag : exec->comp_unit.diagns.all()) { print(*diag, exec->comp_unit); }
+  session.add_unity("/home/wallison/Documentos/git/ayla/src/stdlib/io.ayla");
 
-      RuntimeScope scope;
-      Executor interpreter(&scope);
-      interpreter.execute_ast(exec->comp_unit);
+  session.add_unity("/home/wallison/Documentos/git/ayla/main.ayla");
 
-    } catch (const std::exception &e) { std::cerr << "Erro ao executar " << path << ": " << e.what() << std::endl; }
-  }
+  session.run_pipeline();
 
   return 0;
 }

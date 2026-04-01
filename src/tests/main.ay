@@ -1,5 +1,5 @@
-import window
 
-window.create(100, 200, "test")
+import console
+
 
 

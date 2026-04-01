@@ -5,7 +5,7 @@
 #include <variant>
 
 struct DiagnosticValueRenderer {
-  const CompilationUnit &unit;
+  const ayla::compilation::Unit &unit;
 
   std::string operator()(const std::string &s) const { return s; }
 
@@ -14,9 +14,9 @@ struct DiagnosticValueRenderer {
   std::string operator()(core::ast::NodeKind k) const { return "unit.context.node_names.at(k);"; }
 };
 
-std::string render_value(const DiagnosticValue &v, const CompilationUnit &unit) { return std::visit(DiagnosticValueRenderer{unit}, v); }
+std::string render_value(const DiagnosticValue &v, const ayla::compilation::Unit &unit) { return std::visit(DiagnosticValueRenderer{unit}, v); }
 
-std::string apply_template(const std::string &tmpl, const DiagnosticContext &ctx, const CompilationUnit &unit) {
+std::string apply_template(const std::string &tmpl, const DiagnosticContext &ctx, const ayla::compilation::Unit &unit) {
 
   std::string out;
   out.reserve(tmpl.size());
@@ -43,7 +43,7 @@ std::string apply_template(const std::string &tmpl, const DiagnosticContext &ctx
   return out;
 }
 
-void print(const Diagnostic &diag, const CompilationUnit &unit) {
+void print(const Diagnostic &diag, const ayla::compilation::Unit &unit) {
 
   auto it = DIAG_PT_BR.find(diag.code);
   if (it == DIAG_PT_BR.end()) {

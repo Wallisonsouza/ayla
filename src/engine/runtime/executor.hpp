@@ -1,16 +1,14 @@
 #pragma once
+#include "ayla-compilation/unit.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
 #include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
 #include "core/memory/symbol.hpp"
 #include "core/memory/value.hpp"
-#include "core/module/module.hpp"
 #include "core/node/BinaryOp.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
-#include "debug/engine/node/ast_debug.hpp"
-#include "engine/CompilationUnit.hpp"
 #include "runtime_scope.hpp"
 #include <iostream>
 #include <memory>
@@ -34,7 +32,7 @@ struct Executor {
 
   Executor(RuntimeScope *scope) : current_scope(scope) {}
 
-  ExecResult execute_node(CompilationUnit &unit, core::ast::ASTNode *node) {
+  ExecResult execute_node(ayla::compilation::Unit &unit, core::ast::ASTNode *node) {
     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
 
     switch (node->kind) {
@@ -79,9 +77,9 @@ struct Executor {
     }
   }
 
-  ExecResult execute_module_declaration(CompilationUnit &unit, parser::node::statement::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
+  ExecResult execute_module_declaration(ayla::compilation::Unit &unit, parser::node::statement::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
 
-  ExecResult execute_import_node(CompilationUnit &unit, parser::node::statement::ImportNode *node) {
+  ExecResult execute_import_node(ayla::compilation::Unit &unit, parser::node::statement::ImportNode *node) {
 
     auto module_id = node->resolved_module_id;
 
@@ -113,16 +111,13 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_function_call(CompilationUnit &unit, parser::node::FunctionCallNode *node) {
-
-    ASTDebug debug;
+  ExecResult execute_function_call(ayla::compilation::Unit &unit, parser::node::FunctionCallNode *node) {
 
     auto callee = execute_node(unit, node->callee).value;
 
     std::vector<Value> args;
     for (auto *arg_node : node->arguments) {
 
-      debug.debug_node(arg_node, true);
       auto v = execute_node(unit, arg_node).value;
       args.push_back(*v);
     }
@@ -166,12 +161,12 @@ struct Executor {
   }
 
   // ===================== STATEMENTS =====================
-  ExecResult execute_expression_statement(CompilationUnit &unit, core::ast::ExpressionStatementNode *node) {
+  ExecResult execute_expression_statement(ayla::compilation::Unit &unit, core::ast::ExpressionStatementNode *node) {
     execute_node(unit, node->expression);
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_block(CompilationUnit &unit, parser::node::BlockStatementNode *block) {
+  ExecResult execute_block(ayla::compilation::Unit &unit, parser::node::BlockStatementNode *block) {
 
     ScopeGuard guard(this);
 
@@ -184,7 +179,7 @@ struct Executor {
     return last;
   }
 
-  ExecResult execute_if(CompilationUnit &unit, parser::node::IfStatementNode *node) {
+  ExecResult execute_if(ayla::compilation::Unit &unit, parser::node::IfStatementNode *node) {
     auto cond = execute_node(unit, node->condition);
     if (cond.value->as_bool()) return execute_block(unit, node->then_block);
 
@@ -193,7 +188,7 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_while(CompilationUnit &unit, parser::node::ASTWhileStatementNode *node) {
+  ExecResult execute_while(ayla::compilation::Unit &unit, parser::node::ASTWhileStatementNode *node) {
 
     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
@@ -204,14 +199,14 @@ struct Executor {
     return last;
   }
 
-  ExecResult execute_return(CompilationUnit &unit, parser::node::ReturnStatementNode *node) {
+  ExecResult execute_return(ayla::compilation::Unit &unit, parser::node::ReturnStatementNode *node) {
     if (!node->value) return ExecResult::make_return(std::make_shared<Value>(Value::Void()));
 
     return ExecResult::make_return(execute_node(unit, node->value).value);
   }
 
   // ===================== ARRAYS =====================
-  ExecResult execute_array(CompilationUnit &unit, parser::node::ASTArrayLiteralNode *node) {
+  ExecResult execute_array(ayla::compilation::Unit &unit, parser::node::ASTArrayLiteralNode *node) {
     Value::array elements;
 
     for (auto *el : node->elements) {
@@ -223,7 +218,7 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Array(std::move(elements))));
   }
 
-  ExecResult execute_index_access(CompilationUnit &unit, parser::node::IndexAccessNode *node) {
+  ExecResult execute_index_access(ayla::compilation::Unit &unit, parser::node::IndexAccessNode *node) {
     auto base = execute_node(unit, node->base).value;
     auto index = execute_node(unit, node->index).value;
 
@@ -238,7 +233,7 @@ struct Executor {
   }
 
   // ===================== BINARY =====================
-  ExecResult execute_binary(CompilationUnit &unit, parser::node::BinaryExpressionNode *node) {
+  ExecResult execute_binary(ayla::compilation::Unit &unit, parser::node::BinaryExpressionNode *node) {
     auto lhs = execute_node(unit, node->lhs).value;
     auto rhs = execute_node(unit, node->rhs).value;
 
@@ -260,16 +255,16 @@ struct Executor {
   // ===================== VARIABLES =====================
   ExecResult execute_identifier(core::ast::IdentifierNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
 
-  ExecResult execute_path(CompilationUnit &unit, parser::node::MemberAccessNode *member) { return ExecResult::make_value(current_scope->get(member->resolved_symbol_id)); }
+  ExecResult execute_path(ayla::compilation::Unit &unit, parser::node::MemberAccessNode *member) { return ExecResult::make_value(current_scope->get(member->resolved_symbol_id)); }
 
-  ExecResult execute_variable_declaration(CompilationUnit &unit, core::ast::PatternNode *node) {
+  ExecResult execute_variable_declaration(ayla::compilation::Unit &unit, core::ast::PatternNode *node) {
     auto val = node->value ? execute_node(unit, node->value).value : std::make_shared<Value>(Value::Null());
 
     current_scope->set(node->symbol_id, val);
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
-  ExecResult execute_assignment(CompilationUnit &unit, parser::node::statement::AssignmentNode *node) {
+  ExecResult execute_assignment(ayla::compilation::Unit &unit, parser::node::statement::AssignmentNode *node) {
     auto rhs = execute_node(unit, node->value).value;
 
     // a = ...
@@ -300,7 +295,7 @@ struct Executor {
     throw std::runtime_error("Invalid assignment target");
   }
 
-  ExecResult execute_function_declaration(CompilationUnit &unit, parser::node::FunctionDeclarationNode *node) {
+  ExecResult execute_function_declaration(ayla::compilation::Unit &unit, parser::node::FunctionDeclarationNode *node) {
 
     if (node->native_fn) {
       current_scope->set(node->symbol_id, std::make_shared<Value>(Value::Native(*node->native_fn)));
@@ -311,7 +306,7 @@ struct Executor {
     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
   // ===================== ENTRY =====================
-  void execute_ast(CompilationUnit &unit) {
+  void execute_ast(ayla::compilation::Unit &unit) {
     if (!unit.diagns.all().empty()) return;
     for (auto *n : unit.ast.get_nodes()) execute_node(unit, n);
   }

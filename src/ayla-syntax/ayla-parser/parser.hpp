@@ -1,4 +1,5 @@
 #pragma once
+#include "ayla-compilation/unit.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
 #include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
@@ -7,7 +8,6 @@
 #include "core/node/Type.hpp"
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
-#include "engine/CompilationUnit.hpp"
 enum class ParserResultCode { Success, Error };
 
 template <typename NodeType> struct ParserResult {
@@ -20,7 +20,7 @@ template <typename NodeType> struct ParserResult {
 };
 
 struct Parser {
-  CompilationUnit &unit;
+  ayla::compilation::Unit &unit;
 
   core::ast::TypeNode *parse_type();
 

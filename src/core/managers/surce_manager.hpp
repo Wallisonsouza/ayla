@@ -1,10 +1,22 @@
 #pragma once
-#include "core/memory/Arena.hpp"
+
 #include "core/source/Source.hpp"
+#include <memory>
+#include <unordered_map>
 
 class SourceManager {
-  core::memory::Arena arena;
+  std::unordered_map<std::string, std::unique_ptr<core::source::Source>> sources;
 
 public:
-  core::source::Source *create_source(const std::string &path) { return arena.alloc<core::source::Source>(path); }
+  core::source::Source &load(const std::string &path) {
+
+    auto it = sources.find(path);
+    if (it != sources.end()) return *it->second;
+
+    auto src = std::make_unique<core::source::Source>(path);
+    auto &ref = *src;
+
+    sources[path] = std::move(src);
+    return ref;
+  }
 };
