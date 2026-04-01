@@ -1,9 +1,9 @@
 #pragma once
 
 #include "ayla-source/source.hpp"
+#include "ayla-syntax/ayla-parser/scope.hpp"
 #include "core/memory/symbol.hpp"
 #include "core/memory/value.hpp"
-#include "core/module/scope.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"

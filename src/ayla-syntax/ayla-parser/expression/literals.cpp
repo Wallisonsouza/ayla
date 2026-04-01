@@ -1,15 +1,15 @@
 #include "ayla-structural/ayla-token/token.hpp"
 #include "ayla-syntax/ayla-parser/parser.hpp"
 
-core::ast::ASTExpressionNode *Parser::parse_number_literal() {
-  ayla::structural::token::Token *token = unit.tokens.match(ayla::structural::token::TokenKind::NUMBER_LITERAL);
+core::ast::IdentifierNode *Parser::parse_identifier() {
+
+  ayla::structural::token::Token *token = unit.tokens.match(ayla::structural::token::TokenKind::IDENTIFIER);
   if (!token) return nullptr;
 
-  std::string text = unit.source.buffer.get_text(token->slice.span);
-  try {
-    double value = std::stod(text);
-    return unit.ast.create_node<parser::node::NumberLiteralNode>(value);
-  } catch (const std::exception &) { return nullptr; }
+  auto *node = unit.ast.create_node<core::ast::IdentifierNode>(unit.source.buffer.get_text(token->slice.span));
+  node->slice = token->slice;
+
+  return node;
 }
 
 core::ast::ASTExpressionNode *Parser::parse_string_literal() {
@@ -22,15 +22,15 @@ core::ast::ASTExpressionNode *Parser::parse_string_literal() {
   return unit.ast.create_node<parser::node::StringLiteralNode>(text);
 }
 
-core::ast::IdentifierNode *Parser::parse_identifier() {
-
-  ayla::structural::token::Token *token = unit.tokens.match(ayla::structural::token::TokenKind::IDENTIFIER);
+core::ast::ASTExpressionNode *Parser::parse_number_literal() {
+  ayla::structural::token::Token *token = unit.tokens.match(ayla::structural::token::TokenKind::NUMBER_LITERAL);
   if (!token) return nullptr;
 
-  auto *node = unit.ast.create_node<core::ast::IdentifierNode>(unit.source.buffer.get_text(token->slice.span));
-  node->slice = token->slice;
-
-  return node;
+  std::string text = unit.source.buffer.get_text(token->slice.span);
+  try {
+    double value = std::stod(text);
+    return unit.ast.create_node<parser::node::NumberLiteralNode>(value);
+  } catch (const std::exception &) { return nullptr; }
 }
 
 core::ast::ASTExpressionNode *Parser::parse_object_literal() {

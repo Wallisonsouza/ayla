@@ -24,9 +24,11 @@ void TypeChecker::check(core::ast::ASTNode *node) {
   case core::ast::NodeKind::IfStatement: check_if_statement(static_cast<parser::node::IfStatementNode *>(node)); break;
   case core::ast::NodeKind::WhileStatement: check_while_statement(static_cast<parser::node::ASTWhileStatementNode *>(node)); break;
   case core::ast::NodeKind::ReturnStatement: check_return_statement(static_cast<parser::node::ReturnStatementNode *>(node)); break;
-  case core::ast::NodeKind::BlockStatement: check_block(static_cast<parser::node::BlockStatementNode *>(node)); break;
-  case core::ast::NodeKind::Import: check_import_node(static_cast<parser::node::statement::ImportNode *>(node)); break;
-  case core::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<parser::node::statement::ModuleDeclarationNode *>(node)); break;
+  case core::ast::NodeKind::BlockStatement:
+    check_block(static_cast<parser::node::BlockStatementNode *>(node));
+    break;
+    // case core::ast::NodeKind::Import: check_import_node(static_cast<parser::node::statement::ImportNode *>(node)); break;
+    // case core::ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<parser::node::statement::ModuleDeclarationNode *>(node)); break;
 
   default: break;
   }

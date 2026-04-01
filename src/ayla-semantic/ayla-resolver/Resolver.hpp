@@ -1,11 +1,10 @@
 #pragma once
 #include "ayla-compilation/unit.hpp"
-#include "ayla-source/source.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
 #include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
-#include "core/module/scope.hpp"
+#include "ayla-syntax/ayla-parser/scope.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"

@@ -1,5 +1,5 @@
+#include "ayla-syntax/ayla-parser/scope.hpp"
 #include "core/memory/Arena.hpp"
-#include "core/module/scope.hpp"
 
 class ScopeManager {
   core::memory::Arena arena;

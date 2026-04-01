@@ -1,6 +1,5 @@
 #pragma once
-#include "core/module/module_manager.hpp"
-#include "core/module/scope.hpp"
+#include "ayla-syntax/ayla-parser/scope.hpp"
 #include "core/table/PrecedenceTable.hpp"
 #include "core/table/TokenTable.hpp"
 
@@ -9,7 +8,6 @@ struct Context {
 
   core::table::DescriptorTable descriptor_table;
   core::table::PrecedenceTable precedence_table;
-  core::ModuleManager module_manager;
   core::ParserScope root_scope;
   Context() : root_scope(nullptr) {}
 };

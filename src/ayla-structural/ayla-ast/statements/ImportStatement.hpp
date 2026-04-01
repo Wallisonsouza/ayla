@@ -1,6 +1,5 @@
 #pragma once
 #include "core/memory/symbol.hpp"
-#include "core/module/module.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include <optional>
@@ -12,7 +11,6 @@ namespace parser::node::statement {
 struct ModuleDeclarationNode : core::ast::ASTStatementNode {
   std::vector<core::ast::IdentifierNode *> path;
   std::vector<ASTNode *> body;
-  ModuleId resolved_module_id;
   SymbolId resolved_symbol_id;
 
   ModuleDeclarationNode(std::vector<core::ast::IdentifierNode *> p, std::vector<ASTNode *> b)
@@ -22,7 +20,6 @@ struct ModuleDeclarationNode : core::ast::ASTStatementNode {
 struct ImportNode : core::ast::ASTStatementNode {
   std::vector<core::ast::IdentifierNode *> path;
   std::optional<std::string> alias;
-  ModuleId resolved_module_id;
   SymbolId resolved_symbol_id;
 
   explicit ImportNode(std::vector<core::ast::IdentifierNode *> p) : ASTStatementNode(core::ast::NodeKind::Import), path(std::move(p)) {}

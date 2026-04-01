@@ -13,8 +13,6 @@ void Resolver::resolve_identifier(core::ast::IdentifierNode *node) {
   node->resolved_symbol_id = id;
 }
 
-void Resolver::resolve_number_literal(parser::node::NumberLiteralNode *node) {}
-
 void Resolver::resolve_string_literal(parser::node::StringLiteralNode *node) {}
 
 void Resolver::resolve_boolean_literal(parser::node::BoolLiteralNode *node) {}
