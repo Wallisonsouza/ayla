@@ -1,8 +1,6 @@
 #pragma once
-#include "core/source/Source.hpp"
-#include "core/source/SourceBuffer.hpp"
-#include "core/source/Span.hpp"
-#include "core/token/Location.hpp"
+
+#include "ayla-source/source.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 #include "utils/Unicode.hpp"
@@ -75,13 +73,13 @@ inline const char *compute_display_end(const char *line_end, const char *span_en
 // ------------------------------------------------------------
 // Corte de linha com ...
 // ------------------------------------------------------------
-inline CutLine cut_line(std::string_view line, const core::source::Span &span, std::string_view cut_prefix = "...", std::string_view cut_suffix = "...") {
+inline CutLine cut_line(std::string_view line, const std::string_view &span, std::string_view cut_prefix = "...", std::string_view cut_suffix = "...") {
   const char *line_ptr = line.data();
   const char *line_end = line_ptr + line.size();
 
   CutLine out;
-  out.start = compute_display_start(line_ptr, span.begin);
-  out.end = compute_display_end(line_end, span.end);
+  out.start = compute_display_start(line_ptr, span.begin());
+  out.end = compute_display_end(line_end, span.end());
 
   if (out.start != line_ptr) {
     out.text += cut_prefix;
@@ -95,7 +93,7 @@ inline CutLine cut_line(std::string_view line, const core::source::Span &span, s
   return out;
 }
 
-inline bool is_multiline(const SourceSlice &slice) { return slice.range.begin.line != slice.range.end.line; }
+inline bool is_multiline(const ayla::source::SourceSlice &slice) { return slice.range.begin.line != slice.range.end.line; }
 
 // ------------------------------------------------------------
 // Ponteiros (~, ^, path genérico)
@@ -125,7 +123,7 @@ fill_line(const char *display_start, const char *display_end, const char *span_b
 // ------------------------------------------------------------
 // Diagnóstico principal
 // ------------------------------------------------------------
-inline void print_diagnostic(const std::string &title, std::string &message, const std::string &help, const SourceSlice &slice, const core::source::Source &source) {
+inline void print_diagnostic(const std::string &title, std::string &message, const std::string &help, const ayla::source::SourceSlice &slice, const ayla::source::Source &source) {
   constexpr std::string_view CUT = "...";
 
   // Cabeçalho do erro
@@ -149,10 +147,10 @@ inline void print_diagnostic(const std::string &title, std::string &message, con
   debug::Console::log(LINE_NO, ln.str(), SEP, " | ", CODE_TEXT, cut.text);
 
   // Imprime os tildes cobrindo todo o slice
-  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", TILDE, fill_line(cut.start, cut.end, slice.span.begin, slice.span.end, cut.prefix_offset));
+  debug::Console::log(LINE_NO, std::string(ln_width, ' '), SEP, " | ", TILDE, fill_line(cut.start, cut.end, slice.span.begin(), slice.span.end(), cut.prefix_offset));
 
   // Caret no final do slice
-  int caret_pos = static_cast<int>(slice.span.end - cut.start) + cut.prefix_offset - 1;
+  int caret_pos = static_cast<int>(slice.span.end() - cut.start) + cut.prefix_offset - 1;
   if (caret_pos < 0) caret_pos = 0;
 
   std::string caret_line(caret_pos, ' ');

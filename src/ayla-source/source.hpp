@@ -1,11 +1,13 @@
 #pragma once
-#include "Span.hpp"
+
+#include "ayla-source/source_location.hpp"
 #include <cassert>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
-namespace core::source {
+namespace ayla::source {
 
 class SourceBuffer {
   std::string data;
@@ -32,9 +34,9 @@ public:
     return lines[line_number - 1];
   }
 
-  std::string get_text(const Span &span) const {
-    assert(span.begin >= data.data() && span.end <= data.data() + data.size());
-    return std::string(span.begin, span.end);
+  std::string get_text(const std::string_view &span) const {
+    assert(span.data() >= data.data() && span.data() + span.size() <= data.data() + data.size());
+    return std::string(span);
   }
 
   const char *line_begin(size_t line_number) const {
@@ -46,4 +48,11 @@ public:
   size_t line_count() const { return lines.size(); }
 };
 
-} // namespace core::source
+struct Source {
+  std::string path;
+  SourceBuffer buffer;
+
+  Source(std::string p) : path(std::move(p)), buffer(TextLoader::load_file(path)) {}
+};
+
+} // namespace ayla::source

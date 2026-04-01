@@ -47,7 +47,7 @@ struct TypeChecker {
   void check_module_declaration(parser::node::statement::ModuleDeclarationNode *node);
   void check_assignment(parser::node::statement::AssignmentNode *node);
   void check_expression_statement(core::ast::ExpressionStatementNode *node);
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
+  void report_error(DiagnosticCode code, const ayla::source::SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     auto *diag = unit.diagns.create(code, slice);
     for (auto &[k, v] : ctx) { diag->context.set(k, v); }
   }

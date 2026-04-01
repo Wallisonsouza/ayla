@@ -2,7 +2,7 @@
 
 #include "core/token/Token.hpp"
 #include "core/token/TokenGroup.hpp"
-#include "core/token/TokenKind.hpp"
+
 #include "core/token/token_stream.hpp"
 #include "debug/console/console.hpp"
 #include <sstream>

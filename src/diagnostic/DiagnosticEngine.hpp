@@ -16,7 +16,7 @@ class DiagnosticEngine {
 public:
   explicit DiagnosticEngine(const ayla::compilation::Unit &unit) : unit(unit) {}
 
-  Diagnostic *create(DiagnosticCode code, const SourceSlice &slice) {
+  Diagnostic *create(DiagnosticCode code, const ayla::source::SourceSlice &slice) {
     auto *diag = arena_.alloc<Diagnostic>();
     diag->origin = DiagnosticOrigin::Parser;
     diag->code = code;

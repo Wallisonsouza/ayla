@@ -1,7 +1,6 @@
 #pragma once
 #include "core/memory/Arena.hpp"
 #include "core/node/Node.hpp"
-#include "core/token/Location.hpp"
 #include <functional>
 #include <vector>
 
@@ -14,7 +13,7 @@ public:
     return node;
   }
 
-  template <typename T, typename... Args> T *create_error_node(const SourceSlice &slice, Args &&...args) {
+  template <typename T, typename... Args> T *create_error_node(const ayla::source::SourceSlice &slice, Args &&...args) {
     T *node = ast_arena.alloc<T>(std::forward<Args>(args)...);
 
     node->kind = core::ast::NodeKind::Error;

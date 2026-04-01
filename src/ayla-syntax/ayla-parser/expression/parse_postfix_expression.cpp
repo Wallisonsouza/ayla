@@ -11,17 +11,17 @@ core::ast::ASTExpressionNode *Parser::parse_postfix_expression() {
 
     switch (tok->descriptor->kind) {
 
-    case TokenKind::OPEN_PAREN:
+    case ayla::structural::token::TokenKind::OPEN_PAREN:
       expr = parse_call_acess(expr);
       if (!expr) return nullptr;
       break;
 
-    case TokenKind::DOT:
+    case ayla::structural::token::TokenKind::DOT:
       expr = parse_member_acess(expr);
       if (!expr) return nullptr;
       break;
 
-    case TokenKind::OPEN_BRACKET:
+    case ayla::structural::token::TokenKind::OPEN_BRACKET:
       expr = parse_index_access(expr);
       if (!expr) return nullptr;
       break;

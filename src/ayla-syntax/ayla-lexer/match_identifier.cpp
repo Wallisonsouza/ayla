@@ -1,6 +1,7 @@
+
 #include "lexer.hpp"
 
-Token *Lexer::match_identifier() {
+ayla::structural::token::Token *ayla::syntax::Lexer::match_identifier() {
 
   auto start = stream.get_state();
   char32_t c = stream.peek();
@@ -20,8 +21,8 @@ Token *Lexer::match_identifier() {
 
   auto slice = stream.slice_from(start);
 
-  auto descriptor = unit.context.descriptor_table.lookup_by_name(slice.span.view());
-  if (!descriptor) { descriptor = unit.context.descriptor_table.lookup_by_kind(TokenKind::IDENTIFIER); }
+  auto descriptor = unit.context.descriptor_table.lookup_by_name(slice.span);
+  if (!descriptor) { descriptor = unit.context.descriptor_table.lookup_by_kind(ayla::structural::token::TokenKind::IDENTIFIER); }
 
-  return unit.tokens.create_token<Token>(descriptor, slice);
+  return unit.tokens.create_token<structural::token::Token>(descriptor, slice);
 }

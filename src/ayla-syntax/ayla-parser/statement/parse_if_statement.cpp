@@ -4,7 +4,7 @@
 #include "core/node/flags.hpp"
 
 core::ast::ASTStatementNode *Parser::parse_if_statement() {
-  if (!unit.tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::IF_KEYWORD)) return nullptr;
 
   auto *condition = parse_expression();
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
@@ -37,8 +37,8 @@ core::ast::ASTStatementNode *Parser::parse_if_statement() {
   }
 
   core::ast::ASTStatementNode *else_block = nullptr;
-  if (unit.tokens.match(TokenKind::ELSE_KEYWORD)) {
-    if (unit.tokens.peek(TokenKind::IF_KEYWORD)) {
+  if (unit.tokens.match(ayla::structural::token::TokenKind::ELSE_KEYWORD)) {
+    if (unit.tokens.peek(ayla::structural::token::TokenKind::IF_KEYWORD)) {
       else_block = parse_if_statement();
     } else {
       else_block = parse_block_statement();

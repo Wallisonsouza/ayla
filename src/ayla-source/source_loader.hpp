@@ -1,10 +1,8 @@
-#pragma once
 #include <fstream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 
-namespace utils {
+namespace ayla::source {
 
 class TextLoader {
 public:
@@ -18,4 +16,4 @@ public:
   }
 };
 
-} // namespace utils
+} // namespace ayla::source

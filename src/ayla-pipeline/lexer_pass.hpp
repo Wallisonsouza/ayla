@@ -6,7 +6,7 @@
 
 struct LexerPass : Pass {
   void run(ayla::compilation::Unit &unit) override {
-    Lexer lexer(unit);
+    ayla::syntax::Lexer lexer(unit);
     lexer.generate_tokens();
   }
 };

@@ -3,7 +3,6 @@
 #include "core/memory/type.hpp"
 #include "core/memory/value.hpp"
 #include "core/module/scope.hpp"
-#include "engine/runtime/runtime_scope.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -19,7 +18,7 @@ struct Module {
   ModuleInitFn on_module_init;
   bool initialized = false;
   std::string name;
-  RuntimeScope runtime_scope;
+  // RuntimeScope runtime_scope;
   core::ParserScope parser_scope;
   ModuleType *type;
 

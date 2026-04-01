@@ -1,14 +1,14 @@
+#include "ayla-compilation/compilation_unit_manager.hpp"
 #include "ayla-pipeline/pipeline.hpp"
+#include "ayla-source/source_manager.hpp"
 #include "context.hpp"
-#include "core/managers/surce_manager.hpp"
-#include "engine/compilation_unit_manager.hpp"
 
 namespace ayla::compilation {
 class Session {
 
   ayla::compilation::Context &context;
   CompilationUnitManager comp_manager;
-  SourceManager source_manager;
+  source::SourceManager source_manager;
   Pipeline pipeline;
 
 public:

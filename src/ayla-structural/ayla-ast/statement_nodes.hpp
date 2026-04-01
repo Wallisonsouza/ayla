@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ayla-source/source.hpp"
 #include "core/memory/symbol.hpp"
 #include "core/memory/value.hpp"
 #include "core/module/scope.hpp"
@@ -60,7 +61,7 @@ struct FunctionDeclarationNode : core::ast::ASTStatementNode {
 };
 
 struct FunctionErrorNode : core::ast::ASTStatementNode {
-  explicit FunctionErrorNode(const SourceSlice &slice = {}) : ASTStatementNode(core::ast::NodeKind::Error) {
+  explicit FunctionErrorNode(const ayla::source::SourceSlice &slice = {}) : ASTStatementNode(core::ast::NodeKind::Error) {
     this->slice = slice;
 
     flags.set(NodeFlags::HasError);

@@ -6,23 +6,23 @@ core::ast::Modifiers Parser::parse_modifiers() {
 
   while (auto *tok = unit.tokens.peek()) {
     switch (tok->descriptor->kind) {
-    case TokenKind::STATIC:
+    case ayla::structural::token::TokenKind::STATIC:
       mods.add(core::ast::Modifier::Static);
       unit.tokens.advance();
       break;
-    case TokenKind::MUT:
+    case ayla::structural::token::TokenKind::MUT:
       mods.add(core::ast::Modifier::Mut);
       unit.tokens.advance();
       break;
-    case TokenKind::PUBLIC:
+    case ayla::structural::token::TokenKind::PUBLIC:
       mods.add(core::ast::Modifier::Public);
       unit.tokens.advance();
       break;
-    case TokenKind::PRIVATE:
+    case ayla::structural::token::TokenKind::PRIVATE:
       mods.add(core::ast::Modifier::Private);
       unit.tokens.advance();
       break;
-    case TokenKind::EXTERN_KEYWORD:
+    case ayla::structural::token::TokenKind::EXTERN_KEYWORD:
       mods.add(core::ast::Modifier::Extern);
       unit.tokens.advance();
       break;

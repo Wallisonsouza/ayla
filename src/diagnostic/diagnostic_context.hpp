@@ -1,11 +1,11 @@
 #pragma once
+#include "ayla-structural/ayla-token/kind.hpp"
 #include "core/node/NodeKind.hpp"
-#include "core/token/TokenKind.hpp"
 #include <string>
 #include <unordered_map>
 #include <variant>
 
-using DiagnosticValue = std::variant<std::string, TokenKind, core::ast::NodeKind>;
+using DiagnosticValue = std::variant<std::string, ayla::structural::token::TokenKind, core::ast::NodeKind>;
 
 struct DiagnosticContext {
   std::unordered_map<std::string, DiagnosticValue> values;

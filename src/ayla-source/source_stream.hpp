@@ -1,15 +1,14 @@
 #pragma once
-#include "SourceBuffer.hpp"
-#include "Span.hpp"
-#include "core/token/Location.hpp"
+#include "ayla-source/source.hpp"
 #include "utils/Utf8.hpp"
 #include <cstddef>
 #include <cstdint>
+#include <string_view>
 #include <vector>
 
-namespace core::source {
+namespace ayla::source {
 
-class TextStream {
+class SourceStream {
 public:
   struct State {
     const char *ptr;
@@ -17,16 +16,13 @@ public:
     size_t line;
     size_t column;
 
-    Span span_to(const State &end) const { return Span{ptr, end.ptr}; }
+    std::string_view view_to(const State &end) const { return std::string_view(ptr, end.ptr - ptr); }
 
-    SourceRange range_to(const State &end) const {
-      return SourceRange{.begin = {offset, line, column},
-                         .end = {end.offset, end.line, end.column}};
-    }
+    ayla::source::SourceRange range_to(const State &end) const { return ayla::source::SourceRange{.begin = {offset, line, column}, .end = {end.offset, end.line, end.column}}; }
   };
 
 private:
-  const SourceBuffer &buffer;
+  const ayla::source::SourceBuffer &buffer;
   const char *begin;
   const char *current;
   const char *end;
@@ -37,14 +33,12 @@ private:
   std::vector<State> checkpoints;
 
 public:
-  explicit TextStream(const SourceBuffer &buf)
-      : buffer(buf), begin(buf.begin()), current(buf.begin()), end(buf.end()) {}
+  explicit SourceStream(const ayla::source::SourceBuffer &buf) : buffer(buf), begin(buf.begin()), current(buf.begin()), end(buf.end()) {}
 
   bool eof() const { return current >= end; }
 
   char32_t peek() const {
-    if (eof())
-      return U'\0';
+    if (eof()) return U'\0';
     size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*current));
     return utils::Utf::utf8_to_codepoint(current, len);
   }
@@ -52,20 +46,17 @@ public:
   char32_t peek_n(size_t n) const {
     const char *p = current;
     while (n--) {
-      if (p >= buffer.end())
-        return 0;
+      if (p >= buffer.end()) return 0;
       size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*p));
       p += len;
     }
-    if (p >= buffer.end())
-      return 0;
+    if (p >= buffer.end()) return 0;
     size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*p));
     return utils::Utf::utf8_to_codepoint(p, len);
   }
 
   char32_t advance() {
-    if (eof())
-      return U'\0';
+    if (eof()) return U'\0';
     size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*current));
     char32_t cp = utils::Utf::utf8_to_codepoint(current, len);
 
@@ -81,21 +72,17 @@ public:
   }
 
   void advance_n(size_t n) {
-    while (n--)
-      advance();
+    while (n--) advance();
   }
 
-  SourceSlice slice_from(const State &start) const {
+  ayla::source::SourceSlice slice_from(const State &start) const {
     State end_state = get_state();
-    return {.range = start.range_to(end_state),
-            .span = start.span_to(end_state)};
+    return {.range = start.range_to(end_state), .span = start.view_to(end_state)};
   }
 
   const char *mark() const { return current; }
 
-  State get_state() const {
-    return {current, static_cast<size_t>(current - begin), line, column};
-  }
+  State get_state() const { return {current, static_cast<size_t>(current - begin), line, column}; }
 
   void rollback(const State &s) {
     current = s.ptr;
@@ -111,8 +98,7 @@ public:
     }
   }
   void discard_checkpoint() {
-    if (!checkpoints.empty())
-      checkpoints.pop_back();
+    if (!checkpoints.empty()) checkpoints.pop_back();
   }
 
   // template <typename Predicate> size_t advance_while(Predicate pred) {
@@ -134,4 +120,4 @@ public:
   // }
 };
 
-} // namespace core::source
+} // namespace ayla::source

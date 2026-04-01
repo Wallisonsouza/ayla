@@ -1,10 +1,10 @@
 #pragma once
 #include "ayla-compilation/unit.hpp"
+#include "ayla-source/source.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
 #include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
-#include "core/memory/Arena.hpp"
 #include "core/module/scope.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
@@ -56,7 +56,7 @@ struct Resolver {
   void resolve_import_node(parser::node::statement::ImportNode *node);
   void resolve_expression_statement(core::ast::ExpressionStatementNode *node);
 
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
+  void report_error(DiagnosticCode code, const ayla::source::SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
     // auto *diag = unit.diagns.create(code, slice);
 
     // for (auto &[k, v] : ctx) { diag->context.set(k, v); }

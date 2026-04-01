@@ -1,10 +1,10 @@
 #pragma once
+#include "ayla-source/source.hpp"
 #include "core/memory/symbol.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/NodeKind.hpp"
 #include "core/node/flags.hpp"
-#include "core/token/Location.hpp"
 #include <string>
 #include <vector>
 
@@ -39,7 +39,7 @@ struct TypeDeclarationNode : ASTStatementNode {
 struct IdentifierNode : core::ast::ASTExpressionNode {
   std::string name;
 
-  explicit IdentifierNode(std::string n, const SourceSlice &slice = {}) : ASTExpressionNode(core::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
+  explicit IdentifierNode(std::string n, const ayla::source::SourceSlice &slice = {}) : ASTExpressionNode(core::ast::NodeKind::Identifier), name(std::move(n)) { this->slice = slice; }
 };
 
 struct TypeNode : core::ast::ASTNode {
@@ -76,7 +76,7 @@ struct PatternNode : ASTStatementNode {
 };
 
 struct PatternErrorNode : PatternNode {
-  PatternErrorNode(const SourceSlice &expected_slice, core::ast::Modifiers modifiers = {}) : PatternNode(nullptr, nullptr, nullptr, modifiers) {
+  PatternErrorNode(const ayla::source::SourceSlice &expected_slice, core::ast::Modifiers modifiers = {}) : PatternNode(nullptr, nullptr, nullptr, modifiers) {
     this->kind = core::ast::NodeKind::Error;
     this->slice = expected_slice;
 

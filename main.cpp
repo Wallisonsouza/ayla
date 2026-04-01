@@ -15,9 +15,7 @@ int main() {
   session.add_pass(std::make_unique<ParsePass>());
   session.add_pass(std::make_unique<ResolvePass>());
 
-  session.add_unity("/home/wallison/Documentos/git/ayla/src/stdlib/io.ayla");
-
-  session.add_unity("/home/wallison/Documentos/git/ayla/main.ayla");
+  session.add_unity("/home/wallison/Documentos/c++/ayla-lang/src/tests/main.ay");
 
   session.run_pipeline();
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-
+namespace ayla::structural::token {
 enum class TokenKind : uint8_t {
   STATIC,
   MUT,
@@ -61,3 +61,4 @@ enum class TokenKind : uint8_t {
   Type, // mais tokens a serem lidos.
   // tokens.
 };
+}

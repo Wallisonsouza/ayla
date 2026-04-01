@@ -1,6 +1,6 @@
 #include "lexer.hpp"
 
-Token *Lexer::match_string() {
+ayla::structural::token::Token *ayla::syntax::Lexer::match_string() {
   char32_t quote = stream.peek();
 
   if (quote != U'"' && quote != U'\'') { return nullptr; }
@@ -44,7 +44,7 @@ Token *Lexer::match_string() {
     return nullptr;
   }
 
-  auto descriptor = unit.context.descriptor_table.lookup_by_kind(TokenKind::STRING_LITERAL);
+  auto descriptor = unit.context.descriptor_table.lookup_by_kind(ayla::structural::token::TokenKind::STRING_LITERAL);
 
-  return unit.tokens.create_token<Token>(descriptor, slice);
+  return unit.tokens.create_token<ayla::structural::token::Token>(descriptor, slice);
 }

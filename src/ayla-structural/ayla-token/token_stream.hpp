@@ -1,10 +1,10 @@
 #pragma once
+#include "ayla-structural/ayla-token/token.hpp"
 #include "core/memory/Arena.hpp"
-#include "core/token/Token.hpp"
 #include <functional>
 #include <vector>
 
-namespace core::token {
+namespace ayla::structural::token {
 
 class TokenStream {
 public:
@@ -116,19 +116,19 @@ public:
   // -----------------------------
   // Localização
   // -----------------------------
-  inline const SourceSlice &last_slice() const noexcept {
-    static SourceSlice empty{};
+  inline const ayla::source::SourceSlice &last_slice() const noexcept {
+    static ayla::source::SourceSlice empty{};
     return last_token_ ? last_token_->slice : empty;
   }
 
-  inline const SourceSlice &peek_slice(size_t offset = 0) const noexcept {
-    static SourceSlice empty{};
+  inline const ayla::source::SourceSlice &peek_slice(size_t offset = 0) const noexcept {
+    static ayla::source::SourceSlice empty{};
     if (auto *tok = peek(offset)) return tok->slice;
     return empty;
   }
 
-  inline const SourceSlice slice_of(const Token *tok) const noexcept {
-    static SourceSlice empty{};
+  inline const ayla::source::SourceSlice slice_of(const Token *tok) const noexcept {
+    static ayla::source::SourceSlice empty{};
     return tok ? tok->slice : empty;
   }
 
@@ -140,4 +140,4 @@ private:
   Token *last_token_ = nullptr;
 };
 
-} // namespace core::token
+} // namespace ayla::structural::token

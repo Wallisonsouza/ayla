@@ -4,7 +4,7 @@
 core::ast::ASTStatementNode *Parser::parse_variable_declaration(core::ast::Modifiers modifiers) {
   auto mods = parse_modifiers();
 
-  if (!unit.tokens.match(TokenKind::VALUE_KEYWORD) && !unit.tokens.match(TokenKind::CONST_KEYWORD)) { return nullptr; }
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::VALUE_KEYWORD) && !unit.tokens.match(ayla::structural::token::TokenKind::CONST_KEYWORD)) { return nullptr; }
 
   auto *pattern = parse_pattern(mods);
 

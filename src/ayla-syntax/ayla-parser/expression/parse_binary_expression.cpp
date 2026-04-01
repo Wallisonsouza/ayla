@@ -34,13 +34,13 @@ core::ast::ASTExpressionNode *Parser::parse_binary_expression(int min_precedence
 
     core::ast::BinaryOperation op;
     switch (tok->descriptor->kind) {
-    case TokenKind::PLUS: op = core::ast::BinaryOperation::Add; break;
-    case TokenKind::MINUS: op = core::ast::BinaryOperation::Subtract; break;
-    case TokenKind::STAR: op = core::ast::BinaryOperation::Multiply; break;
-    case TokenKind::SLASH: op = core::ast::BinaryOperation::Divide; break;
-    case TokenKind::EQUAL: op = core::ast::BinaryOperation::Equal; break;
-    case TokenKind::LESS: op = core::ast::BinaryOperation::Less; break;
-    case TokenKind::LESS_EQUAL: op = core::ast::BinaryOperation::LessEqual; break;
+    case ayla::structural::token::TokenKind::PLUS: op = core::ast::BinaryOperation::Add; break;
+    case ayla::structural::token::TokenKind::MINUS: op = core::ast::BinaryOperation::Subtract; break;
+    case ayla::structural::token::TokenKind::STAR: op = core::ast::BinaryOperation::Multiply; break;
+    case ayla::structural::token::TokenKind::SLASH: op = core::ast::BinaryOperation::Divide; break;
+    case ayla::structural::token::TokenKind::EQUAL: op = core::ast::BinaryOperation::Equal; break;
+    case ayla::structural::token::TokenKind::LESS: op = core::ast::BinaryOperation::Less; break;
+    case ayla::structural::token::TokenKind::LESS_EQUAL: op = core::ast::BinaryOperation::LessEqual; break;
     default: return left;
     }
 

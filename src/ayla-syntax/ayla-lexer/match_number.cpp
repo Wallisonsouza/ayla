@@ -1,6 +1,6 @@
 #include "lexer.hpp"
 
-Token *Lexer::match_number() {
+ayla::structural::token::Token *ayla::syntax::Lexer::match_number() {
 
   auto start = stream.get_state();
 
@@ -24,7 +24,7 @@ Token *Lexer::match_number() {
 
   auto slice = stream.slice_from(start);
 
-  auto descriptor = unit.context.descriptor_table.lookup_by_kind(TokenKind::NUMBER_LITERAL);
+  auto descriptor = unit.context.descriptor_table.lookup_by_kind(ayla::structural::token::TokenKind::NUMBER_LITERAL);
 
-  return unit.tokens.create_token<Token>(descriptor, slice);
+  return unit.tokens.create_token<ayla::structural::token::Token>(descriptor, slice);
 }

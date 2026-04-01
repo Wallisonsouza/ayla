@@ -5,7 +5,7 @@
 
 parser::node::ASTWhileStatementNode *Parser::parse_while_statemente() {
 
-  if (!unit.tokens.match(TokenKind::WHILE_KEYWORD)) return nullptr;
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::WHILE_KEYWORD)) return nullptr;
 
   auto *condition = parse_expression();
 

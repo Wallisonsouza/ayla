@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/token/Location.hpp"
+#include "ayla-source/source.hpp"
 #include "diagnostic/diagnostic_code.hpp"
 #include "diagnostic/diagnostic_context.hpp"
 #include <optional>
@@ -15,24 +15,20 @@ struct Diagnostic {
   DiagnosticCode code;
   Severity severity;
 
-  std::optional<SourceSlice> slice;
+  std::optional<ayla::source::SourceSlice> slice;
   DiagnosticContext context;
 
 public:
   void set_expected(const std::string &expected) {
 
-    if (expected.empty()) {
-      return;
-    }
+    if (expected.empty()) { return; }
 
     context.set("expected", expected);
   }
 
   void set_found(const std::string &found) {
 
-    if (found.empty()) {
-      return;
-    }
+    if (found.empty()) { return; }
 
     context.set("found", found);
   }

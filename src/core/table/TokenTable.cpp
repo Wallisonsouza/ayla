@@ -3,7 +3,7 @@
 // #include "core/hash/TransparentHash.hpp"
 // #include "core/token/TokenDescriptor.hpp"
 // #include "core/token/TokenGroup.hpp"
-// #include "core/token/TokenKind.hpp"
+//
 // #include <deque>
 // #include <string>
 // #include <unordered_map>
@@ -23,7 +23,7 @@
 //         return desc;
 //     }
 
-//     // Adiciona um token sem nome (ex.: TokenKind::Identifier)
+//     // Adiciona um token sem nome (ex.: ayla::structural::token::TokenKind::Identifier)
 //     token::TokenDescriptor &add(TokenKind kind, token::TokenGroup group) {
 //         storage_.emplace_back(kind, group, "");
 //         TokenDescriptor &desc = storage_.back();

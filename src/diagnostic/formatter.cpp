@@ -9,7 +9,7 @@ struct DiagnosticValueRenderer {
 
   std::string operator()(const std::string &s) const { return s; }
 
-  std::string operator()(TokenKind k) const { return "'" + unit.context.descriptor_table.lookup_by_kind(k)->name + "'"; }
+  std::string operator()(ayla::structural::token::TokenKind k) const { return "'" + unit.context.descriptor_table.lookup_by_kind(k)->name + "'"; }
 
   std::string operator()(core::ast::NodeKind k) const { return "unit.context.node_names.at(k);"; }
 };

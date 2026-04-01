@@ -1,16 +1,16 @@
 #pragma once
 
 #include "NodeKind.hpp"
+#include "ayla-source/source.hpp"
 #include "core/memory/type.hpp"
 #include "core/node/flags.hpp"
-#include "core/token/Location.hpp"
 
 namespace core::ast {
 
 struct ASTNode {
   NodeKind kind;
   NodeKindBase base_kind;
-  SourceSlice slice;
+  ayla::source::SourceSlice slice;
   NodeFlag flags;
 
   Type *inferred_type;

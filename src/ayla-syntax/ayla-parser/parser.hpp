@@ -1,13 +1,14 @@
 #pragma once
 #include "ayla-compilation/unit.hpp"
+#include "ayla-source/source.hpp"
 #include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "ayla-structural/ayla-ast/statement_nodes.hpp"
 #include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
+
 #include "ayla-syntax/ayla-parser/error/recover.hpp"
 #include "core/node/Modifier.hpp"
 #include "core/node/Type.hpp"
-#include "core/token/Location.hpp"
-#include "core/token/TokenKind.hpp"
+
 enum class ParserResultCode { Success, Error };
 
 template <typename NodeType> struct ParserResult {
@@ -26,7 +27,7 @@ struct Parser {
 
 private:
   void recover_until(RecoverBoundary boundaries);
-  using BoundaryFn = std::function<bool(TokenKind)>;
+  using BoundaryFn = std::function<bool(ayla::structural::token::TokenKind)>;
 
   void recover_until(BoundaryFn boundary);
 
@@ -84,9 +85,9 @@ public:
     }
   }
 
-  void consume_statement_separators() { while (unit.tokens.match(TokenKind::NEW_LINE) || unit.tokens.match(TokenKind::SEMI_COLON)); }
+  void consume_statement_separators() { while (unit.tokens.match(ayla::structural::token::TokenKind::NEW_LINE) || unit.tokens.match(ayla::structural::token::TokenKind::SEMI_COLON)); }
 
-  void report_error(DiagnosticCode code, const std::string &expected, const SourceSlice &slice_override = SourceSlice{}) {
+  void report_error(DiagnosticCode code, const std::string &expected, const ayla::source::SourceSlice &slice_override = ayla::source::SourceSlice{}) {
 
     auto *diag = unit.diagns.create(code, unit.tokens.peek_slice());
     diag->set_expected(expected);
@@ -94,7 +95,7 @@ public:
     if (auto current = unit.tokens.peek()) { diag->set_found(unit.source.buffer.get_text(current->slice.span)); }
   }
 
-  template <typename ErrorNodeT> ErrorNodeT *make_error(DiagnosticCode code, const std::string &message, const SourceSlice &slice) {
+  template <typename ErrorNodeT> ErrorNodeT *make_error(DiagnosticCode code, const std::string &message, const ayla::source::SourceSlice &slice) {
     report_error(code, message);
     recover_until(RecoverBoundary::Function);
 
@@ -102,7 +103,8 @@ public:
   }
 
   template <typename ListNodeType, typename ElementType, typename ParseFunc>
-  ListNodeType *parse_generic_list(TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
+  ListNodeType *
+  parse_generic_list(ayla::structural::token::TokenKind open_token, ayla::structural::token::TokenKind close_token, ayla::structural::token::TokenKind separator_token, ParseFunc parse_element) {
     std::vector<ElementType *> elements;
 
     if (!unit.tokens.match(open_token)) {
@@ -136,7 +138,7 @@ public:
         continue;
       }
 
-      if (current->descriptor->kind == TokenKind::OPEN_BRACE) {
+      if (current->descriptor->kind == ayla::structural::token::TokenKind::OPEN_BRACE) {
         report_error(DiagnosticCode::ExpectedToken, "expected closing token before block");
       } else {
         auto sep_desc = unit.context.descriptor_table.lookup_by_kind(separator_token);
@@ -150,7 +152,7 @@ public:
     return nullptr;
   }
 
-  Token *expect(TokenKind kind) {
+  ayla::structural::token::Token *expect(ayla::structural::token::TokenKind kind) {
     if (unit.tokens.check(kind)) { return unit.tokens.advance(); }
 
     report_error(DiagnosticCode::ExpectedToken, "expected token");

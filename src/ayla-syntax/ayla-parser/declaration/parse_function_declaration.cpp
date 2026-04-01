@@ -4,14 +4,15 @@
 #include "core/node/Modifier.hpp"
 #include "core/node/Type.hpp"
 #include "core/node/flags.hpp"
-#include "core/token/TokenKind.hpp"
 
 parser::node::ReturnStatementNode *Parser::parse_return_statement() {
 
-  unit.tokens.match(TokenKind::RETURN_KEYWORD);
+  unit.tokens.match(ayla::structural::token::TokenKind::RETURN_KEYWORD);
 
   // return sem valor
-  if (unit.tokens.peek(TokenKind::CLOSE_BRACE) || unit.tokens.peek(TokenKind::NEW_LINE)) { return unit.ast.create_node<parser::node::ReturnStatementNode>(nullptr); }
+  if (unit.tokens.peek(ayla::structural::token::TokenKind::CLOSE_BRACE) || unit.tokens.peek(ayla::structural::token::TokenKind::NEW_LINE)) {
+    return unit.ast.create_node<parser::node::ReturnStatementNode>(nullptr);
+  }
 
   auto *value = parse_expression();
   if (!value) {
@@ -26,7 +27,7 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
   std::vector<core::ast::ASTStatementNode *> statements;
 
-  if (!unit.tokens.match(TokenKind::OPEN_BRACE)) {
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::OPEN_BRACE)) {
 
     report_error(DiagnosticCode::ExpectedToken, "'{' to start block");
 
@@ -35,7 +36,7 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
 
   consume_statement_separators();
 
-  while (!unit.tokens.is_end() && !unit.tokens.peek(TokenKind::CLOSE_BRACE)) {
+  while (!unit.tokens.is_end() && !unit.tokens.peek(ayla::structural::token::TokenKind::CLOSE_BRACE)) {
 
     auto *stmt = parse_statement();
     if (stmt) {
@@ -48,7 +49,7 @@ parser::node::BlockStatementNode *Parser::parse_block_statement() {
   }
 
   // '}'
-  if (!unit.tokens.match(TokenKind::CLOSE_BRACE)) {
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::CLOSE_BRACE)) {
 
     report_error(DiagnosticCode::ExpectedToken, "'}' to close block");
 
@@ -62,7 +63,7 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modif
 
   auto start = unit.tokens.peek_slice();
 
-  if (!unit.tokens.match(TokenKind::FUNCTION_KEYWORD)) { return nullptr; }
+  if (!unit.tokens.match(ayla::structural::token::TokenKind::FUNCTION_KEYWORD)) { return nullptr; }
 
   auto *name = parse_identifier();
   if (!name) {
@@ -71,8 +72,8 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modif
     return unit.ast.create_node<parser::node::FunctionErrorNode>(start);
   }
 
-  auto param_list =
-      parse_generic_list<parser::node::ASTParameterListNode, core::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern({}); });
+  auto param_list = parse_generic_list<parser::node::ASTParameterListNode, core::ast::PatternNode>(ayla::structural::token::TokenKind::OPEN_PAREN, ayla::structural::token::TokenKind::CLOSE_PAREN,
+                                                                                                   ayla::structural::token::TokenKind::COMMA, [&]() { return parse_pattern({}); });
 
   if (param_list->flags.has(NodeFlags::HasError)) {
     recover_until(RecoverBoundary::Function);
@@ -81,7 +82,7 @@ core::ast::ASTStatementNode *Parser::parse_function_declaration(core::ast::Modif
 
   core::ast::TypeNode *return_type = nullptr;
 
-  if (unit.tokens.match(TokenKind::ARROW)) {
+  if (unit.tokens.match(ayla::structural::token::TokenKind::ARROW)) {
     return_type = parse_type();
     if (!return_type) {
       report_error(DiagnosticCode::ExpectedType, "return type");
