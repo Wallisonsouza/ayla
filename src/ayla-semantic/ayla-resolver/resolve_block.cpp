@@ -1,0 +1,15 @@
+#include "ayla-semantic/ayla-resolver/Resolver.hpp"
+#include "ayla-structural/ayla-ast/statement_nodes.hpp"
+
+void Resolver::resolve_block(parser::node::BlockStatementNode *node, bool create_scope) {
+
+  if (create_scope) push_scope();
+
+  for (auto *stmt : node->statements) { resolve(stmt); }
+
+  if (create_scope) pop_scope();
+}
+
+void Resolver::resolve_return_statement(parser::node::ReturnStatementNode *node) {
+  if (node->value) { resolve(node->value); }
+}

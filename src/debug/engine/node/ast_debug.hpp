@@ -1,13 +1,13 @@
 #pragma once
+#include "ayla-structural/ayla-ast/literal_nodes.hpp"
+#include "ayla-structural/ayla-ast/operator_nodes.hpp"
+#include "ayla-structural/ayla-ast/statement_nodes.hpp"
+#include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
 #include "core/AST.hpp"
 #include "core/node/Node.hpp"
 #include "core/node/Type.hpp"
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
 #include <string>
 #include <vector>
 

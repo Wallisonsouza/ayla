@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
+#include "ayla-structural/ayla-ast/literal_nodes.hpp"
 #include "core/node/Type.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
 #include "utils/Utf8.hpp"
 
 void ASTDebug::debug_identifier(const core::ast::IdentifierNode *node) {

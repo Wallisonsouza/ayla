@@ -1,10 +1,10 @@
 
+#include "ayla-semantic/ayla-checker/TypeChecker.hpp"
+#include "ayla-semantic/ayla-resolver/Resolver.hpp"
+#include "ayla-syntax/ayla-lexer/lexer.hpp"
+#include "ayla-syntax/ayla-parser/parser.hpp"
 #include "debug/engine/node/ast_debug.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "engine/checker/TypeChecker.hpp"
-#include "engine/lexer/lexer.hpp"
-#include "engine/parser/parser.hpp"
-#include "engine/resolver/Resolver.hpp"
 
 struct ExecutionUnit {
   CompilationUnit &comp_unit;

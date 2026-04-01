@@ -1,6 +1,6 @@
 #include "ast_debug.hpp"
+#include "ayla-structural/ayla-ast/operator_nodes.hpp"
 #include "core/node/BinaryOp.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
 
 void ASTDebug::debug_binary_expression(const parser::node::BinaryExpressionNode *node) {
 

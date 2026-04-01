@@ -14,8 +14,8 @@ int main() {
   auto engine = Engine(context);
 
   std::vector<std::string> scripts = {
-      "/home/wallison/Documentos/git/ayla/src/tests/window_module.ay",
-      "/home/wallison/Documentos/git/ayla/src/tests/main.ay",
+      "/home/wallison/Documentos/c++/ayla-lang/src/tests/window_module.ay",
+      "/home/wallison/Documentos/c++/ayla-lang/src/tests/main.ay",
   };
 
   for (auto &path : scripts) {
@@ -25,9 +25,9 @@ int main() {
 
       for (auto &diag : exec->comp_unit.diagns.all()) { print(*diag, exec->comp_unit); }
 
-      // RuntimeScope scope;
-      // Executor interpreter(&scope);
-      // interpreter.execute_ast(exec->comp_unit);
+      RuntimeScope scope;
+      Executor interpreter(&scope);
+      interpreter.execute_ast(exec->comp_unit);
 
     } catch (const std::exception &e) { std::cerr << "Erro ao executar " << path << ": " << e.what() << std::endl; }
   }

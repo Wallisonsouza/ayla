@@ -1,4 +1,8 @@
 #pragma once
+#include "ayla-structural/ayla-ast/literal_nodes.hpp"
+#include "ayla-structural/ayla-ast/operator_nodes.hpp"
+#include "ayla-structural/ayla-ast/statement_nodes.hpp"
+#include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
 #include "core/memory/symbol.hpp"
 #include "core/memory/value.hpp"
 #include "core/module/module.hpp"
@@ -7,10 +11,6 @@
 #include "core/node/Type.hpp"
 #include "debug/engine/node/ast_debug.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/operator_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
 #include "runtime_scope.hpp"
 #include <iostream>
 #include <memory>

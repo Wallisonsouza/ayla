@@ -3,9 +3,6 @@
 #include "core/node/NodeKind.hpp"
 #include "core/node/Type.hpp"
 #include "debug/console/console.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
-#include "engine/parser/node/statement_nodes.hpp"
 
 ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
 

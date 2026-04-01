@@ -1,5 +1,5 @@
 #include "ast_debug.hpp"
-#include "engine/parser/node/statement/ImportStatement.hpp"
+#include "ayla-structural/ayla-ast/statements/ImportStatement.hpp"
 
 void ASTDebug::debug_import(const parser::node::statement::ImportNode *node) {
   out << "Import\n";

@@ -1,5 +1,5 @@
 #include "ast_debug.hpp"
-#include "engine/parser/node/literal_nodes.hpp"
+#include "ayla-structural/ayla-ast/literal_nodes.hpp"
 
 void ASTDebug::debug_object_literal(const parser::node::ObjectLiteralNode *node) {
   out << "Object\n";
