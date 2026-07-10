@@ -1,95 +1,158 @@
-Ayla
+# Ayla
 
-Ayla é uma linguagem baseada em composição.
+<p align="center">
+  A programming language built around<br>
+  <b>Data · Functions · Composition</b>
+</p>
 
-A linguagem possui apenas quatro conceitos principais:
+---
 
-* data: define estruturas de dados.
-* fn: define funções.
-* compose: cria novos tipos a partir de dados.
-* bind: conecta funções a uma composição.
+## Overview
 
-O objetivo é manter estado, lógica e composição separados.
+Ayla is a programming language focused on clear separation of responsibilities.
 
-Data
+The language is built around four core concepts:
 
-Um data define apenas dados.
+| Concept | Purpose |
+|---|---|
+| `data` | Define data structures |
+| `fn` | Define functions |
+| `compose` | Create composed types |
+| `bind` | Connect functions to compositions |
 
+---
+
+# Data
+
+Data structures contain only state.
+
+```ayla
 data Position {
     x: i32,
     y: i32
 }
+
+data Velocity {
+    x: i32,
+    y: i32
+}
+```
+
+---
+
+# Functions
+
+Functions contain logic and are independent from types.
+
+```ayla
+fn move(position: Position, velocity: Velocity) {
+    position.x += velocity.x
+    position.y += velocity.y
+}
+```
+
+---
+
+# Composition
+
+Types are created by composing data.
+
+```ayla
+compose Player {
+    position: Position
+    velocity: Velocity
+}
+```
+
+A composition does not own logic.
+It only defines what it contains.
+
+---
+
+# Binding
+
+Functions are connected explicitly using `bind`.
+
+```ayla
+compose Player {
+    position: Position
+    velocity: Velocity
+
+    bind move {
+        position
+        velocity
+    }
+}
+```
+
+The generated interface:
+
+```ayla
+player.move()
+```
+
+is equivalent to:
+
+```ayla
+move(
+    player.position,
+    player.velocity
+)
+```
+
+---
+
+# Example
+
+```ayla
+data Position {
+    x: i32,
+    y: i32
+}
+
 data Velocity {
     x: i32,
     y: i32
 }
 
-Functions
-
-Toda lógica é implementada em funções.
-
-fn move(position: Position, velocity: Velocity) {
+fn update(position: Position, velocity: Velocity) {
     position.x += velocity.x
-    position.y += velocity.y
 }
-
-As funções são independentes e podem ser reutilizadas em qualquer composição.
-
-Compose
-
-Um compose define um novo tipo.
 
 compose Player {
     position: Position
     velocity: Velocity
+
+    bind update {
+        position
+        velocity
+    }
 }
+```
 
-Instanciando um tipo:
+---
 
-let player = Player()
+# Philosophy
 
+```
+Data
+ ↓
+Functions
+ ↓
+Composition
+ ↓
 Bind
+```
 
-Funções não pertencem automaticamente a uma composição.
+Ayla avoids mixing responsibilities.
 
-Para utilizá-las é necessário criar um bind.
+- No classes
+- No inheritance
+- No implicit methods
+- Explicit composition
 
-compose Player {
-    position: Position
-    velocity: Velocity
-    bind move {
-        position
-        velocity
-    }
-}
+---
 
-Após o bind, a função pode ser utilizada pela composição.
+## Status
 
-player.move()
-
-Equivalente a:
-
-move(
-    player.position,
-    player.velocity
-)
-
-Reuse
-
-A mesma função pode ser ligada a diferentes composições.
-
-compose Enemy {
-    position: Position
-    velocity: Velocity
-    bind move {
-        position
-        velocity
-    }
-}
-
-Design Principles
-
-* Dados não contêm lógica.
-* Funções não pertencem a tipos.
-* Composições apenas organizam dados.
-* Toda ligação entre uma composição e uma função é explícita através de bind.
+🚧 Experimental language project
