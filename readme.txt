@@ -1,135 +1,95 @@
-# Ayla
+Ayla
 
-Ayla é uma linguagem baseada em três conceitos fundamentais:
+Ayla é uma linguagem baseada em composição.
 
-- **data** — define apenas dados.
-- **fn** — define apenas lógica.
-- **compose** — organiza dados e conecta funções.
+A linguagem possui apenas quatro conceitos principais:
 
-Não existem classes, herança ou métodos.
+* data: define estruturas de dados.
+* fn: define funções.
+* compose: cria novos tipos a partir de dados.
+* bind: conecta funções a uma composição.
 
----
+O objetivo é manter estado, lógica e composição separados.
 
-# Data
+Data
 
-Um `data` representa apenas uma estrutura de dados.
+Um data define apenas dados.
 
-```ayla
 data Position {
     x: i32,
     y: i32
 }
-
 data Velocity {
     x: i32,
     y: i32
 }
-```
 
-Os dados não possuem lógica.
+Functions
 
----
+Toda lógica é implementada em funções.
 
-# Funções
-
-Toda lógica é escrita em funções.
-
-```ayla
 fn move(position: Position, velocity: Velocity) {
     position.x += velocity.x
     position.y += velocity.y
 }
-```
 
-As funções não pertencem a nenhum tipo.
+As funções são independentes e podem ser reutilizadas em qualquer composição.
 
----
+Compose
 
-# Compose
+Um compose define um novo tipo.
 
-Um `compose` cria um novo tipo combinando dados.
-
-```ayla
 compose Player {
     position: Position
     velocity: Velocity
 }
-```
 
-Agora existe um novo tipo chamado `Player`.
+Instanciando um tipo:
 
-```ayla
 let player = Player()
-```
 
----
+Bind
 
-# Bind
+Funções não pertencem automaticamente a uma composição.
 
-Nenhuma função pertence automaticamente a uma composição.
+Para utilizá-las é necessário criar um bind.
 
-Para utilizá-la é necessário criar um `bind`.
-
-```ayla
 compose Player {
     position: Position
     velocity: Velocity
-
     bind move {
         position
         velocity
     }
 }
-```
 
-O compilador conecta os parâmetros da função aos campos da composição.
+Após o bind, a função pode ser utilizada pela composição.
 
-Uma chamada como:
-
-```ayla
 player.move()
-```
 
-é equivalente a:
+Equivalente a:
 
-```ayla
 move(
     player.position,
     player.velocity
 )
-```
 
----
+Reuse
 
-# Reutilização
+A mesma função pode ser ligada a diferentes composições.
 
-A mesma função pode ser utilizada por diferentes composições.
-
-```ayla
 compose Enemy {
     position: Position
     velocity: Velocity
-
     bind move {
         position
         velocity
     }
 }
-```
 
-A função `move` continua sendo única.
+Design Principles
 
----
-
-# Filosofia
-
-A linguagem separa completamente cada responsabilidade.
-
-- `data` representa estado.
-- `fn` representa comportamento.
-- `compose` representa organização.
-- `bind` representa a ligação entre dados e funções.
-
-Nada pertence implicitamente a outro elemento.
-
-Tudo é explícito.
+* Dados não contêm lógica.
+* Funções não pertencem a tipos.
+* Composições apenas organizam dados.
+* Toda ligação entre uma composição e uma função é explícita através de bind.
