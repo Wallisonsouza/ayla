@@ -21,14 +21,6 @@ target_include_directories(ayla PRIVATE
 find_package(ICU REQUIRED COMPONENTS uc i18n)
 target_link_libraries(ayla PRIVATE ICU::uc ICU::i18n)
 
-# ===================== GLFW =====================
-find_package(glfw3 CONFIG REQUIRED)
-target_link_libraries(ayla PRIVATE glfw)
-
-
-
-
-
 add_custom_target(run
     COMMAND ayla
     DEPENDS ayla
