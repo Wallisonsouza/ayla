@@ -58,5 +58,5 @@ void print(const Diagnostic &diag, const CompilationUnit &unit) {
   std::string help = apply_template(tmpl.help, diag.context, unit);
   std::string message = apply_template(tmpl.message, diag.context, unit);
 
-  diagnostic::print_diagnostic(tmpl.title, message, help, diag.slice.value_or({}), unit.source);
+//  diagnostic::print_diagnostic(tmpl.title, message, help, diag.slice.value_or({}), unit.source);
 }

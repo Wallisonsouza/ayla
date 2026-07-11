@@ -15,9 +15,7 @@ int main() {
   auto context = ayla::language::create_context();
   auto engine = Engine(context);
 
-  std::vector<std::string> scripts = {
-      "/home/wallison/Documentos/git/ayla/src/stdlib/Convert.ayla", "/home/wallison/Documentos/git/ayla/src/stdlib/IO.ayla", "/home/wallison/Documentos/git/ayla/src/stdlib/console.ayla",
-      "/home/wallison/Documentos/git/ayla/src/stdlib/glfw.ayla",    "/home/wallison/Documentos/git/ayla/main.ayla",
+  std::vector<std::string> scripts = {"../main.ayla"
   };
 
   for (auto &path : scripts) {

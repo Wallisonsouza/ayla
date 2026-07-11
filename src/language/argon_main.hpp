@@ -18,7 +18,7 @@ inline LanguageContext create_context() {
   auto context = LanguageContext();
 
   create_module_console(context);
-  create_module_glfw(context);
+//  create_module_glfw(context);
   create_module_io(context);
   create_module_convert(context);
 
