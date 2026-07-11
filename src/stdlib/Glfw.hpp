@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 
 #include "engine/language_context.hpp"
 #include <GLFW/glfw3.h>
@@ -94,3 +94,4 @@ inline void create_module_glfw(LanguageContext &ctx) {
     });
   };
 }
+*/
