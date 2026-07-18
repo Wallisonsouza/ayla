@@ -1,0 +1,254 @@
+[
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/main.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/main.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/main.cpp",
+  "output": "CMakeFiles/ayla.dir/main.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/ast_debug.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/ast_debug.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/ast_debug.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/ast_debug.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_assing_node.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_assing_node.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_assing_node.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_assing_node.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_binary_expression.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_binary_expression.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_binary_expression.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_binary_expression.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_block.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_block.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_block.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_block.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_expression_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_expression_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_expression_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_expression_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_if_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_if_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_if_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_if_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_import.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_import.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_import.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_import.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_index_acess.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_index_acess.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_index_acess.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_index_acess.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_literals.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_literals.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_literals.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_literals.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_object.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_object.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_object.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_object.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_path_expression.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_path_expression.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_path_expression.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_path_expression.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_pattern.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_pattern.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_pattern.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_pattern.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_return_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_return_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_return_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_return_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_type.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_type.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_type.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_type.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_variable_declaration.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_variable_declaration.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_variable_declaration.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_variable_declaration.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/debug_while_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_while_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/debug_while_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/debug_while_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/debug/engine/node/degub_function.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/degub_function.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/debug/engine/node/degub_function.cpp",
+  "output": "CMakeFiles/ayla.dir/src/debug/engine/node/degub_function.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/diagnostic/formatter.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/diagnostic/formatter.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/diagnostic/formatter.cpp",
+  "output": "CMakeFiles/ayla.dir/src/diagnostic/formatter.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/runtime/value/ArrayValue.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/runtime/value/ArrayValue.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/runtime/value/ArrayValue.cpp",
+  "output": "CMakeFiles/ayla.dir/src/runtime/value/ArrayValue.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/checker/Module.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/checker/Module.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/checker/Module.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/checker/Module.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/checker/TypeChecker.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/checker/TypeChecker.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/checker/TypeChecker.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/checker/TypeChecker.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/Resolver.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/Resolver.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/Resolver.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/Resolver.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/literals.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/literals.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/literals.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/literals.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_acess.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_acess.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_acess.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_acess.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_assing.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_assing.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_assing.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_assing.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_binary_expression.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_binary_expression.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_binary_expression.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_binary_expression.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_block.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_block.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_block.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_block.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_expression_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_expression_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_expression_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_expression_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_function_declaration.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_function_declaration.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_function_declaration.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_function_declaration.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_if_statement.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_if_statement.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_if_statement.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_if_statement.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_module.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_module.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_module.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_module.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_pattern.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_pattern.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_pattern.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_pattern.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_type.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_type.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_type.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_type.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/resolver/resolve_variable_declaration.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_variable_declaration.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/resolver/resolve_variable_declaration.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/resolver/resolve_variable_declaration.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/semantic/types/BuiltinTypes.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/types/BuiltinTypes.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/semantic/types/BuiltinTypes.cpp",
+  "output": "CMakeFiles/ayla.dir/src/semantic/types/BuiltinTypes.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/lexer/match_identifier.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_identifier.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_identifier.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/lexer/match_identifier.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/lexer/match_number.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_number.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_number.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/lexer/match_number.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/lexer/match_operator.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_operator.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_operator.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/lexer/match_operator.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/lexer/match_string.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_string.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/lexer/match_string.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/lexer/match_string.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/parser/parser.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/parser/parser.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/parser/parser.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/parser/parser.cpp.o"
+},
+{
+  "directory": "/home/wallisonlopesdesouza/Documentos/git/ayla/build",
+  "command": "/usr/bin/clang++  -I/home/wallisonlopesdesouza/Documentos/git/ayla/src -std=gnu++20 -o CMakeFiles/ayla.dir/src/syntax/parser/recovery/parser_panic.cpp.o -c /home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/parser/recovery/parser_panic.cpp",
+  "file": "/home/wallisonlopesdesouza/Documentos/git/ayla/src/syntax/parser/recovery/parser_panic.cpp",
+  "output": "CMakeFiles/ayla.dir/src/syntax/parser/recovery/parser_panic.cpp.o"
+}
+]

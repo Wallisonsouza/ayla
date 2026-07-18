@@ -1,8 +1,0 @@
-module console {
-
-  extern funct log(message: string) -> void
-
-  extern funct error(message: string) -> void
-
-  extern funct warn(message: string) -> void
-}

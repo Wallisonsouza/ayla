@@ -35,15 +35,15 @@ struct Executor {
 
   ExecResult execute_import_node(CompilationUnit &unit, ayla::ast::node::ImportStatementNode *node) {
 
-    auto module = unit.context.module_manager.get(node->resolved_module_id);
+    // auto module = unit.context.module_manager.get(node->resolved_module_id);
 
-    if (!module) throw std::runtime_error("Module not found");
+    // if (!module) throw std::runtime_error("Module not found");
 
-    module->ensure_initialized();
+    // module->ensure_initialized();
 
-    current_scope->set(node->resolved_symbol_id, module->module_object);
+    // current_scope->set(node->resolved_symbol_id, module->module_object);
 
-    return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
+    // return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
   }
 
   ExecResult execute_object(CompilationUnit &unit, ayla::ast::node::ObjectLiteralNode *node) {

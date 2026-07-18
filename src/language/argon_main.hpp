@@ -5,10 +5,6 @@
 #include "engine/language_context.hpp"
 #include "semantic/checker/TypeChecker.hpp"
 #include "semantic/types/type.hpp"
-#include "stdlib/Console.hpp"
-#include "stdlib/Convert.hpp"
-#include "stdlib/Glfw.hpp"
-#include "stdlib/IO.hpp"
 #include <memory>
 
 namespace ayla::language {
@@ -17,10 +13,6 @@ inline LanguageContext create_context() {
 
   auto context = LanguageContext();
 
-  create_module_console(context);
-//  create_module_glfw(context);
-  create_module_io(context);
-  create_module_convert(context);
 
   context.type_table["number"] = std::make_shared<Type>(BuiltinTypes::Number);
 
