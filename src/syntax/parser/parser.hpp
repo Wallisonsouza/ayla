@@ -1,12 +1,12 @@
 #pragma once
-#include "ast/statements/ExpressionStatementNode.hpp"
-#include "ast/statements/IfStatementNode.hpp"
+
 #include "core/node/Modifier.hpp"
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "syntax/parser/recovery/recover.hpp"
 
+// expressions
 #include "ast/ExpressionNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
@@ -14,11 +14,19 @@
 #include "ast/expressions/IndexAcessExpressionNode.hpp"
 #include "ast/expressions/LiteralExpressionNode.hpp"
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
+#include "ast/expressions/UnaryExpressionNode.hpp"
+
+// statements
+#include "ast/statements/ExpressionStatementNode.hpp"
+#include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
 #include "ast/statements/ModuleDeclarationNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
+#include "ast/statements/WhileStatementNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
+#include "ast/statements/FunctionDeclarationNode.hpp"
 
 struct Parser {
   CompilationUnit &unit;

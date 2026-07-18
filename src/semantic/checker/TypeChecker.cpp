@@ -1,6 +1,7 @@
 #include "TypeChecker.hpp"
 #include "core/node/BinaryOp.hpp"
-
+#include "ast/statements/BlockStatementNode.hpp" 
+#include "ast/statements/FunctionDeclarationNode.hpp" 
 namespace ayla {
 void TypeChecker::check(ast::AstNode *node) {
   if (!node) return;

@@ -20,6 +20,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "runtime/value/value.hpp"
 
 enum class OpCode {
   NOP,
@@ -84,17 +85,17 @@ struct BytecodeGenerator {
     switch (node->kind) {
     case NK::NumberLiteral: {
       auto n = static_cast<ayla::ast::node::NumberLiteralNode *>(node);
-      emit(Instruction(OpCode::PUSH_NUMBER, Value(n->value)));
+      emit(Instruction(OpCode::PUSH_NUMBER, Value::Number(n->value)));
       break;
     }
     case NK::StringLiteral: {
       auto s = static_cast<ayla::ast::node::StringLiteralNode *>(node);
-      emit(Instruction(OpCode::PUSH_STRING, Value(s->value)));
+      emit(Instruction(OpCode::PUSH_STRING, Value::String(s->value)));
       break;
     }
     case NK::BooleanLiteral: {
       auto b = static_cast<ayla::ast::node::BoolLiteralNode *>(node);
-      emit(Instruction(OpCode::PUSH_BOOLEAN, Value(b->value)));
+      emit(Instruction(OpCode::PUSH_BOOLEAN, Value::Boolean(b->value)));
       break;
     }
     case NK::Identifier: {

@@ -19,7 +19,8 @@
 #include "ast/statements/ReturnStatementNodes.hpp"
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
-
+#include "ast/statements/BlockStatementNode.hpp" 
+#include "ast/statements/FunctionDeclarationNode.hpp" 
 namespace ayla {
 struct TypeChecker {
 
