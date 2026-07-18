@@ -14,7 +14,7 @@ struct TypeNode : AstNode {
 
   TypeNode(std::string name_, std::vector<TypeNode *> g) : AstNode(NodeKind::Type), name(std::move(name_)), generics(std::move(g)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 } // namespace ayla::ast

@@ -10,7 +10,7 @@ struct IndexAccessNode : ExpressionNode {
 
   IndexAccessNode(ExpressionNode *b, ExpressionNode *i) : ExpressionNode(NodeKind::IndexAccess), base(b), index(i) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 } // namespace ayla::ast::node

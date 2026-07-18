@@ -11,6 +11,6 @@ struct ImportStatementNode : StatementNode {
 
   explicit ImportStatementNode(std::vector<IdentifierExpressionNode *> p) : StatementNode(NodeKind::ImportStatement), path(std::move(p)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 } // namespace ayla::ast::node

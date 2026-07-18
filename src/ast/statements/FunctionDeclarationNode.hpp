@@ -20,6 +20,6 @@ struct FunctionDeclarationNode : StatementNode {
   FunctionDeclarationNode(IdentifierExpressionNode *identifier, std::vector<PatternNode *> params, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, DeclarationSpecifiers s = {})
       : StatementNode(NodeKind::FunctionDeclaration), identifier(identifier), parameters(std::move(params)), return_type(ret_type), body(b), specifiers(s) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 } // namespace ayla::ast::node

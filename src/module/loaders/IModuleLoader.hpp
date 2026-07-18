@@ -1,6 +1,6 @@
 #include <string_view>
 #include <memory>
-#include <Module.hpp>
+#include <module/Module.hpp>
 
 class IModuleLoader
 {

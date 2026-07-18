@@ -10,6 +10,6 @@ struct AssignmentExpressionNode : ExpressionNode {
 
   AssignmentExpressionNode(ExpressionNode *t, ExpressionNode *v) : ExpressionNode(NodeKind::Assignment), target(t), value(v) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 } // namespace ayla::ast::node

@@ -4,7 +4,7 @@
 #include "engine/CompilationUnit.hpp"
 #include "semantic/types/BuiltinTypes.hpp"
 
-#include "ast/AstNode.hpp"
+
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"

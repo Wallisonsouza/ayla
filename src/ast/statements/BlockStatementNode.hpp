@@ -10,6 +10,6 @@ struct BlockStatementNode : StatementNode {
 
   explicit BlockStatementNode(std::vector<StatementNode *> stmts = {}) : StatementNode(NodeKind::BlockStatement), statements(std::move(stmts)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 } // namespace ayla::ast::node

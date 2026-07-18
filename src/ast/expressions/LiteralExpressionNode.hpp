@@ -11,7 +11,7 @@ struct NumberLiteralNode : ExpressionNode {
 
   explicit NumberLiteralNode(double v) : ExpressionNode(NodeKind::NumberLiteral), value(v) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct StringLiteralNode : ExpressionNode {
@@ -19,7 +19,7 @@ struct StringLiteralNode : ExpressionNode {
 
   explicit StringLiteralNode(std::string v) : ExpressionNode(NodeKind::StringLiteral), value(std::move(v)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct BoolLiteralNode : ExpressionNode {
@@ -27,13 +27,13 @@ struct BoolLiteralNode : ExpressionNode {
 
   explicit BoolLiteralNode(bool v) : ExpressionNode(NodeKind::BooleanLiteral), value(v) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct NullLiteralNode : ExpressionNode {
   NullLiteralNode() : ExpressionNode(NodeKind::NullLiteral) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct ArrayLiteralNode : ExpressionNode {
@@ -41,7 +41,7 @@ struct ArrayLiteralNode : ExpressionNode {
 
   explicit ArrayLiteralNode(std::vector<ExpressionNode *> elems) : ExpressionNode(NodeKind::ArrayLiteral), elements(std::move(elems)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct ObjectFieldNode : AstNode {
@@ -50,7 +50,7 @@ struct ObjectFieldNode : AstNode {
 
   ObjectFieldNode(ExpressionNode *k, ExpressionNode *v) : AstNode(NodeKind::ObjectField), key(k), value(v) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 struct ObjectLiteralNode : ExpressionNode {
@@ -58,7 +58,7 @@ struct ObjectLiteralNode : ExpressionNode {
 
   explicit ObjectLiteralNode(std::vector<ObjectFieldNode *> f) : ExpressionNode(NodeKind::ObjectLiteral), fields(std::move(f)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 } // namespace ayla::ast::node

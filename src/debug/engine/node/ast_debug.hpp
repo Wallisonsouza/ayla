@@ -3,7 +3,7 @@
 #include "debug/console/color.hpp"
 #include "debug/console/console.hpp"
 
-#include "ast/AstNode.hpp"
+
 #include "ast/PatternNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"

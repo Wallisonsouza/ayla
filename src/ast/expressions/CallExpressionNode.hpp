@@ -10,7 +10,7 @@ struct CallExpressionNode : ExpressionNode {
 
   CallExpressionNode(ExpressionNode *c, std::vector<ExpressionNode *> a) : ExpressionNode(NodeKind::FunctionCall), callee(c), arguments(std::move(a)) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 } // namespace ayla::ast::node

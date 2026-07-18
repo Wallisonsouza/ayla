@@ -13,7 +13,7 @@ struct VariableDeclarationNode : StatementNode {
 
   VariableDeclarationNode(PatternNode *p, ExpressionNode *init, DeclarationSpecifiers specifiers = {}) : StatementNode(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
 
-  void accept(AstVisitor &v) override { v.visit(this); }
+  
 };
 
 } // namespace ayla::ast::node

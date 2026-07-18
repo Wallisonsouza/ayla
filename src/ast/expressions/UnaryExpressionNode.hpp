@@ -12,7 +12,7 @@ struct UnaryExpressionNode : ExpressionNode {
 
   UnaryExpressionNode(UnaryOperation op, ExpressionNode *operand) : ExpressionNode(NodeKind::UnaryExpression), operand(operand), op(op) {}
 
-  void accept(AstVisitor &v) override {}
+  
 };
 
 } // namespace ayla::ast::node
