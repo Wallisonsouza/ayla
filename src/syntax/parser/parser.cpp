@@ -1,55 +1,150 @@
 #include "syntax/parser/parser.hpp"
+#include "core/modifiers/Modifier.hpp"
+#include "core/modifiers/ModifierSet.hpp"
+#include "core/operators/UnaryOperation.hpp"
+#include "syntax/parser/DeclarationSpecifiers.hpp"
 
-ayla::ast::node::VariableDeclarationNode *Parser::parse_variable_declaration(ayla::ast::Modifiers modifiers) {
+ayla::ast::node::VariableDeclarationNode *
+Parser::parse_variable_declaration(DeclarationSpecifiers specifiers)
+{
+    if (!unit.tokens.match(TokenKind::VALUE_KEYWORD))
+        return nullptr;
 
-  bool is_const = unit.tokens.match(TokenKind::CONST_KEYWORD);
+    auto *pattern = parse_pattern();
 
-  if (!is_const) {
-    if (!unit.tokens.match(TokenKind::VALUE_KEYWORD)) return nullptr;
-  }
+    if (!pattern)
+        return nullptr;
 
-  // pattern
-  auto *pattern = parse_pattern();
-  if (!pattern) return nullptr;
+    ayla::ast::ExpressionNode *initializer = nullptr;
 
-  // initializer opcional
-  ayla::ast::ExpressionNode *init = nullptr;
+    if (unit.tokens.match(TokenKind::ASSIGN))
+        initializer = parse_expression();
 
-  if (unit.tokens.match(TokenKind::ASSIGN)) { init = parse_expression(); }
-
-  return unit.ast.create_node<ayla::ast::node::VariableDeclarationNode>(pattern, init, modifiers);
+    return unit.ast.create_node<
+        ayla::ast::node::VariableDeclarationNode>(
+            pattern,
+            initializer,
+            specifiers);
 }
 
-ayla::ast::Modifiers Parser::parse_modifiers() {
-  ayla::ast::Modifiers mods;
 
-  while (auto *tok = unit.tokens.peek()) {
-    switch (tok->descriptor->kind) {
-    case TokenKind::STATIC:
-      mods.add(ayla::ast::Modifier::Static);
-      unit.tokens.advance();
-      break;
-    case TokenKind::MUT:
-      mods.add(ayla::ast::Modifier::Mut);
-      unit.tokens.advance();
-      break;
-    case TokenKind::PUBLIC:
-      mods.add(ayla::ast::Modifier::Public);
-      unit.tokens.advance();
-      break;
-    case TokenKind::PRIVATE:
-      mods.add(ayla::ast::Modifier::Private);
-      unit.tokens.advance();
-      break;
-    case TokenKind::EXTERN_KEYWORD:
-      mods.add(ayla::ast::Modifier::Extern);
-      unit.tokens.advance();
-      break;
-    default: return mods;
+ayla::ast::StatementNode*
+Parser::parse_function_declaration(
+    DeclarationSpecifiers specifiers)
+{
+    auto start = unit.tokens.peek_slice();
+
+    if (!unit.tokens.match(TokenKind::FUNCTION_KEYWORD))
+        return nullptr;
+
+    auto* name = parse_identifier();
+
+    if (!name)
+    {
+        report_error(
+            DiagnosticCode::ExpectedIdentifier,
+            "function name");
+
+        recover_until(RecoverBoundary::Function);
+
+        return nullptr;
     }
-  }
 
-  return mods;
+    auto params =
+        parse_generic_list<ayla::ast::PatternNode>(
+            TokenKind::OPEN_PAREN,
+            TokenKind::CLOSE_PAREN,
+            TokenKind::COMMA,
+            [&]()
+            {
+                return parse_pattern();
+            });
+
+    ayla::ast::TypeNode* return_type = nullptr;
+
+    if (unit.tokens.match(TokenKind::ARROW))
+    {
+        return_type = parse_type();
+
+        if (!return_type)
+        {
+            report_error(
+                DiagnosticCode::ExpectedType,
+                "return type");
+
+            recover_until(RecoverBoundary::Function);
+
+            return nullptr;
+        }
+    }
+
+    ayla::ast::node::BlockStatementNode* body = nullptr;
+
+    if (!specifiers.modifiers.has(Modifier::Extern))
+    {
+        body = parse_block_statement();
+
+        if (body->flags.has(NodeFlags::HasError))
+        {
+            recover_until(RecoverBoundary::Function);
+
+            return nullptr;
+        }
+    }
+
+    return unit.ast.create_node<
+        ayla::ast::node::FunctionDeclarationNode>(
+            name,
+            std::move(params),
+            return_type,
+            body,
+            specifiers);
+}
+
+DeclarationSpecifiers Parser::parse_declaration_specifiers()
+{
+    DeclarationSpecifiers specifiers;
+
+    while (auto *tok = unit.tokens.peek())
+    {
+        switch (tok->descriptor->kind)
+        {
+        case TokenKind::PUBLIC:
+            specifiers.visibility = Visibility::Public;
+            unit.tokens.advance();
+            break;
+
+        case TokenKind::PRIVATE:
+            specifiers.visibility = Visibility::Private;
+            unit.tokens.advance();
+            break;
+
+        case TokenKind::STATIC:
+            specifiers.modifiers.add(Modifier::Static);
+            unit.tokens.advance();
+            break;
+
+        case TokenKind::MUT:
+            specifiers.modifiers.add(Modifier::Mut);
+            unit.tokens.advance();
+            break;
+
+        case TokenKind::CONST:
+            specifiers.modifiers.add(Modifier::Const);
+            unit.tokens.advance();
+            break;
+
+        case TokenKind::EXTERN:
+            specifiers.modifiers.add(Modifier::Extern);
+            unit.tokens.advance();
+            break;
+
+        default:
+            return specifiers;
+        }
+    }
+
+    return specifiers;
 }
 
 ayla::ast::node::ModuleDeclarationNode *Parser::parse_module_declaration() {
@@ -141,45 +236,6 @@ ayla::ast::node::BlockStatementNode *Parser::parse_block_statement() {
   return unit.ast.create_node<ayla::ast::node::BlockStatementNode>(std::move(statements));
 }
 
-ayla::ast::StatementNode *Parser::parse_function_declaration(ayla::ast::Modifiers modifiers) {
-
-  auto start = unit.tokens.peek_slice();
-
-  if (!unit.tokens.match(TokenKind::FUNCTION_KEYWORD)) { return nullptr; }
-
-  auto *name = parse_identifier();
-  if (!name) {
-    report_error(DiagnosticCode::ExpectedIdentifier, "function name");
-    recover_until(RecoverBoundary::Function);
-    return nullptr;
-  }
-
-  auto params = parse_generic_list<ayla::ast::PatternNode>(TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parse_pattern(); });
-
-  ayla::ast::TypeNode *return_type = nullptr;
-
-  if (unit.tokens.match(TokenKind::ARROW)) {
-    return_type = parse_type();
-    if (!return_type) {
-      report_error(DiagnosticCode::ExpectedType, "return type");
-      recover_until(RecoverBoundary::Function);
-      return nullptr;
-    }
-  }
-
-  ayla::ast::node::BlockStatementNode *body = nullptr;
-
-  if (!modifiers.has(ayla::ast::Modifier::Extern)) {
-    body = parse_block_statement();
-
-    if (body->flags.has(NodeFlags::HasError)) {
-      recover_until(RecoverBoundary::Function);
-      return nullptr;
-    }
-  }
-
-  return unit.ast.create_node<ayla::ast::node::FunctionDeclarationNode>(name, params, return_type, body, modifiers);
-}
 
 ayla::ast::ExpressionNode *Parser::parse_member_acess(ayla::ast::ExpressionNode *base) {
 
@@ -427,14 +483,14 @@ ayla::ast::ExpressionNode *Parser::parse_unary_expression() {
   auto *tok = unit.tokens.peek();
   if (!tok) return parse_postfix_expression();
 
-  ayla::UnaryOperation op;
+  UnaryOperation op;
 
   switch (tok->descriptor->kind) {
   case TokenKind::NOT:
-    op = ayla::UnaryOperation::NOT;
+    op = UnaryOperation::Not;
     break;
 
-    // case TokenKind::MINUS: op = ayla::UnaryOperation::NEGATE; break;
+    // case TokenKind::MINUS: op = UnaryOperation::NEGATE; break;
 
   default: return parse_postfix_expression();
   }
@@ -538,7 +594,7 @@ ayla::ast::StatementNode *Parser::parse_if_statement() {
   return unit.ast.create_node<ayla::ast::node::IfStatementNode>(condition, then_block, else_block);
 }
 ayla::ast::StatementNode *Parser::parse_statement() {
-  auto modifiers = parse_modifiers();
+  auto specifiers = parse_declaration_specifiers();
   auto *tok = unit.tokens.peek();
   if (!tok) return nullptr;
 
@@ -549,8 +605,8 @@ ayla::ast::StatementNode *Parser::parse_statement() {
   case TokenKind::WHILE_KEYWORD: return parse_while_statemente();
   case TokenKind::RETURN_KEYWORD: return parse_return_statement();
   case TokenKind::VALUE_KEYWORD:
-  case TokenKind::CONST_KEYWORD: return parse_variable_declaration(modifiers);
-  case TokenKind::FUNCTION_KEYWORD: return parse_function_declaration(modifiers);
+  case TokenKind::CONST: return parse_variable_declaration(specifiers);
+  case TokenKind::FUNCTION_KEYWORD: return parse_function_declaration(specifiers);
   default:
     if (auto *expr = parse_expression()) { return unit.ast.create_node<ayla::ast::node::ExpressionStatementNode>(expr); }
     unit.tokens.advance();

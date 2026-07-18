@@ -1,9 +1,10 @@
 #pragma once
 
-#include "core/node/Modifier.hpp"
+#include "core/modifiers/ModifierSet.hpp"
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "syntax/parser/DeclarationSpecifiers.hpp"
 #include "syntax/parser/recovery/recover.hpp"
 
 // expressions
@@ -43,7 +44,7 @@ private:
   ayla::ast::ExpressionNode *parse_call_acess(ayla::ast::ExpressionNode *callee);
   ayla::ast::ExpressionNode *finish_member(ayla::ast::ExpressionNode *base);
   ayla::ast::ExpressionNode *finish_index(ayla::ast::ExpressionNode *base);
-  ayla::ast::Modifiers parse_modifiers();
+  DeclarationSpecifiers parse_declaration_specifiers();
   std::vector<ayla::ast::PatternNode *> parse_function_parameters();
 
   std::vector<ayla::ast::PatternNode *> parse_parameter_list();
@@ -62,8 +63,8 @@ public:
   ayla::ast::StatementNode *parse_import_statement();
   ayla::ast::node::ArrayLiteralNode *parse_array_literal();
 
-  ayla::ast::node::VariableDeclarationNode *parse_variable_declaration(ayla::ast::Modifiers modifiers);
-  ayla::ast::StatementNode *parse_function_declaration(ayla::ast::Modifiers modifiers);
+  ayla::ast::node::VariableDeclarationNode *parse_variable_declaration(DeclarationSpecifiers specifiers);
+  ayla::ast::StatementNode *parse_function_declaration(DeclarationSpecifiers specifiers);
   ayla::ast::node::ModuleDeclarationNode *parse_module_declaration();
   ayla::ast::StatementNode *parse_if_statement();
   ayla::ast::node::WhileStatementNode *parse_while_statemente();

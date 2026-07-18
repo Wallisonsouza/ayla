@@ -1,5 +1,6 @@
 #pragma once
-#include "core/node/BinaryOp.hpp"
+
+#include "core/operators/BinaryOperation.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/language_context.hpp"
@@ -25,7 +26,7 @@ inline LanguageContext create_context() {
   context.descriptor_table.add(TokenKind::TRUE_KEYWORD, "true", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::FALSE_KEYWORD, "false", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::EXTERN_KEYWORD, "extern", TokenGroup::Keyword);
+  context.descriptor_table.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::FUNCTION_KEYWORD, "funct", TokenGroup::Keyword);
@@ -54,18 +55,18 @@ inline LanguageContext create_context() {
   context.descriptor_table.add(TokenKind::LESS_EQUAL, "<=", TokenGroup::Operator);
   context.descriptor_table.add(TokenKind::GREATER, ">", TokenGroup::Operator);
   context.descriptor_table.add(TokenKind::GREATER_EQUAL, ">=", TokenGroup::Operator);
-  context.precedence_table.add_right(TokenKind::ASSIGN, 1, ast::BinaryOperation::Assign);
-  context.precedence_table.add_right(TokenKind::ARROW, 2, ast::BinaryOperation::Arrow);
-  context.precedence_table.add_left(TokenKind::EQUAL, 5, ast::BinaryOperation::Equal);
-  context.precedence_table.add_left(TokenKind::NOT_EQUAL, 5, ast::BinaryOperation::NotEqual);
-  context.precedence_table.add_left(TokenKind::LESS, 6, ast::BinaryOperation::Less);
-  context.precedence_table.add_left(TokenKind::LESS_EQUAL, 6, ast::BinaryOperation::LessEqual);
-  context.precedence_table.add_left(TokenKind::GREATER, 6, ast::BinaryOperation::Greater);
-  context.precedence_table.add_left(TokenKind::GREATER_EQUAL, 6, ast::BinaryOperation::GreaterEqual);
-  context.precedence_table.add_left(TokenKind::PLUS, 10, ast::BinaryOperation::Add);
-  context.precedence_table.add_left(TokenKind::MINUS, 10, ast::BinaryOperation::Subtract);
-  context.precedence_table.add_left(TokenKind::STAR, 20, ast::BinaryOperation::Multiply);
-  context.precedence_table.add_left(TokenKind::SLASH, 20, ast::BinaryOperation::Divide);
+  context.precedence_table.add_right(TokenKind::ASSIGN, 1, BinaryOperation::Assign);
+  context.precedence_table.add_right(TokenKind::ARROW, 2, BinaryOperation::Arrow);
+  context.precedence_table.add_left(TokenKind::EQUAL, 5, BinaryOperation::Equal);
+  context.precedence_table.add_left(TokenKind::NOT_EQUAL, 5, BinaryOperation::NotEqual);
+  context.precedence_table.add_left(TokenKind::LESS, 6, BinaryOperation::Less);
+  context.precedence_table.add_left(TokenKind::LESS_EQUAL, 6, BinaryOperation::LessEqual);
+  context.precedence_table.add_left(TokenKind::GREATER, 6, BinaryOperation::Greater);
+  context.precedence_table.add_left(TokenKind::GREATER_EQUAL, 6, BinaryOperation::GreaterEqual);
+  context.precedence_table.add_left(TokenKind::PLUS, 10, BinaryOperation::Add);
+  context.precedence_table.add_left(TokenKind::MINUS, 10, BinaryOperation::Subtract);
+  context.precedence_table.add_left(TokenKind::STAR, 20, BinaryOperation::Multiply);
+  context.precedence_table.add_left(TokenKind::SLASH, 20, BinaryOperation::Divide);
 
   // punctuaction
   context.descriptor_table.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);

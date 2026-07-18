@@ -1,7 +1,7 @@
 #include "TypeChecker.hpp"
-#include "core/node/BinaryOp.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
 #include "ast/statements/FunctionDeclarationNode.hpp" 
+#include "core/operators/BinaryOperation.hpp"
 namespace ayla {
 void TypeChecker::check(ast::AstNode *node) {
   if (!node) return;
@@ -225,10 +225,10 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
   // ------------------
   // Aritméticos
   // ------------------
-  case ast::BinaryOperation::Add:
-  case ast::BinaryOperation::Subtract:
-  case ast::BinaryOperation::Multiply:
-  case ast::BinaryOperation::Divide:
+  case BinaryOperation::Add:
+  case BinaryOperation::Subtract:
+  case BinaryOperation::Multiply:
+  case BinaryOperation::Divide:
 
     if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
@@ -238,8 +238,8 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
   // ------------------
   // Lógicos
   // ------------------
-  case ast::BinaryOperation::And:
-  case ast::BinaryOperation::Or:
+  case BinaryOperation::And:
+  case BinaryOperation::Or:
 
     if (l != &BuiltinTypes::Boolean || r != &BuiltinTypes::Boolean) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
@@ -249,10 +249,10 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
   // ------------------
   // Comparação
   // ------------------
-  case ast::BinaryOperation::Less:
-  case ast::BinaryOperation::LessEqual:
-  case ast::BinaryOperation::Greater:
-  case ast::BinaryOperation::GreaterEqual:
+  case BinaryOperation::Less:
+  case BinaryOperation::LessEqual:
+  case BinaryOperation::Greater:
+  case BinaryOperation::GreaterEqual:
 
     if (l != &BuiltinTypes::Number || r != &BuiltinTypes::Number) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 
@@ -262,8 +262,8 @@ void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node)
   // ------------------
   // Igualdade
   // ------------------
-  case ast::BinaryOperation::Equal:
-  case ast::BinaryOperation::NotEqual:
+  case BinaryOperation::Equal:
+  case BinaryOperation::NotEqual:
 
     if (l != r) { report_error(DiagnosticCode::TypeMismatch, node->slice); }
 

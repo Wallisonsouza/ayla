@@ -34,7 +34,7 @@ constexpr const char *token_kind_to_str(TokenKind kin) {
   case K::INVALID: return "INVALID";
   case K::COMMENT: return "COMMENT";
   case K::VALUE_KEYWORD: return "VALUE_KEYWORD";
-  case K::CONST_KEYWORD: return "CONST_KEYWORD";
+  case K::CONST: return "CONST_KEYWORD";
   case K::FUNCTION_KEYWORD: return "FUNCTION_KEYWORD";
   case K::OPEN_BRACKET: return "OPEN_BRACKET";
   case K::CLOSE_BRACKET: return "CLOSE_BRACKET";

@@ -1,26 +1,79 @@
 #pragma once
+
 #include <cstdint>
 #include <functional>
 #include <limits>
 
-struct SymbolId {
-  uint32_t value;
 
-  static constexpr uint32_t INVALID = std::numeric_limits<uint32_t>::max();
+struct SymbolId
+{
+    using ValueType = uint32_t;
 
-  constexpr SymbolId() : value(INVALID) {}
+    static constexpr ValueType INVALID =
+        std::numeric_limits<ValueType>::max();
 
-  explicit constexpr SymbolId(uint32_t v) : value(v) {}
 
-  constexpr bool is_valid() const { return value != INVALID; }
+private:
 
-  constexpr bool operator==(SymbolId other) const { return value == other.value; }
-  constexpr bool operator!=(SymbolId other) const { return value != other.value; }
-  constexpr bool operator<(SymbolId other) const { return value < other.value; }
+    ValueType value = INVALID;
+
+
+public:
+
+    constexpr SymbolId() = default;
+
+
+    explicit constexpr SymbolId(ValueType v)
+        : value(v)
+    {
+    }
+
+
+    constexpr bool is_valid() const
+    {
+        return value != INVALID;
+    }
+
+
+    constexpr explicit operator bool() const
+    {
+        return is_valid();
+    }
+
+
+    constexpr ValueType index() const
+    {
+        return value;
+    }
+
+
+    constexpr bool operator==(SymbolId other) const
+    {
+        return value == other.value;
+    }
+
+
+    constexpr bool operator!=(SymbolId other) const
+    {
+        return value != other.value;
+    }
+
+
+    constexpr bool operator<(SymbolId other) const
+    {
+        return value < other.value;
+    }
 };
 
-namespace std {
-template <> struct hash<SymbolId> {
-  size_t operator()(const SymbolId &id) const noexcept { return std::hash<uint32_t>{}(id.value); }
+
+namespace std
+{
+template<>
+struct hash<SymbolId>
+{
+    size_t operator()(const SymbolId& id) const noexcept
+    {
+        return hash<uint32_t>{}(id.index());
+    }
 };
-} // namespace std
+}

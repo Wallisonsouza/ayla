@@ -1,6 +1,8 @@
 #pragma once
 
-#include "core/node/BinaryOp.hpp"
+
+#include "core/operators/BinaryOperation.hpp"
+#include "core/operators/UnaryOperation.hpp"
 #include "engine/CompilationUnit.hpp"
 
 #include "ast/expressions/AssignmentExpression.hpp"
@@ -266,17 +268,17 @@ struct Executor {
     auto lhs = execute_node(unit, node->lhs).value;
     auto rhs = execute_node(unit, node->rhs).value;
 
-    using BO = ayla::ast::BinaryOperation;
+    
     switch (node->op) {
-    case BO::Add: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() + rhs->get_number())));
-    case BO::Subtract: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() - rhs->get_number())));
-    case BO::Multiply: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() * rhs->get_number())));
-    case BO::Divide: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() / rhs->get_number())));
-    case BO::Equal: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() == rhs->get_number())));
-    case BO::Less: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() < rhs->get_number())));
-    case BO::LessEqual: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() <= rhs->get_number())));
-    case BO::Greater: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() > rhs->get_number())));
-    case BO::GreaterEqual: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() >= rhs->get_number())));
+    case BinaryOperation::Add: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() + rhs->get_number())));
+    case BinaryOperation::Subtract: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() - rhs->get_number())));
+    case BinaryOperation::Multiply: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() * rhs->get_number())));
+    case BinaryOperation::Divide: return ExecResult::make_value(std::make_shared<Value>(Value::Number(lhs->get_number() / rhs->get_number())));
+    case BinaryOperation::Equal: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() == rhs->get_number())));
+    case BinaryOperation::Less: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() < rhs->get_number())));
+    case BinaryOperation::LessEqual: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() <= rhs->get_number())));
+    case BinaryOperation::Greater: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() > rhs->get_number())));
+    case BinaryOperation::GreaterEqual: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(lhs->get_number() >= rhs->get_number())));
     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
     }
   }
@@ -286,7 +288,7 @@ struct Executor {
     auto operand = execute_node(unit, node->operand).value;
 
     switch (node->op) {
-    case ayla::UnaryOperation::NOT: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(!operand->get_boolean())));
+    case UnaryOperation::Not: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(!operand->get_boolean())));
 
     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
     }

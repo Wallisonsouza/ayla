@@ -1,9 +1,9 @@
 #include "ast_debug.hpp"
-#include "core/node/BinaryOp.hpp"
+#include "core/operators/BinaryOperation.hpp"
 
 void ASTDebug::debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node) {
 
-  debug_header("BinaryExpression: " + ayla::ast::binary_op_to_string(node->op));
+debug_header(std::format("BinaryExpression: {}", to_string(node->op)));
 
   if (node->lhs) { debug_labeled("Left", node->lhs, false); }
 

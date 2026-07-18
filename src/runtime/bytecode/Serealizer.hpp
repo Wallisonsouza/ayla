@@ -40,7 +40,7 @@ inline std::string opcode_to_string(OpCode op) {
 inline std::string serialize_instruction(const Instruction &instr) {
   std::string s = opcode_to_string(instr.op);
 
-  if (instr.var_id.value != 0) s += " var_id=" + std::to_string(instr.var_id.value);
+  if (instr.var_id.index() != 0) s += " var_id=" + std::to_string(instr.var_id.index());
   if (instr.operand.is_number()) s += " value=" + std::to_string(instr.operand.get_number());
   if (!instr.name.empty()) s += " name=" + instr.name;
   if (instr.jump_target != 0) s += " jump_target=" + std::to_string(instr.jump_target);

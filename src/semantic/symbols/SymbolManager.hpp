@@ -1,6 +1,7 @@
 #pragma once
 #include "SymbolId.hpp"
 #include "semantic/symbols/Symbol.hpp"
+#include "Symbol.hpp"
 
 #include <deque>
 #include <stdexcept>
@@ -17,7 +18,7 @@ public:
     if (next_id == SymbolId::INVALID) { throw std::runtime_error("SymbolId overflow"); }
 
     SymbolId id(next_id++);
-    symbols.emplace_back(name, kind, visibility, is_builtin, decl);
+    symbols.emplace_back(id, name, kind, visibility, is_builtin, decl);
 
     return id;
   }
@@ -25,7 +26,7 @@ public:
   Symbol *get(SymbolId id) {
     if (!id.is_valid()) return nullptr;
 
-    uint32_t i = id.value;
+    uint32_t i = id.index();
 
     if (i >= symbols.size()) return nullptr;
 
@@ -35,7 +36,7 @@ public:
   const Symbol *get(SymbolId id) const {
     if (!id.is_valid()) return nullptr;
 
-    uint32_t i = id.value;
+    uint32_t i = id.index();
 
     if (i >= symbols.size()) return nullptr;
 

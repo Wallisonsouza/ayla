@@ -12,16 +12,16 @@ void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclaration
 
   SymbolId sym_id = unit.context.symbol_manager.create_symbol(node->identifier->name, SymbolKind::Function, Visibility::Public, false, node);
 
-  current_scope->declare(node->identifier->name, sym_id);
+  current_scope->symbols.insert(node->identifier->name, sym_id);
   node->symbol_id = sym_id;
 
-  if (node->modifiers.has(ayla::ast::Modifier::Extern)) return;
+  if (node->specifiers.modifiers.has(Modifier::Extern)) return;
 
   // --- Escopo da função ---
   push_scope();
 
   // --- Bind dos parâmetros (AGORA PATTERNS) ---
-  for (auto *param : node->parameters) { resolve_pattern(param, node->modifiers); }
+  for (auto *param : node->parameters) { resolve_pattern(param, node->specifiers.modifiers); }
 
   if (node->body) resolve_block(node->body, false);
 

@@ -15,11 +15,12 @@
 #include "ast/statements/ReturnStatementNodes.hpp"
 #include "ast/statements/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
-#include "core/node/BinaryOp.hpp"
 
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "core/operators/BinaryOperation.hpp"
+#include "core/operators/UnaryOperation.hpp"
 #include "runtime/value/value.hpp"
 
 enum class OpCode {
@@ -107,17 +108,17 @@ struct BytecodeGenerator {
       auto bin = static_cast<ayla::ast::node::BinaryExpressionNode *>(node);
       generate_node(bin->lhs);
       generate_node(bin->rhs);
-      using BO = ayla::ast::BinaryOperation;
+     
       switch (bin->op) {
-      case BO::Add: emit(Instruction(OpCode::ADD)); break;
-      case BO::Subtract: emit(Instruction(OpCode::SUB)); break;
-      case BO::Multiply: emit(Instruction(OpCode::MUL)); break;
-      case BO::Divide: emit(Instruction(OpCode::DIV)); break;
-      case BO::Equal: emit(Instruction(OpCode::EQ)); break;
-      case BO::Less: emit(Instruction(OpCode::LT)); break;
-      case BO::LessEqual: emit(Instruction(OpCode::LTE)); break;
-      case BO::Greater: emit(Instruction(OpCode::GT)); break;
-      case BO::GreaterEqual: emit(Instruction(OpCode::GTE)); break;
+      case BinaryOperation::Add: emit(Instruction(OpCode::ADD)); break;
+      case BinaryOperation::Subtract: emit(Instruction(OpCode::SUB)); break;
+      case BinaryOperation::Multiply: emit(Instruction(OpCode::MUL)); break;
+      case BinaryOperation::Divide: emit(Instruction(OpCode::DIV)); break;
+      case BinaryOperation::Equal: emit(Instruction(OpCode::EQ)); break;
+      case BinaryOperation::Less: emit(Instruction(OpCode::LT)); break;
+      case BinaryOperation::LessEqual: emit(Instruction(OpCode::LTE)); break;
+      case BinaryOperation::Greater: emit(Instruction(OpCode::GT)); break;
+      case BinaryOperation::GreaterEqual: emit(Instruction(OpCode::GTE)); break;
       default: throw std::runtime_error("Operador binário não implementado");
       }
       break;
@@ -125,7 +126,7 @@ struct BytecodeGenerator {
     case NK::UnaryExpression: {
       auto un = static_cast<ayla::ast::node::UnaryExpressionNode *>(node);
       generate_node(un->operand);
-      if (un->op == ayla::UnaryOperation::NOT) emit(Instruction(OpCode::NOT));
+      if (un->op == UnaryOperation::Not) emit(Instruction(OpCode::NOT));
       break;
     }
     case NK::VariableDeclaration: {

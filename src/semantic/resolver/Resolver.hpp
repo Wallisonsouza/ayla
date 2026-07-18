@@ -1,8 +1,9 @@
 #pragma once
 
+#include "core/modifiers/ModifierSet.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "semantic/scope/scope.hpp"
+#include "semantic/scope/Scope.hpp"
 
 #include "ast/AstNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
@@ -23,10 +24,10 @@
 #include "ast/statements/FunctionDeclarationNode.hpp" 
 struct Resolver {
 
-  core::ParserScope *current_scope;
+  core::Scope *current_scope;
   CompilationUnit &unit;
 
-  explicit Resolver(CompilationUnit &unit, core::ParserScope *global) : unit(unit), current_scope(global) {}
+  explicit Resolver(CompilationUnit &unit, core::Scope *global) : unit(unit), current_scope(global) {}
 
   void resolve(ayla::ast::AstNode *node);
 
@@ -35,7 +36,7 @@ struct Resolver {
 
   void resolve_top_level();
 
-  void resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers modifier);
+  void resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier);
 
   void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
   void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);

@@ -9,10 +9,10 @@ enum class TokenKind : uint8_t {
   INVALID,
   COMMENT,
 
-  EXTERN_KEYWORD,
+  EXTERN,
   MODULE_KEYWORD,
   VALUE_KEYWORD,
-  CONST_KEYWORD,
+  CONST,
   FUNCTION_KEYWORD,
   IMPORT_KEYWORD,
   IF_KEYWORD,     // Representa a palavra-chave 'if'.

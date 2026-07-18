@@ -1,12 +1,12 @@
 #include "Resolver.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
-#include "core/node/flags.hpp"
+
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
 
-  node->flags.set(NodeFlags::Resolved);
+  node->flags.add(NodeFlags::Resolved);
 
   switch (node->kind) {
 

@@ -2,7 +2,7 @@
 
 #include "ast/AstVisitor.hpp"
 #include "ast/NodeKind.hpp"
-#include "core/node/flags.hpp"
+#include "NodeState.hpp"
 #include "core/token/Location.hpp"
 
 struct Type;
@@ -12,7 +12,7 @@ namespace ayla::ast {
 struct AstNode {
   NodeKind kind;
   SourceSlice slice;
-  NodeFlag flags;
+  NodeState flags;
   Type *inferred_type = nullptr;
   virtual ~AstNode() = default;
   virtual void accept(AstVisitor &v) = 0;

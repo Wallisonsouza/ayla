@@ -1,4 +1,5 @@
-#include "core/node/Modifier.hpp"
+#include "core/modifiers/Modifier.hpp"
+
 #include "semantic/resolver/Resolver.hpp"
 #include <iostream>
 
@@ -8,7 +9,7 @@ void Resolver::resolve_assignment(ayla::ast::node::AssignmentExpressionNode *nod
 
   auto symbol = unit.context.symbol_manager.get(node->target->resolved_symbol_id);
 
-  if (symbol->modifiers.has(ayla::ast::Modifier::Mut)) { std::cout << "aaaaaaaaaaaaaaaa, e mut"; }
+  if (symbol->modifiers.has(Modifier::Mut)) { std::cout << "aaaaaaaaaaaaaaaa, e mut"; }
 
   if (node->value) { resolve(node->value); }
 }

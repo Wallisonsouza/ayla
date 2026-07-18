@@ -1,7 +1,7 @@
+#include "semantic/types/type.hpp"
+#include <memory>
 #include <unordered_map>
 #include <string>
-#include  <memory>
-#include <type.hpp>
 
 namespace core::table {
 class TypeTable {

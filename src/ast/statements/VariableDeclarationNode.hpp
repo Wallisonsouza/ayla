@@ -2,16 +2,16 @@
 
 #include "ast/PatternNode.hpp"
 #include "ast/StatementNode.hpp"
-#include "core/node/Modifier.hpp"
+#include "syntax/parser/DeclarationSpecifiers.hpp"
 
 namespace ayla::ast::node {
 
 struct VariableDeclarationNode : StatementNode {
   PatternNode *pattern;
   ExpressionNode *initializer;
-  Modifiers modifiers;
+  DeclarationSpecifiers specifiers;
 
-  VariableDeclarationNode(PatternNode *p, ExpressionNode *init, Modifiers m = {}) : StatementNode(NodeKind::VariableDeclaration), pattern(p), initializer(init), modifiers(m) {}
+  VariableDeclarationNode(PatternNode *p, ExpressionNode *init, DeclarationSpecifiers specifiers = {}) : StatementNode(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
 
   void accept(AstVisitor &v) override { v.visit(this); }
 };

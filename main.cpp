@@ -1,8 +1,7 @@
 #include "diagnostic/formatter.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "engine/Engine.hpp"
-#include "language/argon_main.hpp"
-#include "runtime/bytecode/ByteCode.hpp"
+#include "context/argon_main.hpp"
 #include "runtime/bytecode/Serealizer.hpp"
 #include "runtime/interpreter/executor.hpp"
 #include <iostream>

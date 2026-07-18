@@ -1,14 +1,14 @@
 #include "Resolver.hpp"
-#include "core/node/Modifier.hpp"
+#include "core/modifiers/ModifierSet.hpp"
 
-void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers modifier) {
+void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier) {
   if (!pat) return;
 
   switch (pat->kind) {
   case ayla::ast::NodeKind::IdentifierPattern: {
     auto *pattern = static_cast<ayla::ast::IdentifierPatternNode *>(pat);
 
-    if (current_scope->has_symbol_local(pattern->identifier->name)) {
+    if (current_scope->symbols.contains(pattern->identifier->name)) {
       report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
       return;
     }
@@ -18,7 +18,7 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ayla::ast::Modifiers
     auto symbol = unit.context.symbol_manager.get(sybol_id);
     symbol->modifiers = modifier;
 
-    current_scope->declare(pattern->identifier->name, sybol_id);
+    current_scope->symbols.insert(pattern->identifier->name, sybol_id);
 
     pattern->symbol_id = sybol_id;
 
