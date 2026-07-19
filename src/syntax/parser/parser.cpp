@@ -7,6 +7,10 @@
 ayla::ast::node::VariableDeclarationNode *
 Parser::parse_variable_declaration(DeclarationSpecifiers specifiers)
 {
+  // value a = 10;
+
+  // _ [A-Z] [a-z] [0-9] _
+
     if (!unit.tokens.match(TokenKind::VALUE_KEYWORD))
         return nullptr;
 

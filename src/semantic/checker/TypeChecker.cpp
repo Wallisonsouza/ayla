@@ -2,6 +2,7 @@
 #include "ast/statements/BlockStatementNode.hpp" 
 #include "ast/statements/FunctionDeclarationNode.hpp" 
 #include "core/operators/BinaryOperation.hpp"
+
 namespace ayla {
 void TypeChecker::check(ast::AstNode *node) {
   if (!node) return;

@@ -4,6 +4,7 @@
 #include "core/token/Location.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "engine/Pass.hpp"
 #include "syntax/parser/DeclarationSpecifiers.hpp"
 #include "syntax/parser/recovery/recover.hpp"
 
@@ -30,9 +31,13 @@
 #include "ast/statements/FunctionDeclarationNode.hpp"
 
 struct Parser {
-  CompilationUnit &unit;
 
   ayla::ast::TypeNode *parse_type();
+
+
+  CompilationUnit &unit;
+
+  Parser(CompilationUnit &unit): unit(unit){};
 
 private:
   void recover_until(RecoverBoundary boundaries);
@@ -82,7 +87,7 @@ public:
 
   ayla::ast::PatternNode *parse_pattern();
 
-  void parse_program() {
+  void generate() {
 
     consume_statement_separators();
 

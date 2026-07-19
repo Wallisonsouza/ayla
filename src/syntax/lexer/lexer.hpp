@@ -5,10 +5,10 @@
 #include "engine/CompilationUnit.hpp"
 #include "utils/Unicode.hpp"
 
-struct Lexer {
+struct Lexer  {
 private:
-  CompilationUnit &unit;
   core::source::TextStream stream;
+  CompilationUnit &unit;
 
   Token *match_token() {
 
@@ -28,7 +28,7 @@ private:
   }
 
 public:
-  Lexer(CompilationUnit &unit) : unit(unit), stream(unit.source.buffer) {};
+  Lexer(CompilationUnit &unit) : unit(unit),  stream(unit.source.buffer) {};
 
   Token *match_identifier();
   Token *match_string();
@@ -71,7 +71,7 @@ public:
     }
   }
 
-  void generate_tokens() {
+  void tokenize ()  {
 
     while (!stream.eof()) {
       skip_whitespace_and_comments(stream);

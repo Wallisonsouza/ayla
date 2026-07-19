@@ -1,10 +1,16 @@
 #pragma once
-#include "core/memory/Arena.hpp"
 #include "engine/CompilationUnit.hpp"
 
 class CompilationUnitManager {
-  core::memory::Arena arena;
 
 public:
-  CompilationUnit *create_compilation_unit(LanguageContext &ctx, core::source::Source &src) { return arena.alloc<CompilationUnit>(ctx, src); }
+  std::vector<std::unique_ptr<CompilationUnit>> units;
+
+  CompilationUnit *create_compilation_unit(LanguageContext &context, core::source::Source &source) {
+ 
+    units.push_back(std::move(std::make_unique<CompilationUnit>(context, source)));
+    return units.back().get();  
+
+  };
+
 };
