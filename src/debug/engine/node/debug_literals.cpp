@@ -4,7 +4,7 @@ void ASTDebug::debug_identifier(const ayla::ast::node::IdentifierExpressionNode 
 
   out << "Identifier";
 
-  if (!node->name.empty()) { out << ": " << node->name; }
+  // if (!node->name.empty()) { out << ": " << node->name; }
 
   out << "\n";
 }

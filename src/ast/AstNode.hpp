@@ -9,7 +9,7 @@ struct Type;
 namespace ayla::ast {
 
 struct AstNode {
-  NodeKind kind;
+  const NodeKind kind;
   SourceSlice slice;
   NodeState flags;
   Type *inferred_type = nullptr;

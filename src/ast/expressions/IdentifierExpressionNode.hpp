@@ -2,14 +2,15 @@
 #pragma once
 
 #include "ast/ExpressionNode.hpp"
-#include <string>
+#include "ast/names/QualifiedNameNode.hpp"
 
 namespace ayla::ast::node {
 
 struct IdentifierExpressionNode : ExpressionNode {
-  std::string name;
-  explicit IdentifierExpressionNode(std::string n) : ExpressionNode(NodeKind::Identifier), name(std::move(n)) {}
+
+  NameNode *name;
+  explicit IdentifierExpressionNode(NameNode *n) : ExpressionNode(NodeKind::IdentifierExpression), name(n){}
 
   
 };
-} // namespace ayla::ast::node
+} // namespace ayla::ast::node*

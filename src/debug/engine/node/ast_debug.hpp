@@ -4,7 +4,7 @@
 #include "debug/console/console.hpp"
 
 
-#include "ast/PatternNode.hpp"
+#include "ast/patterns/PatternNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"
@@ -15,12 +15,12 @@
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/statements/ModuleDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/statements/VariableDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/statements/FunctionDeclarationNode.hpp" 
+#include "ast/declarations/FunctionDeclarationNode.hpp" 
 #include <string>
 #include <vector>
 
@@ -78,6 +78,7 @@ struct ASTDebug {
   void debug_string_literal(const ayla::ast::node::StringLiteralNode *node);
   void debug_bool_literal(const ayla::ast::node::BoolLiteralNode *node);
 
+  void debug_name(const ayla::ast::NameNode *node);
   void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
   void debug_identifier(const ayla::ast::node::IdentifierExpressionNode *node);
   void debug_member_access(const ayla::ast::node::MemberAccessExpressionNode *node);
@@ -94,7 +95,7 @@ struct ASTDebug {
   void debug_return_statement(const ayla::ast::node::ReturnStatementNode *node);
 
   void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
-  void debug_index_acess(const ayla::ast::node::IndexAccessNode *node);
+  void debug_index_acess(const ayla::ast::node::IndexAccessExpressionNode *node);
   void debug_array_literal(const ayla::ast::node::ArrayLiteralNode *node);
   void debug_path_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
   void debug_if_statement(const ayla::ast::node::IfStatementNode *node);

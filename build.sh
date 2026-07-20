@@ -4,9 +4,9 @@ set -e
 export CC=clang
 export CXX=clang++
 
-rm -rf build
+# rm -rf build
 
-mkdir -p build
+# mkdir -p build
 cd build
 
 # Gera build usando Ninja
@@ -14,7 +14,7 @@ cmake -G Ninja \
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 ..
 
-MAX_THREADS=12
+MAX_THREADS=8
 THREADS=$(nproc)
 
 if [ "$THREADS" -gt "$MAX_THREADS" ]; then

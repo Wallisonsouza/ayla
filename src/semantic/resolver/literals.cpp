@@ -4,7 +4,7 @@
 void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
-  SymbolId id = current_scope->resolve_symbol(node->name);
+  SymbolId id = current_scope->resolve_symbol(node->name->str);
 
   if (!id.is_valid()) {
     report_error(DiagnosticCode::UndeclaredSymbol, node->slice);

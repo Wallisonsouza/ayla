@@ -1,36 +1,56 @@
+
 #include "debug/engine/node/ast_debug.hpp"
+#include "debug/engine/token/dump_tokens.hpp"
 #include "engine/Pass.hpp"
+#include "semantic/checker/TypeChecker.hpp"
+#include "semantic/resolver/Resolver.hpp"
 #include "syntax/lexer/lexer.hpp"
-#include "syntax/parser/parser.hpp"
+#include "syntax/parser/Parser.hpp"
+#include "syntax/parser/ParserContext.hpp"
 
+class LexerPass : public Pass {
+  void run(CompilationUnit &unit) override {
 
-class LexerPass: public Pass {
-    void run(CompilationUnit &unit) override {
+    Lexer lex(unit);
 
-        Lexer lex(unit);
+    lex.tokenize();
 
-        lex.tokenize();
-    };
+   
+  };
 };
 
+class ResolvePass : public Pass {
+  void run(CompilationUnit &unit) override {
 
-class ParsePass: public Pass {
-    void run(CompilationUnit &unit) override {
+    auto scope = unit.scope_manager.create_scope(nullptr);
+    Resolver resolver(unit, scope);
 
-        Parser parser(unit);
-
-        parser.generate();
-    };
+    for (auto node : unit.ast.get_nodes()) { resolver.resolve(node); }
+  };
 };
 
+class CheckPass : public Pass {
+  void run(CompilationUnit &unit) override {
 
-class DebugPass: public Pass {
+    ayla::TypeChecker checker(unit);
 
-    ASTDebug debug;
+    for (auto node : unit.ast.get_nodes()) { checker.check(node); }
+  };
+};
 
-    void run(CompilationUnit &unit) override {
+class ParsePass : public Pass {
+  void run(CompilationUnit &unit) override {
 
-        debug.dump_ast(unit.ast);
-      
-    };
+    ParseContext context = ParseContext(unit);
+    Parser parser(context);
+
+    parser.run();
+  };
+};
+
+class AstDebug : public Pass {
+
+  ASTDebug debug;
+
+  void run(CompilationUnit &unit) override { debug.dump_ast(unit.ast); };
 };

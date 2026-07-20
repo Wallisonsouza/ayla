@@ -3,7 +3,8 @@
 #include "engine/CompilationUnit.hpp"
 
 struct Pass {
-  virtual ~Pass() = default;
+
   public:
+    virtual ~Pass() = default;
   virtual void run(CompilationUnit &unit) = 0;
 };

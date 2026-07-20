@@ -6,11 +6,11 @@
 namespace ayla::ast::node {
 
 struct ImportStatementNode : StatementNode {
-  std::vector<IdentifierExpressionNode *> path;
+  QualifiedNameNode* name;
   std::optional<std::string> alias;
   SymbolId resolved_symbol_id;
 
-  explicit ImportStatementNode(std::vector<IdentifierExpressionNode *> p) : StatementNode(NodeKind::ImportStatement), path(std::move(p)) {}
+  explicit ImportStatementNode(QualifiedNameNode* n) : StatementNode(NodeKind::ImportStatement), name(n) {}
 
   
 };

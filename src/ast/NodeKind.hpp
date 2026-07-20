@@ -13,9 +13,10 @@ enum class NodeKind {
   ObjectFieldList,
   CharLiteral,
   NullLiteral,
-  Identifier,
+  Name,
   Interface,
   IdentifierPattern,
+  QualifiedName,
 
   // === Statements ===
   MemberAccess,
@@ -34,12 +35,13 @@ enum class NodeKind {
   OperatorDeclaration,
   ModuleDeclaration,
 
-  FunctionCall,
+  Call,
   FunctionParameter,
   NativeFunctionDeclaration,
   TypeDeclaration,
   ParameterDeclaration,
 
+  IdentifierExpression,
   CallExpression,
   BinaryExpression,
   UnaryExpression,

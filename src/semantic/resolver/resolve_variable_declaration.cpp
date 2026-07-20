@@ -1,6 +1,5 @@
 #include "Resolver.hpp"
-#include "ast/statements/VariableDeclarationNode.hpp"
-
+#include "ast/declarations/VariableDeclarationNode.hpp"
 
 void Resolver::resolve_variable_declaration(ayla::ast::node::VariableDeclarationNode *node) {
 

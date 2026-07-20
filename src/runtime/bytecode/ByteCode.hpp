@@ -9,11 +9,11 @@
 #include "ast/expressions/UnaryExpressionNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ExpressionStatementNode.hpp"
-#include "ast/statements/FunctionDeclarationNode.hpp"
+#include "ast/declarations/FunctionDeclarationNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/statements/VariableDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 
 #include <stdexcept>
@@ -99,7 +99,7 @@ struct BytecodeGenerator {
       emit(Instruction(OpCode::PUSH_BOOLEAN, Value::Boolean(b->value)));
       break;
     }
-    case NK::Identifier: {
+    case NK::Name: {
       auto id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(node);
       emit(Instruction(OpCode::LOAD, id->resolved_symbol_id));
       break;
@@ -143,7 +143,7 @@ struct BytecodeGenerator {
       auto ass = static_cast<ayla::ast::node::AssignmentExpressionNode *>(node);
       generate_node(ass->value);
       switch (ass->target->kind) {
-      case NK::Identifier: {
+      case NK::Name: {
         auto *id = static_cast<ayla::ast::node::IdentifierExpressionNode *>(ass->target);
         emit(Instruction(OpCode::STORE, id->resolved_symbol_id));
         break;

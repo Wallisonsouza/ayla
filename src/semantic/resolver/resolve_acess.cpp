@@ -2,7 +2,7 @@
 #include "diagnostic/diagnostic_code.hpp"
 #include "semantic/resolver/Resolver.hpp"
 
-void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
+void Resolver::resolve_index_access(ayla::ast::node::IndexAccessExpressionNode *node) {
 
   if (node->base) resolve(node->base);
 
@@ -10,7 +10,7 @@ void Resolver::resolve_index_access(ayla::ast::node::IndexAccessNode *node) {
 }
 
 void Resolver::resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node) {
-  if (!node || !node->base || !node->field) return;
+  if (!node || !node->base || !node->member) return;
 
   resolve(node->base);
 

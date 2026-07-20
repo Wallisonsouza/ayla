@@ -15,12 +15,12 @@
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/statements/ModuleDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/statements/VariableDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/statements/FunctionDeclarationNode.hpp" 
+#include "ast/declarations/FunctionDeclarationNode.hpp" 
 namespace ayla {
 struct TypeChecker {
 
@@ -52,7 +52,7 @@ struct TypeChecker {
   void check_binary_expression(ast::node::BinaryExpressionNode *node);
   void check_unary_expression(ast::node::UnaryExpressionNode *node);
   void check_member_access(ast::node::MemberAccessExpressionNode *node);
-  void check_index_access(ast::node::IndexAccessNode *node);
+  void check_index_access(ast::node::IndexAccessExpressionNode *node);
 
   // Controle
   void check_if_statement(ast::node::IfStatementNode *node);

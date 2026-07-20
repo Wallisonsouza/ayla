@@ -1,0 +1,41 @@
+#include "NameParser.hpp"
+#include "debug/engine/token/dump_tokens.hpp"
+
+NameParser::NameParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+
+ayla::ast::NameNode *NameParser::parse_name() {
+  auto &tokens = context.tokens();
+
+  debug::engine::dump_token(*tokens.peek());
+
+  auto *token = tokens.match(TokenKind::IDENTIFIER);
+
+  if (!token) return nullptr;
+
+  auto text = context.source().buffer.get_text(token->slice.span);
+
+  return context.ast().create_node<ayla::ast::NameNode>(text);
+}
+
+ayla::ast::QualifiedNameNode *NameParser::parse_qualified_name() {
+  auto &tokens = context.tokens();
+
+  std::vector<ayla::ast::NameNode *> parts;
+
+  auto *first = parse_name();
+
+  if (!first) return nullptr;
+
+  parts.push_back(first);
+
+  while (tokens.match(TokenKind::DOT)) {
+
+    auto *next = parse_name();
+
+    if (!next) return nullptr;
+
+    parts.push_back(next);
+  }
+
+  return context.ast().create_node<ayla::ast::QualifiedNameNode>(std::move(parts));
+}

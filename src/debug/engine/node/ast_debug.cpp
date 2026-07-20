@@ -1,6 +1,8 @@
 #include "ast_debug.hpp"
-#include "ast/PatternNode.hpp"
+#include "ast/NodeKind.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/names/QualifiedNameNode.hpp"
+#include "ast/patterns/PatternNode.hpp"
 #include "core/AST.hpp"
 #include "debug/console/console.hpp"
 
@@ -42,7 +44,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::NullLiteral: debug_null_literal(static_cast<const ayla::ast::node::NullLiteralNode *>(node)); break;
 
-  case NodeKind::Identifier: debug_identifier(static_cast<const ayla::ast::node::IdentifierExpressionNode *>(node)); break;
+  case NodeKind::Name: debug_name(static_cast<const NameNode *>(node)); break;
 
   case NodeKind::ImportStatement: debug_import(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
 
@@ -54,7 +56,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case NodeKind::FunctionCall: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
+  case NodeKind::Call: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
@@ -68,7 +70,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::BlockStatement: debug_block(static_cast<const ayla::ast::node::BlockStatementNode *>(node)); break;
 
-  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessNode *>(node)); break;
+  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
 
   case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 

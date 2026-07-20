@@ -2,28 +2,28 @@
 
 void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclarationNode *node) {
 
-  if (!node) return;
+  // if (!node) return;
 
-  // --- Bind da função ---
-  if (current_scope->has_symbol_local(node->identifier->name)) {
-    report_error(DiagnosticCode::RedeclaredIdentifier, node->identifier->slice, {{"name", node->identifier->name}});
-    return;
-  }
+  // // --- Bind da função ---
+  // if (current_scope->has_symbol_local(node->name->str)) {
+  //   report_error(DiagnosticCode::RedeclaredIdentifier, node->identifier->slice, {{"name", node->identifier->name}});
+  //   return;
+  // }
 
-  SymbolId sym_id = unit.context.symbol_manager.create_symbol(node->identifier->name, SymbolKind::Function, Visibility::Public, false, node);
+  // SymbolId sym_id = unit.context.symbol_manager.create_symbol(node->name->str, SymbolKind::Function, Visibility::Public, false, node);
 
-  current_scope->symbols.insert(node->identifier->name, sym_id);
-  node->symbol_id = sym_id;
+  // current_scope->symbols.insert(node->name->str, sym_id);
+  // node->symbol_id = sym_id;
 
-  if (node->specifiers.modifiers.has(Modifier::Extern)) return;
+  // if (node->specifiers.modifiers.has(Modifier::Extern)) return;
 
-  // --- Escopo da função ---
-  push_scope();
+  // // --- Escopo da função ---
+  // push_scope();
 
-  // --- Bind dos parâmetros (AGORA PATTERNS) ---
-  for (auto *param : node->parameters) { resolve_pattern(param, node->specifiers.modifiers); }
+  // // --- Bind dos parâmetros (AGORA PATTERNS) ---
+  // for (auto *param : node->parameters) { resolve_pattern(param, node->specifiers.modifiers); }
 
-  if (node->body) resolve_block(node->body, false);
+  // if (node->body) resolve_block(node->body, false);
 
-  pop_scope();
+  // pop_scope();
 }

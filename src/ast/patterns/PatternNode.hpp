@@ -2,7 +2,8 @@
 
 
 #include "ast/TypeNode.hpp"
-#include "ast/expressions/IdentifierExpressionNode.hpp"
+
+#include "ast/names/QualifiedNameNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 
 namespace ayla::ast {
@@ -12,11 +13,11 @@ struct PatternNode : AstNode {
 };
 
 struct IdentifierPatternNode : PatternNode {
-  node::IdentifierExpressionNode *identifier;
+  NameNode *name;
   SymbolId symbol_id;
   TypeNode *type_annotation;
 
-  IdentifierPatternNode(node::IdentifierExpressionNode *identifier, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), identifier(identifier), type_annotation(type) {}
+  IdentifierPatternNode(NameNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), name(n), type_annotation(type) {}
 
   
 };

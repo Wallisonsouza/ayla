@@ -5,5 +5,5 @@ void ASTDebug::debug_path_expression(const ayla::ast::node::MemberAccessExpressi
   debug_header("MemberAccessNode");
 
   debug_labeled("Base", node->base, false);
-  debug_labeled("Field", node->field, true);
+  debug_labeled("Field", node->member, true);
 }

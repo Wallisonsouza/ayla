@@ -1,15 +1,15 @@
 #pragma once
 
 #include "ast/ExpressionNode.hpp"
-#include "ast/expressions/IdentifierExpressionNode.hpp"
+#include "ast/names/QualifiedNameNode.hpp"
 
 namespace ayla::ast::node {
 
 struct MemberAccessExpressionNode : ExpressionNode {
   ExpressionNode *base;
-  IdentifierExpressionNode *field;
+  NameNode *member;
 
-  MemberAccessExpressionNode(ExpressionNode *b, IdentifierExpressionNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), field(f) {}
+  MemberAccessExpressionNode(ExpressionNode *b, NameNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), member(f) {}
 
   
 };

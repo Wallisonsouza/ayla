@@ -28,9 +28,9 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::ImportStatement: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
 
-  case ayla::ast::NodeKind::Identifier: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::Name: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::FunctionCall: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
+  case ayla::ast::NodeKind::Call: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
@@ -46,7 +46,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<ayla::ast::node::ArrayLiteralNode *>(node)); break;
 
-  case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<ayla::ast::node::IndexAccessNode *>(node)); break;
+  case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
 
   case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node)); break;
 

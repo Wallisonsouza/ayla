@@ -3,7 +3,7 @@
 #include "core/operators/BinaryOperation.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
-#include "engine/language_context.hpp"
+#include "engine/LangContext.hpp"
 #include "semantic/checker/TypeChecker.hpp"
 #include "semantic/types/type.hpp"
 #include <memory>
@@ -23,8 +23,8 @@ inline LanguageContext create_context() {
 
   context.type_table["void"] = std::make_shared<Type>(BuiltinTypes::Void);
 
-  context.descriptor_table.add(TokenKind::TRUE_KEYWORD, "true", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::FALSE_KEYWORD, "false", TokenGroup::Keyword);
+  context.descriptor_table.add(TokenKind::TRUE, "true", TokenGroup::Keyword);
+  context.descriptor_table.add(TokenKind::FALSE, "false", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);

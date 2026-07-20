@@ -16,12 +16,12 @@
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/statements/ModuleDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/statements/VariableDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/statements/FunctionDeclarationNode.hpp" 
+#include "ast/declarations/FunctionDeclarationNode.hpp" 
 struct Resolver {
 
   core::Scope *current_scope;
@@ -33,8 +33,6 @@ struct Resolver {
 
   void push_scope();
   void pop_scope();
-
-  void resolve_top_level();
 
   void resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier);
 
@@ -48,7 +46,7 @@ struct Resolver {
   void resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node);
   void resolve_type_node(ayla::ast::TypeNode *node);
 
-  void resolve_index_access(ayla::ast::node::IndexAccessNode *node);
+  void resolve_index_access(ayla::ast::node::IndexAccessExpressionNode *node);
   void resolve_member_access(ayla::ast::node::MemberAccessExpressionNode *node);
 
   void resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node);

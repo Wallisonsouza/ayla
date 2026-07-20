@@ -1,5 +1,5 @@
 #include "ast/NodeKind.hpp"
-#include "ast/PatternNode.hpp"
+#include "ast/patterns/PatternNode.hpp"
 #include "ast_debug.hpp"
 
 void ASTDebug::debug_pattern(const ayla::ast::PatternNode *node) {
@@ -10,7 +10,7 @@ void ASTDebug::debug_pattern(const ayla::ast::PatternNode *node) {
 
     auto pattern = static_cast<const ayla::ast::IdentifierPatternNode *>(node);
 
-    debug_header("IdentifierPattern: " + pattern->identifier->name);
+    debug_header("IdentifierPattern: " + pattern->name->str);
 
     debug_node(pattern->type_annotation, true);
   }

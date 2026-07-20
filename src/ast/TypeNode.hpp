@@ -1,20 +1,18 @@
 #include "ast/AstNode.hpp"
+#include "ast/names/QualifiedNameNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
-#include <string>
 
 namespace ayla::ast {
 
 struct TypeNode : AstNode {
-  std::string name;
+  NameNode *name;
   SymbolId symbol_id;
   std::vector<TypeNode *> generics;
   bool is_primitive = false;
 
-  TypeNode(std::string name_, bool primitive = false) : AstNode(NodeKind::Type), name(std::move(name_)), is_primitive(primitive) {}
+  TypeNode(NameNode *n, bool primitive = false) : AstNode(NodeKind::Type), name(n), is_primitive(primitive) {}
 
-  TypeNode(std::string name_, std::vector<TypeNode *> g) : AstNode(NodeKind::Type), name(std::move(name_)), generics(std::move(g)) {}
-
-  
+  TypeNode(NameNode *n, std::vector<TypeNode *> g) : AstNode(NodeKind::Type), name(n), generics(std::move(g)) {}
 };
 
 } // namespace ayla::ast

@@ -1,6 +1,6 @@
 #include "TypeChecker.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/statements/FunctionDeclarationNode.hpp" 
+#include "ast/declarations/FunctionDeclarationNode.hpp" 
 #include "core/operators/BinaryOperation.hpp"
 
 namespace ayla {
@@ -9,7 +9,7 @@ void TypeChecker::check(ast::AstNode *node) {
 
   switch (node->kind) {
   case ast::NodeKind::ExpressionStatement: check_expression_statement(static_cast<ast::node::ExpressionStatementNode *>(node)); break;
-  case ast::NodeKind::Identifier: check_identifier(static_cast<ast::node::IdentifierExpressionNode *>(node)); break;
+  case ast::NodeKind::Name: check_identifier(static_cast<ast::node::IdentifierExpressionNode *>(node)); break;
   case ast::NodeKind::NumberLiteral: check_number_literal(static_cast<ast::node::NumberLiteralNode *>(node)); break;
   case ast::NodeKind::StringLiteral: check_string_literal(static_cast<ast::node::StringLiteralNode *>(node)); break;
   case ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ast::node::BoolLiteralNode *>(node)); break;
@@ -17,10 +17,10 @@ void TypeChecker::check(ast::AstNode *node) {
   case ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ast::node::ObjectLiteralNode *>(node)); break;
   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::node::VariableDeclarationNode *>(node)); break;
   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::node::FunctionDeclarationNode *>(node)); break;
-  case ast::NodeKind::FunctionCall: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
+  case ast::NodeKind::Call: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::node::BinaryExpressionNode *>(node)); break;
   case ast::NodeKind::MemberAccess: check_member_access(static_cast<ast::node::MemberAccessExpressionNode *>(node)); break;
-  case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessNode *>(node)); break;
+  case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessExpressionNode *>(node)); break;
   case ast::NodeKind::Assignment: check_assignment(dynamic_cast<ast::node::AssignmentExpressionNode *>(node)); break;
   case ast::NodeKind::IfStatement: check_if_statement(static_cast<ast::node::IfStatementNode *>(node)); break;
   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::node::WhileStatementNode *>(node)); break;
@@ -40,7 +40,7 @@ void TypeChecker::check_identifier(ast::node::IdentifierExpressionNode *node) {
   auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id);
 
   if (!sym) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"expected", node->name}});
+    // report_error(DiagnosticCode::UndeclaredSymbol, node->slice, {{"expected", node->name}});
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
@@ -73,26 +73,26 @@ void TypeChecker::check_array_literal(ast::node::ArrayLiteralNode *node) {
 }
 
 void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
-  if (!node) return;
+  // if (!node) return;
 
-  auto *objType = unit.context.type_arena.alloc<ObjectType>();
+  // auto *objType = unit.context.type_arena.alloc<ObjectType>();
 
-  for (auto *field : node->fields) {
-    check(field->value);
+  // for (auto *field : node->fields) {
+  //   check(field->value);
 
-    if (!field->key || field->key->kind != ast::NodeKind::Identifier) continue;
-    auto *key = static_cast<ast::node::IdentifierExpressionNode *>(field->key);
+  //   if (!field->key || field->key->kind != ast::NodeKind::Name) continue;
+  //   auto *key = static_cast<ast::node::IdentifierExpressionNode *>(field->key);
 
-    if (objType->has_member(key->name)) {
-      report_error(DiagnosticCode::RedeclaredIdentifier, key->slice);
-      continue;
-    }
+  //   if (objType->has_member(key->name)) {
+  //     report_error(DiagnosticCode::RedeclaredIdentifier, key->slice);
+  //     continue;
+  //   }
 
-    Type *valueType = field->value ? field->value->inferred_type : &BuiltinTypes::Unknown;
-    objType->add_member(key->name, valueType);
-  }
+  //   Type *valueType = field->value ? field->value->inferred_type : &BuiltinTypes::Unknown;
+  //   objType->add_member(key->name, valueType);
+  // }
 
-  node->inferred_type = objType;
+  // node->inferred_type = objType;
 }
 
 //---------------------------
@@ -100,29 +100,29 @@ void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
 //---------------------------
 
 void TypeChecker::check_variable_declaration(ast::node::VariableDeclarationNode *node) {
-  if (!node) return;
+  // if (!node) return;
 
-  if (node->initializer) { check(node->initializer); }
+  // if (node->initializer) { check(node->initializer); }
 
-  check_pattern(node->pattern);
+  // check_pattern(node->pattern);
 
-  auto *idPattern = dynamic_cast<ast::IdentifierPatternNode *>(node->pattern);
-  if (!idPattern) return;
+  // auto *idPattern = dynamic_cast<ast::IdentifierPatternNode *>(node->pattern);
+  // if (!idPattern) return;
 
-  if (idPattern->type_annotation) { auto type = unit.context.type_table.find(idPattern->type_annotation->name); }
+  // if (idPattern->type_annotation) { auto type = unit.context.type_table.find(idPattern->type_annotation->name); }
 
-  Type *finalType = nullptr;
+  // Type *finalType = nullptr;
 
-  if (idPattern->type_annotation)
-    finalType = idPattern->type_annotation->inferred_type;
-  else if (node->initializer)
-    finalType = node->initializer->inferred_type;
-  else
-    finalType = &BuiltinTypes::Unknown;
+  // if (idPattern->type_annotation)
+  //   finalType = idPattern->type_annotation->inferred_type;
+  // else if (node->initializer)
+  //   finalType = node->initializer->inferred_type;
+  // else
+  //   finalType = &BuiltinTypes::Unknown;
 
-  idPattern->inferred_type = finalType;
+  // idPattern->inferred_type = finalType;
 
-  if (auto *sym = unit.context.symbol_manager.get(idPattern->symbol_id)) sym->type = finalType; // ✅ Atualiza o símbolo com tipo final
+  // if (auto *sym = unit.context.symbol_manager.get(idPattern->symbol_id)) sym->type = finalType; // ✅ Atualiza o símbolo com tipo final
 }
 
 void TypeChecker::check_pattern(ast::PatternNode *node) {
@@ -137,8 +137,8 @@ void TypeChecker::check_pattern(ast::PatternNode *node) {
     // Se existir type annotation
     if (idPattern->type_annotation)
       finalType = idPattern->type_annotation->inferred_type;
-    else if (idPattern->identifier && idPattern->identifier->inferred_type)
-      finalType = idPattern->identifier->inferred_type;
+    else if (idPattern->name && idPattern->name->inferred_type)
+      finalType = idPattern->name->inferred_type;
     else
       finalType = &BuiltinTypes::Unknown;
 
@@ -281,7 +281,7 @@ void TypeChecker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
   check(node->operand);
 }
 
-void TypeChecker::check_index_access(ast::node::IndexAccessNode *node) {
+void TypeChecker::check_index_access(ast::node::IndexAccessExpressionNode *node) {
   if (!node || !node->base || !node->index) return;
 
   check(node->base);
@@ -334,17 +334,17 @@ void TypeChecker::check_member_access(ast::node::MemberAccessExpressionNode *nod
   Type *baseType = node->base->inferred_type;
 
   if (!baseType || baseType->kind != TypeKind::Object) {
-    report_error(DiagnosticCode::InvalidMemberAccess, node->field->slice);
+    report_error(DiagnosticCode::InvalidMemberAccess, node->member->slice);
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
 
   auto *objType = static_cast<ObjectType *>(baseType);
 
-  Type *fieldType = objType->get_member(node->field->name);
+  Type *fieldType = objType->get_member(node->member->str);
 
   if (!fieldType) {
-    report_error(DiagnosticCode::MemberNotFound, node->field->slice, {{"member", node->field->name}});
+    report_error(DiagnosticCode::MemberNotFound, node->member->slice, {{"member", node->member->str}});
     node->inferred_type = &BuiltinTypes::Unknown;
     return;
   }
@@ -363,7 +363,7 @@ void TypeChecker::check_assignment(ast::node::AssignmentExpressionNode *node) {
   Type *valueType = node->value->inferred_type ? node->value->inferred_type : &BuiltinTypes::Unknown;
 
   switch (node->target->kind) {
-  case ast::NodeKind::Identifier: {
+  case ast::NodeKind::Name: {
 
     auto *id_node = static_cast<ast::node::IdentifierExpressionNode *>(node->target);
     targetType = id_node->inferred_type ? id_node->inferred_type : &BuiltinTypes::Unknown;
@@ -377,7 +377,7 @@ void TypeChecker::check_assignment(ast::node::AssignmentExpressionNode *node) {
   }
 
   case ast::NodeKind::IndexAccess: {
-    auto *idxNode = static_cast<ast::node::IndexAccessNode *>(node->target);
+    auto *idxNode = static_cast<ast::node::IndexAccessExpressionNode *>(node->target);
     targetType = idxNode->inferred_type ? idxNode->inferred_type : &BuiltinTypes::Unknown;
     break;
   }
