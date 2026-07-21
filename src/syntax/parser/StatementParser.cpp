@@ -13,7 +13,6 @@
 #include "ast/statements/ReturnStatementNodes.hpp"
 
 #include "core/token/token_stream.hpp"
-#include "debug/engine/token/dump_tokens.hpp"
 #include "syntax/parser/ParserUtil.hpp"
 #include <iostream>
 
@@ -135,6 +134,8 @@ ayla::ast::StatementNode *StatementParser::parse_if() {
   auto *condition = parser.expressions().parse_expression();
 
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
+
+    std::cout << "Fatal error: no condition in if statement";
     // context.report_error(...)
     return nullptr;
   }

@@ -25,5 +25,8 @@ public:
     return diag;
   }
 
+
+  
+
   const std::vector<Diagnostic *> &all() const { return diagnostics_; }
 };

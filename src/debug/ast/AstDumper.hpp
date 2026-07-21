@@ -35,7 +35,7 @@ struct TreeLayout {
   void print_vertical_padding(size_t lines);
 };
 
-struct ASTDebug {
+struct AstDumper {
 
   struct LabeledChild {
     const char *label;
@@ -67,7 +67,7 @@ struct ASTDebug {
   std::ostream &out;
   TreeLayout tree;
 
-  explicit ASTDebug(std::ostream &out = std::cout);
+  explicit AstDumper(std::ostream &out = std::cout);
 
   void dump_ast(const Ast &ast);
   void debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last);
@@ -80,28 +80,28 @@ struct ASTDebug {
 
   void debug_name(const ayla::ast::NameNode *node);
   void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
-  void debug_identifier(const ayla::ast::node::IdentifierExpressionNode *node);
+  void debug_identifier_expression(const ayla::ast::node::IdentifierExpressionNode *node);
   void debug_member_access(const ayla::ast::node::MemberAccessExpressionNode *node);
-  void debug_import(const ayla::ast::node::ImportStatementNode *node);
+  void debug_import_statement(const ayla::ast::node::ImportStatementNode *node);
   void debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);
   void debug_type(const ayla::ast::TypeNode *node);
   void debug_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node);
   void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
   void debug_unary_expression(const ayla::ast::node::UnaryExpressionNode *node);
-  void debug_function_call(const ayla::ast::node::CallExpressionNode *node);
+  void debug_call_expression(const ayla::ast::node::CallExpressionNode *node);
   void debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);
   void debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node);
   void debug_object_field(const ayla::ast::node::ObjectFieldNode *node);
   void debug_return_statement(const ayla::ast::node::ReturnStatementNode *node);
 
   void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
-  void debug_index_acess(const ayla::ast::node::IndexAccessExpressionNode *node);
+  void debug_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node);
   void debug_array_literal(const ayla::ast::node::ArrayLiteralNode *node);
-  void debug_path_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
+  void debug_member_acess_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
   void debug_if_statement(const ayla::ast::node::IfStatementNode *node);
-  void debug_ASSIGN_node(const ayla::ast::node::AssignmentExpressionNode *node);
-  void debug_block(const ayla::ast::node::BlockStatementNode *node);
-  void debug_while(const ayla::ast::node::WhileStatementNode *node);
+  void debug_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node);
+  void debug_block_statement(const ayla::ast::node::BlockStatementNode *node);
+  void debug_while_statement(const ayla::ast::node::WhileStatementNode *node);
   void debug_children(const std::vector<const ayla::ast::AstNode *> &children);
   void debug_pattern(const ayla::ast::PatternNode *node);
 

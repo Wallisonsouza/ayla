@@ -1,12 +1,13 @@
 
-#include "debug/engine/node/ast_debug.hpp"
-#include "debug/engine/token/dump_tokens.hpp"
+#include "debug/ast/AstDumper.hpp"
+#include "debug/lexer/TokenDumper.hpp"
 #include "engine/Pass.hpp"
 #include "semantic/checker/TypeChecker.hpp"
 #include "semantic/resolver/Resolver.hpp"
 #include "syntax/lexer/lexer.hpp"
 #include "syntax/parser/Parser.hpp"
 #include "syntax/parser/ParserContext.hpp"
+#include <iostream>
 
 class LexerPass : public Pass {
   void run(CompilationUnit &unit) override {
@@ -14,8 +15,6 @@ class LexerPass : public Pass {
     Lexer lex(unit);
 
     lex.tokenize();
-
-   
   };
 };
 
@@ -38,6 +37,16 @@ class CheckPass : public Pass {
   };
 };
 
+class TokenDumpPass : public Pass {
+
+  void run(CompilationUnit &unit) override {
+
+    debug::lexer::TokenDumper dumper;
+
+    std::cout << dumper.dump(unit.tokens);
+  };
+};
+
 class ParsePass : public Pass {
   void run(CompilationUnit &unit) override {
 
@@ -48,9 +57,10 @@ class ParsePass : public Pass {
   };
 };
 
-class AstDebug : public Pass {
+class AstDumpPass : public Pass {
 
-  ASTDebug debug;
-
-  void run(CompilationUnit &unit) override { debug.dump_ast(unit.ast); };
+  void run(CompilationUnit &unit) override {
+    AstDumper debug;
+    debug.dump_ast(unit.ast);
+  };
 };

@@ -6,6 +6,7 @@
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"
+#include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "ast/expressions/IndexAcessExpressionNode.hpp"
 #include "ast/expressions/LiteralExpressionNode.hpp"
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
@@ -14,7 +15,6 @@
 #include "NameParser.hpp"
 #include "core/token/Token.hpp"
 #include "syntax/parser/ParserUtil.hpp"
-#include <iostream>
 
 ExpressionParser::ExpressionParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
@@ -206,7 +206,8 @@ ayla::ast::ExpressionNode *ExpressionParser::parse_primary_expression() {
   case TokenKind::TRUE:
   case TokenKind::FALSE: return parse_bool_literal();
 
-  case TokenKind::IDENTIFIER: return parse_identifier_expression();
+  case TokenKind::IDENTIFIER: {
+    return parse_identifier_expression();}
 
   case TokenKind::OPEN_PAREN: return parse_grouped_expression();
 
@@ -216,9 +217,12 @@ ayla::ast::ExpressionNode *ExpressionParser::parse_primary_expression() {
 
 ayla::ast::ExpressionNode *ExpressionParser::parse_identifier_expression() {
 
-  std::cout << "method parse_identifier_expression not implemented";
+  auto *name = parser.names().parse_name();
 
-  return nullptr;
+  if (!name) return nullptr;
+
+
+  return context.ast().create_node<ayla::ast::node::IdentifierExpressionNode>(name);
 }
 
 ayla::ast::ExpressionNode *ExpressionParser::parse_unary_expression() {

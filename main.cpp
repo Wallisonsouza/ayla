@@ -1,7 +1,5 @@
 #include "context/argon_main.hpp"
-#include "debug/engine/token/dump_tokens.hpp"
 #include "runtime/bytecode/Serealizer.hpp"
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -15,18 +13,18 @@ int main() {
   CompilationSession session(context);
 
   session.add_pass(std::make_unique<LexerPass>());
+  // debug
+  session.add_pass(std::make_unique<TokenDumpPass>());
+  
   session.add_pass(std::make_unique<ParsePass>());
-  // session.add_pass(std::make_unique<ResolvePass>());
-  // session.add_pass(std::make_unique<CheckPass>());
+  // debug
+  session.add_pass(std::make_unique<AstDumpPass>());
 
-  session.add_pass(std::make_unique<AstDebug>());
+
 
   auto unit = session.add_script("../scripts/main.ayla");
 
   session.compile();
-
-
-  //  debug::engine::dump_tokens(unit->tokens);
 
   return 0;
 }

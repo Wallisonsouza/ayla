@@ -1,12 +1,9 @@
 #include "NameParser.hpp"
-#include "debug/engine/token/dump_tokens.hpp"
 
 NameParser::NameParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 ayla::ast::NameNode *NameParser::parse_name() {
   auto &tokens = context.tokens();
-
-  debug::engine::dump_token(*tokens.peek());
 
   auto *token = tokens.match(TokenKind::IDENTIFIER);
 

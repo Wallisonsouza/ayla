@@ -5,6 +5,7 @@
 namespace ayla::ast::node {
 
 struct IndexAccessExpressionNode : ExpressionNode {
+  
   ExpressionNode *base;
   ExpressionNode *index;
 

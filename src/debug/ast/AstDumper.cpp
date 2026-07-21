@@ -1,12 +1,13 @@
-#include "ast_debug.hpp"
+#include "AstDumper.hpp"
 #include "ast/NodeKind.hpp"
+#include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
 #include "ast/names/QualifiedNameNode.hpp"
 #include "ast/patterns/PatternNode.hpp"
 #include "core/AST.hpp"
 #include "debug/console/console.hpp"
 
-ASTDebug::ASTDebug(std::ostream &out) : out(out), tree(out) {}
+AstDumper::AstDumper(std::ostream &out) : out(out), tree(out) {}
 
 TreeLayout::TreeLayout(std::ostream &out) : out(out) {}
 
@@ -21,7 +22,7 @@ void TreeLayout::begin_node(bool is_last) {
 
 void TreeLayout::end_node() { ancestors_alive.pop_back(); }
 
-void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
+void AstDumper::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   using namespace ayla::ast;
   if (!node) return;
 
@@ -29,6 +30,8 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   switch (node->kind) {
 
+  case ayla::ast::NodeKind::IdentifierExpression: debug_identifier_expression(static_cast<const node::IdentifierExpressionNode *>(node)); break;
+  
   case NodeKind::Pattern:
   case NodeKind::IdentifierPattern: debug_pattern(static_cast<const PatternNode *>(node)); break;
 
@@ -46,7 +49,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::Name: debug_name(static_cast<const NameNode *>(node)); break;
 
-  case NodeKind::ImportStatement: debug_import(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
+  case NodeKind::ImportStatement: debug_import_statement(static_cast<const ayla::ast::node::ImportStatementNode *>(node)); break;
 
   case NodeKind::ModuleDeclaration: debug_module_declaration(static_cast<const ayla::ast::node::ModuleDeclarationNode *>(node)); break;
 
@@ -56,27 +59,27 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
 
   case NodeKind::BinaryExpression: debug_binary_expression(static_cast<const ayla::ast::node::BinaryExpressionNode *>(node)); break;
 
-  case NodeKind::Call: debug_function_call(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
+  case NodeKind::Call: debug_call_expression(static_cast<const ayla::ast::node::CallExpressionNode *>(node)); break;
 
   case NodeKind::ExpressionStatement: debug_expression_statement(static_cast<const ayla::ast::node::ExpressionStatementNode *>(node)); break;
 
   case NodeKind::FunctionDeclaration: debug_function_declaration(static_cast<const ayla::ast::node::FunctionDeclarationNode *>(node)); break;
 
-  case NodeKind::MemberAccess: debug_path_expression(static_cast<const ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
+  case NodeKind::MemberAccess: debug_member_acess_expression(static_cast<const ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
   case NodeKind::IfStatement: debug_if_statement(static_cast<const ayla::ast::node::IfStatementNode *>(node)); break;
 
-  case NodeKind::Assignment: debug_ASSIGN_node(static_cast<const ayla::ast::node::AssignmentExpressionNode *>(node)); break;
+  case NodeKind::Assignment: debug_assignment_expression(static_cast<const ayla::ast::node::AssignmentExpressionNode *>(node)); break;
 
-  case NodeKind::BlockStatement: debug_block(static_cast<const ayla::ast::node::BlockStatementNode *>(node)); break;
+  case NodeKind::BlockStatement: debug_block_statement(static_cast<const ayla::ast::node::BlockStatementNode *>(node)); break;
 
-  case NodeKind::IndexAccess: debug_index_acess(static_cast<const ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
+  case NodeKind::IndexAccess: debug_index_acess_expression(static_cast<const ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
 
   case NodeKind::ReturnStatement: debug_return_statement(static_cast<const ayla::ast::node::ReturnStatementNode *>(node)); break;
 
   case NodeKind::ArrayLiteral: debug_array_literal(static_cast<const ayla::ast::node::ArrayLiteralNode *>(node)); break;
 
-  case NodeKind::WhileStatement: debug_while(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
+  case NodeKind::WhileStatement: debug_while_statement(static_cast<const ayla::ast::node::WhileStatementNode *>(node)); break;
 
   case NodeKind::UnaryExpression: debug_unary_expression(static_cast<const ayla::ast::node::UnaryExpressionNode *>(node)); break;
   default: out << "<error>\n"; break;
@@ -85,7 +88,7 @@ void ASTDebug::debug_node(const ayla::ast::AstNode *node, bool isLast) {
   tree.end_node();
 }
 
-void ASTDebug::dump_ast(const Ast &ast) {
+void AstDumper::dump_ast(const Ast &ast) {
 
   tree.ancestors_alive.clear();
 
@@ -95,7 +98,7 @@ void ASTDebug::dump_ast(const Ast &ast) {
   }
 }
 
-void ASTDebug::debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last) {
+void AstDumper::debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last) {
   tree.begin_node(is_last);
 
   debug::Console::log(label_color, label);
