@@ -57,6 +57,7 @@ public:
   static const Color SoftRed;  // notas relacionadas a erro
   static const Color MutedRed; // underline, contexto
   static const Color PinkRed;  // warnings que parecem erro
+    static const Color MediumSlateBlue;  // warnings que parecem erro
 };
 
 inline const Color Color::Black(0, 0, 0);
@@ -90,5 +91,7 @@ inline const Color Color::Lime(0, 255, 0);
 inline const Color Color::Navy(0, 0, 128);
 inline const Color Color::Maroon(128, 0, 0);
 inline const Color Color::Olive(128, 128, 0);
+
+inline const Color Color::MediumSlateBlue(60,179,113);
 
 } // namespace debug

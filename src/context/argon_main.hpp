@@ -29,7 +29,7 @@ inline LanguageContext create_context() {
   context.descriptor_table.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::FUNCTION_KEYWORD, "funct", TokenGroup::Keyword);
+  context.descriptor_table.add(TokenKind::FUNCTION_KEYWORD, "fu", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
   context.descriptor_table.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);

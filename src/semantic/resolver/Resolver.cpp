@@ -1,7 +1,6 @@
 #include "Resolver.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
 
-
 void Resolver::resolve(ayla::ast::AstNode *node) {
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
@@ -26,7 +25,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ImportStatement: resolve_import_node(static_cast<ayla::ast::node::ImportStatementNode *>(node)); break;
+  case ayla::ast::NodeKind::ImportDeclaration: resolve_import_node(static_cast<ayla::ast::node::ImportDeclarationNode *>(node)); break;
 
   case ayla::ast::NodeKind::Name: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 

@@ -8,10 +8,8 @@
 #include "PatternParser.hpp"
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
-#include "ast/declarations/FunctionDeclarationNode.hpp"
-#include "ast/names/QualifiedNameNode.hpp"
-#include "ast/patterns/PatternNode.hpp"
-#include "ast/statements/BlockStatementNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
+#include "debug/ast/AstDumper.hpp"
 #include "syntax/parser/ParserUtil.hpp"
 #include <vector>
 
@@ -27,31 +25,32 @@ Parser::Parser(ParseContext &context) : context(context) {
 Parser::~Parser() = default;
 
 void Parser::run() {
-  ayla::parser::consume_statement_separators(context);
+  auto *module = declarations().parse_module_declaration();
+
+  if (!module) { module = context.ast().create_node<ayla::ast::node::ModuleDeclarationNode>(nullptr); }
+
+  auto *script = context.ast().create_node<ayla::ast::node::BlockStatementNode>();
 
   auto &tokens = context.tokens();
 
-  auto *body = context.ast().create_node<ayla::ast::node::BlockStatementNode>();
-
   while (!tokens.is_end()) {
+
     if (auto *decl = declarations().parse_declaration()) {
-      context.ast().add_root(decl);
-    } else if (auto *stmt = statements().parse_statement()) {
-  
-      body->statements.push_back(stmt);
-    } else {
-      // erro de sintaxe
-      tokens.advance();
+      module->declarations.push_back(decl);
+      continue;
     }
 
-    ayla::parser::consume_statement_separators(context);
+    if (auto *stmt = statements().parse_statement()) {
+      script->statements.push_back(stmt);
+      continue;
+    }
+
+    tokens.advance();
   }
 
-  if (!body->statements.empty()) {
-    auto *name = context.ast().create_node<ayla::ast::NameNode>("main");
+  context.unit.module = module;
+  context.unit.script = script;
 
-    auto *main = context.ast().create_node<ayla::ast::node::FunctionDeclarationNode>(name, std::vector<ayla::ast::PatternNode *>{}, nullptr, body);
-
-    context.ast().add_root(main);
-  }
+  
+  context.ast().set_root(module);
 }

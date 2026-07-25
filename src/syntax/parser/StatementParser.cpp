@@ -10,7 +10,7 @@
 #include "ast/statements/WhileStatementNode.hpp"
 
 #include "ast/statements/BlockStatementNode.hpp"
-#include "ast/statements/ReturnStatementNodes.hpp"
+#include "ast/statements/ReturnStatementNode.hpp"
 
 #include "core/token/token_stream.hpp"
 #include "syntax/parser/ParserUtil.hpp"
@@ -24,21 +24,21 @@ ayla::ast::StatementNode *StatementParser::parse_statement() {
 
 
   switch (tokens.peek()->descriptor->kind) {
-  case TokenKind::IF_KEYWORD: return parse_if();
+  case TokenKind::IF_KEYWORD: return parse_if_statement();
 
-  case TokenKind::WHILE_KEYWORD: return parse_while();
+  case TokenKind::WHILE_KEYWORD: return parse_while_statement();
 
-  case TokenKind::RETURN_KEYWORD: return parse_return();
+  case TokenKind::RETURN_KEYWORD: return parse_return_statement();
 
-  case TokenKind::IMPORT_KEYWORD: return parse_import();
 
-  case TokenKind::OPEN_BRACE: return parse_block();
+
+  case TokenKind::OPEN_BRACE: return parse_block_statement();
 
   default: return nullptr;
   }
 }
 
-ayla::ast::StatementNode *StatementParser::parse_return() {
+ayla::ast::StatementNode *StatementParser::parse_return_statement() {
   auto &tokens = context.tokens();
 
   tokens.match(TokenKind::RETURN_KEYWORD);
@@ -53,11 +53,11 @@ ayla::ast::StatementNode *StatementParser::parse_return() {
   return context.ast().create_node<ayla::ast::node::ReturnStatementNode>(value);
 }
 
-ayla::ast::node::BlockStatementNode *StatementParser::parse_block() {
+ayla::ast::node::BlockStatementNode *StatementParser::parse_block_statement() {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::OPEN_BRACE)) {
-    // context.report_error(...)
+    // context.//report_error(...)
     return nullptr;
   }
 
@@ -72,7 +72,7 @@ ayla::ast::node::BlockStatementNode *StatementParser::parse_block() {
     } else if (auto *stmt_node = parser.statements().parse_statement()) {
       statements.push_back(stmt_node);
     } else {
-      // context.report_error("Comando ou declaração inválida dentro do bloco");
+      // context.//report_error("Comando ou declaração inválida dentro do bloco");
       tokens.advance();
     }
 
@@ -80,14 +80,14 @@ ayla::ast::node::BlockStatementNode *StatementParser::parse_block() {
   }
 
   if (!tokens.match(TokenKind::CLOSE_BRACE)) {
-    // context.report_error(...)
+    // context.//report_error(...)
     return nullptr;
   }
 
   return context.ast().create_node<ayla::ast::node::BlockStatementNode>(std::move(statements));
 }
 
-ayla::ast::StatementNode *StatementParser::parse_while() {
+ayla::ast::StatementNode *StatementParser::parse_while_statement() {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::WHILE_KEYWORD)) return nullptr;
@@ -95,7 +95,7 @@ ayla::ast::StatementNode *StatementParser::parse_while() {
   auto *condition = parser.expressions().parse_expression();
 
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
-    // context.report_error(
+    // context.//report_error(
     //     DiagnosticCode::ConditionMissing,
     //     "expected condition after while"
     // );
@@ -104,7 +104,7 @@ ayla::ast::StatementNode *StatementParser::parse_while() {
   }
 
   if (condition->kind == ayla::ast::NodeKind::Assignment) {
-    // context.report_error(
+    // context.//report_error(
     //     DiagnosticCode::ConditionAssignment,
     //     "assignment is not allowed in while condition"
     // );
@@ -112,10 +112,10 @@ ayla::ast::StatementNode *StatementParser::parse_while() {
     return nullptr;
   }
 
-  auto *block = parse_block();
+  auto *block = parse_block_statement();
 
   if (!block || block->flags.has(NodeFlags::HasError)) {
-    // context.report_error(
+    // context.//report_error(
     //     DiagnosticCode::BlockError,
     //     "error in while block"
     // );
@@ -126,7 +126,7 @@ ayla::ast::StatementNode *StatementParser::parse_while() {
   return context.ast().create_node<ayla::ast::node::WhileStatementNode>(condition, block);
 }
 
-ayla::ast::StatementNode *StatementParser::parse_if() {
+ayla::ast::StatementNode *StatementParser::parse_if_statement() {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::IF_KEYWORD)) return nullptr;
@@ -136,16 +136,16 @@ ayla::ast::StatementNode *StatementParser::parse_if() {
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
 
     std::cout << "Fatal error: no condition in if statement";
-    // context.report_error(...)
+    // context.//report_error(...)
     return nullptr;
   }
 
   if (condition->kind == ayla::ast::NodeKind::Assignment) {
-    // context.report_error(...)
+    // context.//report_error(...)
     return nullptr;
   }
 
-  auto *then_block = parse_block();
+  auto *then_block = parse_block_statement();
 
   if (!then_block || then_block->flags.has(NodeFlags::HasError)) {
     // erro
@@ -157,25 +157,13 @@ ayla::ast::StatementNode *StatementParser::parse_if() {
   if (tokens.match(TokenKind::ELSE_KEYWORD)) {
 
     if (tokens.peek(TokenKind::IF_KEYWORD)) {
-      else_block = parse_if();
+      else_block = parse_if_statement();
     } else {
-      else_block = parse_block();
+      else_block = parse_block_statement();
     }
 
     if (else_block && else_block->flags.has(NodeFlags::HasError)) { return nullptr; }
   }
 
   return context.ast().create_node<ayla::ast::node::IfStatementNode>(condition, then_block, else_block);
-}
-
-ayla::ast::StatementNode *StatementParser::parse_import() {
-  auto &tokens = context.tokens();
-
-  if (!tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
-
-  auto *module = parser.names().parse_qualified_name();
-
-  if (!module) return nullptr;
-
-  return context.ast().create_node<ayla::ast::node::ImportStatementNode>(module);
 }

@@ -6,7 +6,7 @@ void Resolver::resolve_function_declaration(ayla::ast::node::FunctionDeclaration
 
   // // --- Bind da função ---
   // if (current_scope->has_symbol_local(node->name->str)) {
-  //   report_error(DiagnosticCode::RedeclaredIdentifier, node->identifier->slice, {{"name", node->identifier->name}});
+  //   //report_error(DiagnosticCode::RedeclaredIdentifier, node->identifier->slice, {{"name", node->identifier->name}});
   //   return;
   // }
 

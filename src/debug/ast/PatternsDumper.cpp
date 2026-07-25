@@ -1,18 +1,12 @@
 #include "AstDumper.hpp"
 
-void AstDumper::debug_pattern(const ayla::ast::PatternNode *node) {
+#include <format>
 
-  switch (node->kind) {
+void AstDumper::dump_identifier_pattern(
+    const ayla::ast::IdentifierPatternNode *node) {
 
-  case ayla::ast::NodeKind::IdentifierPattern: {
+  auto g = context.object(
+      std::format("IdentifierPattern(\"{}\")", node->name->str));
 
-    auto pattern = static_cast<const ayla::ast::IdentifierPatternNode *>(node);
-
-    if (pattern->name) { debug_header(std::format("IdentifierPattern(\"{}\")", pattern->name->str)); }
-
-    if (pattern->type_annotation) { debug_node(pattern->type_annotation, true); }
-  }
-
-  default: break;
-  }
+  g.field("TypeAnnotation", node->type_annotation);
 }

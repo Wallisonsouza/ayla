@@ -1,42 +1,36 @@
-#include "core/managers/source_manager.hpp"
-#include "diagnostic/formatter.hpp"
-#include "engine/LangContext.hpp"
-#include "engine/Pass.hpp"
-#include "engine/UnitManager.hpp"
-#include "engine/LangContext.hpp"
-#include "PhaseManager.hpp"
+#pragma once
 
+#include "core/managers/source_manager.hpp"
+#include "core/visitor/PassManager.hpp"
+#include "core/visitor/Pipeline.hpp"
+#include "engine/LangContext.hpp"
+#include "engine/UnitManager.hpp"
 class CompilationSession {
 
+public:
+  explicit CompilationSession(LanguageContext &context) : context(context) {}
+
+  CompilationUnit *add_script(const std::string &path) {
+    auto *source = sources.create_source(path);
+
+    return units.create_compilation_unit(context, *source);
+  }
+
+  void compile() {
+    for (auto &unit : units.units) { compile_unit(*unit); }
+  }
+
+  Pipeline &pipeline() { return pipeline_; }
+
+private:
+  void compile_unit(CompilationUnit &unit) { pipeline_.run(unit); }
+
+private:
   LanguageContext &context;
 
-  SourceManager src_manager;
-  CompilationUnitManager cu_manage;
-  PhaseManager phase_manager;
-  
-  public:
-  explicit CompilationSession(LanguageContext &ctx) : context(ctx) {}
+  SourceManager sources;
 
+  UnitManager units;
 
-  CompilationUnit* add_script(const std::string &path) {
-      
-    auto *source = src_manager.create_source(path);
-
-    return cu_manage.create_compilation_unit(context, *source);
-  }
-
-  void add_pass(std::unique_ptr<Pass> pass) {
-    phase_manager.add_phase(std::move(pass));
-  };
-  
-  void compile() {
-
-    for(auto &unit : cu_manage.units) {
-      phase_manager.run_phases(*unit);
-    }
-  }
-
-  void show_diagnostics(CompilationUnit &unit) {
-    for (auto &diag : unit.diagns.all()) { print(*diag, unit); }
-  }
+  Pipeline pipeline_;
 };

@@ -1,4 +1,5 @@
 #include "TokenDumper.hpp"
+#include "core/token/TokenKind.hpp"
 #include <iostream>
 #include <sstream>
 
@@ -20,57 +21,57 @@ constexpr const char *TokenDumper::token_group_to_str(TokenGroup grp) {
 }
 
 constexpr const char *TokenDumper::token_kind_to_str(TokenKind kin) {
-  using K = TokenKind;
 
   switch (kin) {
-  case K::STATIC: return "STATIC";
-  case K::MUT: return "MUT";
-  case K::PUBLIC: return "PUBLIC";
-  case K::PRIVATE: return "PRIVATE";
-  case K::INVALID: return "INVALID";
-  case K::COMMENT: return "COMMENT";
-  case K::VALUE_KEYWORD: return "VALUE_KEYWORD";
-  case K::CONST: return "CONST_KEYWORD";
-  case K::FUNCTION_KEYWORD: return "FUNCTION_KEYWORD";
+  case TokenKind::MODULE_KEYWORD: return "MODULE_KEYWORD";
+  case TokenKind::STATIC: return "STATIC";
+  case TokenKind::MUT: return "MUT";
+  case TokenKind::PUBLIC: return "PUBLIC";
+  case TokenKind::PRIVATE: return "PRIVATE";
+  case TokenKind::INVALID: return "INVALID";
+  case TokenKind::COMMENT: return "COMMENT";
+  case TokenKind::VALUE_KEYWORD: return "VALUE_KEYWORD";
+  case TokenKind::CONST: return "CONST_KEYWORD";
+  case TokenKind::FUNCTION_KEYWORD: return "FUNCTION_KEYWORD";
 
-  case K::OPEN_BRACKET: return "OPEN_BRACKET";
-  case K::CLOSE_BRACKET: return "CLOSE_BRACKET";
+  case TokenKind::OPEN_BRACKET: return "OPEN_BRACKET";
+  case TokenKind::CLOSE_BRACKET: return "CLOSE_BRACKET";
 
-  case K::NEW_LINE: return "Newline";
-  case K::IMPORT_KEYWORD: return "IMPORT_KEYWORD";
-  case K::DOT: return "DOT";
+  case TokenKind::NEW_LINE: return "NEW_LINE";
+  case TokenKind::IMPORT_KEYWORD: return "IMPORT_KEYWORD";
+  case TokenKind::DOT: return "DOT";
 
-  case K::IF_KEYWORD: return "If";
-  case K::ELSE_KEYWORD: return "ELSE_KEYWORD";
-  case K::RETURN_KEYWORD: return "RETURN_KEYWORD";
+  case TokenKind::IF_KEYWORD: return "IF_KEYWORD";
+  case TokenKind::ELSE_KEYWORD: return "ELSE_KEYWORD";
+  case TokenKind::RETURN_KEYWORD: return "RETURN_KEYWORD";
 
-  case K::EQUAL: return "EQUAL";
-  case K::ASSIGN: return "ASSIGN";
+  case TokenKind::EQUAL: return "EQUAL";
+  case TokenKind::ASSIGN: return "ASSIGN";
 
-  case K::Ternary: return "Ternary";
+  case TokenKind::Ternary: return "Ternary";
 
-  case K::PLUS: return "PLUS";
-  case K::MINUS: return "MINUS";
-  case K::STAR: return "STAR";
-  case K::SLASH: return "SLASH";
+  case TokenKind::PLUS: return "PLUS";
+  case TokenKind::MINUS: return "MINUS";
+  case TokenKind::STAR: return "STAR";
+  case TokenKind::SLASH: return "SLASH";
 
-  case K::COLON: return "COLON";
-  case K::COMMA: return "Comma";
-  case K::SEMI_COLON: return "Semicolon";
+  case TokenKind::COLON: return "COLON";
+  case TokenKind::COMMA: return "Comma";
+  case TokenKind::SEMI_COLON: return "Semicolon";
 
-  case K::OPEN_PAREN: return "OPEN_PAREN";
-  case K::CLOSE_PAREN: return "CLOSE_PAREN";
+  case TokenKind::OPEN_PAREN: return "OPEN_PAREN";
+  case TokenKind::CLOSE_PAREN: return "CLOSE_PAREN";
 
-  case K::OPEN_BRACE: return "OPEN_BRACE";
-  case K::CLOSE_BRACE: return "CLOSE_BRACE";
+  case TokenKind::OPEN_BRACE: return "OPEN_BRACE";
+  case TokenKind::CLOSE_BRACE: return "CLOSE_BRACE";
 
-  case K::IDENTIFIER: return "IDENTIFIER";
+  case TokenKind::IDENTIFIER: return "IDENTIFIER";
 
-  case K::NUMBER_LITERAL: return "NUMBER_LITERAL";
-  case K::STRING_LITERAL: return "STRING_LITERAL";
+  case TokenKind::NUMBER_LITERAL: return "NUMBER_LITERAL";
+  case TokenKind::STRING_LITERAL: return "STRING_LITERAL";
 
-  case K::Space: return "Space";
-  case K::EndOfFile: return "EndOfFile";
+  case TokenKind::Space: return "Space";
+  case TokenKind::EndOfFile: return "EndOfFile";
   }
 
   return "<UnknownKind>";
@@ -91,7 +92,6 @@ std::string TokenDumper::sanitize_text(std::string text, size_t max) {
 
 std::string TokenDumper::dump(const Token &token) {
 
-
   const char *kind = "<no-descriptor>";
   const char *group = "<no-descriptor>";
 
@@ -104,7 +104,7 @@ std::string TokenDumper::dump(const Token &token) {
   std::string text{token.slice.span.view()};
 
   std::ostringstream oss;
-  
+
   oss << "Token {\n"
       << "  kind  : " << kind << "\n"
       << "  group : " << group << "\n"

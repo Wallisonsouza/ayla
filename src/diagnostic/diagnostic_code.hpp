@@ -2,6 +2,7 @@
 
 enum class DiagnosticCode {
   UnexpectedToken,
+  ExpectedPattern,
   ExpectedToken,
   ExpectedIdentifier,
   ExpectedType,

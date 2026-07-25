@@ -15,7 +15,7 @@ void Resolver::resolve_member_access(ayla::ast::node::MemberAccessExpressionNode
   resolve(node->base);
 
   if (!node->base->resolved_symbol_id.is_valid()) {
-    report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
+    //report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
     return;
   }
 }

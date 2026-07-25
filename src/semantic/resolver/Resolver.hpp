@@ -1,11 +1,14 @@
 #pragma once
 
+#include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "core/modifiers/ModifierSet.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/scope/Scope.hpp"
 
-
+#include "ast/declarations/FunctionDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"
@@ -13,15 +16,13 @@
 #include "ast/expressions/LiteralExpressionNode.hpp"
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/declarations/ModuleDeclarationNode.hpp"
-#include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/declarations/VariableDeclarationNode.hpp"
+#include "ast/statements/ReturnStatementNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
-#include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/declarations/FunctionDeclarationNode.hpp" 
+
 struct Resolver {
 
   core::Scope *current_scope;
@@ -63,12 +64,6 @@ struct Resolver {
 
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
-  void resolve_import_node(ayla::ast::node::ImportStatementNode *node);
+  void resolve_import_node(ayla::ast::node::ImportDeclarationNode *node);
   void resolve_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
-
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-    auto *diag = unit.diagns.create(code, slice);
-
-    for (auto &[k, v] : ctx) { diag->context.set(k, v); }
-  }
 };

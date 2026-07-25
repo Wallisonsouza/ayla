@@ -26,7 +26,7 @@ void TypeChecker::check(ast::AstNode *node) {
   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::node::WhileStatementNode *>(node)); break;
   case ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ast::node::ReturnStatementNode *>(node)); break;
   case ast::NodeKind::BlockStatement: check_block(static_cast<ast::node::BlockStatementNode *>(node)); break;
-  case ast::NodeKind::ImportStatement: check_import_node(static_cast<ast::node::ImportStatementNode *>(node)); break;
+  case ast::NodeKind::ImportDeclaration: check_import_node(static_cast<ast::node::ImportDeclarationNode *>(node)); break;
   case ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ast::node::ModuleDeclarationNode *>(node)); break;
   case ast::NodeKind::Pattern: check_pattern(static_cast<ast::PatternNode *>(node)); break;
   case ast::NodeKind::UnaryExpression: check_unary_expression(static_cast<ast::node::UnaryExpressionNode *>(node)); break;

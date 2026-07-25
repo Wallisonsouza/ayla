@@ -12,16 +12,15 @@ public:
 
   ayla::ast::StatementNode *parse_statement();
 
-  ayla::ast::node::BlockStatementNode *parse_block();
+  ayla::ast::node::BlockStatementNode *parse_block_statement();
 
 private:
-  ayla::ast::StatementNode *parse_if();
+  ayla::ast::StatementNode *parse_if_statement();
 
-  ayla::ast::StatementNode *parse_while();
+  ayla::ast::StatementNode *parse_while_statement();
 
-  ayla::ast::StatementNode *parse_return();
+  ayla::ast::StatementNode *parse_return_statement();
 
-  ayla::ast::StatementNode *parse_import();
 
 private:
   ParseContext &context;

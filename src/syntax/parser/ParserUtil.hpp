@@ -18,7 +18,7 @@ std::vector<ElementType *> parse_generic_list(ParseContext &context, TokenKind o
   auto &tokens = context.tokens();
 
   if (!tokens.match(open_token)) {
-    // context.report_error(
+    // context.//report_error(
     //     DiagnosticCode::ExpectedToken,
     //     "opening token"
     // );
@@ -55,12 +55,12 @@ std::vector<ElementType *> parse_generic_list(ParseContext &context, TokenKind o
       continue;
     }
 
-    // context.report_error(DiagnosticCode::ExpectedToken, "separator");
+    // context.//report_error(DiagnosticCode::ExpectedToken, "separator");
 
     return {};
   }
 
-  // context.report_error(DiagnosticCode::ExpectedToken, "unterminated list");
+  // context.//report_error(DiagnosticCode::ExpectedToken, "unterminated list");
 
   return {};
 }

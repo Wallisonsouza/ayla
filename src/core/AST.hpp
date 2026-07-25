@@ -3,8 +3,6 @@
 #include "ast/AstNode.hpp"
 #include "core/memory/Arena.hpp"
 #include "core/token/Location.hpp"
-#include <functional>
-#include <vector>
 
 class Ast {
 public:
@@ -25,16 +23,11 @@ public:
     return node;
   }
 
-  void traverse(const std::function<void(ayla::ast::AstNode *)> &fn) const {
-    for (auto *node : roots_) fn(node);
-  }
+  void set_root(ayla::ast::AstNode *node) { root_ = node; }
 
-  size_t size() const { return roots_.size(); }
-  const std::vector<ayla::ast::AstNode *> &get_nodes() const { return roots_; }
-
-  void add_root(ayla::ast::AstNode *node) { roots_.push_back(node); }
+  ayla::ast::AstNode *get_root() const { return root_; }
 
 private:
   core::memory::Arena ast_arena;
-  std::vector<ayla::ast::AstNode *> roots_;
+  ayla::ast::AstNode *root_;
 };

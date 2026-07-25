@@ -1,58 +1,64 @@
 #include "AstDumper.hpp"
 
+#include "ast/expressions/AssignmentExpression.hpp"
+#include "ast/expressions/BinaryExpressionNode.hpp"
+#include "ast/expressions/CallExpressionNode.hpp"
+#include "ast/expressions/IdentifierExpressionNode.hpp"
+#include "ast/expressions/IndexAcessExpressionNode.hpp"
+#include "ast/expressions/MemberAccessExpressionNode.hpp"
+#include "ast/expressions/UnaryExpressionNode.hpp"
 
-void AstDumper::debug_call_expression(const ayla::ast::node::CallExpressionNode *node) {
-  out << "FunctionCall\n";
+#include <format>
 
-  if (node->callee) {
-    bool callee_is_last = node->arguments.empty();
-    debug_labeled("Callee", node->callee, callee_is_last);
+void AstDumper::dump_call_expression(const ayla::ast::node::CallExpressionNode *node) {
+  auto g = context.object("FunctionCall");
+
+  g.field("Callee", node->callee);
+  g.list("Arguments", node->arguments);
+}
+
+void AstDumper::dump_binary_expression(const ayla::ast::node::BinaryExpressionNode *node) {
+  auto g = context.object(std::format("BinaryExpression(\"{}\")", to_string(node->op)));
+
+  g.field("Left", node->lhs);
+  g.field("Right", node->rhs);
+}
+
+void AstDumper::dump_unary_expression(const ayla::ast::node::UnaryExpressionNode *node) {
+  auto g = context.object("UnaryExpression");
+
+  g.field("Operand", node->operand);
+}
+
+void AstDumper::dump_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node) {
+  auto g = context.object("Assignment");
+
+  g.field("Target", node->target);
+  g.field("Value", node->value);
+}
+
+void AstDumper::dump_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node) {
+  auto g = context.object("IndexAccess");
+
+  g.field("Base", node->base);
+  g.field("Index", node->index);
+}
+
+void AstDumper::dump_identifier_expression(const ayla::ast::node::IdentifierExpressionNode *node) {
+  if (node->name) {
+    auto g = context.object(std::format("IdentifierExpression(\"{}\")", node->name->str));
+
+    (void)g;
+  } else {
+    auto g = context.object("IdentifierExpression");
+
+    (void)g;
   }
-
-  if (!node->arguments.empty()) { debug_labeled_childrens(node->arguments, "Args", true); }
 }
 
-void AstDumper::debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node) {
+void AstDumper::dump_member_acess_expression(const ayla::ast::node::MemberAccessExpressionNode *node) {
+  auto g = context.object("MemberAccess");
 
-debug_header(std::format("BinaryExpression(\"{}\")", to_string(node->op)));
-
-  if (node->lhs) { debug_labeled("Left: ", node->lhs, false); }
-
-  if (node->rhs) { debug_labeled("Right: ", node->rhs, true); }
-}
-
-void AstDumper::debug_unary_expression(const ayla::ast::node::UnaryExpressionNode *node) {
-
-  debug_header("UnaryExpression: ");
-
-  if (node->operand) { debug_labeled("Operand", node->operand, true); }
-}
-
-void AstDumper::debug_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node) {
-  out << "ASSIGN\n";
-
-  if (node->target) { debug_labeled("Target", node->target, false); }
-
-  if (node->value) { debug_labeled("Value", node->value, true); }
-}
-
-void AstDumper::debug_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node) {
-
-  debug_header("IndexAcess");
-
-  debug_labeled("Base", node->base, false);
-  debug_labeled("Index", node->index, true);
-}
-
-void AstDumper::debug_identifier_expression(const ayla::ast::node::IdentifierExpressionNode *node) {
-
-  if (node->name) { debug_header(std::format("IdentifierExpression(\"{}\")", node->name->str)); }
-}
-
-void AstDumper::debug_member_acess_expression(const ayla::ast::node::MemberAccessExpressionNode *node) {
-
-  debug_header("MemberAccessNode");
-
-  debug_labeled("Base", node->base, false);
-  debug_labeled("Field", node->member, true);
+  g.field("Base", node->base);
+  g.field("Field", node->member);
 }

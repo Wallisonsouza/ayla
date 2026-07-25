@@ -8,8 +8,8 @@ namespace ayla::ast::node {
 
 struct IdentifierExpressionNode : ExpressionNode {
 
-  NameNode *name;
-  explicit IdentifierExpressionNode(NameNode *n) : ExpressionNode(NodeKind::IdentifierExpression), name(n){}
+  IdentifierNode *name;
+  explicit IdentifierExpressionNode(IdentifierNode *n) : ExpressionNode(NodeKind::IdentifierExpression), name(n){}
 
   
 };

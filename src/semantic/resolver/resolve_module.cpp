@@ -20,14 +20,14 @@ void Resolver::resolve_module_declaration(ayla::ast::node::ModuleDeclarationNode
   // current_scope = prev;
 }
 
-void Resolver::resolve_import_node(ayla::ast::node::ImportStatementNode *node) {
+void Resolver::resolve_import_node(ayla::ast::node::ImportDeclarationNode *node) {
   // if (!node || node->path.empty()) return;
 
   // size_t failed_index;
   // ModuleId module_id = unit.context.module_manager.find_path(node->path, failed_index);
 
   // if (module_id == INVALID_MODULE) {
-  //   report_error(DiagnosticCode::ModuleNotFound, node->slice, {{"name", node->path[failed_index]->name}});
+  //   //report_error(DiagnosticCode::ModuleNotFound, node->slice, {{"name", node->path[failed_index]->name}});
   //   return;
   // }
 
@@ -38,7 +38,7 @@ void Resolver::resolve_import_node(ayla::ast::node::ImportStatementNode *node) {
   // std::string local_name = node->alias.value_or(node->path.back()->name);
 
   // if (current_scope->has_symbol_local(local_name)) {
-  //   report_error(DiagnosticCode::RedeclaredIdentifier, node->slice, {{"name", local_name}});
+  //   //report_error(DiagnosticCode::RedeclaredIdentifier, node->slice, {{"name", local_name}});
   //   return;
   // }
 

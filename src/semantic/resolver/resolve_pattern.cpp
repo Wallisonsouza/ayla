@@ -9,7 +9,7 @@ void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier
   //   auto *pattern = static_cast<ayla::ast::IdentifierPatternNode *>(pat);
 
   //   if (current_scope->symbols.contains(pattern->name->str)) {
-  //     // report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
+  //     // //report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
   //     return;
   //   }
 

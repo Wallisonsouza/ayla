@@ -13,8 +13,6 @@ struct VariableDeclarationNode : DeclarationNode {
   DeclarationSpecifiers specifiers;
 
   VariableDeclarationNode(PatternNode *p, ExpressionNode *init, DeclarationSpecifiers specifiers = {}) : DeclarationNode(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
-
-  
 };
 
 } // namespace ayla::ast::node

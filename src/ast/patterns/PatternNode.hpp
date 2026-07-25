@@ -13,11 +13,11 @@ struct PatternNode : AstNode {
 };
 
 struct IdentifierPatternNode : PatternNode {
-  NameNode *name;
+  IdentifierNode *name;
   SymbolId symbol_id;
   TypeNode *type_annotation;
 
-  IdentifierPatternNode(NameNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), name(n), type_annotation(type) {}
+  IdentifierPatternNode(IdentifierNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), name(n), type_annotation(type) {}
 
   
 };

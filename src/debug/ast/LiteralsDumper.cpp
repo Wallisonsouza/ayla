@@ -1,35 +1,60 @@
 #include "AstDumper.hpp"
+
+#include "ast/expressions/LiteralExpressionNode.hpp"
+
 #include <format>
 
+void AstDumper::dump_number_literal(
+    const ayla::ast::node::NumberLiteralNode *node)
+{
+    auto g = context.object(
+        std::format("Number({})", node->value));
 
-void AstDumper::debug_number_literal(const ayla::ast::node::NumberLiteralNode *node) { debug_header(std::format("Number({})", node->value)); }
-
-void AstDumper::debug_string_literal(const ayla::ast::node::StringLiteralNode *node) { out << "String: \"" << node->value << "\"\n"; }
-
-void AstDumper::debug_bool_literal(const ayla::ast::node::BoolLiteralNode *node) { out << "Boolean: " << (node->value ? "true" : "false") << "\n"; }
-
-void AstDumper::debug_null_literal(const ayla::ast::node::NullLiteralNode *node) {
-  (void)node;
-  out << "NullLiteral\n";
+    (void)g;
 }
 
-void AstDumper::debug_array_literal(const ayla::ast::node::ArrayLiteralNode *node) {
-  out << "ArrayLiteral\n";
+void AstDumper::dump_string_literal(
+    const ayla::ast::node::StringLiteralNode *node)
+{
+    auto g = context.object(
+        std::format("String(\"{}\")", node->value));
 
-  for (size_t i = 0; i < node->elements.size(); ++i) {
-    bool is_last = (i + 1 == node->elements.size());
-    debug_node(node->elements[i], is_last);
-  }
+    (void)g;
 }
 
+void AstDumper::dump_bool_literal(
+    const ayla::ast::node::BoolLiteralNode *node)
+{
+    auto g = context.object(
+        std::format(
+            "Boolean({})",
+            node->value ? "true" : "false"));
 
-void AstDumper::debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node) {
-  out << "Object\n";
+    (void)g;
+}
 
-  if (!node->fields.empty()) {
-    for (size_t i = 0; i < node->fields.size(); ++i) {
-      bool is_last = (i + 1 == node->fields.size());
-      debug_node(node->fields[i], is_last);
-    }
-  }
+void AstDumper::dump_null_literal(
+    const ayla::ast::node::NullLiteralNode *node)
+{
+    (void)node;
+
+    auto g = context.object("Null");
+
+    (void)g;
+}
+
+void AstDumper::dump_array_literal(
+    const ayla::ast::node::ArrayLiteralNode *node)
+{
+    auto g = context.object("ArrayLiteral");
+
+    g.list("Elements", node->elements);
+}
+
+void AstDumper::dump_object_literal(
+    const ayla::ast::node::ObjectLiteralNode *node)
+{
+    auto g = context.object("ObjectLiteral");
+
+    g.list("Fields", node->fields);
 }

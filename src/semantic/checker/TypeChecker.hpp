@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/types/BuiltinTypes.hpp"
@@ -16,7 +17,7 @@
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
 #include "ast/declarations/ModuleDeclarationNode.hpp"
-#include "ast/statements/ReturnStatementNodes.hpp"
+#include "ast/statements/ReturnStatementNode.hpp"
 #include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp" 
@@ -61,7 +62,7 @@ struct TypeChecker {
 
   void check_block(ast::node::BlockStatementNode *node);
 
-  void check_import_node(ast::node::ImportStatementNode *node);
+  void check_import_node(ast::node::ImportDeclarationNode *node);
   void check_module_declaration(ast::node::ModuleDeclarationNode *node);
   void check_assignment(ast::node::AssignmentExpressionNode *node);
   void check_expression_statement(ast::node::ExpressionStatementNode *node);

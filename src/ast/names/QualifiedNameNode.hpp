@@ -1,17 +1,16 @@
 #pragma once
 
-#include "ast/AstNode.hpp"
-#include "ast/NodeKind.hpp"
 #include "ast/names/NameNode.hpp"
 #include <vector>
+#include "ast/names/IdentifierNode.hpp"
 
 namespace ayla::ast {
 
-struct QualifiedNameNode : AstNode {
+struct QualifiedNameNode : NameNode {
 
-  std::vector<NameNode *> parts;
+  std::vector<IdentifierNode *> parts;
 
-  QualifiedNameNode(std::vector<NameNode *> parts) : AstNode(NodeKind::QualifiedName), parts(std::move(parts)) {}
+  QualifiedNameNode(std::vector<IdentifierNode *> parts) : NameNode(NodeKind::QualifiedName), parts(std::move(parts)) {}
 };
 
 } // namespace ayla::ast

@@ -25,13 +25,13 @@ void ayla::TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarat
   // if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
-void ayla::TypeChecker::check_import_node(ayla::ast::node::ImportStatementNode *node) {
+void ayla::TypeChecker::check_import_node(ayla::ast::node::ImportDeclarationNode *node) {
 
   // if (!node) return;
 
   // auto *module = unit.context.module_manager.get(node->resolved_module_id);
   // if (!module) {
-  //   report_error(DiagnosticCode::ModuleNotFound, node->slice);
+  //   //report_error(DiagnosticCode::ModuleNotFound, node->slice);
   //   node->inferred_type = &BuiltinTypes::Unknown;
   //   return;
   // }

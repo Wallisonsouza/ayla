@@ -7,31 +7,32 @@
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
 
-#include "ast/AstNode.hpp"
-#include "ast/StatementNode.hpp"
+#include "ast/declarations/DeclarationNode.hpp"
 #include "ast/declarations/FunctionDeclarationNode.hpp"
 #include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "ast/declarations/VariableDeclarationNode.hpp"
+#include "ast/names/QualifiedNameNode.hpp"
 #include "ast/statements/BlockStatementNode.hpp"
+#include "ast/statements/ImportStatementNode.hpp"
 #include "core/token/Token.hpp"
 #include "core/token/token_stream.hpp"
 #include "syntax/parser/ParserUtil.hpp"
 
 DeclarationParser::DeclarationParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
-ayla::ast::StatementNode *DeclarationParser::parse_declaration() {
+ayla::ast::DeclarationNode *DeclarationParser::parse_declaration() {
   auto specifiers = parse_specifiers();
 
   auto &tokens = context.tokens();
 
   switch (tokens.peek()->descriptor->kind) {
-  case TokenKind::MODULE_KEYWORD:
-    return parse_module();
+  case TokenKind::MODULE_KEYWORD: return parse_module_declaration();
 
-    // case TokenKind::FUNCTION_KEYWORD: return parse_function(specifiers);
+  case TokenKind::FUNCTION_KEYWORD: return parse_function_declaration(specifiers);
 
-  case TokenKind::VALUE_KEYWORD: return parse_variable(specifiers);
+  case TokenKind::VALUE_KEYWORD: return parse_variable_declaration(specifiers);
 
+  case TokenKind::IMPORT_KEYWORD: return parse_import_declaration();
   default: return nullptr;
   }
 }
@@ -81,26 +82,35 @@ DeclarationSpecifiers DeclarationParser::parse_specifiers() {
   return specifiers;
 }
 
-ayla::ast::DeclarationNode *DeclarationParser::parse_variable(DeclarationSpecifiers specifiers) {
-
+ayla::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(DeclarationSpecifiers specifiers) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::VALUE_KEYWORD)) return nullptr;
 
   auto *pattern = parser.patterns().parse_pattern();
 
-  if (!pattern) return nullptr;
+  if (!pattern) {
+    context.report_error(DiagnosticCode::ExpectedPattern);
+
+    // pattern = context.ast().create_node<ayla::ast::node::ErrorPatternNode>();
+  }
 
   ayla::ast::ExpressionNode *initializer = nullptr;
 
-  if (tokens.match(TokenKind::ASSIGN)) { initializer = parser.expressions().parse_expression(); }
+  if (tokens.match(TokenKind::ASSIGN)) {
+    initializer = parser.expressions().parse_expression();
+
+    if (!initializer) {
+      context.report_error(DiagnosticCode::ExpectedExpression);
+
+      // initializer = context.ast().create_node<ayla::ast::node::ErrorExpressionNode>();
+    }
+  }
 
   return context.ast().create_node<ayla::ast::node::VariableDeclarationNode>(pattern, initializer, specifiers);
-
-  return nullptr;
 }
 
-ayla::ast::DeclarationNode *DeclarationParser::parse_function(DeclarationSpecifiers specifiers) {
+ayla::ast::DeclarationNode *DeclarationParser::parse_function_declaration(DeclarationSpecifiers specifiers) {
 
   auto &tokens = context.tokens();
 
@@ -120,7 +130,7 @@ ayla::ast::DeclarationNode *DeclarationParser::parse_function(DeclarationSpecifi
     return_type = parser.types().parse_type();
 
     if (!return_type) {
-      // context.report_error(DiagnosticCode::ExpectedType, "return type");
+      // context.//report_error(DiagnosticCode::ExpectedType, "return type");
 
       return nullptr;
     }
@@ -129,7 +139,7 @@ ayla::ast::DeclarationNode *DeclarationParser::parse_function(DeclarationSpecifi
   ayla::ast::node::BlockStatementNode *body = nullptr;
 
   if (!specifiers.modifiers.has(Modifier::Extern)) {
-    body = parser.statements().parse_block();
+    body = parser.statements().parse_block_statement();
 
     if (body && body->flags.has(NodeFlags::HasError)) { return nullptr; }
   }
@@ -137,25 +147,30 @@ ayla::ast::DeclarationNode *DeclarationParser::parse_function(DeclarationSpecifi
   return context.ast().create_node<ayla::ast::node::FunctionDeclarationNode>(name, std::move(params), return_type, body, specifiers);
 }
 
-ayla::ast::DeclarationNode *DeclarationParser::parse_module() {
+ayla::ast::node::ModuleDeclarationNode *DeclarationParser::parse_module_declaration() {
+  ayla::ast::QualifiedNameNode *name = nullptr;
 
-  auto &tokens = context.tokens();
+  if (context.tokens().match(TokenKind::MODULE_KEYWORD)) {
+    name = parser.names().parse_qualified_name();
 
-  if (!tokens.match(TokenKind::MODULE_KEYWORD)) return nullptr;
+    if (!name) return nullptr;
+  } else {
+    auto *part = context.ast().create_node<ayla::ast::IdentifierNode>(context.unit.source.stem());
 
-  auto *name = parser.names().parse_qualified_name();
-
-  if (!name) return nullptr;
-
-  if (!tokens.match(TokenKind::OPEN_BRACE)) return nullptr;
-
-  std::vector<ayla::ast::AstNode *> body;
-
-  while (!tokens.is_end() && !tokens.match(TokenKind::CLOSE_BRACE)) {
-    auto *node = parser.declarations().parse_declaration();
-
-    if (node) body.push_back(node);
+    name = context.ast().create_node<ayla::ast::QualifiedNameNode>(std::vector{part});
   }
 
-  return context.ast().create_node<ayla::ast::node::ModuleDeclarationNode>(name, std::move(body));
+  return context.ast().create_node<ayla::ast::node::ModuleDeclarationNode>(name);
+}
+
+ayla::ast::DeclarationNode *DeclarationParser::parse_import_declaration() {
+  auto &tokens = context.tokens();
+
+  if (!tokens.match(TokenKind::IMPORT_KEYWORD)) return nullptr;
+
+  auto *module = parser.names().parse_qualified_name();
+
+  if (!module) return nullptr;
+
+  return context.ast().create_node<ayla::ast::node::ImportDeclarationNode>(module);
 }

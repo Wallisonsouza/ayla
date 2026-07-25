@@ -6,14 +6,12 @@
 namespace ayla::ast::node {
 
 struct ModuleDeclarationNode : DeclarationNode {
+  QualifiedNameNode *name;
 
-  QualifiedNameNode* name;
-  std::vector<AstNode *> body;
+  std::vector<DeclarationNode *> declarations;
   SymbolId resolved_symbol_id;
 
-  ModuleDeclarationNode(QualifiedNameNode* n, std::vector<AstNode *> b) : DeclarationNode(NodeKind::ModuleDeclaration), name(n), body(std::move(b)) {}
-
-  
+  ModuleDeclarationNode(QualifiedNameNode *n, std::vector<DeclarationNode *> decls = {}) : DeclarationNode(NodeKind::ModuleDeclaration), name(n), declarations(std::move(decls)) {}
 };
 
 } // namespace ayla::ast::node

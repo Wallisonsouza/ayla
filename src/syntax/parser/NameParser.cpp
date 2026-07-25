@@ -2,7 +2,7 @@
 
 NameParser::NameParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
-ayla::ast::NameNode *NameParser::parse_name() {
+ayla::ast::IdentifierNode *NameParser::parse_name() {
   auto &tokens = context.tokens();
 
   auto *token = tokens.match(TokenKind::IDENTIFIER);
@@ -11,13 +11,13 @@ ayla::ast::NameNode *NameParser::parse_name() {
 
   auto text = context.source().buffer.get_text(token->slice.span);
 
-  return context.ast().create_node<ayla::ast::NameNode>(text);
+  return context.ast().create_node<ayla::ast::IdentifierNode>(text);
 }
 
 ayla::ast::QualifiedNameNode *NameParser::parse_qualified_name() {
   auto &tokens = context.tokens();
 
-  std::vector<ayla::ast::NameNode *> parts;
+  std::vector<ayla::ast::IdentifierNode *> parts;
 
   auto *first = parse_name();
 

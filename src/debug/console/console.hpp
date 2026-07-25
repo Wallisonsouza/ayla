@@ -49,13 +49,18 @@ public:
     log(Color::BrightCyan, "[TIME END] ", label, " -> ", formatted);
   }
 
-  template <typename... Args> static void log(const Args &...args) {
+  template <typename... Args> static void log(Color color, const Args &...args) {
     StyledStream ss(std::cout);
-    ss << defaultColor;
-    (ss << ... << args);
-    ss << Color::reset() << std::endl;
-  }
 
+    ss << color;
+
+    (ss << ... << args);
+
+    ss << Color::reset();
+
+    std::cout << '\n';
+  }
+  
   template <typename... Args> static void warn(const Args &...args) {
     StyledStream ss(std::cerr);
     ss << Color::Yellow;

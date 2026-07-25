@@ -7,9 +7,9 @@ namespace ayla::ast::node {
 
 struct MemberAccessExpressionNode : ExpressionNode {
   ExpressionNode *base;
-  NameNode *member;
+  IdentifierNode *member;
 
-  MemberAccessExpressionNode(ExpressionNode *b, NameNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), member(f) {}
+  MemberAccessExpressionNode(ExpressionNode *b, IdentifierNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), member(f) {}
 
   
 };

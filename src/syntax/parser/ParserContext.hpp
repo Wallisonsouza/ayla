@@ -18,5 +18,7 @@ public:
 
   auto &diagnostics() { return unit.diagns; }
 
+  void report_error(DiagnosticCode code) {}
+
   auto &descriptors() { return unit.context.descriptor_table; }
 };

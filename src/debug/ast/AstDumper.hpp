@@ -1,127 +1,145 @@
 #pragma once
-#include "core/AST.hpp"
-#include "debug/console/color.hpp"
-#include "debug/console/console.hpp"
 
-
-#include "ast/patterns/PatternNode.hpp"
+#include "ast/declarations/FunctionDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"
+#include "ast/expressions/IdentifierExpressionNode.hpp"
 #include "ast/expressions/IndexAcessExpressionNode.hpp"
 #include "ast/expressions/LiteralExpressionNode.hpp"
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/patterns/PatternNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/declarations/ModuleDeclarationNode.hpp"
-#include "ast/statements/ReturnStatementNodes.hpp"
-#include "ast/declarations/VariableDeclarationNode.hpp"
+#include "ast/statements/ReturnStatementNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
-#include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/declarations/FunctionDeclarationNode.hpp" 
-#include <string>
-#include <vector>
+#include "core/visitor/AstStage.hpp"
+#include "debug/ast/DumpContext.hpp"
 
-struct TreeLayout {
-  std::ostream &out;
-  std::vector<bool> ancestors_alive;
+#include <iostream>
+#include <ostream>
 
-  explicit TreeLayout(std::ostream &out);
+class AstDumper : public AstStage {
 
-  void begin_node(bool is_last);
-  void end_node();
-  void print_vertical_padding(size_t lines);
-};
+public:
+  AstDumper(std::ostream &out = std::cout) : context(out, [this](const ayla::ast::AstNode *node) { dispatch(node); }) { register_handlers(); }
 
-struct AstDumper {
 
-  struct LabeledChild {
-    const char *label;
-    const ayla::ast::AstNode *node;
-  };
+  public: void dump_scrypt() {
+    
+  }
+private:
+  void register_handlers() {
+    bind(&AstDumper::dump_number_literal);
+    bind(&AstDumper::dump_string_literal);
+    bind(&AstDumper::dump_bool_literal);
+    bind(&AstDumper::dump_null_literal);
 
-  debug::Color label_color = debug::Color::Blue;
-  debug::Color header_color = debug::Color::Purple;
+    // Names
+    bind(&AstDumper::dump_identifier);
+    bind(&AstDumper::dump_qualified_name);
 
-  void debug_labeled_children(const char *label, const std::vector<LabeledChild> &children, bool is_last) {
-    tree.begin_node(is_last);
-    out << label << "\n";
+    // Expressions
+    bind(&AstDumper::dump_identifier_expression);
+    bind(&AstDumper::dump_binary_expression);
+    bind(&AstDumper::dump_unary_expression);
+    bind(&AstDumper::dump_call_expression);
+    bind(&AstDumper::dump_member_acess_expression);
+    bind(&AstDumper::dump_index_acess_expression);
+    bind(&AstDumper::dump_assignment_expression);
 
-    for (size_t i = 0; i < children.size(); ++i) {
-      const auto &child = children[i];
-      bool child_is_last = (i + 1 == children.size());
+    // Statements
+    bind(&AstDumper::dump_expression_statement);
+    bind(&AstDumper::dump_block_statement);
+    bind(&AstDumper::dump_if_statement);
+    bind(&AstDumper::dump_while_statement);
+    bind(&AstDumper::dump_return_statement);
+    bind(&AstDumper::dump_import_statement);
 
-      tree.begin_node(child_is_last);
-      out << child.label << "\n";
-      debug_node(child.node, true);
-      tree.end_node();
-    }
+    // Declarations
+    bind(&AstDumper::dump_variable_declaration);
+    bind(&AstDumper::dump_function_declaration);
+    bind(&AstDumper::dump_module_declaration);
 
-    tree.end_node();
+    // Other nodes
+    bind(&AstDumper::dump_identifier_pattern);
+    bind(&AstDumper::dump_type);
+    bind(&AstDumper::dump_object_literal);
+    bind(&AstDumper::dump_object_field);
+    bind(&AstDumper::dump_array_literal);
   }
 
-  void debug_header(const std::string &header) { debug::Console::log(header_color, header); }
+  void dump_number_literal(const ayla::ast::node::NumberLiteralNode *node);
 
-  std::ostream &out;
-  TreeLayout tree;
+  void dump_string_literal(const ayla::ast::node::StringLiteralNode *node);
 
-  explicit AstDumper(std::ostream &out = std::cout);
+  void dump_bool_literal(const ayla::ast::node::BoolLiteralNode *node);
 
-  void dump_ast(const Ast &ast);
-  void debug_labeled(const char *label, const ayla::ast::AstNode *child, bool is_last);
+  void dump_null_literal(const ayla::ast::node::NullLiteralNode *node);
 
-  void debug_node(const ayla::ast::AstNode *node, bool is_last);
+  // Names
 
-  void debug_number_literal(const ayla::ast::node::NumberLiteralNode *node);
-  void debug_string_literal(const ayla::ast::node::StringLiteralNode *node);
-  void debug_bool_literal(const ayla::ast::node::BoolLiteralNode *node);
+  void dump_identifier(const ayla::ast::IdentifierNode *node);
 
-  void debug_name(const ayla::ast::NameNode *node);
-  void debug_null_literal(const ayla::ast::node::NullLiteralNode *node);
-  void debug_identifier_expression(const ayla::ast::node::IdentifierExpressionNode *node);
-  void debug_member_access(const ayla::ast::node::MemberAccessExpressionNode *node);
-  void debug_import_statement(const ayla::ast::node::ImportStatementNode *node);
-  void debug_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);
-  void debug_type(const ayla::ast::TypeNode *node);
-  void debug_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node);
-  void debug_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
-  void debug_unary_expression(const ayla::ast::node::UnaryExpressionNode *node);
-  void debug_call_expression(const ayla::ast::node::CallExpressionNode *node);
-  void debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);
-  void debug_object_literal(const ayla::ast::node::ObjectLiteralNode *node);
-  void debug_object_field(const ayla::ast::node::ObjectFieldNode *node);
-  void debug_return_statement(const ayla::ast::node::ReturnStatementNode *node);
+  void dump_qualified_name(const ayla::ast::QualifiedNameNode *node);
 
-  void debug_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
-  void debug_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node);
-  void debug_array_literal(const ayla::ast::node::ArrayLiteralNode *node);
-  void debug_member_acess_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
-  void debug_if_statement(const ayla::ast::node::IfStatementNode *node);
-  void debug_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node);
-  void debug_block_statement(const ayla::ast::node::BlockStatementNode *node);
-  void debug_while_statement(const ayla::ast::node::WhileStatementNode *node);
-  void debug_children(const std::vector<const ayla::ast::AstNode *> &children);
-  void debug_pattern(const ayla::ast::PatternNode *node);
+  // Expressions
 
-  template <typename T> void debug_labeled_childrens(const std::vector<T *> &children, const std::string &label, bool is_last) {
-    tree.begin_node(is_last);
+  void dump_identifier_expression(const ayla::ast::node::IdentifierExpressionNode *node);
 
-    debug::Console::log(label_color, label);
+  void dump_binary_expression(const ayla::ast::node::BinaryExpressionNode *node);
 
-    size_t count = 0;
-    for (auto *c : children)
-      if (c) ++count;
+  void dump_unary_expression(const ayla::ast::node::UnaryExpressionNode *node);
 
-    size_t printed = 0;
-    for (auto *c : children) {
-      if (!c) continue;
-      ++printed;
-      bool child_is_last = (printed == count);
-      debug_node(c, child_is_last);
-    }
+  void dump_call_expression(const ayla::ast::node::CallExpressionNode *node);
 
-    tree.end_node();
-  }
+  void dump_member_acess_expression(const ayla::ast::node::MemberAccessExpressionNode *node);
+
+  void dump_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node);
+
+  void dump_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node);
+
+  // Statements
+
+  void dump_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);
+
+  void dump_block_statement(const ayla::ast::node::BlockStatementNode *node);
+
+  void dump_if_statement(const ayla::ast::node::IfStatementNode *node);
+
+  void dump_while_statement(const ayla::ast::node::WhileStatementNode *node);
+
+  void dump_return_statement(const ayla::ast::node::ReturnStatementNode *node);
+
+  void dump_import_statement(const ayla::ast::node::ImportDeclarationNode *node);
+
+  // Declarations
+
+  void dump_variable_declaration(const ayla::ast::node::VariableDeclarationNode *node);
+
+  void dump_function_declaration(const ayla::ast::node::FunctionDeclarationNode *node);
+
+  void dump_module_declaration(const ayla::ast::node::ModuleDeclarationNode *node);
+
+  // Other nodes
+
+  void dump_identifier_pattern(const ayla::ast::IdentifierPatternNode *node);
+
+  void dump_type(const ayla::ast::TypeNode *node);
+
+  void dump_object_literal(const ayla::ast::node::ObjectLiteralNode *node);
+
+  void dump_object_field(const ayla::ast::node::ObjectFieldNode *node);
+
+  void dump_array_literal(const ayla::ast::node::ArrayLiteralNode *node);
+
+  //---------
+
+private:
+  DumpContext context;
 };

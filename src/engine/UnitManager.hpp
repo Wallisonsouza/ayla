@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/CompilationUnit.hpp"
 
-class CompilationUnitManager {
+class UnitManager {
 
 public:
   std::vector<std::unique_ptr<CompilationUnit>> units;

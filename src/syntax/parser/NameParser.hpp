@@ -8,7 +8,7 @@ class NameParser {
 public:
   NameParser(ParseContext &ctx, Parser &parser);
 
-  ayla::ast::NameNode *parse_name();
+  ayla::ast::IdentifierNode *parse_name();
 
   ayla::ast::QualifiedNameNode *parse_qualified_name();
 

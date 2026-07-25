@@ -1,59 +1,53 @@
 #include "AstDumper.hpp"
 
-void AstDumper::debug_while_statement(const ayla::ast::node::WhileStatementNode *node) {
+void AstDumper::dump_while_statement(
+    const ayla::ast::node::WhileStatementNode *node) {
 
-  out << "While\n";
+  auto g = context.object("WhileStatement");
 
-  if (node->condition) { debug_node(node->condition, false); }
-
-  if (node->body) { debug_node(node->body, true); }
+  g.field("Condition", node->condition);
+  g.field("Body", node->body);
 }
 
-void AstDumper::debug_block_statement(const ayla::ast::node::BlockStatementNode *node) {
+void AstDumper::dump_block_statement(
+    const ayla::ast::node::BlockStatementNode *node) {
 
-  debug_header("BlockExpression");
+  auto g = context.object("BlockStatement");
 
-  bool has_statements = !node->statements.empty();
-
-  if (has_statements) { debug_labeled_childrens(node->statements, "Statements: ", true); }
+  g.list("Statements", node->statements);
 }
 
-void AstDumper::debug_if_statement(const ayla::ast::node::IfStatementNode *node) {
+void AstDumper::dump_if_statement(
+    const ayla::ast::node::IfStatementNode *node) {
 
-  debug_header("If");
+  auto g = context.object("IfStatement");
 
-  std::vector<LabeledChild> children;
-
-  if (node->condition) children.push_back({"Condition: ", node->condition});
-
-  if (node->then_block) children.push_back({"Then: ", node->then_block});
-
-  if (node->else_block) children.push_back({"Else: ", node->else_block});
-
-  for (size_t i = 0; i < children.size(); ++i) {
-    bool is_last = (i + 1 == children.size());
-    debug_labeled(children[i].label, children[i].node, is_last);
-  }
+  g.field("Condition", node->condition);
+  g.field("Then", node->then_block);
+  g.field("Else", node->else_block);
 }
 
-void AstDumper::debug_return_statement(const ayla::ast::node::ReturnStatementNode *node) {
+void AstDumper::dump_return_statement(
+    const ayla::ast::node::ReturnStatementNode *node) {
 
-  debug_header("ReturnStatement");
+  auto g = context.object("ReturnStatement");
 
-  debug_labeled("Value", node->value, true);
+  g.field("Value", node->value);
 }
 
-void AstDumper::debug_expression_statement(const ayla::ast::node::ExpressionStatementNode *node) {
+void AstDumper::dump_expression_statement(
+    const ayla::ast::node::ExpressionStatementNode *node) {
 
-  out << "ExpressionStatement\n";
+  auto g = context.object("ExpressionStatement");
 
-  debug_node(node->expression, true);
+  g.field("Expression", node->expression);
 }
 
-void AstDumper::debug_import_statement(const ayla::ast::node::ImportStatementNode *node) {
-  out << "Import\n";
+void AstDumper::dump_import_statement(
+    const ayla::ast::node::ImportDeclarationNode *node) {
 
-  size_t count = node->name->parts.size();
+  auto g = context.object("ImportStatement");
 
-  for (size_t i = 0; i < count; ++i) { debug_node(node->name->parts[i], i == count - 1); }
+  if (node->name)
+    g.list("Path", node->name->parts);
 }

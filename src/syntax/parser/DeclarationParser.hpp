@@ -2,6 +2,7 @@
 
 #include "ast/StatementNode.hpp"
 #include "ast/declarations/DeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "syntax/parser/DeclarationSpecifiers.hpp"
 
 class ParseContext;
@@ -18,13 +19,15 @@ public:
 
   DeclarationSpecifiers parse_specifiers();
 
-  ayla::ast::DeclarationNode *parse_variable(DeclarationSpecifiers);
+  ayla::ast::DeclarationNode *parse_variable_declaration(DeclarationSpecifiers);
 
-  ayla::ast::DeclarationNode *parse_function(DeclarationSpecifiers);
+  ayla::ast::DeclarationNode *parse_function_declaration(DeclarationSpecifiers);
 
-  ayla::ast::DeclarationNode *parse_module();
+  ayla::ast::node::ModuleDeclarationNode *parse_module_declaration();
 
-  ayla::ast::StatementNode *parse_declaration();
+  ayla::ast::DeclarationNode *parse_declaration();
+
+  ayla::ast::DeclarationNode *parse_import_declaration();
 
 private:
   ParseContext &context;

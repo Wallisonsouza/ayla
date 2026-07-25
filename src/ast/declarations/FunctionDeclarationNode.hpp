@@ -10,14 +10,14 @@
 namespace ayla::ast::node {
 
 struct FunctionDeclarationNode : DeclarationNode {
-  NameNode *name;
+  IdentifierNode *name;
   std::vector<PatternNode *> parameters;
   TypeNode *return_type;
   BlockStatementNode *body;
   DeclarationSpecifiers specifiers;
   SymbolId symbol_id; 
 
-  FunctionDeclarationNode(NameNode *n, std::vector<PatternNode *> params = {}, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, DeclarationSpecifiers s = {})
+  FunctionDeclarationNode(IdentifierNode *n = nullptr, std::vector<PatternNode *> params = {}, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, DeclarationSpecifiers s = {})
       : DeclarationNode(NodeKind::FunctionDeclaration), name(n), parameters(std::move(params)), return_type(ret_type), body(b), specifiers(s) {}
 
   
