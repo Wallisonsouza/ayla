@@ -4,43 +4,31 @@
 #include "semantic/symbols/SymbolTable.hpp"
 #include <string_view>
 
-
 namespace core {
 
 struct Scope {
 
-    Scope* parent = nullptr;
+  Scope *parent = nullptr;
 
-    SymbolTable symbols;
+  SymbolTable symbols;
 
+  explicit Scope(Scope *p = nullptr) : parent(p) {}
 
-    explicit Scope(Scope* p = nullptr)
-        : parent(p)
-    {}
+  SymbolId resolve_symbol(std::string_view name) const {
+    const Scope *scope = this;
 
+    while (scope) {
+      SymbolId id = scope->symbols.find(name);
 
-    SymbolId resolve_symbol(std::string_view name) const
-    {
-        const Scope* scope = this;
+      if (id.is_valid()) return id;
 
-        while(scope)
-        {
-            SymbolId id = scope->symbols.find(name);
-
-            if(id.is_valid())
-                return id;
-
-            scope = scope->parent;
-        }
-
-        return {};
+      scope = scope->parent;
     }
 
+    return SymbolId::invalid();
+  }
 
-    bool has_symbol_local(std::string_view name) const
-    {
-        return symbols.contains(name);
-    }
+  bool has_symbol_local(std::string_view name) const { return symbols.contains(name); }
 };
 
-}
+} // namespace core

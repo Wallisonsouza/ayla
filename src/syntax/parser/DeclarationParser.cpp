@@ -15,7 +15,11 @@
 #include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
 #include "core/token/Token.hpp"
+#include "core/token/TokenKind.hpp"
 #include "core/token/token_stream.hpp"
+#include "diagnostic/DiagnosticCode.hpp"
+#include "diagnostic/Label.hpp"
+#include "diagnostic/Severity.hpp"
 #include "syntax/parser/ParserUtil.hpp"
 
 DeclarationParser::DeclarationParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
@@ -90,9 +94,35 @@ ayla::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(Declar
   auto *pattern = parser.patterns().parse_pattern();
 
   if (!pattern) {
-    context.report_error(DiagnosticCode::ExpectedPattern);
+    auto current = tokens.current();
 
-    // pattern = context.ast().create_node<ayla::ast::node::ErrorPatternNode>();
+    // {
+    // .code = DiagnosticCode::ExpectedToken,
+
+    // .expected =
+    // {
+    //     .token = TokenKind::RIGHT_PAREN
+    // },
+
+    // .found =
+    // {
+    //     .token = TokenKind::LEFT_BRACE
+    // }
+
+    // context.diagnostics().report({.severity = diagnostic::Severity::Error,
+
+    //                               .code = diagnostic::DiagnosticCode::ExpectedPattern,
+
+    //                               .expected = {.kind = diagnostic::ExpectedKind::Identifier},
+
+    //                               .found = {.token = current->descriptor->kind},
+
+    //                               .labels = {{.slice = current->slice,
+
+    //                                           .kind = diagnostic::LabelKind::Primary}}});
+
+    // pattern = context.ast()
+    //     .create_node<ErrorPatternNode>();
   }
 
   ayla::ast::ExpressionNode *initializer = nullptr;
@@ -101,9 +131,17 @@ ayla::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(Declar
     initializer = parser.expressions().parse_expression();
 
     if (!initializer) {
-      context.report_error(DiagnosticCode::ExpectedExpression);
+      auto current = tokens.current();
 
-      // initializer = context.ast().create_node<ayla::ast::node::ErrorExpressionNode>();
+      // context.diagnostics().report({.severity = diagnostic::Severity::Error,
+
+      //                               .code = diagnostic::DiagnosticCode::ExpectedExpression,
+
+      //                               .labels = {{.slice = current->slice,
+
+      //                                           .message = "expected expression here",
+
+      //                                           .kind = diagnostic::LabelKind::Primary}}});
     }
   }
 

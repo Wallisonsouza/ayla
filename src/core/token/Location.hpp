@@ -1,29 +1,23 @@
 #pragma once
 
 #include "core/source/Span.hpp"
-#include <cstddef>
+#include <cstdint>
 
 struct Location {
-  size_t offset;
-  size_t line;
-  size_t column;
-};
-
-struct SourceRange {
-  Location begin;
-  Location end;
+  uint32_t offset{};
+  uint32_t line{};
+  uint32_t column{};
 };
 
 struct SourceSlice {
-  SourceRange range;
-  core::source::Span span;
-};
+  Location begin;
+  Location end;
 
-inline SourceSlice operator+(const SourceSlice &a, const SourceSlice &b) {
-  SourceSlice result;
-  result.range.begin = a.range.begin;
-  result.range.end = b.range.end;
-  result.span.begin = a.span.begin;
-  result.span.end = b.span.end;
-  return result;
-}
+  [[nodiscard]]
+  core::source::Span get_span() const noexcept {
+    return {
+        begin.offset,
+        end.offset,
+    };
+  }
+};

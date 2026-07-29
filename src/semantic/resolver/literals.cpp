@@ -1,5 +1,4 @@
 #include "semantic/resolver/Resolver.hpp"
-#include <iostream>
 
 void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
@@ -12,7 +11,6 @@ void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *nod
   }
 
   node->resolved_symbol_id = id;
-  std::cout << "Resolved identifier '" << node->name << "' to symbol_id " << id.index() << "\n";
 }
 
 void Resolver::resolve_number_literal(ayla::ast::node::NumberLiteralNode *node) {}

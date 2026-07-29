@@ -20,7 +20,8 @@ private:
   ayla::ast::StatementNode *parse_while_statement();
 
   ayla::ast::StatementNode *parse_return_statement();
-
+  
+  ayla::ast::StatementNode *parse_expression_statement();
 
 private:
   ParseContext &context;

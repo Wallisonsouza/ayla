@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/operators/BinaryOperation.hpp"
+#include "core/table/PrecedenceTable.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
 #include "engine/LangContext.hpp"
@@ -14,7 +15,6 @@ inline LanguageContext create_context() {
 
   auto context = LanguageContext();
 
-
   context.type_table["number"] = std::make_shared<Type>(BuiltinTypes::Number);
 
   context.type_table["string"] = std::make_shared<Type>(BuiltinTypes::String);
@@ -23,71 +23,81 @@ inline LanguageContext create_context() {
 
   context.type_table["void"] = std::make_shared<Type>(BuiltinTypes::Void);
 
-  context.descriptor_table.add(TokenKind::TRUE, "true", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::FALSE, "false", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::FUNCTION_KEYWORD, "fu", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
+  //infix
+  context.operators.add_infix(TokenKind::ASSIGN, 1, core::table::Associativity::Right, BinaryOperation::Assign);
+  context.operators.add_infix(TokenKind::ARROW, 2, core::table::Associativity::Right, BinaryOperation::Arrow);
+  context.operators.add_infix(TokenKind::EQUAL, 5, core::table::Associativity::Left, BinaryOperation::Equal);
+  context.operators.add_infix(TokenKind::NOT_EQUAL, 5, core::table::Associativity::Left, BinaryOperation::NotEqual);
+  context.operators.add_infix(TokenKind::LESS, 6, core::table::Associativity::Left, BinaryOperation::Less);
+  context.operators.add_infix(TokenKind::LESS_EQUAL, 6, core::table::Associativity::Left, BinaryOperation::LessEqual);
+  context.operators.add_infix(TokenKind::GREATER, 6, core::table::Associativity::Left, BinaryOperation::Greater);
+  context.operators.add_infix(TokenKind::GREATER_EQUAL, 6, core::table::Associativity::Left, BinaryOperation::GreaterEqual);
+  context.operators.add_infix(TokenKind::PLUS, 10, core::table::Associativity::Left, BinaryOperation::Add);
+  context.operators.add_infix(TokenKind::MINUS, 10, core::table::Associativity::Left, BinaryOperation::Subtract);
+  context.operators.add_infix(TokenKind::STAR, 20, core::table::Associativity::Left, BinaryOperation::Multiply);
+  context.operators.add_infix(TokenKind::SLASH, 20, core::table::Associativity::Left, BinaryOperation::Divide);
+ 
+  //prefix
+  context.operators.add_prefix(TokenKind::NOT, 30, UnaryOperation::Not);
+  // context.operators.add_prefix(TokenKind::MINUS, 30, UnaryOperation::Negate);
+  // context.operators.add_prefix(TokenKind::PLUS, 30, UnaryOperation::Positive);
 
-  context.descriptor_table.add(TokenKind::STATIC, "static", TokenGroup::Keyword);
+  //postfix
+  context.operators.add_postfix(TokenKind::OPEN_PAREN, 100, PostfixOperation::Call);
+  context.operators.add_postfix(TokenKind::OPEN_BRACKET, 100, PostfixOperation::IndexAccess);
+  context.operators.add_postfix(TokenKind::DOT, 100, PostfixOperation::MemberAccess);
 
-  context.descriptor_table.add(TokenKind::MUT, "mut", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::VALUE_KEYWORD, "val", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::PUBLIC, "public", TokenGroup::Keyword);
-  context.descriptor_table.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
+  //keywords
+  context.descriptors.add(TokenKind::TRUE, "true", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::FALSE, "false", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::FUNCTION_KEYWORD, "fu", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::STATIC, "static", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::MUT, "mut", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::VALUE_KEYWORD, "val", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::PUBLIC, "public", TokenGroup::Keyword);
+  context.descriptors.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
 
   // operators
-  context.descriptor_table.add(TokenKind::NOT, "!", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::PLUS, "+", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::MINUS, "-", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::STAR, "*", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::SLASH, "/", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::ASSIGN, "=", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::ARROW, "->", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::EQUAL, "==", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::NOT_EQUAL, "!=", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::LESS, "<", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::LESS_EQUAL, "<=", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::GREATER, ">", TokenGroup::Operator);
-  context.descriptor_table.add(TokenKind::GREATER_EQUAL, ">=", TokenGroup::Operator);
-  context.precedence_table.add_right(TokenKind::ASSIGN, 1, BinaryOperation::Assign);
-  context.precedence_table.add_right(TokenKind::ARROW, 2, BinaryOperation::Arrow);
-  context.precedence_table.add_left(TokenKind::EQUAL, 5, BinaryOperation::Equal);
-  context.precedence_table.add_left(TokenKind::NOT_EQUAL, 5, BinaryOperation::NotEqual);
-  context.precedence_table.add_left(TokenKind::LESS, 6, BinaryOperation::Less);
-  context.precedence_table.add_left(TokenKind::LESS_EQUAL, 6, BinaryOperation::LessEqual);
-  context.precedence_table.add_left(TokenKind::GREATER, 6, BinaryOperation::Greater);
-  context.precedence_table.add_left(TokenKind::GREATER_EQUAL, 6, BinaryOperation::GreaterEqual);
-  context.precedence_table.add_left(TokenKind::PLUS, 10, BinaryOperation::Add);
-  context.precedence_table.add_left(TokenKind::MINUS, 10, BinaryOperation::Subtract);
-  context.precedence_table.add_left(TokenKind::STAR, 20, BinaryOperation::Multiply);
-  context.precedence_table.add_left(TokenKind::SLASH, 20, BinaryOperation::Divide);
+  context.descriptors.add(TokenKind::NOT, "!", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::PLUS, "+", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::MINUS, "-", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::STAR, "*", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::SLASH, "/", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::ASSIGN, "=", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::ARROW, "->", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::EQUAL, "==", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::NOT_EQUAL, "!=", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::LESS, "<", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::LESS_EQUAL, "<=", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::GREATER, ">", TokenGroup::Operator);
+  context.descriptors.add(TokenKind::GREATER_EQUAL, ">=", TokenGroup::Operator);
 
   // punctuaction
-  context.descriptor_table.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::COLON, ":", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::DOT, ".", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::CLOSE_PAREN, ")", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::OPEN_BRACE, "{", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::CLOSE_BRACE, "}", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::OPEN_BRACKET, "[", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::CLOSE_BRACKET, "]", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::SEMI_COLON, ";", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::COMMA, ",", TokenGroup::Punctuation);
-  context.descriptor_table.add(TokenKind::SINGLE_QUOTE, "\'", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::COLON, ":", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::DOT, ".", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::CLOSE_PAREN, ")", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::OPEN_BRACE, "{", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::CLOSE_BRACE, "}", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::OPEN_BRACKET, "[", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::CLOSE_BRACKET, "]", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::SEMI_COLON, ";", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::COMMA, ",", TokenGroup::Punctuation);
+  context.descriptors.add(TokenKind::SINGLE_QUOTE, "\'", TokenGroup::Punctuation);
 
-  context.descriptor_table.add(TokenKind::IDENTIFIER, TokenGroup::NAME);
-
-  context.descriptor_table.add(TokenKind::NUMBER_LITERAL, TokenGroup::Literal);
-  context.descriptor_table.add(TokenKind::STRING_LITERAL, TokenGroup::Literal);
-  context.descriptor_table.add(TokenKind::CharLiteral, TokenGroup::Literal);
-  context.descriptor_table.add(TokenKind::NullLiteral, TokenGroup::Literal);
-  context.descriptor_table.add(TokenKind::NEW_LINE, "\\n", TokenGroup::Whitespace);
+  context.descriptors.add(TokenKind::IDENTIFIER, TokenGroup::NAME);
+  context.descriptors.add(TokenKind::NUMBER_LITERAL, TokenGroup::Literal);
+  context.descriptors.add(TokenKind::STRING_LITERAL, TokenGroup::Literal);
+  context.descriptors.add(TokenKind::CharLiteral, TokenGroup::Literal);
+  context.descriptors.add(TokenKind::NullLiteral, TokenGroup::Literal);
+  context.descriptors.add(TokenKind::NEW_LINE, "\\n", TokenGroup::Whitespace);
 
   return context;
 }

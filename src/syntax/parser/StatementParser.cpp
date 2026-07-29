@@ -2,11 +2,10 @@
 
 #include "DeclarationParser.hpp"
 #include "ExpressionParser.hpp"
-#include "NameParser.hpp"
 #include "Parser.hpp"
 #include "ParserContext.hpp"
+#include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
-#include "ast/statements/ImportStatementNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
 
 #include "ast/statements/BlockStatementNode.hpp"
@@ -14,14 +13,11 @@
 
 #include "core/token/token_stream.hpp"
 #include "syntax/parser/ParserUtil.hpp"
-#include <iostream>
 
 StatementParser::StatementParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 ayla::ast::StatementNode *StatementParser::parse_statement() {
   auto &tokens = context.tokens();
-  
-
 
   switch (tokens.peek()->descriptor->kind) {
   case TokenKind::IF_KEYWORD: return parse_if_statement();
@@ -30,11 +26,9 @@ ayla::ast::StatementNode *StatementParser::parse_statement() {
 
   case TokenKind::RETURN_KEYWORD: return parse_return_statement();
 
-
-
   case TokenKind::OPEN_BRACE: return parse_block_statement();
 
-  default: return nullptr;
+  default: return parse_expression_statement();
   }
 }
 
@@ -134,8 +128,6 @@ ayla::ast::StatementNode *StatementParser::parse_if_statement() {
   auto *condition = parser.expressions().parse_expression();
 
   if (!condition || condition->flags.has(NodeFlags::HasError)) {
-
-    std::cout << "Fatal error: no condition in if statement";
     // context.//report_error(...)
     return nullptr;
   }
@@ -166,4 +158,12 @@ ayla::ast::StatementNode *StatementParser::parse_if_statement() {
   }
 
   return context.ast().create_node<ayla::ast::node::IfStatementNode>(condition, then_block, else_block);
+}
+
+ayla::ast::StatementNode *StatementParser::parse_expression_statement() {
+  auto *expr = parser.expressions().parse_expression();
+
+  if (!expr) return nullptr;
+
+  return context.ast().create_node<ayla::ast::node::ExpressionStatementNode>(expr);
 }

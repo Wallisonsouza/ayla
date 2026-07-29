@@ -1,13 +1,12 @@
 #pragma once
 
-#include <string_view>
+#include <cstdint>
+
 namespace core::source {
 
 struct Span {
-  const char *begin;
-  const char *end;
-
-  std::string_view view() const { return std::string_view(begin, end - begin); }
+  uint32_t begin;
+  uint32_t end;
 };
 
 } // namespace core::source

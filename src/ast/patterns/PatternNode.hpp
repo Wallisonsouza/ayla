@@ -1,9 +1,6 @@
 #pragma once
 
-
 #include "ast/TypeNode.hpp"
-
-#include "ast/names/QualifiedNameNode.hpp"
 #include "semantic/symbols/SymbolId.hpp"
 
 namespace ayla::ast {
@@ -18,8 +15,6 @@ struct IdentifierPatternNode : PatternNode {
   TypeNode *type_annotation;
 
   IdentifierPatternNode(IdentifierNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), name(n), type_annotation(type) {}
-
-  
 };
 
 } // namespace ayla::ast

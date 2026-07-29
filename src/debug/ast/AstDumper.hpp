@@ -29,7 +29,6 @@ class AstDumper : public AstStage {
 public:
   AstDumper(std::ostream &out = std::cout) : context(out, [this](const ayla::ast::AstNode *node) { dispatch(node); }) { register_handlers(); }
 
-
   public: void dump_scrypt() {
     
   }
@@ -103,7 +102,7 @@ private:
   void dump_index_acess_expression(const ayla::ast::node::IndexAccessExpressionNode *node);
 
   void dump_assignment_expression(const ayla::ast::node::AssignmentExpressionNode *node);
-
+ 
   // Statements
 
   void dump_expression_statement(const ayla::ast::node::ExpressionStatementNode *node);

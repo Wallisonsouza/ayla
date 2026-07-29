@@ -9,6 +9,7 @@
 #include "ast/expressions/UnaryExpressionNode.hpp"
 
 #include <format>
+#include <iostream>
 
 void AstDumper::dump_call_expression(const ayla::ast::node::CallExpressionNode *node) {
   auto g = context.object("FunctionCall");

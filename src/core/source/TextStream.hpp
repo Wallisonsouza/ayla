@@ -1,137 +1,129 @@
 #pragma once
+
 #include "SourceBuffer.hpp"
-#include "Span.hpp"
 #include "core/token/Location.hpp"
 #include "utils/Utf8.hpp"
+
 #include <cstddef>
 #include <cstdint>
 #include <vector>
 
 namespace core::source {
 
+struct State {
+  const char *ptr;
+
+  uint32_t offset;
+  uint32_t line;
+  uint32_t column;
+
+  [[nodiscard]]
+  SourceSlice slice_to(const State &end) const noexcept {
+
+    return {.begin =
+                {
+                    .offset = offset,
+                    .line = line,
+                    .column = column,
+                },
+
+            .end = {
+                .offset = end.offset,
+                .line = end.line,
+                .column = end.column,
+            }};
+  }
+};
+
 class TextStream {
 public:
-  struct State {
-    const char *ptr;
-    size_t offset;
-    size_t line;
-    size_t column;
-
-    Span span_to(const State &end) const { return Span{ptr, end.ptr}; }
-
-    SourceRange range_to(const State &end) const {
-      return SourceRange{.begin = {offset, line, column},
-                         .end = {end.offset, end.line, end.column}};
-    }
-  };
-
 private:
   const SourceBuffer &buffer;
+
   const char *begin;
   const char *current;
   const char *end;
 
-  size_t line = 1;
-  size_t column = 1;
+  uint32_t line = 1;
+  uint32_t column = 1;
 
   std::vector<State> checkpoints;
 
 public:
-  explicit TextStream(const SourceBuffer &buf)
-      : buffer(buf), begin(buf.begin()), current(buf.begin()), end(buf.end()) {}
+  explicit TextStream(const SourceBuffer &buf) : buffer(buf), begin(buf.begin()), current(buf.begin()), end(buf.end()) {}
 
-  bool eof() const { return current >= end; }
+  bool eof() const noexcept { return current >= end; }
 
-  char32_t peek() const {
-    if (eof())
-      return U'\0';
-    size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*current));
-    return utils::Utf::utf8_to_codepoint(current, len);
+  char32_t peek() const noexcept {
+    if (eof()) return U'\0';
+
+    return utils::Utf8::decode(current).codepoint;
   }
 
-  char32_t peek_n(size_t n) const {
+  char32_t peek_n(size_t n) const noexcept {
     const char *p = current;
+
     while (n--) {
-      if (p >= buffer.end())
-        return 0;
-      size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*p));
-      p += len;
+      if (p >= end) return U'\0';
+
+      p = utils::Utf8::advance(p);
     }
-    if (p >= buffer.end())
-      return 0;
-    size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*p));
-    return utils::Utf::utf8_to_codepoint(p, len);
+
+    if (p >= end) return U'\0';
+
+    return utils::Utf8::decode(p).codepoint;
   }
 
-  char32_t advance() {
-    if (eof())
-      return U'\0';
-    size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*current));
-    char32_t cp = utils::Utf::utf8_to_codepoint(current, len);
+  char32_t advance() noexcept {
+    if (eof()) return U'\0';
 
-    current += len;
-    if (cp == U'\n') {
+    auto result = utils::Utf8::decode(current);
+
+    current += result.size;
+
+    if (result.codepoint == U'\n') {
       line++;
-      column = 1; // opcional, só para info
+      column = 1;
     } else {
-      column++; // apenas contador simples (opcional)
+      column++;
     }
 
-    return cp;
+    return result.codepoint;
   }
 
-  void advance_n(size_t n) {
-    while (n--)
-      advance();
+  void advance_n(size_t n) noexcept {
+    while (n--) advance();
   }
 
-  SourceSlice slice_from(const State &start) const {
-    State end_state = get_state();
-    return {.range = start.range_to(end_state),
-            .span = start.span_to(end_state)};
+  SourceSlice slice_from(const State &start) const noexcept { return start.slice_to(get_state()); }
+
+  State get_state() const noexcept {
+    return {
+        .ptr = current,
+        .offset = static_cast<uint32_t>(current - begin),
+        .line = line,
+        .column = column,
+    };
   }
 
-  const char *mark() const { return current; }
-
-  State get_state() const {
-    return {current, static_cast<size_t>(current - begin), line, column};
-  }
-
-  void rollback(const State &s) {
-    current = s.ptr;
-    line = s.line;
-    column = s.column;
+  void rollback(const State &state) noexcept {
+    current = state.ptr;
+    line = state.line;
+    column = state.column;
   }
 
   void push_checkpoint() { checkpoints.push_back(get_state()); }
+
   void rollback_checkpoint() {
     if (!checkpoints.empty()) {
       rollback(checkpoints.back());
       checkpoints.pop_back();
     }
   }
-  void discard_checkpoint() {
-    if (!checkpoints.empty())
-      checkpoints.pop_back();
-  }
 
-  // template <typename Predicate> size_t advance_while(Predicate pred) {
-  //   size_t count = 0;
-  //   while (!eof()) {
-  //     size_t len = utils::Utf::utf8_char_len(static_cast<uint8_t>(*current));
-  //     char32_t cp = utils::Utf::utf8_to_codepoint(current, len);
-  //     if (!pred(cp)) break;
-  //     current += len;
-  //     if (cp == U'\n') {
-  //       line++;
-  //       column = 1;
-  //     } else {
-  //       column++;
-  //     }
-  //     count++;
-  //   }
-  //   return count;
-  // }
+  void discard_checkpoint() {
+    if (!checkpoints.empty()) checkpoints.pop_back();
+  }
 };
 
 } // namespace core::source

@@ -6,6 +6,7 @@
 namespace ayla::ast::node {
 
 struct ModuleDeclarationNode : DeclarationNode {
+  
   QualifiedNameNode *name;
 
   std::vector<DeclarationNode *> declarations;

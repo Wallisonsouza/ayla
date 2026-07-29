@@ -1,34 +1,27 @@
 #include "Resolver.hpp"
-#include "core/modifiers/ModifierSet.hpp"
+#include "ast/NodeKind.hpp"
 
-void Resolver::resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier) {
-  // if (!pat) return;
 
-  // switch (pat->kind) {
-  // case ayla::ast::NodeKind::IdentifierPattern: {
-  //   auto *pattern = static_cast<ayla::ast::IdentifierPatternNode *>(pat);
+void Resolver::resolve_identifier_pattern(ayla::ast::IdentifierPatternNode *pattern) {
 
-  //   if (current_scope->symbols.contains(pattern->name->str)) {
-  //     // //report_error(DiagnosticCode::RedeclaredIdentifier, pattern->identifier->slice, {{"name", pattern->identifier->name}});
-  //     return;
-  //   }
+  if (current_scope->symbols.contains(pattern->name->str)) {
 
-  //   SymbolId sybol_id = unit.context.symbol_manager.create_symbol(pattern->name->str, SymbolKind::Variable, Visibility::Private, false, pat);
+    // unit.diagnostics.create(DiagnosticCode::RedeclaredIdentifier, pattern->slice);
+  
+  }
 
-  //   auto symbol = unit.context.symbol_manager.get(sybol_id);
-  //   symbol->modifiers = modifier;
+  SymbolId sybol_id = unit.context.symbols.create_symbol(pattern->name->str, SymbolKind::Variable, Visibility::Private, false);
+  auto symbol = unit.context.symbols.get(sybol_id);
 
-  //   current_scope->symbols.insert(pattern->name->str, sybol_id);
+  current_scope->symbols.insert(pattern->name->str, sybol_id);
 
-  //   pattern->symbol_id = sybol_id;
+  if (pattern->type_annotation) resolve_type_node(pattern->type_annotation);
+}
 
-  //   pattern->name->resolved_symbol_id = sybol_id;
+void Resolver::resolve_pattern(ayla::ast::PatternNode *pat) {
+  switch (pat->kind) {
+  case ayla::ast::NodeKind::IdentifierPattern: resolve_identifier_pattern(static_cast<ayla::ast::IdentifierPatternNode *>(pat)); break;
 
-  //   if (pattern->type_annotation) resolve_type_node(pattern->type_annotation);
-
-  //   break;
-  // }
-
-  // default: break;
-  // }
+  default: break;
+  }
 }

@@ -9,7 +9,7 @@ ayla::ast::IdentifierNode *NameParser::parse_name() {
 
   if (!token) return nullptr;
 
-  auto text = context.source().buffer.get_text(token->slice.span);
+  auto text = context.source().buffer.get_text(token->slice.get_span());
 
   return context.ast().create_node<ayla::ast::IdentifierNode>(text);
 }

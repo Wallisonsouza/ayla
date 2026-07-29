@@ -3,8 +3,12 @@
 #include "core/managers/source_manager.hpp"
 #include "core/visitor/PassManager.hpp"
 #include "core/visitor/Pipeline.hpp"
+#include "diagnostic/diagnostic_debug.hpp"
 #include "engine/LangContext.hpp"
 #include "engine/UnitManager.hpp"
+#include <iostream>
+
+
 class CompilationSession {
 
 public:
@@ -21,6 +25,19 @@ public:
   }
 
   Pipeline &pipeline() { return pipeline_; }
+
+  void show_diagnostics() {
+
+    for (auto &unit : units.units) { 
+
+      std::cout << unit->source.path << ":" << std::endl;
+
+      for (auto &diag : unit->diags.all()) {
+      //  diagnostic::print_diagnostic(diag, unit->source);
+      }
+      
+    }
+  }
 
 private:
   void compile_unit(CompilationUnit &unit) { pipeline_.run(unit); }

@@ -1,6 +1,6 @@
 #include "core/visitor/Stage.hpp"
 #include "engine/CompilationUnit.hpp"
-#include "syntax/lexer/lexer.hpp"
+#include "syntax/lexer/Lexer.hpp"
 
 class LexerStage : public Stage {
 

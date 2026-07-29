@@ -1,4 +1,5 @@
 #include "TokenDumper.hpp"
+#include "core/source/SourceBuffer.hpp"
 #include "core/token/TokenKind.hpp"
 #include <iostream>
 #include <sstream>
@@ -90,36 +91,34 @@ std::string TokenDumper::sanitize_text(std::string text, size_t max) {
   return text;
 }
 
-std::string TokenDumper::dump(const Token &token) {
-
+std::string TokenDumper::dump_token(const Token &token, const core::source::SourceBuffer &source) {
   const char *kind = "<no-descriptor>";
   const char *group = "<no-descriptor>";
 
   if (token.descriptor) {
     kind = token_kind_to_str(token.descriptor->kind);
-
     group = token_group_to_str(token.descriptor->group);
   }
 
-  std::string text{token.slice.span.view()};
+  std::string_view view = source.get_view(token.slice.get_span());
 
   std::ostringstream oss;
 
   oss << "Token {\n"
       << "  kind  : " << kind << "\n"
       << "  group : " << group << "\n"
-      << "  text  : \"" << sanitize_text(text) << "\"\n"
-      << "  range : " << token.slice.range.begin.line << ":" << token.slice.range.begin.column << " -> " << token.slice.range.end.line << ":" << token.slice.range.end.column << "\n"
-      << "  offset: " << token.slice.range.begin.offset << " -> " << token.slice.range.end.offset << "\n"
+      << "  text  : \"" << sanitize_text(std::string(view)) << "\"\n"
+      << "  range : " << token.slice.begin.line << ":" << token.slice.begin.column << " -> " << token.slice.end.line << ":" << token.slice.end.column << "\n"
+      << "  offset: " << token.slice.begin.offset << " -> " << token.slice.end.offset << "\n"
       << "}";
 
   return oss.str();
 }
 
-std::string TokenDumper::dump(const core::token::TokenStream &tokens) {
+std::string TokenDumper::dump(const core::token::TokenStream &tokens, const core::source::SourceBuffer &source) {
   std::ostringstream oss;
 
-  for (auto &token : tokens.get_tokens()) { oss << dump(*token) << "\n\n"; }
+  for (auto &token : tokens.get_tokens()) { oss << dump_token(*token, source) << "\n\n"; }
 
   return oss.str();
 }

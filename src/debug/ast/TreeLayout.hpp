@@ -3,35 +3,25 @@
 #include <ostream>
 #include <vector>
 
+enum class Branch { More, Last };
+
 class TreeLayout {
 
 public:
+  
+  explicit TreeLayout(std::ostream &out);
 
-    enum class Branch {
-        More,
-        Last
-    };
+  void enter(Branch branch);
 
+  void leave();
 
-    explicit TreeLayout(std::ostream& out);
-
-
-    void enter(Branch branch);
-
-    void leave();
-
-
-    void blank_line();
-
+  void blank_line();
 
 private:
-
-    void print_prefix();
-
+  void print_prefix();
 
 private:
+  std::ostream &out;
 
-    std::ostream& out;
-
-    std::vector<bool> branches;
+  std::vector<bool> branches;
 };

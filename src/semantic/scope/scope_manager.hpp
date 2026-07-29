@@ -1,6 +1,8 @@
+#pragma once
 
 #include "core/memory/Arena.hpp"
 #include "semantic/scope/Scope.hpp"
+
 class ScopeManager {
   core::memory::Arena arena;
   std::vector<core::Scope *> scopes;

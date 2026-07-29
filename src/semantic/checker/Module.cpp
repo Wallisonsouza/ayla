@@ -1,7 +1,10 @@
 #include "TypeChecker.hpp"
+#include <iostream>
 
 void ayla::TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarationNode *node) {
-  // if (!node) return;
+  if (!node) return;
+
+   
 
   // auto *module = unit.context.module_manager.get(node->resolved_module_id);
   // if (!module) return;
@@ -25,7 +28,10 @@ void ayla::TypeChecker::check_module_declaration(ayla::ast::node::ModuleDeclarat
   // if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 }
 
-void ayla::TypeChecker::check_import_node(ayla::ast::node::ImportDeclarationNode *node) {
+void ayla::TypeChecker::check_import_declaration_node(ayla::ast::node::ImportDeclarationNode *node) {
+
+
+
 
   // if (!node) return;
 

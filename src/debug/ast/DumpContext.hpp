@@ -24,8 +24,8 @@ public:
 
   class Object {
 
-    const debug::Color NAME_COLOR = debug::Color::MediumSlateBlue;
-    const debug::Color FIELD_COLOR = debug::Color::White;
+    const debug::Color NAME_COLOR = debug::Color::Blue;
+    const debug::Color FIELD_COLOR = debug::Color::DarkGray;
 
   public:
     Object(DumpContext &ctx, std::string_view name) : context(ctx) { debug::Console::log(NAME_COLOR, name); }
@@ -57,11 +57,11 @@ public:
       for (auto &f : fields) {
         bool last = ++index == total;
 
-        context.layout.enter(last ? TreeLayout::Branch::Last : TreeLayout::Branch::More);
+        context.layout.enter(last ? Branch::Last : Branch::More);
 
         debug::Console::log(FIELD_COLOR, f.name, ":");
 
-        context.layout.enter(TreeLayout::Branch::Last);
+        context.layout.enter(Branch::Last);
 
         context.dispatch(f.node);
 
@@ -73,14 +73,14 @@ public:
       for (auto &l : lists) {
         bool last = ++index == total;
 
-        context.layout.enter(last ? TreeLayout::Branch::Last : TreeLayout::Branch::More);
+        context.layout.enter(last ? Branch::Last : Branch::More);
 
         debug::Console::log(FIELD_COLOR, l.name, ":");
 
         for (size_t i = 0; i < l.nodes.size(); i++) {
           bool childLast = i + 1 == l.nodes.size();
 
-          context.layout.enter(childLast ? TreeLayout::Branch::Last : TreeLayout::Branch::More);
+          context.layout.enter(childLast ? Branch::Last : Branch::More);
 
           context.dispatch(l.nodes[i]);
 

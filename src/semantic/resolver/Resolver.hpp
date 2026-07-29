@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ast/expressions/IdentifierExpressionNode.hpp"
+#include "ast/patterns/PatternNode.hpp"
 #include "core/modifiers/ModifierSet.hpp"
-#include "diagnostic/DiagnosticEngine.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/scope/Scope.hpp"
 
@@ -26,16 +26,26 @@
 struct Resolver {
 
   core::Scope *current_scope;
+
+  std::vector<core::Scope *> scope_stack;
+
   CompilationUnit &unit;
 
   explicit Resolver(CompilationUnit &unit, core::Scope *global) : unit(unit), current_scope(global) {}
 
   void resolve(ayla::ast::AstNode *node);
 
-  void push_scope();
-  void pop_scope();
+  void push_scope(core::Scope &scope) {
+    scope_stack.push_back(current_scope);
+    current_scope = &scope;
+  }
 
-  void resolve_pattern(ayla::ast::PatternNode *pat, ModifierSet modifier);
+  void pop_scope() {
+    current_scope = scope_stack.back();
+    scope_stack.pop_back();
+  }
+
+  void resolve_pattern(ayla::ast::PatternNode *pat);
 
   void resolve_function_call(ayla::ast::node::CallExpressionNode *node);
   void resolve_assignment(ayla::ast::node::AssignmentExpressionNode *node);
@@ -64,6 +74,8 @@ struct Resolver {
 
   void resolve_return_statement(ayla::ast::node::ReturnStatementNode *node);
 
-  void resolve_import_node(ayla::ast::node::ImportDeclarationNode *node);
+  void resolve_import_declaration(ayla::ast::node::ImportDeclarationNode *node);
   void resolve_expression_statement(ayla::ast::node::ExpressionStatementNode *node);
+
+  void resolve_identifier_pattern(ayla::ast::IdentifierPatternNode *pattern);
 };

@@ -5,7 +5,8 @@
 #include "core/AST.hpp"
 #include "core/source/Source.hpp"
 #include "core/token/token_stream.hpp"
-#include "diagnostic/DiagnosticEngine.hpp"
+
+#include "diagnostic/DiagnosticContext.hpp"
 #include "engine/LangContext.hpp"
 #include "semantic/scope/scope_manager.hpp"
 
@@ -14,16 +15,16 @@ struct CompilationUnit {
   LanguageContext &context;
   core::source::Source &source;
 
-  DiagnosticEngine diagns;
-
-  ScopeManager scope_manager;
+  ScopeManager scopes;
 
   Ast ast;
 
-   ayla::ast::node::ModuleDeclarationNode* module;
+  ayla::ast::node::ModuleDeclarationNode *module;
   ayla::ast::node::BlockStatementNode *script = nullptr;
+
+  diagnostic::DiagnosticContext diags;
 
   core::token::TokenStream tokens;
 
-  explicit CompilationUnit(LanguageContext &ctx, core::source::Source &src) : context(ctx), source(src), diagns(*this) {}
+  explicit CompilationUnit(LanguageContext &ctx, core::source::Source &src) : context(ctx), source(src) {}
 };

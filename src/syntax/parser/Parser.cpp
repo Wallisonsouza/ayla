@@ -9,7 +9,6 @@
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
 #include "ast/declarations/ModuleDeclarationNode.hpp"
-#include "debug/ast/AstDumper.hpp"
 #include "syntax/parser/ParserUtil.hpp"
 #include <vector>
 

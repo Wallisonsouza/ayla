@@ -6,7 +6,7 @@ export CXX=clang++
 
 # rm -rf build
 
-# mkdir -p build
+ mkdir -p build
 cd build
 
 # Gera build usando Ninja
@@ -35,8 +35,4 @@ clear
 # Executa
 cd build
 
-if ninja -t targets | grep -q "^run:"; then
-    ninja run
-else
-    ./ayla
-fi  
+./ayla run ../scripts/io.ayla --dump tokens --dump ast

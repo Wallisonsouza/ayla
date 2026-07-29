@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ast/NodeKind.hpp"
 #include "NodeState.hpp"
+#include "ast/NodeKind.hpp"
 #include "core/token/Location.hpp"
 
 struct Type;
@@ -20,3 +20,4 @@ protected:
 };
 
 } // namespace ayla::ast
+

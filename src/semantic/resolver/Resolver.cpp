@@ -25,7 +25,7 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
 
   case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
 
-  case ayla::ast::NodeKind::ImportDeclaration: resolve_import_node(static_cast<ayla::ast::node::ImportDeclarationNode *>(node)); break;
+  case ayla::ast::NodeKind::ImportDeclaration: resolve_import_declaration(static_cast<ayla::ast::node::ImportDeclarationNode *>(node)); break;
 
   case ayla::ast::NodeKind::Name: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
 
@@ -56,7 +56,3 @@ void Resolver::resolve(ayla::ast::AstNode *node) {
   default: break;
   }
 }
-
-void Resolver::push_scope() { current_scope = unit.scope_manager.create_scope(current_scope); }
-
-void Resolver::pop_scope() { current_scope = current_scope->parent; }

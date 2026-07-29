@@ -1,10 +1,20 @@
+#pragma once
+
 #include "semantic/scope/Scope.hpp"
 #include <string>
 
 class Module {
 public:
-  std::string name;
-  core::Scope scope;
+  explicit Module(std::string name) : name_(std::move(name)), scope_(nullptr) {}
 
-  std::vector<Module *> imports;
+  std::string_view name() const { return name_; }
+
+  core::Scope &get_scope() { return scope_; }
+
+  // const core::Scope &get_scope() const { return scope_; }
+
+private:
+  std::string name_;
+
+  core::Scope scope_;
 };

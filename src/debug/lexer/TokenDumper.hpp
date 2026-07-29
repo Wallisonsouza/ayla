@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/source/SourceBuffer.hpp"
 #include "core/token/Token.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
@@ -11,9 +12,10 @@ namespace debug::lexer {
 
 class TokenDumper {
 public:
-  std::string dump(const Token &token);
 
-  std::string dump(const core::token::TokenStream &tokens);
+  std::string dump_token(const Token &token, const core::source::SourceBuffer &source) ;
+
+  std::string dump(const core::token::TokenStream &tokens, const core::source::SourceBuffer &source);
 
 private:
   static constexpr const char *token_group_to_str(TokenGroup group);

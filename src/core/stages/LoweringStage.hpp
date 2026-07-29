@@ -5,10 +5,9 @@
 
 class LoweringStage : public Stage {
   void run(CompilationUnit &unit) override {
-    
+
     auto *module = unit.module;
     auto *script = unit.script;
-
 
     if (!script || script->statements.empty()) return;
 

@@ -1,39 +1,31 @@
 #pragma once
 
-#include "core/token/Location.hpp"
-#include "diagnostic/diagnostic_code.hpp"
-#include "diagnostic/diagnostic_context.hpp"
-#include <optional>
+#include "diagnostic/DiagnosticCode.hpp"
+#include "diagnostic/Expected.hpp"
+#include "diagnostic/Label.hpp"
+#include "diagnostic/Severity.hpp"
+
 #include <string>
+#include <vector>
 
-enum class DiagnosticOrigin { Lexer, Parser, Semantic, Runtime, Custom };
+#pragma once
 
-enum class Severity { Info, Warning, Error, Fatal };
+namespace diagnostic {
 
 struct Diagnostic {
-  DiagnosticOrigin origin;
-  DiagnosticCode code;
   Severity severity;
 
-  std::optional<SourceSlice> slice;
-  DiagnosticContext context;
+  DiagnosticCode code;
 
-public:
-  void set_expected(const std::string &expected) {
+  std::optional<Expected> expected;
 
-    if (expected.empty()) {
-      return;
-    }
+  std::optional<Found> found;
 
-    context.set("expected", expected);
-  }
+  std::vector<Label> labels;
 
-  void set_found(const std::string &found) {
+  std::vector<std::string> helps;
 
-    if (found.empty()) {
-      return;
-    }
-
-    context.set("found", found);
-  }
+  std::vector<std::string> notes;
 };
+
+} // namespace diagnostic

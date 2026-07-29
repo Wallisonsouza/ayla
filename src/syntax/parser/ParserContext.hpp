@@ -1,5 +1,6 @@
 #pragma once
 
+#include "diagnostic/DiagnosticCode.hpp"
 #include "engine/CompilationUnit.hpp"
 
 class ParseContext {
@@ -14,11 +15,11 @@ public:
 
   auto &ast() { return unit.ast; }
 
-  auto &precedence() { return unit.context.precedence_table; }
+  auto &operators() { return unit.context.operators; }
 
-  auto &diagnostics() { return unit.diagns; }
+  auto &diagnostics() { return unit.diags; }
 
-  void report_error(DiagnosticCode code) {}
+  void report_error(diagnostic::DiagnosticCode code) {}
 
-  auto &descriptors() { return unit.context.descriptor_table; }
+  auto &descriptors() { return unit.context.descriptors; }
 };

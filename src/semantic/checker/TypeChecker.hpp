@@ -1,11 +1,15 @@
 #pragma once
 
+#include "ast/AstNode.hpp"
 #include "ast/expressions/IdentifierExpressionNode.hpp"
-#include "diagnostic/DiagnosticEngine.hpp"
+#include "core/token/Location.hpp"
+#include "diagnostic/DiagnosticCode.hpp"
 #include "engine/CompilationUnit.hpp"
 #include "semantic/types/BuiltinTypes.hpp"
 
-
+#include "ast/declarations/FunctionDeclarationNode.hpp"
+#include "ast/declarations/ModuleDeclarationNode.hpp"
+#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/expressions/AssignmentExpression.hpp"
 #include "ast/expressions/BinaryExpressionNode.hpp"
 #include "ast/expressions/CallExpressionNode.hpp"
@@ -13,23 +17,26 @@
 #include "ast/expressions/LiteralExpressionNode.hpp"
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
 #include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
 #include "ast/statements/ExpressionStatementNode.hpp"
 #include "ast/statements/IfStatementNode.hpp"
 #include "ast/statements/ImportStatementNode.hpp"
-#include "ast/declarations/ModuleDeclarationNode.hpp"
 #include "ast/statements/ReturnStatementNode.hpp"
-#include "ast/declarations/VariableDeclarationNode.hpp"
 #include "ast/statements/WhileStatementNode.hpp"
-#include "ast/statements/BlockStatementNode.hpp" 
-#include "ast/declarations/FunctionDeclarationNode.hpp" 
-namespace ayla {
-struct TypeChecker {
 
+struct CheckerContext {};
+
+namespace ayla {
+class TypeChecker {
+
+public:
   CompilationUnit &unit;
 
   explicit TypeChecker(CompilationUnit &unit) : unit(unit) {}
+void check(ast::AstNode *node);
 
-  void check(ast::AstNode *node);
+private:
+  
 
   void check_identifier(ast::node::IdentifierExpressionNode *node);
 
@@ -62,14 +69,11 @@ struct TypeChecker {
 
   void check_block(ast::node::BlockStatementNode *node);
 
-  void check_import_node(ast::node::ImportDeclarationNode *node);
+  void check_import_declaration_node(ast::node::ImportDeclarationNode *node);
   void check_module_declaration(ast::node::ModuleDeclarationNode *node);
   void check_assignment(ast::node::AssignmentExpressionNode *node);
   void check_expression_statement(ast::node::ExpressionStatementNode *node);
 
-  void report_error(DiagnosticCode code, const SourceSlice &slice, const std::unordered_map<std::string, std::string> &ctx = {}) {
-    auto *diag = unit.diagns.create(code, slice);
-    for (auto &[k, v] : ctx) { diag->context.set(k, v); }
-  }
+  void report_error(diagnostic::DiagnosticCode vode, SourceSlice slice) {};
 };
 } // namespace ayla

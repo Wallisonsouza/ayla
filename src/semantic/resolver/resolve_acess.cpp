@@ -1,5 +1,4 @@
 #include "ast/expressions/MemberAccessExpressionNode.hpp"
-#include "diagnostic/diagnostic_code.hpp"
 #include "semantic/resolver/Resolver.hpp"
 
 void Resolver::resolve_index_access(ayla::ast::node::IndexAccessExpressionNode *node) {

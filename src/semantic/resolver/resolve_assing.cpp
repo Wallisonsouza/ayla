@@ -7,7 +7,7 @@ void Resolver::resolve_assignment(ayla::ast::node::AssignmentExpressionNode *nod
 
   if (node->target) { resolve(node->target); }
 
-  auto symbol = unit.context.symbol_manager.get(node->target->resolved_symbol_id);
+  auto symbol = unit.context.symbols.get(node->target->resolved_symbol_id);
 
   if (symbol->modifiers.has(Modifier::Mut)) { std::cout << "aaaaaaaaaaaaaaaa, e mut"; }
 
