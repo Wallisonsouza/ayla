@@ -1,10 +1,11 @@
 #include "core/visitor/Stage.hpp"
 #include "debug/ast/AstDumper.hpp"
+#include "engine/CompilerEnvironment.hpp"
 
 class AstDumperStage : public Stage {
-  void run(CompilationUnit &unit) override {
+  void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
     AstDumper dumper;
-    dumper.run(unit);
+    dumper.run(env,unit);
   };
 };

@@ -21,11 +21,11 @@ Token *Lexer::match_identifier() {
 
   auto slice = stream.slice_from(start);
 
-  auto name = unit.source.buffer.get_view(slice.get_span());
+  auto name = ctx.source.buffer.get_view(slice.get_span());
 
-  auto descriptor = unit.context.descriptors.lookup_by_name(name);
+  auto descriptor = ctx.language.descriptors.lookup_by_name(name);
 
-  if (!descriptor) { descriptor = unit.context.descriptors.lookup_by_kind(TokenKind::IDENTIFIER); }
+  if (!descriptor) { descriptor = ctx.language.descriptors.lookup_by_kind(TokenKind::IDENTIFIER); }
 
-  return unit.tokens.create_token<Token>(descriptor, slice);
+  return ctx.tokens.create_token<Token>(descriptor, slice);
 }

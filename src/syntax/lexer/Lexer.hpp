@@ -2,13 +2,13 @@
 
 #include "core/source/TextStream.hpp"
 #include "core/token/Token.hpp"
-#include "engine/CompilationUnit.hpp"
+#include "syntax/lexer/LexerContext.hpp"
 #include "utils/Unicode.hpp"
 
 struct Lexer {
 private:
-  core::source::TextStream stream;
-  CompilationUnit &unit;
+  LexerContext &ctx;
+    core::source::TextStream stream;
 
   Token *match_token() {
 
@@ -24,7 +24,7 @@ private:
   }
 
 public:
-  Lexer(CompilationUnit &unit) : unit(unit), stream(unit.source.buffer) {};
+  Lexer(LexerContext &ctx) : ctx(ctx), stream(ctx.source.buffer) {};
 
   Token *match_identifier();
   Token *match_string();
@@ -75,8 +75,8 @@ public:
 
         auto state = stream.get_state();
 
-        auto desc = unit.context.descriptors.lookup_by_kind(TokenKind::NEW_LINE);
-        unit.tokens.create_token<Token>(desc, stream.slice_from(state));
+        auto desc = ctx.language.descriptors.lookup_by_kind(TokenKind::NEW_LINE);
+        ctx.tokens.create_token<Token>(desc, stream.slice_from(state));
       }
 
       auto start_state = stream.get_state();

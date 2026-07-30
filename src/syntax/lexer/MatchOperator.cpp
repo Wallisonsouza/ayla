@@ -3,7 +3,7 @@
 Token *Lexer::match_operator() {
   auto start = stream.get_state();
 
-  const auto *node = unit.context.descriptors.trie().root();
+  const auto *node = ctx.language.descriptors.trie().root();
   const TokenDescriptor *best = nullptr;
   size_t best_len = 0;
 
@@ -29,5 +29,5 @@ Token *Lexer::match_operator() {
   stream.advance_n(best_len);
   auto slice = stream.slice_from(start);
 
-  return unit.tokens.create_token<Token>(best, slice);
+  return ctx.tokens.create_token<Token>(best, slice);
 }

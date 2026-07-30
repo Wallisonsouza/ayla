@@ -1,5 +1,5 @@
 #include "context/argon_main.hpp"
-#include "core/stages/CheckerStage.hpp"
+#include "core/stages/ResolverStage.hpp"
 #include "runtime/bytecode/Serealizer.hpp"
 #include <iostream>
 
@@ -23,23 +23,22 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Arquivo: " << *cmd.input << '\n';
 
-    auto context = ayla::language::create_context();
-    CompilationSession session(context);
+    auto lang = ayla::language::create_definition();
 
-    session.pipeline().add_stage<LexerStage>();
-    session.pipeline().add_stage<ParserStage>();
-    session.pipeline().add_stage<LoweringStage>();
-    session.pipeline().add_stage<ResolverStage>();
+    CompilationSession session;
 
-    if (has_flag(cmd.dumps, DumpFlags::Tokens)) { session.pipeline().add_stage<TokenDumperStage>(); };
-    if (has_flag(cmd.dumps, DumpFlags::Ast)) { session.pipeline().add_stage<AstDumperStage>(); };
+    session.environment().language = lang;
+
+    session.pipeline.add_stage<LexerStage>();
+    session.pipeline.add_stage<ParserStage>();
+    session.pipeline.add_stage<LoweringStage>();
+    session.pipeline.add_stage<ResolverStage>();
+
+    if (has_flag(cmd.dumps, DumpFlags::Tokens)) { session.pipeline.add_stage<TokenDumperStage>(); };
+    if (has_flag(cmd.dumps, DumpFlags::Ast)) { session.pipeline.add_stage<AstDumperStage>(); };
 
     session.add_script(*cmd.input);
     session.compile();
-    session.show_diagnostics();
+    // session.show_diagnostics();
   }
 }
-
-
-
-

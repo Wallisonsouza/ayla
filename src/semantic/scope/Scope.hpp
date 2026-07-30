@@ -14,7 +14,7 @@ struct Scope {
 
   explicit Scope(Scope *p = nullptr) : parent(p) {}
 
-  SymbolId resolve_symbol(std::string_view name) const {
+  SymbolId symbol(std::string_view name) const {
     const Scope *scope = this;
 
     while (scope) {

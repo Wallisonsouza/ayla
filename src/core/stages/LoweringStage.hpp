@@ -1,10 +1,11 @@
 #include "ast/declarations/FunctionDeclarationNode.hpp"
 #include "core/visitor/Stage.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "engine/CompilerEnvironment.hpp"
 #include <iostream>
 
 class LoweringStage : public Stage {
-  void run(CompilationUnit &unit) override {
+  void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
     auto *module = unit.module;
     auto *script = unit.script;

@@ -6,9 +6,9 @@
 
 struct TokenDescriptor {
 
-  const TokenKind kind;
-  const TokenGroup group;
-  const std::string name;
+   TokenKind kind;
+   TokenGroup group;
+   std::string name;
   std::vector<std::string> aliases;
 
   TokenDescriptor(TokenKind kind, TokenGroup group, const std::string &lexeme)

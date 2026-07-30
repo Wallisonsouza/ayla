@@ -2,12 +2,14 @@
 
 #include "diagnostic/DiagnosticCode.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "engine/CompilerEnvironment.hpp"
 
 class ParseContext {
 public:
   CompilationUnit &unit;
+  CompilerEnvironment &env;
 
-  explicit ParseContext(CompilationUnit &unit) : unit(unit) {}
+  explicit ParseContext(CompilationUnit &unit, CompilerEnvironment &e) : unit(unit), env(e) {}
 
   auto &tokens() { return unit.tokens; }
 
@@ -15,11 +17,11 @@ public:
 
   auto &ast() { return unit.ast; }
 
-  auto &operators() { return unit.context.operators; }
+  auto &operators() { return env.language.operators; }
 
-  auto &diagnostics() { return unit.diags; }
+  auto &diagnostics() { return unit.diagnostics; }
 
   void report_error(diagnostic::DiagnosticCode code) {}
 
-  auto &descriptors() { return unit.context.descriptors; }
+  auto &descriptors() { return env.language.descriptors; }
 };

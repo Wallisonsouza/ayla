@@ -1,9 +1,9 @@
 #include "semantic/resolver/Resolver.hpp"
 
-void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *node) {
+void Resolver::identifier(ayla::ast::node::IdentifierExpressionNode *node) {
   if (!node) return;
 
-  SymbolId id = current_scope->resolve_symbol(node->name->str);
+  SymbolId id = context.scopes.current()->symbol(node->name->str);
 
   if (!id.is_valid()) {
     // //report_error(DiagnosticCode::UndeclaredSymbol, node->slice);
@@ -13,18 +13,18 @@ void Resolver::resolve_identifier(ayla::ast::node::IdentifierExpressionNode *nod
   node->resolved_symbol_id = id;
 }
 
-void Resolver::resolve_number_literal(ayla::ast::node::NumberLiteralNode *node) {}
+void Resolver::number_literal(ayla::ast::node::NumberLiteralNode *node) {}
 
-void Resolver::resolve_string_literal(ayla::ast::node::StringLiteralNode *node) {}
+void Resolver::string_literal(ayla::ast::node::StringLiteralNode *node) {}
 
-void Resolver::resolve_boolean_literal(ayla::ast::node::BoolLiteralNode *node) {}
+void Resolver::boolean_literal(ayla::ast::node::BoolLiteralNode *node) {}
 
-void Resolver::resolve_object_literal(ayla::ast::node::ObjectLiteralNode *node) {
+void Resolver::object_literal(ayla::ast::node::ObjectLiteralNode *node) {
   for (auto *field : node->fields) {
     if (field->value) resolve(field->value);
   }
 }
 
-void Resolver::resolve_array_literal(ayla::ast::node::ArrayLiteralNode *node) {
+void Resolver::array_literal(ayla::ast::node::ArrayLiteralNode *node) {
   for (auto *el : node->elements) resolve(el);
 }

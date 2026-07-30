@@ -4,16 +4,16 @@
 #include "core/table/PrecedenceTable.hpp"
 #include "core/token/TokenGroup.hpp"
 #include "core/token/TokenKind.hpp"
-#include "engine/LangContext.hpp"
+#include "engine/LanguageDefinition.hpp"
 #include "semantic/checker/TypeChecker.hpp"
 #include "semantic/types/type.hpp"
 #include <memory>
 
 namespace ayla::language {
 
-inline LanguageContext create_context() {
+inline LanguageDefinition create_definition() {
 
-  auto context = LanguageContext();
+  auto context = LanguageDefinition();
 
   context.type_table["number"] = std::make_shared<Type>(BuiltinTypes::Number);
 

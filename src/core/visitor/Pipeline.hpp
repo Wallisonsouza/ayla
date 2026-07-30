@@ -1,5 +1,6 @@
 #include "core/visitor/Stage.hpp"
 #include "engine/CompilationUnit.hpp"
+#include "engine/CompilerEnvironment.hpp"
 
 class Pipeline {
 public:
@@ -13,8 +14,8 @@ public:
     return ref;
   }
 
-  void run(CompilationUnit &unit) {
-    for (auto &stage : stages) stage->run(unit);
+  void run(CompilerEnvironment &env, CompilationUnit &unit) {
+    for (auto &stage : stages) stage->run(env,unit);
   }
 
 private:

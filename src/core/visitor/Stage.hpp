@@ -1,10 +1,11 @@
 #pragma once
 
+#include "engine/CompilerEnvironment.hpp"
 class CompilationUnit;
 
 class Stage {
 public:
   virtual ~Stage() = default;
 
-  virtual void run(CompilationUnit &unit) = 0;
+  virtual void run(CompilerEnvironment &env, CompilationUnit &unit) = 0;
 };

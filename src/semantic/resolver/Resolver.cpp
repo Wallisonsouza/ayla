@@ -1,58 +1,45 @@
 #include "Resolver.hpp"
-#include "ast/expressions/UnaryExpressionNode.hpp"
+#include "ast/statements/BlockStatementNode.hpp"
+
+Resolver::Resolver(ResolverContext &ctx) : context(ctx), handlers(this) {
+  handlers.bind<ayla::ast::node::NumberLiteralNode>(&Resolver::number_literal);
+  handlers.bind<ayla::ast::node::StringLiteralNode>(&Resolver::string_literal);
+  handlers.bind<ayla::ast::node::BoolLiteralNode>(&Resolver::boolean_literal);
+
+  handlers.bind<ayla::ast::node::BinaryExpressionNode>(&Resolver::binary_expression);
+  handlers.bind<ayla::ast::node::UnaryExpressionNode>(&Resolver::unary_expression);
+  handlers.bind<ayla::ast::node::AssignmentExpressionNode>(&Resolver::assignment);
+
+  handlers.bind<ayla::ast::node::CallExpressionNode>(&Resolver::function_call);
+  handlers.bind<ayla::ast::node::MemberAccessExpressionNode>(&Resolver::member_access);
+  handlers.bind<ayla::ast::node::IndexAccessExpressionNode>(&Resolver::index_access);
+
+  handlers.bind<ayla::ast::node::IdentifierExpressionNode>(&Resolver::identifier);
+
+  handlers.bind<ayla::ast::node::IfStatementNode>(&Resolver::if_statement);
+  handlers.bind<ayla::ast::node::WhileStatementNode>(&Resolver::while_statement);
+  handlers.bind<ayla::ast::node::BlockStatementNode>(&Resolver::block);
+  handlers.bind<ayla::ast::node::ExpressionStatementNode>(&Resolver::expression_statement);
+  handlers.bind<ayla::ast::node::ReturnStatementNode>(&Resolver::return_statement);
+
+  handlers.bind<ayla::ast::node::VariableDeclarationNode>(&Resolver::variable_declaration);
+  handlers.bind<ayla::ast::node::FunctionDeclarationNode>(&Resolver::function_declaration);
+  handlers.bind<ayla::ast::node::ModuleDeclarationNode>(&Resolver::module_declaration);
+  handlers.bind<ayla::ast::node::ImportDeclarationNode>(&Resolver::import_declaration);
+
+  handlers.bind<ayla::ast::node::ArrayLiteralNode>(&Resolver::array_literal);
+  handlers.bind<ayla::ast::node::ObjectLiteralNode>(&Resolver::object_literal);
+
+  handlers.bind<ayla::ast::TypeNode>(&Resolver::type_node);
+}
 
 void Resolver::resolve(ayla::ast::AstNode *node) {
+
+  auto *root = context.unit.ast.get_root();
 
   if (!node || node->flags.has(NodeFlags::Resolved)) return;
 
   node->flags.add(NodeFlags::Resolved);
 
-  switch (node->kind) {
-
-  case ayla::ast::NodeKind::NumberLiteral: resolve_number_literal(static_cast<ayla::ast::node::NumberLiteralNode *>(node)); break;
-
-  case ayla::ast::NodeKind::StringLiteral: resolve_string_literal(static_cast<ayla::ast::node::StringLiteralNode *>(node)); break;
-
-  case ayla::ast::NodeKind::BooleanLiteral: resolve_boolean_literal(static_cast<ayla::ast::node::BoolLiteralNode *>(node)); break;
-
-  case ayla::ast::NodeKind::IfStatement: resolve_if_statement(static_cast<ayla::ast::node::IfStatementNode *>(node)); break;
-
-  case ayla::ast::NodeKind::WhileStatement: resolve_while_statement(static_cast<ayla::ast::node::WhileStatementNode *>(node)); break;
-
-  case ayla::ast::NodeKind::BlockStatement: resolve_block(static_cast<ayla::ast::node::BlockStatementNode *>(node)); break;
-
-  case ayla::ast::NodeKind::BinaryExpression: resolve_binary_expression(static_cast<ayla::ast::node::BinaryExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::MemberAccess: resolve_member_access(static_cast<ayla::ast::node::MemberAccessExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ImportDeclaration: resolve_import_declaration(static_cast<ayla::ast::node::ImportDeclarationNode *>(node)); break;
-
-  case ayla::ast::NodeKind::Name: resolve_identifier(static_cast<ayla::ast::node::IdentifierExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::Call: resolve_function_call(static_cast<ayla::ast::node::CallExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ExpressionStatement: resolve_expression_statement(static_cast<ayla::ast::node::ExpressionStatementNode *>(node)); break;
-
-  case ayla::ast::NodeKind::VariableDeclaration: resolve_variable_declaration(static_cast<ayla::ast::node::VariableDeclarationNode *>(node)); break;
-
-  case ayla::ast::NodeKind::FunctionDeclaration: resolve_function_declaration(static_cast<ayla::ast::node::FunctionDeclarationNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ModuleDeclaration: resolve_module_declaration(static_cast<ayla::ast::node::ModuleDeclarationNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ReturnStatement: resolve_return_statement(static_cast<ayla::ast::node::ReturnStatementNode *>(node)); break;
-
-  case ayla::ast::NodeKind::Assignment: resolve_assignment(static_cast<ayla::ast::node::AssignmentExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ArrayLiteral: resolve_array_literal(static_cast<ayla::ast::node::ArrayLiteralNode *>(node)); break;
-
-  case ayla::ast::NodeKind::IndexAccess: resolve_index_access(static_cast<ayla::ast::node::IndexAccessExpressionNode *>(node)); break;
-
-  case ayla::ast::NodeKind::ObjectLiteral: resolve_object_literal(static_cast<ayla::ast::node::ObjectLiteralNode *>(node)); break;
-
-  case ayla::ast::NodeKind::Type: resolve_type_node(static_cast<ayla::ast::TypeNode *>(node)); break;
-
-  case ayla::ast::NodeKind::UnaryExpression: resolve_unary_expression(static_cast<ayla::ast::node::UnaryExpressionNode *>(node)); break;
-
-  default: break;
-  }
+  handlers.dispatch(node);
 }

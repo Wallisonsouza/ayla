@@ -14,7 +14,7 @@ cmake -G Ninja \
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 ..
 
-MAX_THREADS=8
+MAX_THREADS=4
 THREADS=$(nproc)
 
 if [ "$THREADS" -gt "$MAX_THREADS" ]; then

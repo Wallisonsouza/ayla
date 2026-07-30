@@ -12,7 +12,7 @@
 class AstStage : public Stage {
 
 public:
-  void run(CompilationUnit &unit) override { dispatch(unit.ast.get_root()); }
+  void run(CompilerEnvironment &env, CompilationUnit &unit) override { dispatch(unit.ast.get_root()); }
 
 protected:
   void dispatch(const ayla::ast::AstNode *node) {
