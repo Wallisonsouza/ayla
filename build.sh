@@ -28,11 +28,11 @@ ninja -j $THREADS
 cd ..
 
 # Cria/atualiza link do compile_commands.json para o clangd
-ln -sf build/compile_commands.json compile_commands.json
+# ln -sf build/compile_commands.json compile_commands.json
 
 clear
 
 # Executa
 cd build
 
-./ayla run ../scripts/io.ayla --dump tokens --dump ast
+./ayla run ../src/ayla/scripts/io.ayla --dump tokens --dump ast

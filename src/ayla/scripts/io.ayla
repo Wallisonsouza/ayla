@@ -1,0 +1,15 @@
+module std.io 
+
+extern fu print(text: String) -> Void
+
+val pi = 
+val a = 10
+extern fu log(text: String) -> Void
+
+extern fu error(text: String) -> Void
+
+extern fu warn(text: String) -> Void
+
+fu abacate () {
+    val pi = 10
+}

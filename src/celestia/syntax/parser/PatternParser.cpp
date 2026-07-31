@@ -1,0 +1,41 @@
+#include "PatternParser.hpp"
+#include "NameParser.hpp"
+#include "Parser.hpp"
+#include "ParserContext.hpp"
+#include "TypeParser.hpp"
+#include "celestia/ast/patterns/PatternNode.hpp"
+#include "celestia/core/AST.hpp"
+#include "celestia/core/token/token_stream.hpp"
+
+PatternParser::PatternParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+
+celestia::ast::PatternNode *PatternParser::parse_pattern() {
+
+  auto current = context.tokens().peek();
+
+  switch (current->desc->kind) {
+  case TokenKind::IDENTIFIER:
+    return parse_identifier_pattern();
+
+    // case TokenKind::OPEN_BRACKET:
+    //     return parse_array_pattern();
+
+    // case TokenKind::OPEN_BRACE:
+    //     return parse_object_pattern();
+
+  default: return nullptr;
+  }
+}
+
+celestia::ast::PatternNode *PatternParser::parse_identifier_pattern() {
+
+  auto *name = parser.names().parse_name();
+  if (!name) return nullptr;
+
+  celestia::ast::TypeNode *type = nullptr;
+
+  if (context.tokens().match(TokenKind::COLON)) type = parser.types().parse_type();
+
+  return context.get_ast().create_node<celestia::ast::IdentifierPatternNode>(name, type);
+}
+celestia::ast::PatternNode *PatternParser::parse_typed_pattern() { return nullptr; }

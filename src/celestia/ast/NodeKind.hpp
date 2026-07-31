@@ -1,0 +1,63 @@
+#pragma once
+
+namespace celestia::ast {
+
+enum class NodeKind {
+  // === Base ===
+  Unknown,
+  NumberLiteral,
+  StringLiteral,
+  BooleanLiteral,
+  ObjectLiteral,
+  ObjectField,
+  ObjectFieldList,
+  CharLiteral,
+  NullLiteral,
+  Name,
+  Interface,
+  IdentifierPattern,
+  QualifiedName,
+
+  // === Statements ===
+  MemberAccess,
+  IndexAccess,
+  BlockStatement,
+  IfStatement,
+  WhileStatement,
+  ForStatement,
+  ReturnStatement,
+  ExpressionStatement,
+  ImportDeclaration,
+
+  // === Declarations ===
+  VariableDeclaration,
+  FunctionDeclaration,
+  OperatorDeclaration,
+  ModuleDeclaration,
+
+  Call,
+  FunctionParameter,
+  NativeFunctionDeclaration,
+  TypeDeclaration,
+  ParameterDeclaration,
+
+  IdentifierExpression,
+  Identifier,
+  CallExpression,
+  BinaryExpression,
+  UnaryExpression,
+  LiteralExpression,
+  AssignmentExpression,
+
+  // === Types ===
+  Type,
+  TypeReference,
+  GenericType,
+  Assignment,
+  Pattern,
+  Error,
+  ParameterList,
+  ArrayLiteral
+};
+
+} // namespace celestia::ast

@@ -1,15 +1,14 @@
-#include "context/argon_main.hpp"
-#include "core/stages/ResolverStage.hpp"
-#include "runtime/bytecode/Serealizer.hpp"
+#include "ayla/language/AylaLanguage.hpp"
+#include "celestia/core/stages/ResolverStage.hpp"
 #include <iostream>
 
-#include "engine/CompilationSession.hpp"
+#include "celestia/engine/CompilationSession.hpp"
 
-#include "core/stages/DumperStage.hpp"
-#include "core/stages/LexerStage.hpp"
-#include "core/stages/LoweringStage.hpp"
-#include "core/stages/ParserStage.hpp"
-#include "core/stages/TokenDumperStage.hpp"
+#include "celestia/core/stages/DumperStage.hpp"
+#include "celestia/core/stages/LexerStage.hpp"
+#include "celestia/core/stages/LoweringStage.hpp"
+#include "celestia/core/stages/ParserStage.hpp"
+#include "celestia/core/stages/TokenDumperStage.hpp"
 
 #include "src/CommandLine.hpp"
 
@@ -39,6 +38,8 @@ int main(int argc, char *argv[]) {
 
     session.add_script(*cmd.input);
     session.compile();
+
+    session.diagnostics();
     // session.show_diagnostics();
   }
 }
