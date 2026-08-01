@@ -8,15 +8,15 @@ struct Type;
 
 namespace celestia::ast {
 
-struct AstNode {
+struct Node {
   const NodeKind kind;
   SourceSlice slice;
   NodeState flags;
   Type *inferred_type = nullptr;
-  virtual ~AstNode() = default;
+  virtual ~Node() = default;
 
 protected:
-  explicit AstNode(NodeKind k) : kind(k) {}
+  explicit Node(NodeKind k) : kind(k) {}
 };
 
 } // namespace celestia::ast

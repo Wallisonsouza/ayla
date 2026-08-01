@@ -1,15 +1,15 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct WhileStatementNode : StatementNode {
-  ExpressionNode *condition;
-  StatementNode *body;
+struct WhileStatement : Statement {
+  Expression *condition;
+  Statement *body;
 
-  WhileStatementNode(ExpressionNode *cond, StatementNode *block) : StatementNode(NodeKind::WhileStatement), condition(cond), body(block) {}
+  WhileStatement(Expression *cond, Statement *block) : Statement(NodeKind::WhileStatement), condition(cond), body(block) {}
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

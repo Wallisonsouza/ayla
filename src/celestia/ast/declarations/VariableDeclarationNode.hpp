@@ -1,18 +1,18 @@
 #pragma once
 
 #include "celestia/ast/declarations/DeclarationNode.hpp"
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/syntax/parser/DeclarationSpecifiers.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct VariableDeclarationNode : DeclarationNode {
+struct VariableDeclarationNode : Declaration {
   PatternNode *pattern;
-  ExpressionNode *initializer;
+  Expression *initializer;
   DeclarationSpecifiers specifiers;
 
-  VariableDeclarationNode(PatternNode *p, ExpressionNode *init, DeclarationSpecifiers specifiers = {}) : DeclarationNode(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
+  VariableDeclarationNode(PatternNode *p, Expression *init, DeclarationSpecifiers specifiers = {}) : Declaration(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

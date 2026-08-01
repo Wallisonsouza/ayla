@@ -1,16 +1,16 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct ExpressionStatementNode : StatementNode {
-  ExpressionNode *expression;
+struct ExpressionStatement : Statement {
+  Expression *expression;
 
-  explicit ExpressionStatementNode(ExpressionNode *expr) : StatementNode(NodeKind::ExpressionStatement), expression(expr) {}
+  explicit ExpressionStatement(Expression *expr) : Statement(NodeKind::ExpressionStatement), expression(expr) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

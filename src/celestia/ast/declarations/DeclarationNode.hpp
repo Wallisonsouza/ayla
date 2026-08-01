@@ -1,10 +1,10 @@
 #pragma once
 
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 
 namespace celestia::ast {
-struct DeclarationNode : StatementNode {
+struct Declaration : Statement {
   bool resolved = false;
-  explicit DeclarationNode(NodeKind k) : StatementNode(k) {}
+  explicit Declaration(NodeKind k) : Statement(k) {}
 };
 } // namespace celestia::ast

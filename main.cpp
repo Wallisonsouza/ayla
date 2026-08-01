@@ -2,7 +2,7 @@
 #include "celestia/core/stages/ResolverStage.hpp"
 #include <iostream>
 
-#include "celestia/engine/CompilationSession.hpp"
+#include "celestia/engine/Compiler.hpp"
 
 #include "celestia/core/stages/DumperStage.hpp"
 #include "celestia/core/stages/LexerStage.hpp"
@@ -24,22 +24,20 @@ int main(int argc, char *argv[]) {
 
     auto lang = ayla::language::create_definition();
 
-    CompilationSession session;
+    Compiler compiler(lang);
 
-    session.environment().language = lang;
+    compiler.pipeline.add_stage<LexerStage>();
+    compiler.pipeline.add_stage<ParserStage>();
+    compiler.pipeline.add_stage<LoweringStage>();
+    compiler.pipeline.add_stage<ResolverStage>();
 
-    session.pipeline.add_stage<LexerStage>();
-    session.pipeline.add_stage<ParserStage>();
-    session.pipeline.add_stage<LoweringStage>();
-    session.pipeline.add_stage<ResolverStage>();
+    if (has_flag(cmd.dumps, DumpFlags::Tokens)) { compiler.pipeline.add_stage<TokenDumperStage>(); };
+    if (has_flag(cmd.dumps, DumpFlags::Ast)) { compiler.pipeline.add_stage<AstDumperStage>(); };
 
-    if (has_flag(cmd.dumps, DumpFlags::Tokens)) { session.pipeline.add_stage<TokenDumperStage>(); };
-    if (has_flag(cmd.dumps, DumpFlags::Ast)) { session.pipeline.add_stage<AstDumperStage>(); };
+    compiler.add_script(*cmd.input);
+    compiler.compile();
 
-    session.add_script(*cmd.input);
-    session.compile();
-
-    session.diagnostics();
+    compiler.diagnostics();
     // session.show_diagnostics();
   }
 }

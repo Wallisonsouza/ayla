@@ -1,6 +1,6 @@
 // #pragma once
 
-// #include "celestia/ast/AstNode.hpp"
+// #include "celestia/ast/Node.hpp"
 // #include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
 // #include "celestia/core/token/Location.hpp"
 // #include "celestia/diagnostic/DiagnosticCode.hpp"
@@ -8,7 +8,7 @@
 // #include "celestia/semantic/types/BuiltinTypes.hpp"
 
 // #include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-// #include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
+// #include "celestia/ast/declarations/ModuleDeclaration.hpp"
 // #include "celestia/ast/declarations/VariableDeclarationNode.hpp"
 // #include "celestia/ast/expressions/AssignmentExpression.hpp"
 // #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
@@ -38,41 +38,41 @@
 // private:
   
 
-//   void check_identifier(ast::node::IdentifierExpressionNode *node);
+//   void check_identifier(ast::IdentifierExpressionNode *node);
 
-//   void check_number_literal(ast::node::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
+//   void check_number_literal(ast::NumberLiteralNode *node) { node->inferred_type = &BuiltinTypes::Number; }
 
-//   void check_string_literal(ast::node::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
+//   void check_string_literal(ast::StringLiteralNode *node) { node->inferred_type = &BuiltinTypes::String; }
 
-//   void check_boolean_literal(ast::node::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
+//   void check_boolean_literal(ast::BoolLiteralNode *node) { node->inferred_type = &BuiltinTypes::Boolean; }
 
-//   void check_array_literal(ast::node::ArrayLiteralNode *node);
+//   void check_array_literal(ast::ArrayLiteralNode *node);
 
-//   void check_object_literal(ast::node::ObjectLiteralNode *node);
+//   void check_object_literal(ast::ObjectLiteralNode *node);
 
 //   void check_pattern(ast::PatternNode *node);
 
-//   void check_function_declaration(ast::node::FunctionDeclarationNode *node);
-//   void check_variable_declaration(ast::node::VariableDeclarationNode *node);
-//   void check_function_call(ast::node::CallExpressionNode *node);
+//   void check_function_declaration(ast::FunctionDeclarationNode *node);
+//   void check_variable_declaration(ast::VariableDeclarationNode *node);
+//   void check_function_call(ast::CallExpressionNode *node);
 
 //   // Expressões
-//   void check_binary_expression(ast::node::BinaryExpressionNode *node);
-//   void check_unary_expression(ast::node::UnaryExpressionNode *node);
-//   void check_member_access(ast::node::MemberAccessExpressionNode *node);
-//   void check_index_access(ast::node::IndexAccessExpressionNode *node);
+//   void check_binary_expression(ast::BinaryExpressionNode *node);
+//   void check_unary_expression(ast::UnaryExpressionNode *node);
+//   void check_member_access(ast::MemberAccessExpressionNode *node);
+//   void check_index_access(ast::IndexAccessExpressionNode *node);
 
 //   // Controle
-//   void check_if_statement(ast::node::IfStatementNode *node);
-//   void check_while_statement(ast::node::WhileStatementNode *node);
-//   void check_return_statement(ast::node::ReturnStatementNode *node);
+//   void check_if_statement(ast::IfStatementNode *node);
+//   void check_while_statement(ast::WhileStatementNode *node);
+//   void check_return_statement(ast::ReturnStatementNode *node);
 
-//   void check_block(ast::node::BlockStatementNode *node);
+//   void check_block(ast::BlockStatementNode *node);
 
-//   void check_import_declaration_node(ast::node::ImportDeclarationNode *node);
-//   void check_module_declaration(ast::node::ModuleDeclarationNode *node);
-//   void check_assignment(ast::node::AssignmentExpressionNode *node);
-//   void check_expression_statement(ast::node::ExpressionStatementNode *node);
+//   void check_import_declaration_node(ast::ImportDeclarationNode *node);
+//   void check_module_declaration(ast::ModuleDeclaration *node);
+//   void check_assignment(ast::AssignmentExpressionNode *node);
+//   void check_expression_statement(ast::ExpressionStatementNode *node);
 
 //   void report_error(diagnostic::DiagnosticCode vode, SourceSlice slice) {};
 // };

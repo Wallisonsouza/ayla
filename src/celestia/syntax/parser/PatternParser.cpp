@@ -7,7 +7,7 @@
 #include "celestia/core/AST.hpp"
 #include "celestia/core/token/token_stream.hpp"
 
-PatternParser::PatternParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+PatternParser::PatternParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::PatternNode *PatternParser::parse_pattern() {
 

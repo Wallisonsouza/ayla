@@ -1,6 +1,6 @@
 #include "NameParser.hpp"
 
-NameParser::NameParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+NameParser::NameParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::IdentifierNode *NameParser::parse_name() {
   auto &tokens = context.tokens();

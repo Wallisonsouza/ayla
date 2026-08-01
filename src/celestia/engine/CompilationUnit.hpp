@@ -20,9 +20,9 @@ struct CompilationUnit {
 
   core::token::TokenStream tokens;
 
-  celestia::ast::node::ModuleDeclarationNode *module = nullptr;
+  celestia::ast::ModuleDeclaration *module = nullptr;
 
-  celestia::ast::node::BlockStatementNode *script = nullptr;
+  celestia::ast::BlockStatement *script = nullptr;
 
   CompilationUnit(core::source::Source &source) : source(source) {}
 };

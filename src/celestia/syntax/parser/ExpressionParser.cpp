@@ -1,8 +1,9 @@
 #include "ExpressionParser.hpp"
 
-#include "Parser.hpp"
+#include "celestia/syntax/parser/Parser.hpp"
 #include "ParserContext.hpp"
-
+#include "NameParser.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/ast/expressions/AssignmentExpression.hpp"
 #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
 #include "celestia/ast/expressions/CallExpressionNode.hpp"
@@ -11,16 +12,12 @@
 #include "celestia/ast/expressions/LiteralExpressionNode.hpp"
 #include "celestia/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "celestia/ast/expressions/UnaryExpressionNode.hpp"
-
-#include "NameParser.hpp"
 #include "celestia/core/operators/OperatorKind.hpp"
-#include "celestia/core/token/Token.hpp"
-
 #include <variant>
 
-ExpressionParser::ExpressionParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+ExpressionParser::ExpressionParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_number_literal() {
+celestia::ast::Expression *ExpressionParser::parse_number_literal() {
   auto &tokens = context.tokens();
 
   auto *token = tokens.match(TokenKind::NUMBER_LITERAL);
@@ -30,31 +27,31 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_number_literal() {
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
   try {
-    return context.get_ast().create_node<celestia::ast::node::NumberLiteralNode>(std::stod(text));
+    return context.get_ast().create_node<celestia::ast::NumberLiteralNode>(std::stod(text));
   } catch (...) { return nullptr; }
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_string_literal() {
+celestia::ast::Expression *ExpressionParser::parse_string_literal() {
   auto *token = context.tokens().match(TokenKind::STRING_LITERAL);
 
   if (!token) return nullptr;
 
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
-  return context.get_ast().create_node<celestia::ast::node::StringLiteralNode>(text);
+  return context.get_ast().create_node<celestia::ast::StringLiteralNode>(text);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_bool_literal() {
+celestia::ast::Expression *ExpressionParser::parse_bool_literal() {
   auto *token = context.tokens().advance();
 
   if (!token) return nullptr;
 
   bool value = token->desc->kind == TokenKind::TRUE;
 
-  return context.get_ast().create_node<celestia::ast::node::BoolLiteralNode>(value);
+  return context.get_ast().create_node<celestia::ast::BoolLiteralNode>(value);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_assignment(celestia::ast::ExpressionNode *target) {
+celestia::ast::Expression *ExpressionParser::parse_assignment(celestia::ast::Expression *target) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::ASSIGN)) return nullptr;
@@ -63,18 +60,18 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_assignment(celestia::ast:
 
   if (!value) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::node::AssignmentExpressionNode>(target, value);
+  return context.get_ast().create_node<celestia::ast::AssignmentExpressionNode>(target, value);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_identifier_expression() {
+celestia::ast::Expression *ExpressionParser::parse_identifier_expression() {
   auto *name = parser.names().parse_name();
 
   if (!name) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::node::IdentifierExpressionNode>(name);
+  return context.get_ast().create_node<celestia::ast::IdentifierExpressionNode>(name);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_member_access(celestia::ast::ExpressionNode *base) {
+celestia::ast::Expression *ExpressionParser::parse_member_access(celestia::ast::Expression *base) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::DOT)) return nullptr;
@@ -83,10 +80,10 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_member_access(celestia::a
 
   if (!member) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::node::MemberAccessExpressionNode>(base, member);
+  return context.get_ast().create_node<celestia::ast::MemberAccessExpressionNode>(base, member);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_index_access(celestia::ast::ExpressionNode *base) {
+celestia::ast::Expression *ExpressionParser::parse_index_access(celestia::ast::Expression *base) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::OPEN_BRACKET)) return nullptr;
@@ -97,15 +94,15 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_index_access(celestia::as
 
   if (!tokens.match(TokenKind::CLOSE_BRACKET)) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::node::IndexAccessExpressionNode>(base, index);
+  return context.get_ast().create_node<celestia::ast::IndexAccessExpressionNode>(base, index);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_call(celestia::ast::ExpressionNode *callee) {
+celestia::ast::Expression *ExpressionParser::parse_call(celestia::ast::Expression *callee) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::OPEN_PAREN)) return nullptr;
 
-  std::vector<celestia::ast::ExpressionNode *> args;
+  std::vector<celestia::ast::Expression *> args;
 
   while (!tokens.is_end()) {
     if (tokens.match(TokenKind::CLOSE_PAREN)) break;
@@ -123,10 +120,10 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_call(celestia::ast::Expre
     }
   }
 
-  return context.get_ast().create_node<celestia::ast::node::CallExpressionNode>(callee, std::move(args));
+  return context.get_ast().create_node<celestia::ast::CallExpressionNode>(callee, std::move(args));
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_binary_expression(int min_bp, celestia::ast::ExpressionNode *left) {
+celestia::ast::Expression *ExpressionParser::parse_binary_expression(int min_bp, celestia::ast::Expression *left) {
   while (true) {
     auto *token = context.tokens().peek();
 
@@ -150,13 +147,13 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_binary_expression(int min
 
     auto op = std::get<BinaryOperation>(info->op);
 
-    left = context.get_ast().create_node<celestia::ast::node::BinaryExpressionNode>(left, op, right);
+    left = context.get_ast().create_node<celestia::ast::BinaryExpressionNode>(left, op, right);
   }
 
   return left;
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_grouped_expression() {
+celestia::ast::Expression *ExpressionParser::parse_grouped_expression() {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::OPEN_PAREN)) return nullptr;
@@ -170,7 +167,7 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_grouped_expression() {
   return expr;
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_postfix_expression() {
+celestia::ast::Expression *ExpressionParser::parse_postfix_expression() {
   auto *expr = parse_primary_expression();
 
   if (!expr) return nullptr;
@@ -204,7 +201,7 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_postfix_expression() {
   return expr;
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_primary_expression() {
+celestia::ast::Expression *ExpressionParser::parse_primary_expression() {
   auto *token = context.tokens().peek();
 
   if (!token) return nullptr;
@@ -225,7 +222,7 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_primary_expression() {
   }
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_unary_expression() {
+celestia::ast::Expression *ExpressionParser::parse_unary_expression() {
   auto *token = context.tokens().peek();
 
   if (!token) return parse_postfix_expression();
@@ -244,10 +241,10 @@ celestia::ast::ExpressionNode *ExpressionParser::parse_unary_expression() {
 
   if (!operand) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::node::UnaryExpressionNode>(op, operand);
+  return context.get_ast().create_node<celestia::ast::UnaryExpressionNode>(op, operand);
 }
 
-celestia::ast::ExpressionNode *ExpressionParser::parse_expression() {
+celestia::ast::Expression *ExpressionParser::parse_expression() {
   auto *lhs = parse_unary_expression();
 
   if (!lhs) return nullptr;

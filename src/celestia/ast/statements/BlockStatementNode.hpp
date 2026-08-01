@@ -1,15 +1,15 @@
 #pragma once
 
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 #include <vector>
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct BlockStatementNode : StatementNode {
-  std::vector<StatementNode *> statements;
+struct BlockStatement : Statement {
+  std::vector<Statement *> statements;
 
-  explicit BlockStatementNode(std::vector<StatementNode *> stmts = {}) : StatementNode(NodeKind::BlockStatement), statements(std::move(stmts)) {}
+  explicit BlockStatement(std::vector<Statement *> stmts = {}) : Statement(NodeKind::BlockStatement), statements(std::move(stmts)) {}
 
   
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

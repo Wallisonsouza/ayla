@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TreeLayout.hpp"
-#include "celestia/ast/AstNode.hpp"
+#include "celestia/ast/Node.hpp"
 #include "celestia/debug/console/color.hpp"
 #include "celestia/debug/console/console.hpp"
 
@@ -13,13 +13,13 @@
 class DumpContext {
 
 public:
-  using Dispatch = std::function<void(const celestia::ast::AstNode *)>;
+  using Dispatch = std::function<void(const celestia::ast::Node *)>;
 
   DumpContext(std::ostream &out, Dispatch dispatch) : out(out), layout(out), dispatch(std::move(dispatch)) {}
 
   struct Field {
     std::string name;
-    const celestia::ast::AstNode *node;
+    const celestia::ast::Node *node;
   };
 
   class Object {
@@ -30,14 +30,14 @@ public:
   public:
     Object(DumpContext &ctx, std::string_view name) : context(ctx) { debug::Console::log(NAME_COLOR, name); }
 
-    void field(std::string_view name, const celestia::ast::AstNode *node) {
+    void field(std::string_view name, const celestia::ast::Node *node) {
       if (node) { fields.push_back(Field{std::string(name), node}); }
     }
 
     template <typename T> void list(std::string_view name, const std::vector<T *> &nodes) {
       if (nodes.empty()) return;
 
-      lists.push_back(List{std::string(name), std::vector<const celestia::ast::AstNode *>(nodes.begin(), nodes.end())});
+      lists.push_back(List{std::string(name), std::vector<const celestia::ast::Node *>(nodes.begin(), nodes.end())});
     }
 
     ~Object() { flush(); }
@@ -46,7 +46,7 @@ public:
     struct List {
       std::string name;
 
-      std::vector<const celestia::ast::AstNode *> nodes;
+      std::vector<const celestia::ast::Node *> nodes;
     };
 
     void flush() {

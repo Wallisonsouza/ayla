@@ -21,10 +21,10 @@ struct FunctionDeclarationNode;
 struct RuntimeScope;
 
 struct UserFunction {
-  celestia::ast::node::FunctionDeclarationNode *node;
+  celestia::ast::FunctionDeclarationNode *node;
   std::shared_ptr<RuntimeScope> captured_scope;
 
-  UserFunction(celestia::ast::node::FunctionDeclarationNode *n, std::shared_ptr<RuntimeScope> scope) : node(n), captured_scope(scope) {}
+  UserFunction(celestia::ast::FunctionDeclarationNode *n, std::shared_ptr<RuntimeScope> scope) : node(n), captured_scope(scope) {}
 };
 
 struct Value {
@@ -41,7 +41,7 @@ struct Value {
   static Value Null() { return Value{NullValue{}}; }
   static Value Void() { return Value{VoidValue{}}; }
   static Value Native(NativeFunction fn) { return Value{std::move(fn)}; }
-  static Value User(celestia::ast::node::FunctionDeclarationNode *node, std::shared_ptr<RuntimeScope> scope) { return Value{UserFunction(node, scope)}; }
+  static Value User(celestia::ast::FunctionDeclarationNode *node, std::shared_ptr<RuntimeScope> scope) { return Value{UserFunction(node, scope)}; }
   static Value Array(array elements) { return Value{.data = ArrayValue{elements}}; }
   static Value Object() { return Value{ObjectValue{}}; }
 

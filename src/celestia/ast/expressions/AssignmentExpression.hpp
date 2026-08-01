@@ -1,15 +1,15 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct AssignmentExpressionNode : ExpressionNode {
-  ExpressionNode *target;
-  ExpressionNode *value;
+struct AssignmentExpressionNode : Expression {
+  Expression *target;
+  Expression *value;
 
-  AssignmentExpressionNode(ExpressionNode *t, ExpressionNode *v) : ExpressionNode(NodeKind::Assignment), target(t), value(v) {}
+  AssignmentExpressionNode(Expression *t, Expression *v) : Expression(NodeKind::Assignment), target(t), value(v) {}
 
   
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

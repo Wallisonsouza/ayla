@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
 struct TypeDeclarationNode : DeclarationNode {
   std::string name;
@@ -15,4 +15,4 @@ struct TypeDeclarationNode : DeclarationNode {
   // 
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

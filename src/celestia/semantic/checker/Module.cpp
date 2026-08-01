@@ -1,7 +1,7 @@
 // #include "TypeChecker.hpp"
 // #include <iostream>
 
-// void ayla::TypeChecker::check_module_declaration(celestia::ast::node::ModuleDeclarationNode *node) {
+// void ayla::TypeChecker::check_module_declaration(celestia::ast::ModuleDeclaration *node) {
 //   if (!node) return;
 
    
@@ -17,7 +17,7 @@
 
 //   //   check(stmt);
 
-//   //   if (auto *fn = dynamic_cast<celestia::ast::node::FunctionDeclarationNode *>(stmt)) {
+//   //   if (auto *fn = dynamic_cast<celestia::ast::FunctionDeclarationNode *>(stmt)) {
 
 //   //     if (fn->identifier) module->type->add_member(fn->identifier->name, fn->inferred_type);
 //   //   }
@@ -28,7 +28,7 @@
 //   // if (auto *sym = unit.context.symbol_manager.get(node->resolved_symbol_id)) { sym->type = module->type; }
 // }
 
-// void ayla::TypeChecker::check_import_declaration_node(celestia::ast::node::ImportDeclarationNode *node) {
+// void ayla::TypeChecker::check_import_declaration_node(celestia::ast::ImportDeclarationNode *node) {
 
 
 

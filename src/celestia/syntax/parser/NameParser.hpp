@@ -6,13 +6,13 @@
 class NameParser {
 
 public:
-  NameParser(ParseContext &ctx, Parser &parser);
+  NameParser(ParseContext &ctx, celestia::Parser &parser);
 
-  celestia::ast::IdentifierNode *parse_name();
+ celestia::ast::IdentifierNode *parse_name();
 
-  celestia::ast::QualifiedNameNode *parse_qualified_name();
+ celestia::ast::QualifiedNameNode *parse_qualified_name();
 
 private:
   ParseContext &context;
-  Parser &parser;
+  celestia::Parser &parser;
 };

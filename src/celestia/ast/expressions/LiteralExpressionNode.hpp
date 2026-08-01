@@ -1,64 +1,64 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include <string>
 #include <vector>
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct NumberLiteralNode : ExpressionNode {
+struct NumberLiteralNode : Expression {
   double value;
 
-  explicit NumberLiteralNode(double v) : ExpressionNode(NodeKind::NumberLiteral), value(v) {}
+  explicit NumberLiteralNode(double v) : Expression(NodeKind::NumberLiteral), value(v) {}
 
   
 };
 
-struct StringLiteralNode : ExpressionNode {
+struct StringLiteralNode : Expression {
   std::string value;
 
-  explicit StringLiteralNode(std::string v) : ExpressionNode(NodeKind::StringLiteral), value(std::move(v)) {}
+  explicit StringLiteralNode(std::string v) : Expression(NodeKind::StringLiteral), value(std::move(v)) {}
 
   
 };
 
-struct BoolLiteralNode : ExpressionNode {
+struct BoolLiteralNode : Expression {
   bool value;
 
-  explicit BoolLiteralNode(bool v) : ExpressionNode(NodeKind::BooleanLiteral), value(v) {}
+  explicit BoolLiteralNode(bool v) : Expression(NodeKind::BooleanLiteral), value(v) {}
 
   
 };
 
-struct NullLiteralNode : ExpressionNode {
-  NullLiteralNode() : ExpressionNode(NodeKind::NullLiteral) {}
+struct NullLiteralNode : Expression {
+  NullLiteralNode() : Expression(NodeKind::NullLiteral) {}
 
   
 };
 
-struct ArrayLiteralNode : ExpressionNode {
-  std::vector<ExpressionNode *> elements;
+struct ArrayLiteralNode : Expression {
+  std::vector<Expression *> elements;
 
-  explicit ArrayLiteralNode(std::vector<ExpressionNode *> elems) : ExpressionNode(NodeKind::ArrayLiteral), elements(std::move(elems)) {}
-
-  
-};
-
-struct ObjectFieldNode : AstNode {
-  ExpressionNode *key;
-  ExpressionNode *value;
-
-  ObjectFieldNode(ExpressionNode *k, ExpressionNode *v) : AstNode(NodeKind::ObjectField), key(k), value(v) {}
+  explicit ArrayLiteralNode(std::vector<Expression *> elems) : Expression(NodeKind::ArrayLiteral), elements(std::move(elems)) {}
 
   
 };
 
-struct ObjectLiteralNode : ExpressionNode {
+struct ObjectFieldNode : Node {
+  Expression *key;
+  Expression *value;
+
+  ObjectFieldNode(Expression *k, Expression *v) : Node(NodeKind::ObjectField), key(k), value(v) {}
+
+  
+};
+
+struct ObjectLiteralNode : Expression {
   std::vector<ObjectFieldNode *> fields;
 
-  explicit ObjectLiteralNode(std::vector<ObjectFieldNode *> f) : ExpressionNode(NodeKind::ObjectLiteral), fields(std::move(f)) {}
+  explicit ObjectLiteralNode(std::vector<ObjectFieldNode *> f) : Expression(NodeKind::ObjectLiteral), fields(std::move(f)) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

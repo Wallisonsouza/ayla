@@ -8,11 +8,14 @@
 #include "celestia/engine/CompilerEnvironment.hpp"
 
 #include "celestia/engine/UnitManager.hpp"
+#include "celestia/language/LanguageDefinition.hpp"
 
-class CompilationSession {
+class Compiler {
 
 public:
-  CompilationSession() = default;
+  Compiler(celestia::LanguageDefinition &lang) {
+    environment_.language = lang;
+  }
   Pipeline pipeline;
   CompilationUnit *add_script(const std::string &path) {
     auto *source = sources.create_source(path);

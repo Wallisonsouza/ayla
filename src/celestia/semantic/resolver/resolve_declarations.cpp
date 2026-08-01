@@ -2,7 +2,7 @@
 #include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
 #include <iostream>
 
-void Resolver::module_declaration(celestia::ast::node::ModuleDeclarationNode *node) {
+void Resolver::module_declaration(celestia::ast::ModuleDeclaration *node) {
 
   auto mod = context.compiler.modules.register_module(node->name->get_name());
 
@@ -15,7 +15,7 @@ void Resolver::module_declaration(celestia::ast::node::ModuleDeclarationNode *no
   context.scopes.pop();
 }
 
-void Resolver::import_declaration(celestia::ast::node::ImportDeclarationNode *node) {
+void Resolver::import_declaration(celestia::ast::ImportDeclarationNode *node) {
   // if (!node || node->path.empty()) return;
 
   // size_t failed_index;
@@ -46,7 +46,7 @@ void Resolver::import_declaration(celestia::ast::node::ImportDeclarationNode *no
   // node->resolved_symbol_id = sym_id;
 }
 
-void Resolver::function_declaration(celestia::ast::node::FunctionDeclarationNode *node) {
+void Resolver::function_declaration(celestia::ast::FunctionDeclarationNode *node) {
 
   if (!node) return;
 
@@ -78,7 +78,7 @@ void Resolver::function_declaration(celestia::ast::node::FunctionDeclarationNode
   context.scopes.pop();
 }
 
-void Resolver::variable_declaration(celestia::ast::node::VariableDeclarationNode *node) {
+void Resolver::variable_declaration(celestia::ast::VariableDeclarationNode *node) {
 
   if (node->pattern) { pattern(node->pattern); }
 

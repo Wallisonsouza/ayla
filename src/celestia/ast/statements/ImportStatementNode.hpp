@@ -6,15 +6,15 @@
 
 #include <optional>
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct ImportDeclarationNode : DeclarationNode {
+struct ImportDeclarationNode : Declaration {
   QualifiedNameNode* name;
   std::optional<std::string> alias;
   SymbolId resolved_symbol_id;
 
-  explicit ImportDeclarationNode(QualifiedNameNode* n) : DeclarationNode(NodeKind::ImportDeclaration), name(n) {}
+  explicit ImportDeclarationNode(QualifiedNameNode* n) : Declaration(NodeKind::ImportDeclaration), name(n) {}
 
   
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

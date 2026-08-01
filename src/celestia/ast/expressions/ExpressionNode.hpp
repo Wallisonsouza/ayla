@@ -1,14 +1,14 @@
 #pragma once
 
-#include "celestia/ast/AstNode.hpp"
+#include "celestia/ast/Node.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 
 namespace celestia::ast {
 
-struct ExpressionNode : AstNode {
+struct Expression : Node {
 
   SymbolId resolved_symbol_id;
-  explicit ExpressionNode(NodeKind k) : AstNode(k) {}
+  explicit Expression(NodeKind k) : Node(k) {}
 };
 
 } // namespace celestia::ast

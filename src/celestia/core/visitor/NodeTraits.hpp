@@ -43,15 +43,15 @@ template <typename T> struct NodeTraits;
 // Declarations
 // =====================
 
-template <> struct NodeTraits<node::FunctionDeclarationNode> {
+template <> struct NodeTraits<FunctionDeclarationNode> {
   static constexpr NodeKind kind = NodeKind::FunctionDeclaration;
 };
 
-template <> struct NodeTraits<node::VariableDeclarationNode> {
+template <> struct NodeTraits<VariableDeclarationNode> {
   static constexpr NodeKind kind = NodeKind::VariableDeclaration;
 };
 
-template <> struct NodeTraits<node::ModuleDeclarationNode> {
+template <> struct NodeTraits<ModuleDeclaration> {
   static constexpr NodeKind kind = NodeKind::ModuleDeclaration;
 };
 
@@ -59,31 +59,31 @@ template <> struct NodeTraits<node::ModuleDeclarationNode> {
 // Expressions
 // =====================
 
-template <> struct NodeTraits<node::BinaryExpressionNode> {
+template <> struct NodeTraits<BinaryExpressionNode> {
   static constexpr NodeKind kind = NodeKind::BinaryExpression;
 };
 
-template <> struct NodeTraits<node::UnaryExpressionNode> {
+template <> struct NodeTraits<UnaryExpressionNode> {
   static constexpr NodeKind kind = NodeKind::UnaryExpression;
 };
 
-template <> struct NodeTraits<node::CallExpressionNode> {
+template <> struct NodeTraits<CallExpressionNode> {
   static constexpr NodeKind kind = NodeKind::Call;
 };
 
-template <> struct NodeTraits<node::AssignmentExpressionNode> {
+template <> struct NodeTraits<AssignmentExpressionNode> {
   static constexpr NodeKind kind = NodeKind::Assignment;
 };
 
-template <> struct NodeTraits<node::MemberAccessExpressionNode> {
+template <> struct NodeTraits<MemberAccessExpressionNode> {
   static constexpr NodeKind kind = NodeKind::MemberAccess;
 };
 
-template <> struct NodeTraits<node::IndexAccessExpressionNode> {
+template <> struct NodeTraits<IndexAccessExpressionNode> {
   static constexpr NodeKind kind = NodeKind::IndexAccess;
 };
 
-template <> struct NodeTraits<node::IdentifierExpressionNode> {
+template <> struct NodeTraits<IdentifierExpressionNode> {
   static constexpr NodeKind kind = NodeKind::IdentifierExpression;
 };
 
@@ -91,31 +91,31 @@ template <> struct NodeTraits<node::IdentifierExpressionNode> {
 // Literals
 // =====================
 
-template <> struct NodeTraits<node::NumberLiteralNode> {
+template <> struct NodeTraits<NumberLiteralNode> {
   static constexpr NodeKind kind = NodeKind::NumberLiteral;
 };
 
-template <> struct NodeTraits<node::StringLiteralNode> {
+template <> struct NodeTraits<StringLiteralNode> {
   static constexpr NodeKind kind = NodeKind::StringLiteral;
 };
 
-template <> struct NodeTraits<node::BoolLiteralNode> {
+template <> struct NodeTraits<BoolLiteralNode> {
   static constexpr NodeKind kind = NodeKind::BooleanLiteral;
 };
 
-template <> struct NodeTraits<node::NullLiteralNode> {
+template <> struct NodeTraits<NullLiteralNode> {
   static constexpr NodeKind kind = NodeKind::NullLiteral;
 };
 
-template <> struct NodeTraits<node::ArrayLiteralNode> {
+template <> struct NodeTraits<ArrayLiteralNode> {
   static constexpr NodeKind kind = NodeKind::ArrayLiteral;
 };
 
-template <> struct NodeTraits<node::ObjectLiteralNode> {
+template <> struct NodeTraits<ObjectLiteralNode> {
   static constexpr NodeKind kind = NodeKind::ObjectLiteral;
 };
 
-template <> struct NodeTraits<node::ObjectFieldNode> {
+template <> struct NodeTraits<ObjectFieldNode> {
   static constexpr NodeKind kind = NodeKind::ObjectField;
 };
 
@@ -123,27 +123,27 @@ template <> struct NodeTraits<node::ObjectFieldNode> {
 // Statements
 // =====================
 
-template <> struct NodeTraits<node::BlockStatementNode> {
+template <> struct NodeTraits<BlockStatement> {
   static constexpr NodeKind kind = NodeKind::BlockStatement;
 };
 
-template <> struct NodeTraits<node::IfStatementNode> {
+template <> struct NodeTraits<IfStatement> {
   static constexpr NodeKind kind = NodeKind::IfStatement;
 };
 
-template <> struct NodeTraits<node::WhileStatementNode> {
+template <> struct NodeTraits<WhileStatement> {
   static constexpr NodeKind kind = NodeKind::WhileStatement;
 };
 
-template <> struct NodeTraits<node::ReturnStatementNode> {
+template <> struct NodeTraits<ReturnStatement> {
   static constexpr NodeKind kind = NodeKind::ReturnStatement;
 };
 
-template <> struct NodeTraits<node::ExpressionStatementNode> {
+template <> struct NodeTraits<ExpressionStatement> {
   static constexpr NodeKind kind = NodeKind::ExpressionStatement;
 };
 
-template <> struct NodeTraits<node::ImportDeclarationNode> {
+template <> struct NodeTraits<ImportDeclarationNode> {
   static constexpr NodeKind kind = NodeKind::ImportDeclaration;
 };
 

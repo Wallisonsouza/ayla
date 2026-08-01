@@ -7,7 +7,7 @@ class ParserStage : public Stage {
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
     ParseContext context = ParseContext(unit, env);
-    Parser parser(context);
+    celestia::Parser parser(context);
 
     parser.run();
   };

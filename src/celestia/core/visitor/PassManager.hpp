@@ -20,12 +20,12 @@
 //     return ref;
 //   }
 
-//   void run(const celestia::ast::AstNode *root) {
-//     walker.walk(root, [this](const celestia::ast::AstNode *node) { dispatch(node); });
+//   void run(const mocelestia::ast::Node *root) {
+//     walker.walk(root, [this](const mocelestia::ast::Node *node) { dispatch(node); });
 //   }
 
 // private:
-//   void dispatch(const celestia::ast::AstNode *node) {
+//   void dispatch(const mocelestia::ast::Node *node) {
 //     for (auto &pass : passes) { pass->dispatch(node); }
 //   }
 

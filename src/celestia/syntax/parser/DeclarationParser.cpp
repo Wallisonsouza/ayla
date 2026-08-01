@@ -12,6 +12,7 @@
 #include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
 #include "celestia/ast/declarations/VariableDeclarationNode.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
+#include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/statements/ImportStatementNode.hpp"
 #include "celestia/core/token/Token.hpp"
@@ -22,9 +23,9 @@
 #include "celestia/diagnostic/Expected.hpp"
 #include "celestia/syntax/parser/ParserUtil.hpp"
 
-DeclarationParser::DeclarationParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+DeclarationParser::DeclarationParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
 
-celestia::ast::DeclarationNode *DeclarationParser::parse_declaration() {
+celestia::ast::Declaration *DeclarationParser::parse_declaration() {
   auto specifiers = parse_specifiers();
 
   auto &tokens = context.tokens();
@@ -90,7 +91,7 @@ DeclarationSpecifiers DeclarationParser::parse_specifiers() {
   return specifiers;
 }
 
-celestia::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(DeclarationSpecifiers specifiers) {
+celestia::ast::Declaration *DeclarationParser::parse_variable_declaration(DeclarationSpecifiers specifiers) {
 
   auto &tokens = context.tokens();
 
@@ -111,7 +112,7 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(De
     return nullptr;
   }
 
-  celestia::ast::ExpressionNode *initializer = nullptr;
+  celestia::ast::Expression *initializer = nullptr;
 
   if (tokens.match(TokenKind::ASSIGN)) {
 
@@ -131,10 +132,10 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_variable_declaration(De
     }
   }
 
-  return context.get_ast().create_node<celestia::ast::node::VariableDeclarationNode>(pattern, initializer, specifiers);
+  return context.get_ast().create_node<celestia::ast::VariableDeclarationNode>(pattern, initializer, specifiers);
 }
 
-celestia::ast::DeclarationNode *DeclarationParser::parse_function_declaration(DeclarationSpecifiers specifiers) {
+celestia::ast::Declaration *DeclarationParser::parse_function_declaration(DeclarationSpecifiers specifiers) {
 
   auto &tokens = context.tokens();
 
@@ -142,13 +143,10 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_function_declaration(De
 
   auto *name = parser.names().parse_name();
 
-  if (!name) {
+  if (!name) { return nullptr; }
 
-
-    return nullptr;
-  }
-
-  auto params = ayla::parser::parse_generic_list<celestia::ast::PatternNode>(context, TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parser.patterns().parse_pattern(); });
+  auto params =
+      ayla::parser::parse_generic_list<celestia::ast::PatternNode>(context, TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parser.patterns().parse_pattern(); });
 
   celestia::ast::TypeNode *return_type = nullptr;
 
@@ -156,15 +154,10 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_function_declaration(De
 
     return_type = parser.types().parse_type();
 
-    if (!return_type) {
-
-  
-
-      return nullptr;
-    }
+    if (!return_type) { return nullptr; }
   }
 
-  celestia::ast::node::BlockStatementNode *body = nullptr;
+  celestia::ast::BlockStatement *body = nullptr;
 
   if (!specifiers.modifiers.has(Modifier::Extern)) {
 
@@ -173,10 +166,10 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_function_declaration(De
     if (body && body->flags.has(NodeFlags::HasError)) return nullptr;
   }
 
-  return context.get_ast().create_node<celestia::ast::node::FunctionDeclarationNode>(name, std::move(params), return_type, body, specifiers);
+  return context.get_ast().create_node<celestia::ast::FunctionDeclarationNode>(name, std::move(params), return_type, body, specifiers);
 }
 
-celestia::ast::node::ModuleDeclarationNode *DeclarationParser::parse_module_declaration() {
+celestia::ast::ModuleDeclaration *DeclarationParser::parse_module_declaration() {
 
   celestia::ast::QualifiedNameNode *name = nullptr;
 
@@ -184,12 +177,7 @@ celestia::ast::node::ModuleDeclarationNode *DeclarationParser::parse_module_decl
 
     name = parser.names().parse_qualified_name();
 
-    if (!name) {
-
-    
-
-      return nullptr;
-    }
+    if (!name) { return nullptr; }
 
   } else {
 
@@ -198,10 +186,10 @@ celestia::ast::node::ModuleDeclarationNode *DeclarationParser::parse_module_decl
     name = context.get_ast().create_node<celestia::ast::QualifiedNameNode>(std::vector{part});
   }
 
-  return context.get_ast().create_node<celestia::ast::node::ModuleDeclarationNode>(name);
+  return context.get_ast().create_node<celestia::ast::ModuleDeclaration>(name);
 }
 
-celestia::ast::DeclarationNode *DeclarationParser::parse_import_declaration() {
+celestia::ast::Declaration *DeclarationParser::parse_import_declaration() {
 
   auto &tokens = context.tokens();
 
@@ -209,10 +197,7 @@ celestia::ast::DeclarationNode *DeclarationParser::parse_import_declaration() {
 
   auto *module = parser.names().parse_qualified_name();
 
-  if (!module) {
+  if (!module) { return nullptr; }
 
-    return nullptr;
-  }
-
-  return context.get_ast().create_node<celestia::ast::node::ImportDeclarationNode>(module);
+  return context.get_ast().create_node<celestia::ast::ImportDeclarationNode>(module);
 }

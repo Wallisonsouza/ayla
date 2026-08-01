@@ -1,18 +1,18 @@
 #pragma once
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/core/operators/BinaryOperation.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct BinaryExpressionNode : ExpressionNode {
+struct BinaryExpressionNode : Expression {
 
-  ExpressionNode *lhs;
+  Expression *lhs;
   BinaryOperation op;
-  ExpressionNode *rhs;
+  Expression *rhs;
 
-  BinaryExpressionNode(ExpressionNode *l, BinaryOperation o, ExpressionNode *r) : ExpressionNode(NodeKind::BinaryExpression), lhs(l), op(o), rhs(r) {}
+  BinaryExpressionNode(Expression *l, BinaryOperation o, Expression *r) : Expression(NodeKind::BinaryExpression), lhs(l), op(o), rhs(r) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

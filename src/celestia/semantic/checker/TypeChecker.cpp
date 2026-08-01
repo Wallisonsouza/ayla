@@ -11,33 +11,33 @@
 
 
 //   switch (node->kind) {
-//   case ast::NodeKind::ExpressionStatement: check_expression_statement(static_cast<ast::node::ExpressionStatementNode *>(node)); break;
-//   case ast::NodeKind::Name: check_identifier(static_cast<ast::node::IdentifierExpressionNode *>(node)); break;
-//   case ast::NodeKind::NumberLiteral: check_number_literal(static_cast<ast::node::NumberLiteralNode *>(node)); break;
-//   case ast::NodeKind::StringLiteral: check_string_literal(static_cast<ast::node::StringLiteralNode *>(node)); break;
-//   case ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ast::node::BoolLiteralNode *>(node)); break;
-//   case ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<ast::node::ArrayLiteralNode *>(node)); break;
-//   case ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ast::node::ObjectLiteralNode *>(node)); break;
-//   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::node::VariableDeclarationNode *>(node)); break;
-//   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::node::FunctionDeclarationNode *>(node)); break;
-//   case ast::NodeKind::Call: check_function_call(static_cast<ast::node::CallExpressionNode *>(node)); break;
-//   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::node::BinaryExpressionNode *>(node)); break;
-//   case ast::NodeKind::MemberAccess: check_member_access(static_cast<ast::node::MemberAccessExpressionNode *>(node)); break;
-//   case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::node::IndexAccessExpressionNode *>(node)); break;
-//   case ast::NodeKind::Assignment: check_assignment(dynamic_cast<ast::node::AssignmentExpressionNode *>(node)); break;
-//   case ast::NodeKind::IfStatement: check_if_statement(static_cast<ast::node::IfStatementNode *>(node)); break;
-//   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::node::WhileStatementNode *>(node)); break;
-//   case ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ast::node::ReturnStatementNode *>(node)); break;
-//   case ast::NodeKind::BlockStatement: check_block(static_cast<ast::node::BlockStatementNode *>(node)); break;
-//   case ast::NodeKind::ImportDeclaration: check_import_declaration_node(static_cast<ast::node::ImportDeclarationNode *>(node)); break;
-//   case ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ast::node::ModuleDeclarationNode *>(node)); break;
+//   case ast::NodeKind::ExpressionStatement: check_expression_statement(static_cast<ast::ExpressionStatementNode *>(node)); break;
+//   case ast::NodeKind::Name: check_identifier(static_cast<ast::IdentifierExpressionNode *>(node)); break;
+//   case ast::NodeKind::NumberLiteral: check_number_literal(static_cast<ast::NumberLiteralNode *>(node)); break;
+//   case ast::NodeKind::StringLiteral: check_string_literal(static_cast<ast::StringLiteralNode *>(node)); break;
+//   case ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ast::BoolLiteralNode *>(node)); break;
+//   case ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<ast::ArrayLiteralNode *>(node)); break;
+//   case ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ast::ObjectLiteralNode *>(node)); break;
+//   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::VariableDeclarationNode *>(node)); break;
+//   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::FunctionDeclarationNode *>(node)); break;
+//   case ast::NodeKind::Call: check_function_call(static_cast<ast::CallExpressionNode *>(node)); break;
+//   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::BinaryExpressionNode *>(node)); break;
+//   case ast::NodeKind::MemberAccess: check_member_access(static_cast<ast::MemberAccessExpressionNode *>(node)); break;
+//   case ast::NodeKind::IndexAccess: check_index_access(static_cast<ast::IndexAccessExpressionNode *>(node)); break;
+//   case ast::NodeKind::Assignment: check_assignment(dynamic_cast<ast::AssignmentExpressionNode *>(node)); break;
+//   case ast::NodeKind::IfStatement: check_if_statement(static_cast<ast::IfStatementNode *>(node)); break;
+//   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::WhileStatementNode *>(node)); break;
+//   case ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ast::ReturnStatementNode *>(node)); break;
+//   case ast::NodeKind::BlockStatement: check_block(static_cast<ast::BlockStatementNode *>(node)); break;
+//   case ast::NodeKind::ImportDeclaration: check_import_declaration_node(static_cast<ast::ImportDeclarationNode *>(node)); break;
+//   case ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ast::ModuleDeclaration *>(node)); break;
 //   case ast::NodeKind::Pattern: check_pattern(static_cast<ast::PatternNode *>(node)); break;
-//   case ast::NodeKind::UnaryExpression: check_unary_expression(static_cast<ast::node::UnaryExpressionNode *>(node)); break;
+//   case ast::NodeKind::UnaryExpression: check_unary_expression(static_cast<ast::UnaryExpressionNode *>(node)); break;
 //   default: break;
 //   }
 // }
 
-// void TypeChecker::check_identifier(ast::node::IdentifierExpressionNode *node) {
+// void TypeChecker::check_identifier(ast::IdentifierExpressionNode *node) {
 //   if (!node) return;
 
 //   auto *sym = unit.context.symbols.get(node->resolved_symbol_id);
@@ -51,12 +51,12 @@
 //   node->inferred_type = sym->type ? sym->type : &BuiltinTypes::Unknown;
 // }
 
-// void TypeChecker::check_expression_statement(ast::node::ExpressionStatementNode *node) {
+// void TypeChecker::check_expression_statement(ast::ExpressionStatementNode *node) {
 //   if (!node || !node->expression) return;
 //   check(node->expression);
 // }
 
-// void TypeChecker::check_array_literal(ast::node::ArrayLiteralNode *node) {
+// void TypeChecker::check_array_literal(ast::ArrayLiteralNode *node) {
 //   if (!node) return;
 
 //   Type *elementType = nullptr;
@@ -75,7 +75,7 @@
 //   node->inferred_type = unit.context.type_arena.alloc<ArrayType>(elementType);
 // }
 
-// void TypeChecker::check_object_literal(ast::node::ObjectLiteralNode *node) {
+// void TypeChecker::check_object_literal(ast::ObjectLiteralNode *node) {
 //   // if (!node) return;
 
 //   // auto *objType = unit.context.type_arena.alloc<ObjectType>();
@@ -84,7 +84,7 @@
 //   //   check(field->value);
 
 //   //   if (!field->key || field->key->kind != ast::NodeKind::Name) continue;
-//   //   auto *key = static_cast<ast::node::IdentifierExpressionNode *>(field->key);
+//   //   auto *key = static_cast<ast::IdentifierExpressionNode *>(field->key);
 
 //   //   if (objType->has_member(key->name)) {
 //   //     report_error(diagnostic::DiagnosticCode::RedeclaredIdentifier, key->slice);
@@ -102,7 +102,7 @@
 // // Variáveis
 // //---------------------------
 
-// void TypeChecker::check_variable_declaration(ast::node::VariableDeclarationNode *node) {
+// void TypeChecker::check_variable_declaration(ast::VariableDeclarationNode *node) {
 //   // if (!node) return;
 
 //   // if (node->initializer) { check(node->initializer); }
@@ -154,7 +154,7 @@
 
 // inline Type *current_function_return_type = nullptr;
 
-// void TypeChecker::check_return_statement(ast::node::ReturnStatementNode *node) {
+// void TypeChecker::check_return_statement(ast::ReturnStatementNode *node) {
 //   if (!node->value) return;
 
 //   check(node->value);
@@ -170,7 +170,7 @@
 //   node->inferred_type = actual;
 // }
 
-// void TypeChecker::check_function_declaration(ast::node::FunctionDeclarationNode *node) {
+// void TypeChecker::check_function_declaration(ast::FunctionDeclarationNode *node) {
 //   if (!node) return;
 
 //   current_function_return_type = node->return_type ? node->return_type->inferred_type : nullptr;
@@ -190,7 +190,7 @@
 //   current_function_return_type = nullptr;
 // }
 
-// void TypeChecker::check_function_call(ast::node::CallExpressionNode *node) {
+// void TypeChecker::check_function_call(ast::CallExpressionNode *node) {
 //   if (!node) return;
 
 //   check(node->callee);
@@ -214,7 +214,7 @@
 // // Expressões
 // //---------------------------
 
-// void TypeChecker::check_binary_expression(ast::node::BinaryExpressionNode *node) {
+// void TypeChecker::check_binary_expression(ast::BinaryExpressionNode *node) {
 
 //   if (!node) return;
 
@@ -278,13 +278,13 @@
 //   }
 // }
 
-// void TypeChecker::check_unary_expression(ast::node::UnaryExpressionNode *node) {
+// void TypeChecker::check_unary_expression(ast::UnaryExpressionNode *node) {
 //   if (!node) return;
 
 //   check(node->operand);
 // }
 
-// void TypeChecker::check_index_access(ast::node::IndexAccessExpressionNode *node) {
+// void TypeChecker::check_index_access(ast::IndexAccessExpressionNode *node) {
 //   if (!node || !node->base || !node->index) return;
 
 //   check(node->base);
@@ -305,7 +305,7 @@
 //   node->inferred_type = arrType->element_type;
 // }
 
-// void TypeChecker::check_if_statement(ast::node::IfStatementNode *node) {
+// void TypeChecker::check_if_statement(ast::IfStatementNode *node) {
 //   check(node->condition);
 //   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(diagnostic::DiagnosticCode::TypeMismatch, node->condition->slice);
 
@@ -315,7 +315,7 @@
 //   node->inferred_type = &BuiltinTypes::Unknown;
 // }
 
-// void TypeChecker::check_while_statement(ast::node::WhileStatementNode *node) {
+// void TypeChecker::check_while_statement(ast::WhileStatementNode *node) {
 //   check(node->condition);
 //   if (node->condition->inferred_type != &BuiltinTypes::Boolean) report_error(diagnostic::DiagnosticCode::TypeMismatch, node->condition->slice);
 
@@ -324,7 +324,7 @@
 //   node->inferred_type = &BuiltinTypes::Unknown;
 // }
 
-// void TypeChecker::check_block(ast::node::BlockStatementNode *node) {
+// void TypeChecker::check_block(ast::BlockStatementNode *node) {
 //   if (!node) return;
 
 //   for (auto *stmt : node->statements) check(stmt);
@@ -332,7 +332,7 @@
 //   node->inferred_type = &BuiltinTypes::Unknown;
 // }
 
-// void TypeChecker::check_member_access(ast::node::MemberAccessExpressionNode *node) {
+// void TypeChecker::check_member_access(ast::MemberAccessExpressionNode *node) {
 //   check(node->base);
 //   Type *baseType = node->base->inferred_type;
 
@@ -355,7 +355,7 @@
 //   node->inferred_type = fieldType;
 // }
 
-// void TypeChecker::check_assignment(ast::node::AssignmentExpressionNode *node) {
+// void TypeChecker::check_assignment(ast::AssignmentExpressionNode *node) {
 
 //   if (!node || !node->target || !node->value) return;
 
@@ -368,19 +368,19 @@
 //   switch (node->target->kind) {
 //   case ast::NodeKind::Name: {
 
-//     auto *id_node = static_cast<ast::node::IdentifierExpressionNode *>(node->target);
+//     auto *id_node = static_cast<ast::IdentifierExpressionNode *>(node->target);
 //     targetType = id_node->inferred_type ? id_node->inferred_type : &BuiltinTypes::Unknown;
 //     break;
 //   }
 
 //   case ast::NodeKind::MemberAccess: {
-//     auto *memNode = static_cast<ast::node::MemberAccessExpressionNode *>(node->target);
+//     auto *memNode = static_cast<ast::MemberAccessExpressionNode *>(node->target);
 //     targetType = memNode->inferred_type ? memNode->inferred_type : &BuiltinTypes::Unknown;
 //     break;
 //   }
 
 //   case ast::NodeKind::IndexAccess: {
-//     auto *idxNode = static_cast<ast::node::IndexAccessExpressionNode *>(node->target);
+//     auto *idxNode = static_cast<ast::IndexAccessExpressionNode *>(node->target);
 //     targetType = idxNode->inferred_type ? idxNode->inferred_type : &BuiltinTypes::Unknown;
 //     break;
 //   }

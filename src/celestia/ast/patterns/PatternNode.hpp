@@ -1,12 +1,14 @@
 #pragma once
 
+#include "celestia/ast/Node.hpp"
+#include "celestia/ast/NodeKind.hpp"
 #include "celestia/ast/TypeNode.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 
 namespace celestia::ast {
 
-struct PatternNode : AstNode {
-  using AstNode::AstNode;
+struct PatternNode : Node {
+  explicit PatternNode(NodeKind kind = NodeKind::Pattern) : Node(kind) {}
 };
 
 struct IdentifierPatternNode : PatternNode {

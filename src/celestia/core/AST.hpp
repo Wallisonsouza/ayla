@@ -1,6 +1,6 @@
 #pragma once
 
-#include "celestia/ast/AstNode.hpp"
+#include "celestia/ast/Node.hpp"
 #include "celestia/core/memory/Arena.hpp"
 
 class Ast {
@@ -12,11 +12,11 @@ public:
     return node;
   }
 
-  void set_root(celestia::ast::AstNode *node) { root_ = node; }
+  void set_root(celestia::ast::Node *node) { root_ = node; }
 
-  celestia::ast::AstNode *get_root() const { return root_; }
+  celestia::ast::Node *get_root() const { return root_; }
 
 private:
   core::memory::Arena ast_arena;
-  celestia::ast::AstNode *root_;
+  celestia::ast::Node *root_;
 };

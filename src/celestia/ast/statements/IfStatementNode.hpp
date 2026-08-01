@@ -1,16 +1,16 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct IfStatementNode : StatementNode {
-  ExpressionNode *condition;
-  StatementNode *then_block;
-  StatementNode *else_block;
+struct IfStatement : Statement {
+  Expression *condition;
+  Statement *then_block;
+  Statement *else_block;
 
-  IfStatementNode(ExpressionNode *cond, StatementNode *then_b, StatementNode *else_b = nullptr) : StatementNode(NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
+  IfStatement(Expression *cond, Statement *then_b, Statement *else_b = nullptr) : Statement(NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
  
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

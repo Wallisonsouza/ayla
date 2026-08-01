@@ -8,7 +8,7 @@ void AstDumper::dump_type(const celestia::ast::TypeNode *node) {
   g.list("Generics", node->generics);
 }
 
-void AstDumper::dump_object_field(const celestia::ast::node::ObjectFieldNode *node) {
+void AstDumper::dump_object_field(const celestia::ast::ObjectFieldNode *node) {
 
   auto g = context.object("Field");
 

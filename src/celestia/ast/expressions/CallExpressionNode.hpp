@@ -1,16 +1,16 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct CallExpressionNode : ExpressionNode {
-  ExpressionNode *callee;
-  std::vector<ExpressionNode *> arguments;
+struct CallExpressionNode : Expression {
+  Expression *callee;
+  std::vector<Expression *> arguments;
 
-  CallExpressionNode(ExpressionNode *c, std::vector<ExpressionNode *> a) : ExpressionNode(NodeKind::Call), callee(c), arguments(std::move(a)) {}
+  CallExpressionNode(Expression *c, std::vector<Expression *> a) : Expression(NodeKind::Call), callee(c), arguments(std::move(a)) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

@@ -4,7 +4,7 @@
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "NameParser.hpp"
 
-TypeParser::TypeParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
+TypeParser::TypeParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::TypeNode *TypeParser::parse_type() {
   auto *name = parser.names().parse_name();

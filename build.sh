@@ -35,4 +35,4 @@ clear
 # Executa
 cd build
 
-./ayla run ../src/ayla/scripts/io.ayla --dump tokens --dump ast
+./ayla run ../src/ayla/scripts/io.ayla  --dump ast

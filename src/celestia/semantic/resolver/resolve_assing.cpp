@@ -3,7 +3,7 @@
 #include "celestia/semantic/resolver/Resolver.hpp"
 #include <iostream>
 
-void Resolver::assignment(celestia::ast::node::AssignmentExpressionNode *node) {
+void Resolver::assignment(celestia::ast::AssignmentExpressionNode *node) {
 
   if (node->target) { resolve(node->target); }
 

@@ -6,17 +6,17 @@
 #include "celestia/semantic/symbols/SymbolId.hpp"
 #include "celestia/syntax/parser/DeclarationSpecifiers.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct FunctionDeclarationNode : DeclarationNode {
+struct FunctionDeclarationNode : Declaration {
   IdentifierNode *name;
   std::vector<PatternNode *> parameters;
   TypeNode *return_type;
-  BlockStatementNode *body;
+  BlockStatement *body;
   DeclarationSpecifiers specifiers;
   SymbolId symbol_id;
 
-  FunctionDeclarationNode(IdentifierNode *n = nullptr, std::vector<PatternNode *> params = {}, TypeNode *ret_type = nullptr, BlockStatementNode *b = nullptr, DeclarationSpecifiers s = {})
-      : DeclarationNode(NodeKind::FunctionDeclaration), name(n), parameters(std::move(params)), return_type(ret_type), body(b), specifiers(s) {}
+  FunctionDeclarationNode(IdentifierNode *n = nullptr, std::vector<PatternNode *> params = {}, TypeNode *ret_type = nullptr, BlockStatement *b = nullptr, DeclarationSpecifiers s = {})
+      : Declaration(NodeKind::FunctionDeclaration), name(n), parameters(std::move(params)), return_type(ret_type), body(b), specifiers(s) {}
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

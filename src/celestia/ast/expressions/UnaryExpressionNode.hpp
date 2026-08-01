@@ -1,18 +1,18 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/core/operators/UnaryOperation.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct UnaryExpressionNode : ExpressionNode {
+struct UnaryExpressionNode : Expression {
 
   UnaryOperation op;
-  ExpressionNode *operand;
+  Expression *operand;
 
-  UnaryExpressionNode(UnaryOperation op, ExpressionNode *operand) : ExpressionNode(NodeKind::UnaryExpression), operand(operand), op(op) {}
+  UnaryExpressionNode(UnaryOperation op, Expression *operand) : Expression(NodeKind::UnaryExpression), operand(operand), op(op) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

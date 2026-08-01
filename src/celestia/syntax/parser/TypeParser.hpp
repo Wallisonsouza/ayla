@@ -1,20 +1,19 @@
 #pragma once
 
-namespace celestia::ast {
-class TypeNode;
-}
 
+#include "celestia/ast/TypeNode.hpp"
+#include "celestia/syntax/parser/Parser.hpp"
 class ParseContext;
 class Parser;
 
 class TypeParser {
 
 public:
-  TypeParser(ParseContext &, Parser &);
+  TypeParser(ParseContext &, celestia::Parser &);
 
   celestia::ast::TypeNode *parse_type();
 
 private:
   ParseContext &context;
-  Parser &parser;
+  celestia::Parser &parser;
 };

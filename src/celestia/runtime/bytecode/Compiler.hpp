@@ -9,36 +9,36 @@
 // struct Compiler {
 //   std::vector<Instruction> code;
 
-//   void compile_node(celestia::ast::AstNode *node) {
+//   void compile_node(mocelestia::ast::Node *node) {
 //     if (!node) return;
 
 //     switch (node->kind) {
 
 //     // Literais
 //     case celestia::ast::NodeKind::NumberLiteral: {
-//       auto n = static_cast<celestia::ast::node::NumberLiteralNode *>(node)->value;
+//       auto n = static_cast<celestia::ast::NumberLiteralNode *>(node)->value;
 //       code.push_back({OpCode::PUSH_NUMBER, Value::Number(n)});
 //       break;
 //     }
 //     case celestia::ast::NodeKind::StringLiteral: {
-//       auto s = static_cast<celestia::ast::node::StringLiteralNode *>(node)->value;
+//       auto s = static_cast<celestia::ast::StringLiteralNode *>(node)->value;
 //       code.push_back({OpCode::PUSH_STRING, Value::String(s)});
 //       break;
 //     }
 //     case celestia::ast::NodeKind::BooleanLiteral: {
-//       auto b = static_cast<celestia::ast::node::BoolLiteralNode *>(node)->value;
+//       auto b = static_cast<celestia::ast::BoolLiteralNode *>(node)->value;
 //       code.push_back({OpCode::PUSH_BOOLEAN, Value::Boolean(b)});
 //       break;
 //     }
 
 //     // Variáveis
 //     case celestia::ast::NodeKind::Identifier: {
-//       auto id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(node);
+//       auto id = static_cast<celestia::ast::IdentifierExpressionNode *>(node);
 //       code.push_back({OpCode::LOAD_VAR, {}, id->resolved_symbol_id});
 //       break;
 //     }
 //     case celestia::ast::NodeKind::VariableDeclaration: {
-//       auto decl = static_cast<celestia::ast::node::VariableDeclarationNode *>(node);
+//       auto decl = static_cast<celestia::ast::VariableDeclarationNode *>(node);
 //       compile_node(decl->initializer);
 //       auto *id_pattern = static_cast<celestia::ast::IdentifierPatternNode *>(decl->pattern);
 //       code.push_back({OpCode::STORE_VAR, {}, id_pattern->symbol_id});
@@ -47,7 +47,7 @@
 
 //     // Operações binárias
 //     case celestia::ast::NodeKind::BinaryExpression: {
-//       auto bin = static_cast<celestia::ast::node::BinaryExpressionNode *>(node);
+//       auto bin = static_cast<celestia::ast::BinaryExpressionNode *>(node);
 //       compile_node(bin->lhs);
 //       compile_node(bin->rhs);
 //       using BO = celestia::ast::BinaryOperation;
@@ -66,7 +66,7 @@
 //     }
 
 //     case celestia::ast::NodeKind::UnaryExpression: {
-//       auto u = static_cast<celestia::ast::node::UnaryExpressionNode *>(node);
+//       auto u = static_cast<celestia::ast::UnaryExpressionNode *>(node);
 //       compile_node(u->operand);
 //       if (u->op == ayla::UnaryOperation::NOT) code.push_back({OpCode::NOT});
 //       break;
@@ -74,7 +74,7 @@
 
 //     // Chamada de função
 //     case celestia::ast::NodeKind::FunctionCall: {
-//       auto call = static_cast<celestia::ast::node::CallExpressionNode *>(node);
+//       auto call = static_cast<celestia::ast::CallExpressionNode *>(node);
 //       compile_node(call->callee);
 //       for (auto *arg : call->arguments) compile_node(arg);
 //       code.push_back({OpCode::CALL, Value(static_cast<int>(call->arguments.size()))});
@@ -83,10 +83,10 @@
 
 //     // Assignment simples
 //     case celestia::ast::NodeKind::Assignment: {
-//       auto assign = static_cast<celestia::ast::node::AssignmentExpressionNode *>(node);
+//       auto assign = static_cast<celestia::ast::AssignmentExpressionNode *>(node);
 //       compile_node(assign->value);
 //       if (assign->target->kind == celestia::ast::NodeKind::Identifier) {
-//         auto *id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(assign->target);
+//         auto *id = static_cast<celestia::ast::IdentifierExpressionNode *>(assign->target);
 //         code.push_back({OpCode::STORE_VAR, {}, id->resolved_symbol_id});
 //       }
 //       break;

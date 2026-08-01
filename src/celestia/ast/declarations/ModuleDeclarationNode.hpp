@@ -3,16 +3,16 @@
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct ModuleDeclarationNode : DeclarationNode {
+struct ModuleDeclaration : Declaration {
 
   QualifiedNameNode *name;
 
-  std::vector<DeclarationNode *> declarations;
+  std::vector<Declaration *> declarations;
   SymbolId resolved_symbol_id;
 
-  ModuleDeclarationNode(QualifiedNameNode *n, std::vector<DeclarationNode *> decls = {}) : DeclarationNode(NodeKind::ModuleDeclaration), name(n), declarations(std::move(decls)) {}
+  ModuleDeclaration(QualifiedNameNode *n, std::vector<Declaration *> decls = {}) : Declaration(NodeKind::ModuleDeclaration), name(n), declarations(std::move(decls)) {}
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

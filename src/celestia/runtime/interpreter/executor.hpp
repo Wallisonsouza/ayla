@@ -17,7 +17,7 @@
 // #include "celestia/ast/statements/FunctionDeclarationNode.hpp"
 // #include "celestia/ast/statements/IfStatementNode.hpp"
 // #include "celestia/ast/statements/ImportStatementNode.hpp"
-// #include "celestia/ast/statements/ModuleDeclarationNode.hpp"
+// #include "celestia/ast/statements/ModuleDeclaration.hpp"
 // #include "celestia/ast/statements/ReturnStatementNode.hpp"
 // #include "celestia/ast/statements/VariableDeclarationNode.hpp"
 // #include "celestia/ast/statements/WhileStatementNode.hpp"
@@ -33,9 +33,9 @@
 
 //   Executor(std::shared_ptr<RuntimeScope> scope) : current_scope(scope) {}
 
-//   ExecResult execute_module_declaration(CompilationUnit &unit, celestia::ast::node::ModuleDeclarationNode *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
+//   ExecResult execute_module_declaration(CompilationUnit &unit, celestia::ast::ModuleDeclaration *node) { return ExecResult::make_value(std::make_shared<Value>(Value::Void())); }
 
-//   ExecResult execute_import_node(CompilationUnit &unit, celestia::ast::node::ImportStatementNode *node) {
+//   ExecResult execute_import_node(CompilationUnit &unit, celestia::ast::ImportStatementNode *node) {
 
 //     // auto module = unit.context.module_manager.get(node->resolved_module_id);
 
@@ -48,7 +48,7 @@
 //     // return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 //   }
 
-//   ExecResult execute_object(CompilationUnit &unit, celestia::ast::node::ObjectLiteralNode *node) {
+//   ExecResult execute_object(CompilationUnit &unit, celestia::ast::ObjectLiteralNode *node) {
 
 //     auto obj_val = std::make_shared<Value>(Value::Object());
 //     auto &obj = obj_val->get_object_ref();
@@ -59,7 +59,7 @@
 //       std::string key_str;
 
 //       if (field->key->kind == celestia::ast::NodeKind::Identifier) {
-//         auto *id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(field->key);
+//         auto *id = static_cast<celestia::ast::IdentifierExpressionNode *>(field->key);
 
 //         key_str = id->name;
 
@@ -80,7 +80,7 @@
 //     return ExecResult::make_value(obj_val);
 //   }
 
-//   ExecResult execute_member_acess(CompilationUnit &unit, celestia::ast::node::MemberAccessExpressionNode *member) {
+//   ExecResult execute_member_acess(CompilationUnit &unit, celestia::ast::MemberAccessExpressionNode *member) {
 
 //     auto base_res = execute_node(unit, member->base);
 //     auto base_val = base_res.value;
@@ -96,7 +96,7 @@
 //     return ExecResult::make_value(obj.get(field_name));
 //   }
 
-//   ExecResult execute_array(CompilationUnit &unit, celestia::ast::node::ArrayLiteralNode *node) {
+//   ExecResult execute_array(CompilationUnit &unit, celestia::ast::ArrayLiteralNode *node) {
 
 //     array elements;
 
@@ -109,7 +109,7 @@
 //     return ExecResult::make_value(std::make_shared<Value>(Value::Array(std::move(elements))));
 //   }
 
-//   ExecResult execute_index_access(CompilationUnit &unit, celestia::ast::node::IndexAccessNode *node) {
+//   ExecResult execute_index_access(CompilationUnit &unit, celestia::ast::IndexAccessNode *node) {
 //     auto base = execute_node(unit, node->base).value;
 //     auto index = execute_node(unit, node->index).value;
 
@@ -123,60 +123,60 @@
 //     return ExecResult::make_value(arr[i]);
 //   }
 
-//   ExecResult execute_node(CompilationUnit &unit, celestia::ast::AstNode *node) {
+//   ExecResult execute_node(CompilationUnit &unit, mocelestia::ast::Node *node) {
 //     if (!node) return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
 
 //     switch (node->kind) {
 
-//     case celestia::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<celestia::ast::node::ExpressionStatementNode *>(node));
+//     case celestia::ast::NodeKind::ExpressionStatement: return execute_expression_statement(unit, static_cast<celestia::ast::ExpressionStatementNode *>(node));
 
-//     case celestia::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<celestia::ast::node::AssignmentExpressionNode *>(node));
+//     case celestia::ast::NodeKind::Assignment: return execute_assignment(unit, static_cast<celestia::ast::AssignmentExpressionNode *>(node));
 
-//     case celestia::ast::NodeKind::Identifier: return execute_identifier(static_cast<celestia::ast::node::IdentifierExpressionNode *>(node));
+//     case celestia::ast::NodeKind::Identifier: return execute_identifier(static_cast<celestia::ast::IdentifierExpressionNode *>(node));
 
 //     // literals
-//     case celestia::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<celestia::ast::node::NumberLiteralNode *>(node)->value)));
+//     case celestia::ast::NodeKind::NumberLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Number(static_cast<celestia::ast::NumberLiteralNode *>(node)->value)));
 
-//     case celestia::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<celestia::ast::node::StringLiteralNode *>(node)->value)));
+//     case celestia::ast::NodeKind::StringLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::String(static_cast<celestia::ast::StringLiteralNode *>(node)->value)));
 
-//     case celestia::ast::NodeKind::BooleanLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(static_cast<celestia::ast::node::BoolLiteralNode *>(node)->value)));
+//     case celestia::ast::NodeKind::BooleanLiteral: return ExecResult::make_value(std::make_shared<Value>(Value::Boolean(static_cast<celestia::ast::BoolLiteralNode *>(node)->value)));
 
-//     case celestia::ast::NodeKind::ObjectLiteral: return execute_object(unit, static_cast<celestia::ast::node::ObjectLiteralNode *>(node));
+//     case celestia::ast::NodeKind::ObjectLiteral: return execute_object(unit, static_cast<celestia::ast::ObjectLiteralNode *>(node));
 
 //     // exps
-//     case celestia::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<celestia::ast::node::BinaryExpressionNode *>(node));
+//     case celestia::ast::NodeKind::BinaryExpression: return execute_binary(unit, static_cast<celestia::ast::BinaryExpressionNode *>(node));
 
-//     case celestia::ast::NodeKind::UnaryExpression: return execute_unary(unit, static_cast<celestia::ast::node::UnaryExpressionNode *>(node));
+//     case celestia::ast::NodeKind::UnaryExpression: return execute_unary(unit, static_cast<celestia::ast::UnaryExpressionNode *>(node));
 
-//     case celestia::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<celestia::ast::node::MemberAccessExpressionNode *>(node));
+//     case celestia::ast::NodeKind::MemberAccess: return execute_member_acess(unit, static_cast<celestia::ast::MemberAccessExpressionNode *>(node));
 
-//     case celestia::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<celestia::ast::node::CallExpressionNode *>(node));
+//     case celestia::ast::NodeKind::FunctionCall: return execute_function_call(unit, static_cast<celestia::ast::CallExpressionNode *>(node));
 
-//     case celestia::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<celestia::ast::node::VariableDeclarationNode *>(node));
+//     case celestia::ast::NodeKind::VariableDeclaration: return execute_variable_declaration(unit, static_cast<celestia::ast::VariableDeclarationNode *>(node));
 
-//     case celestia::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<celestia::ast::node::BlockStatementNode *>(node));
+//     case celestia::ast::NodeKind::BlockStatement: return execute_block(unit, static_cast<celestia::ast::BlockStatementNode *>(node));
 
-//     case celestia::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<celestia::ast::node::IfStatementNode *>(node));
+//     case celestia::ast::NodeKind::IfStatement: return execute_if(unit, static_cast<celestia::ast::IfStatementNode *>(node));
 
-//     case celestia::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<celestia::ast::node::ArrayLiteralNode *>(node));
+//     case celestia::ast::NodeKind::ArrayLiteral: return execute_array(unit, static_cast<celestia::ast::ArrayLiteralNode *>(node));
 
-//     case celestia::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<celestia::ast::node::IndexAccessNode *>(node));
+//     case celestia::ast::NodeKind::IndexAccess: return execute_index_access(unit, static_cast<celestia::ast::IndexAccessNode *>(node));
 
-//     case celestia::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<celestia::ast::node::WhileStatementNode *>(node));
+//     case celestia::ast::NodeKind::WhileStatement: return execute_while(unit, static_cast<celestia::ast::WhileStatementNode *>(node));
 
-//     case celestia::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<celestia::ast::node::FunctionDeclarationNode *>(node));
+//     case celestia::ast::NodeKind::FunctionDeclaration: return execute_function_declaration(unit, static_cast<celestia::ast::FunctionDeclarationNode *>(node));
 
-//     case celestia::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<celestia::ast::node::ReturnStatementNode *>(node));
+//     case celestia::ast::NodeKind::ReturnStatement: return execute_return(unit, static_cast<celestia::ast::ReturnStatementNode *>(node));
 
-//     case celestia::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<celestia::ast::node::ModuleDeclarationNode *>(node));
+//     case celestia::ast::NodeKind::ModuleDeclaration: return execute_module_declaration(unit, static_cast<celestia::ast::ModuleDeclaration *>(node));
 
-//     case celestia::ast::NodeKind::ImportStatement: return execute_import_node(unit, static_cast<celestia::ast::node::ImportStatementNode *>(node));
+//     case celestia::ast::NodeKind::ImportStatement: return execute_import_node(unit, static_cast<celestia::ast::ImportStatementNode *>(node));
 
 //     default: return ExecResult::make_value(std::make_shared<Value>(Value::Null()));
 //     }
 //   }
 
-//   ExecResult execute_function_call(CompilationUnit &unit, celestia::ast::node::CallExpressionNode *node) {
+//   ExecResult execute_function_call(CompilationUnit &unit, celestia::ast::CallExpressionNode *node) {
 //     auto callee = execute_node(unit, node->callee).value;
 
 //     if (!callee) throw std::runtime_error("Null callee");
@@ -221,12 +221,12 @@
 //   }
 
 //   // ===================== STATEMENTS =====================
-//   ExecResult execute_expression_statement(CompilationUnit &unit, celestia::ast::node::ExpressionStatementNode *node) {
+//   ExecResult execute_expression_statement(CompilationUnit &unit, celestia::ast::ExpressionStatementNode *node) {
 //     execute_node(unit, node->expression);
 //     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 //   }
 
-//   ExecResult execute_block(CompilationUnit &unit, celestia::ast::node::BlockStatementNode *block) {
+//   ExecResult execute_block(CompilationUnit &unit, celestia::ast::BlockStatementNode *block) {
 
 //     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
@@ -237,7 +237,7 @@
 //     return last;
 //   }
 
-//   ExecResult execute_if(CompilationUnit &unit, celestia::ast::node::IfStatementNode *node) {
+//   ExecResult execute_if(CompilationUnit &unit, celestia::ast::IfStatementNode *node) {
 //     auto cond = execute_node(unit, node->condition);
 //     if (cond.value->as_bool()) return execute_node(unit, node->then_block);
 
@@ -246,7 +246,7 @@
 //     return ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 //   }
 
-//   ExecResult execute_while(CompilationUnit &unit, celestia::ast::node::WhileStatementNode *node) {
+//   ExecResult execute_while(CompilationUnit &unit, celestia::ast::WhileStatementNode *node) {
 
 //     ExecResult last = ExecResult::make_value(std::make_shared<Value>(Value::Void()));
 
@@ -257,14 +257,14 @@
 //     return last;
 //   }
 
-//   ExecResult execute_return(CompilationUnit &unit, celestia::ast::node::ReturnStatementNode *node) {
+//   ExecResult execute_return(CompilationUnit &unit, celestia::ast::ReturnStatementNode *node) {
 //     if (!node->value) return ExecResult::make_return(std::make_shared<Value>(Value::Void()));
 
 //     return ExecResult::make_return(execute_node(unit, node->value).value);
 //   }
 
 //   // ===================== BINARY =====================
-//   ExecResult execute_binary(CompilationUnit &unit, celestia::ast::node::BinaryExpressionNode *node) {
+//   ExecResult execute_binary(CompilationUnit &unit, celestia::ast::BinaryExpressionNode *node) {
 //     auto lhs = execute_node(unit, node->lhs).value;
 //     auto rhs = execute_node(unit, node->rhs).value;
 
@@ -283,7 +283,7 @@
 //     }
 //   }
 
-//   ExecResult execute_unary(CompilationUnit &unit, celestia::ast::node::UnaryExpressionNode *node) {
+//   ExecResult execute_unary(CompilationUnit &unit, celestia::ast::UnaryExpressionNode *node) {
 
 //     auto operand = execute_node(unit, node->operand).value;
 
@@ -295,9 +295,9 @@
 //   }
 
 //   // ===================== VARIABLES =====================
-//   ExecResult execute_identifier(celestia::ast::node::IdentifierExpressionNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
+//   ExecResult execute_identifier(celestia::ast::IdentifierExpressionNode *Identifier) { return ExecResult::make_value(current_scope->get(Identifier->resolved_symbol_id)); }
 
-//   ExecResult execute_variable_declaration(CompilationUnit &unit, celestia::ast::node::VariableDeclarationNode *node) {
+//   ExecResult execute_variable_declaration(CompilationUnit &unit, celestia::ast::VariableDeclarationNode *node) {
 
 //     std::shared_ptr<Value> val;
 
@@ -327,17 +327,17 @@
 //     scope->values[id] = val;
 //   }
 
-//   ExecResult execute_assignment(CompilationUnit &unit, celestia::ast::node::AssignmentExpressionNode *node) {
+//   ExecResult execute_assignment(CompilationUnit &unit, celestia::ast::AssignmentExpressionNode *node) {
 //     auto rhs = execute_node(unit, node->value).value;
 
 //     // a = ...
 //     if (node->target->kind == celestia::ast::NodeKind::Identifier) {
-//       auto *id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(node->target);
+//       auto *id = static_cast<celestia::ast::IdentifierExpressionNode *>(node->target);
 //       set_in_scope_chain(current_scope, id->resolved_symbol_id, rhs);
 //       return ExecResult::make_value(rhs);
 //     }
 //     if (node->target->kind == celestia::ast::NodeKind::MemberAccess) {
-//       auto *mem = static_cast<celestia::ast::node::MemberAccessExpressionNode *>(node->target);
+//       auto *mem = static_cast<celestia::ast::MemberAccessExpressionNode *>(node->target);
 
 //       auto base = execute_node(unit, mem->base).value;
 
@@ -353,7 +353,7 @@
 //     }
 
 //     if (node->target->kind == celestia::ast::NodeKind::IndexAccess) {
-//       auto *idx = static_cast<celestia::ast::node::IndexAccessNode *>(node->target);
+//       auto *idx = static_cast<celestia::ast::IndexAccessNode *>(node->target);
 
 //       auto base = execute_node(unit, idx->base).value;
 //       auto index = execute_node(unit, idx->index).value;
@@ -372,7 +372,7 @@
 //     throw std::runtime_error("Invalid assignment target");
 //   }
 
-//   ExecResult execute_function_declaration(CompilationUnit &unit, celestia::ast::node::FunctionDeclarationNode *node) {
+//   ExecResult execute_function_declaration(CompilationUnit &unit, celestia::ast::FunctionDeclarationNode *node) {
 
 //     current_scope->set(node->symbol_id, std::make_shared<Value>(Value::User(node, current_scope)));
 

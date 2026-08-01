@@ -13,7 +13,7 @@ private:
   uint32_t next_id = 0;
 
 public:
-  SymbolId create_symbol(const std::string &name, SymbolKind kind, Visibility visibility = Visibility::Private, bool is_builtin = false, celestia::ast::AstNode *decl = nullptr) {
+  SymbolId create_symbol(const std::string &name, SymbolKind kind, Visibility visibility = Visibility::Private, bool is_builtin = false, celestia::ast::Node *decl = nullptr) {
 
     if (next_id == SymbolId::INVALID) { throw std::runtime_error("SymbolId overflow"); }
 

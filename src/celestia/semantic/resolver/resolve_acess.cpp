@@ -1,14 +1,14 @@
 #include "celestia/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "celestia/semantic/resolver/Resolver.hpp"
 
-void Resolver::index_access(celestia::ast::node::IndexAccessExpressionNode *node) {
+void Resolver::index_access(celestia::ast::IndexAccessExpressionNode *node) {
 
   if (node->base) resolve(node->base);
 
   if (node->index) resolve(node->index);
 }
 
-void Resolver::member_access(celestia::ast::node::MemberAccessExpressionNode *node) {
+void Resolver::member_access(celestia::ast::MemberAccessExpressionNode *node) {
   if (!node || !node->base || !node->member) return;
 
   resolve(node->base);
@@ -19,7 +19,7 @@ void Resolver::member_access(celestia::ast::node::MemberAccessExpressionNode *no
   }
 }
 
-void Resolver::function_call(celestia::ast::node::CallExpressionNode *node) {
+void Resolver::function_call(celestia::ast::CallExpressionNode *node) {
 
   if (node->callee) resolve(node->callee);
 

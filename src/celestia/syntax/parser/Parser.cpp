@@ -12,6 +12,7 @@
 #include "celestia/syntax/parser/ParserUtil.hpp"
 #include <vector>
 
+namespace celestia {
 Parser::Parser(ParseContext &context) : context(context) {
   declaration_parser = std::make_unique<DeclarationParser>(context, *this);
   expression_parser = std::make_unique<ExpressionParser>(context, *this);
@@ -26,9 +27,9 @@ Parser::~Parser() = default;
 void Parser::run() {
   auto *module = declarations().parse_module_declaration();
 
-  if (!module) { module = context.get_ast().create_node<celestia::ast::node::ModuleDeclarationNode>(nullptr); }
+  if (!module) { module = context.get_ast().create_node<celestia::ast::ModuleDeclaration>(nullptr); }
 
-  auto *script = context.get_ast().create_node<celestia::ast::node::BlockStatementNode>();
+  auto *script = context.get_ast().create_node<celestia::ast::BlockStatement>();
 
   auto &tokens = context.tokens();
 
@@ -50,6 +51,7 @@ void Parser::run() {
   context.unit.module = module;
   context.unit.script = script;
 
-  
   context.get_ast().set_root(module);
 }
+
+} // namespace celestia

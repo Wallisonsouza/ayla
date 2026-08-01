@@ -1,17 +1,17 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/ast/names/IdentifierNode.hpp"
 
-namespace celestia::ast::node {
+namespace celestia::ast {
 
-struct MemberAccessExpressionNode : ExpressionNode {
-  ExpressionNode *base;
+struct MemberAccessExpressionNode : Expression {
+  Expression *base;
   IdentifierNode *member;
 
-  MemberAccessExpressionNode(ExpressionNode *b, IdentifierNode *f) : ExpressionNode(NodeKind::MemberAccess), base(b), member(f) {}
+  MemberAccessExpressionNode(Expression *b, IdentifierNode *f) : Expression(NodeKind::MemberAccess), base(b), member(f) {}
 
   
 };
 
-} // namespace celestia::ast::node
+} // namespace celestia::ast

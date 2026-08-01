@@ -31,9 +31,9 @@ struct ResolverContext {
 
   ContextStack<core::Scope> scopes;
 
-  celestia::ast::node::FunctionDeclarationNode *current_function = nullptr;
-  celestia::ast::node::ModuleDeclarationNode *current_module = nullptr;
-  celestia::ast::node::WhileStatementNode *current_loop = nullptr;
+  celestia::ast::FunctionDeclarationNode *current_function = nullptr;
+  celestia::ast::ModuleDeclaration *current_module = nullptr;
+  celestia::ast::WhileStatement *current_loop = nullptr;
 
   ResolverContext(CompilerEnvironment &compiler, CompilationUnit &unit) : compiler(compiler), unit(unit), scopes(nullptr) {}
 };
@@ -42,7 +42,7 @@ struct Resolver {
 
 public:
   explicit Resolver(ResolverContext &context);
-  void resolve(celestia::ast::AstNode *node);
+  void resolve(celestia::ast::Node *node);
 
 private:
   HandlerRegistry handlers;
@@ -50,35 +50,35 @@ private:
 
   void pattern(celestia::ast::PatternNode *pat);
 
-  void function_call(celestia::ast::node::CallExpressionNode *node);
-  void assignment(celestia::ast::node::AssignmentExpressionNode *node);
+  void function_call(celestia::ast::CallExpressionNode *node);
+  void assignment(celestia::ast::AssignmentExpressionNode *node);
 
-  void array_literal(celestia::ast::node::ArrayLiteralNode *node);
-  void object_literal(celestia::ast::node::ObjectLiteralNode *node);
-  void number_literal(celestia::ast::node::NumberLiteralNode *node);
-  void string_literal(celestia::ast::node::StringLiteralNode *node);
-  void boolean_literal(celestia::ast::node::BoolLiteralNode *node);
+  void array_literal(celestia::ast::ArrayLiteralNode *node);
+  void object_literal(celestia::ast::ObjectLiteralNode *node);
+  void number_literal(celestia::ast::NumberLiteralNode *node);
+  void string_literal(celestia::ast::StringLiteralNode *node);
+  void boolean_literal(celestia::ast::BoolLiteralNode *node);
   void type_node(celestia::ast::TypeNode *node);
 
-  void index_access(celestia::ast::node::IndexAccessExpressionNode *node);
-  void member_access(celestia::ast::node::MemberAccessExpressionNode *node);
+  void index_access(celestia::ast::IndexAccessExpressionNode *node);
+  void member_access(celestia::ast::MemberAccessExpressionNode *node);
 
-  void identifier(celestia::ast::node::IdentifierExpressionNode *node);
-  void binary_expression(celestia::ast::node::BinaryExpressionNode *node);
-  void unary_expression(celestia::ast::node::UnaryExpressionNode *node);
-  void if_statement(celestia::ast::node::IfStatementNode *node);
-  void while_statement(celestia::ast::node::WhileStatementNode *node);
+  void identifier(celestia::ast::IdentifierExpressionNode *node);
+  void binary_expression(celestia::ast::BinaryExpressionNode *node);
+  void unary_expression(celestia::ast::UnaryExpressionNode *node);
+  void if_statement(celestia::ast::IfStatement *node);
+  void while_statement(celestia::ast::WhileStatement *node);
 
-  void variable_declaration(celestia::ast::node::VariableDeclarationNode *node);
-  void function_declaration(celestia::ast::node::FunctionDeclarationNode *node);
-  void module_declaration(celestia::ast::node::ModuleDeclarationNode *node);
+  void variable_declaration(celestia::ast::VariableDeclarationNode *node);
+  void function_declaration(celestia::ast::FunctionDeclarationNode *node);
+  void module_declaration(celestia::ast::ModuleDeclaration *node);
 
-  void block(celestia::ast::node::BlockStatementNode *node);
+  void block(celestia::ast::BlockStatement *node);
 
-  void return_statement(celestia::ast::node::ReturnStatementNode *node);
+  void return_statement(celestia::ast::ReturnStatement *node);
 
-  void import_declaration(celestia::ast::node::ImportDeclarationNode *node);
-  void expression_statement(celestia::ast::node::ExpressionStatementNode *node);
+  void import_declaration(celestia::ast::ImportDeclarationNode *node);
+  void expression_statement(celestia::ast::ExpressionStatement *node);
 
   void identifier_pattern(celestia::ast::IdentifierPatternNode *pattern);
 };

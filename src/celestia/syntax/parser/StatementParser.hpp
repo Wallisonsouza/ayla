@@ -1,29 +1,30 @@
 #pragma once
 
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
+#include "celestia/syntax/parser/Parser.hpp"
 
 class ParseContext;
 class Parser;
 
 class StatementParser {
 public:
-  StatementParser(ParseContext &context, Parser &parser);
+  StatementParser(ParseContext &context, celestia::Parser &parser);
 
-  celestia::ast::StatementNode *parse_statement();
+  celestia::ast::Statement *parse_statement();
 
-  celestia::ast::node::BlockStatementNode *parse_block_statement();
+  celestia::ast::BlockStatement *parse_block_statement();
 
 private:
-  celestia::ast::StatementNode *parse_if_statement();
+  celestia::ast::Statement *parse_if_statement();
 
-  celestia::ast::StatementNode *parse_while_statement();
+  celestia::ast::Statement *parse_while_statement();
 
-  celestia::ast::StatementNode *parse_return_statement();
+  celestia::ast::Statement *parse_return_statement();
   
-  celestia::ast::StatementNode *parse_expression_statement();
+  celestia::ast::Statement *parse_expression_statement();
 
 private:
   ParseContext &context;
-  Parser &parser;
+  celestia::Parser &parser;
 };

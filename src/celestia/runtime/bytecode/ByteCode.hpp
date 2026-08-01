@@ -78,34 +78,34 @@
 //   void emit(const Instruction &instr) { code.push_back(instr); }
 //   const std::vector<Instruction> &get_code() const { return code; }
 
-//   void generate_node(celestia::ast::AstNode *node) {
+//   void generate_node(mocelestia::ast::Node *node) {
 //     if (!node) return;
 
 //     using NK = celestia::ast::NodeKind;
 
 //     switch (node->kind) {
 //     case NK::NumberLiteral: {
-//       auto n = static_cast<celestia::ast::node::NumberLiteralNode *>(node);
+//       auto n = static_cast<celestia::ast::NumberLiteralNode *>(node);
 //       emit(Instruction(OpCode::PUSH_NUMBER, Value::Number(n->value)));
 //       break;
 //     }
 //     case NK::StringLiteral: {
-//       auto s = static_cast<celestia::ast::node::StringLiteralNode *>(node);
+//       auto s = static_cast<celestia::ast::StringLiteralNode *>(node);
 //       emit(Instruction(OpCode::PUSH_STRING, Value::String(s->value)));
 //       break;
 //     }
 //     case NK::BooleanLiteral: {
-//       auto b = static_cast<celestia::ast::node::BoolLiteralNode *>(node);
+//       auto b = static_cast<celestia::ast::BoolLiteralNode *>(node);
 //       emit(Instruction(OpCode::PUSH_BOOLEAN, Value::Boolean(b->value)));
 //       break;
 //     }
 //     case NK::Name: {
-//       auto id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(node);
+//       auto id = static_cast<celestia::ast::IdentifierExpressionNode *>(node);
 //       emit(Instruction(OpCode::LOAD, id->resolved_symbol_id));
 //       break;
 //     }
 //     case NK::BinaryExpression: {
-//       auto bin = static_cast<celestia::ast::node::BinaryExpressionNode *>(node);
+//       auto bin = static_cast<celestia::ast::BinaryExpressionNode *>(node);
 //       generate_node(bin->lhs);
 //       generate_node(bin->rhs);
      
@@ -124,13 +124,13 @@
 //       break;
 //     }
 //     case NK::UnaryExpression: {
-//       auto un = static_cast<celestia::ast::node::UnaryExpressionNode *>(node);
+//       auto un = static_cast<celestia::ast::UnaryExpressionNode *>(node);
 //       generate_node(un->operand);
 //       if (un->op == UnaryOperation::Not) emit(Instruction(OpCode::NOT));
 //       break;
 //     }
 //     case NK::VariableDeclaration: {
-//       auto var = static_cast<celestia::ast::node::VariableDeclarationNode *>(node);
+//       auto var = static_cast<celestia::ast::VariableDeclarationNode *>(node);
 //       if (var->initializer)
 //         generate_node(var->initializer);
 //       else
@@ -140,11 +140,11 @@
 //       break;
 //     }
 //     case NK::Assignment: {
-//       auto ass = static_cast<celestia::ast::node::AssignmentExpressionNode *>(node);
+//       auto ass = static_cast<celestia::ast::AssignmentExpressionNode *>(node);
 //       generate_node(ass->value);
 //       switch (ass->target->kind) {
 //       case NK::Name: {
-//         auto *id = static_cast<celestia::ast::node::IdentifierExpressionNode *>(ass->target);
+//         auto *id = static_cast<celestia::ast::IdentifierExpressionNode *>(ass->target);
 //         emit(Instruction(OpCode::STORE, id->resolved_symbol_id));
 //         break;
 //       }
@@ -153,7 +153,7 @@
 //       break;
 //     }
 //     case NK::ExpressionStatement: {
-//       auto es = static_cast<celestia::ast::node::ExpressionStatementNode *>(node);
+//       auto es = static_cast<celestia::ast::ExpressionStatementNode *>(node);
 //       generate_node(es->expression);
 //       emit(Instruction(OpCode::PUSH_VOID));
 //       break;
@@ -162,7 +162,7 @@
 //     }
 //   }
 
-//   void generate_ast(const std::vector<celestia::ast::AstNode *> &nodes) {
+//   void generate_ast(const std::vector<mocelestia::ast::Node *> &nodes) {
 //     for (auto *n : nodes) generate_node(n);
 //   }
 // };

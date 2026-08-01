@@ -9,7 +9,7 @@
 struct Type;
 
 namespace celestia::ast {
-struct AstNode;
+struct Node;
 
 }
 
@@ -28,8 +28,8 @@ struct Symbol {
 
   Type *type = nullptr;
 
-  celestia::ast::AstNode *declaration = nullptr;
+  celestia::ast::Node *declaration = nullptr;
 
-  Symbol(SymbolId id, std::string name, SymbolKind kind, Visibility visibility, bool builtin, celestia::ast::AstNode *decl)
+  Symbol(SymbolId id, std::string name, SymbolKind kind, Visibility visibility, bool builtin, celestia::ast::Node *decl)
       : id(id), name(std::move(name)), kind(kind), visibility(visibility), is_builtin(builtin), declaration(decl) {}
 };

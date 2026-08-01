@@ -13,7 +13,7 @@ class LoweringStage : public Stage {
     if (!script || script->statements.empty()) return;
 
 
-    auto *main = unit.ast.create_node<celestia::ast::node::FunctionDeclarationNode>();
+    auto *main = unit.ast.create_node<celestia::ast::FunctionDeclarationNode>();
 
     main->name = unit.ast.create_node<celestia::ast::IdentifierNode>("main");
 

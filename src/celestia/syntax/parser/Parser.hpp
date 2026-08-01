@@ -10,10 +10,7 @@ class PatternParser;
 class TypeParser;
 class NameParser;
 
-namespace celestia::ast {
-class AstNode;
-}
-
+namespace celestia {
 class Parser {
 
 public:
@@ -49,3 +46,5 @@ private:
 
   std::unique_ptr<NameParser> name_parser;
 };
+
+} // namespace celestia

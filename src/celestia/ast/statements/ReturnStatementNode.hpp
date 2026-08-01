@@ -1,14 +1,14 @@
 #pragma once
 
-#include "celestia/ast/ExpressionNode.hpp"
-#include "celestia/ast/StatementNode.hpp"
+#include "celestia/ast/expressions/ExpressionNode.hpp"
+#include "celestia/ast/statements/StatementNode.hpp"
 
-namespace celestia::ast::node {
-struct ReturnStatementNode : StatementNode {
-  ExpressionNode *value = nullptr;
+namespace celestia::ast {
+struct ReturnStatement : Statement {
+  Expression *value = nullptr;
 
-  ReturnStatementNode(ExpressionNode *v) : StatementNode(NodeKind::ReturnStatement), value(v) {}
+  ReturnStatement(Expression *v) : Statement(NodeKind::ReturnStatement), value(v) {}
 
   
 };
-} // namespace celestia::ast::node
+} // namespace celestia::ast

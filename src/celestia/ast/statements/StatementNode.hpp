@@ -2,9 +2,8 @@
 #include "celestia/ast/Node.hpp"
 
 namespace celestia::ast {
-
-struct NameNode : Node {
-  explicit NameNode(NodeKind k) : Node(k) {}
+struct Statement : Node {
+  bool resolved = false;
+  explicit Statement(NodeKind k) : Node(k) {}
 };
-
 } // namespace celestia::ast
