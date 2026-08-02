@@ -4,12 +4,12 @@
 // #include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
 // #include "celestia/core/token/Location.hpp"
 // #include "celestia/diagnostic/DiagnosticCode.hpp"
-// #include "celestia/engine/CompilationUnit.hpp"
+// #include "celestia/compiler/CompilationUnit.hpp"
 // #include "celestia/semantic/types/BuiltinTypes.hpp"
 
-// #include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
+// #include "celestia/ast/declarations/FunctionDeclaration.hpp"
 // #include "celestia/ast/declarations/ModuleDeclaration.hpp"
-// #include "celestia/ast/declarations/VariableDeclarationNode.hpp"
+// #include "celestia/ast/declarations/VariableDeclaration.hpp"
 // #include "celestia/ast/expressions/AssignmentExpression.hpp"
 // #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
 // #include "celestia/ast/expressions/CallExpressionNode.hpp"
@@ -20,7 +20,7 @@
 // #include "celestia/ast/statements/BlockStatementNode.hpp"
 // #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 // #include "celestia/ast/statements/IfStatementNode.hpp"
-// #include "celestia/ast/statements/ImportStatementNode.hpp"
+// #include "celestia/ast/declarations/ImportDeclaration.hpp"
 // #include "celestia/ast/statements/ReturnStatementNode.hpp"
 // #include "celestia/ast/statements/WhileStatementNode.hpp"
 
@@ -52,8 +52,8 @@
 
 //   void check_pattern(ast::PatternNode *node);
 
-//   void check_function_declaration(ast::FunctionDeclarationNode *node);
-//   void check_variable_declaration(ast::VariableDeclarationNode *node);
+//   void check_function_declaration(ast::FunctionDeclaration *node);
+//   void check_variable_declaration(ast::VariableDeclaration *node);
 //   void check_function_call(ast::CallExpressionNode *node);
 
 //   // Expressões
@@ -69,7 +69,7 @@
 
 //   void check_block(ast::BlockStatementNode *node);
 
-//   void check_import_declaration_node(ast::ImportDeclarationNode *node);
+//   void check_import_declaration_node(ast::ImportDeclaration *node);
 //   void check_module_declaration(ast::ModuleDeclaration *node);
 //   void check_assignment(ast::AssignmentExpressionNode *node);
 //   void check_expression_statement(ast::ExpressionStatementNode *node);

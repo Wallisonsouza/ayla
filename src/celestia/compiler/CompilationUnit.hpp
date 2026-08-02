@@ -1,6 +1,6 @@
 #pragma once
 
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/core/AST.hpp"
 #include "celestia/core/source/Source.hpp"

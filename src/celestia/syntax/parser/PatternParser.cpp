@@ -3,6 +3,7 @@
 #include "Parser.hpp"
 #include "ParserContext.hpp"
 #include "TypeParser.hpp"
+#include "celestia/ast/patterns/IdentifierPatternNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/core/AST.hpp"
 #include "celestia/core/token/token_stream.hpp"

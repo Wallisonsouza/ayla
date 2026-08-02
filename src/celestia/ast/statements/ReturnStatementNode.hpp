@@ -8,7 +8,5 @@ struct ReturnStatement : Statement {
   Expression *value = nullptr;
 
   ReturnStatement(Expression *v) : Statement(NodeKind::ReturnStatement), value(v) {}
-
-  
 };
 } // namespace celestia::ast

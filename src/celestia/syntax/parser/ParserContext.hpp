@@ -2,8 +2,8 @@
 
 #include "celestia/diagnostic/Diagnostic.hpp"
 #include "celestia/diagnostic/DiagnosticCode.hpp"
-#include "celestia/engine/CompilationUnit.hpp"
-#include "celestia/engine/CompilerEnvironment.hpp"
+#include "celestia/compiler/CompilationUnit.hpp"
+#include "celestia/compiler/CompilerEnvironment.hpp"
 
 class ParseContext {
 public:

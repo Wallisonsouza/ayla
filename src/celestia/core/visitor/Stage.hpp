@@ -1,6 +1,6 @@
 #pragma once
 
-#include "celestia/engine/CompilerEnvironment.hpp"
+#include "celestia/compiler/CompilerEnvironment.hpp"
 class CompilationUnit;
 
 class Stage {

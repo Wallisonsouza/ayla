@@ -1,5 +1,5 @@
 #pragma once
-#include "celestia/ast/declarations/DeclarationNode.hpp"
+#include "Declaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 

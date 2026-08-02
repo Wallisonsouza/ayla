@@ -8,12 +8,11 @@
 
 #include <string>
 
-namespace debug::lexer {
+namespace celestia::debug {
 
 class TokenDumper {
 public:
-
-  std::string dump_token(const Token &token, const core::source::SourceBuffer &source) ;
+  std::string dump_token(const Token &token, const core::source::SourceBuffer &source);
 
   std::string dump(const core::token::TokenStream &tokens, const core::source::SourceBuffer &source);
 
@@ -25,4 +24,4 @@ private:
   static std::string sanitize_text(std::string text, size_t max = 40);
 };
 
-} // namespace debug::lexer
+} // namespace celestia::debug

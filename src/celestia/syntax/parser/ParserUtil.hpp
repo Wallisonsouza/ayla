@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ParserContext.hpp"
+#include "celestia/ast/NodeState.hpp"
 #include "celestia/core/token/TokenKind.hpp"
 
 class ParseContext;
@@ -40,7 +41,7 @@ std::vector<ElementType *> parse_generic_list(ParseContext &context, TokenKind o
 
       if (!element) { return {}; }
 
-      if (element->flags.has(NodeFlags::HasError)) { return {}; }
+      if (element->flags.has(celestia::ast::NodeFlags::HasError)) { return {}; }
 
       elements.push_back(element);
 

@@ -1,5 +1,5 @@
 #include "celestia/core/visitor/Stage.hpp"
-#include "celestia/engine/CompilationUnit.hpp"
+#include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/syntax/lexer/Lexer.hpp"
 #include "celestia/syntax/lexer/LexerContext.hpp"
 

@@ -7,14 +7,15 @@
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
 
-#include "celestia/ast/declarations/DeclarationNode.hpp"
-#include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
-#include "celestia/ast/declarations/VariableDeclarationNode.hpp"
+#include "celestia/ast/NodeState.hpp"
+#include "celestia/ast/declarations/Declaration.hpp"
+#include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
-#include "celestia/ast/statements/ImportStatementNode.hpp"
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
 #include "celestia/core/token/Token.hpp"
 #include "celestia/core/token/TokenKind.hpp"
 #include "celestia/core/token/token_stream.hpp"
@@ -132,7 +133,7 @@ celestia::ast::Declaration *DeclarationParser::parse_variable_declaration(Declar
     }
   }
 
-  return context.get_ast().create_node<celestia::ast::VariableDeclarationNode>(pattern, initializer, specifiers);
+  return context.get_ast().create_node<celestia::ast::VariableDeclaration>(pattern, initializer, specifiers);
 }
 
 celestia::ast::Declaration *DeclarationParser::parse_function_declaration(DeclarationSpecifiers specifiers) {
@@ -163,10 +164,10 @@ celestia::ast::Declaration *DeclarationParser::parse_function_declaration(Declar
 
     body = parser.statements().parse_block_statement();
 
-    if (body && body->flags.has(NodeFlags::HasError)) return nullptr;
+    if (body && body->flags.has(celestia::ast::NodeFlags::HasError)) return nullptr;
   }
 
-  return context.get_ast().create_node<celestia::ast::FunctionDeclarationNode>(name, std::move(params), return_type, body, specifiers);
+  return context.get_ast().create_node<celestia::ast::FunctionDeclaration>(name, std::move(params), return_type, body, specifiers);
 }
 
 celestia::ast::ModuleDeclaration *DeclarationParser::parse_module_declaration() {
@@ -199,5 +200,5 @@ celestia::ast::Declaration *DeclarationParser::parse_import_declaration() {
 
   if (!module) { return nullptr; }
 
-  return context.get_ast().create_node<celestia::ast::ImportDeclarationNode>(module);
+  return context.get_ast().create_node<celestia::ast::ImportDeclaration>(module);
 }

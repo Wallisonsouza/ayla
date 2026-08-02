@@ -1,5 +1,5 @@
 #include "Resolver.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include <iostream>
 
 void Resolver::module_declaration(celestia::ast::ModuleDeclaration *node) {
@@ -15,7 +15,7 @@ void Resolver::module_declaration(celestia::ast::ModuleDeclaration *node) {
   context.scopes.pop();
 }
 
-void Resolver::import_declaration(celestia::ast::ImportDeclarationNode *node) {
+void Resolver::import_declaration(celestia::ast::ImportDeclaration *node) {
   // if (!node || node->path.empty()) return;
 
   // size_t failed_index;
@@ -46,7 +46,7 @@ void Resolver::import_declaration(celestia::ast::ImportDeclarationNode *node) {
   // node->resolved_symbol_id = sym_id;
 }
 
-void Resolver::function_declaration(celestia::ast::FunctionDeclarationNode *node) {
+void Resolver::function_declaration(celestia::ast::FunctionDeclaration *node) {
 
   if (!node) return;
 
@@ -78,7 +78,7 @@ void Resolver::function_declaration(celestia::ast::FunctionDeclarationNode *node
   context.scopes.pop();
 }
 
-void Resolver::variable_declaration(celestia::ast::VariableDeclarationNode *node) {
+void Resolver::variable_declaration(celestia::ast::VariableDeclaration *node) {
 
   if (node->pattern) { pattern(node->pattern); }
 

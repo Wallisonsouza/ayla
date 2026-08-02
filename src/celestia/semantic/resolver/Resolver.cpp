@@ -1,4 +1,5 @@
 #include "Resolver.hpp"
+#include "celestia/ast/NodeState.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 
 Resolver::Resolver(ResolverContext &ctx) : context(ctx), handlers(this) {
@@ -22,10 +23,10 @@ Resolver::Resolver(ResolverContext &ctx) : context(ctx), handlers(this) {
   handlers.bind<celestia::ast::ExpressionStatement>(&Resolver::expression_statement);
   handlers.bind<celestia::ast::ReturnStatement>(&Resolver::return_statement);
 
-  handlers.bind<celestia::ast::VariableDeclarationNode>(&Resolver::variable_declaration);
-  handlers.bind<celestia::ast::FunctionDeclarationNode>(&Resolver::function_declaration);
+  handlers.bind<celestia::ast::VariableDeclaration>(&Resolver::variable_declaration);
+  handlers.bind<celestia::ast::FunctionDeclaration>(&Resolver::function_declaration);
   handlers.bind<celestia::ast::ModuleDeclaration>(&Resolver::module_declaration);
-  handlers.bind<celestia::ast::ImportDeclarationNode>(&Resolver::import_declaration);
+  handlers.bind<celestia::ast::ImportDeclaration>(&Resolver::import_declaration);
 
   handlers.bind<celestia::ast::ArrayLiteralNode>(&Resolver::array_literal);
   handlers.bind<celestia::ast::ObjectLiteralNode>(&Resolver::object_literal);
@@ -37,9 +38,9 @@ void Resolver::resolve(celestia::ast::Node *node) {
 
   auto *root = context.unit.ast.get_root();
 
-  if (!node || node->flags.has(NodeFlags::Resolved)) return;
+  if (!node || node->flags.has(celestia::ast::NodeFlags::Resolved)) return;
 
-  node->flags.add(NodeFlags::Resolved);
+  node->flags.add(celestia::ast::NodeFlags::Resolved);
 
   handlers.dispatch(node);
 }

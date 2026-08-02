@@ -9,8 +9,6 @@ struct ExpressionStatement : Statement {
   Expression *expression;
 
   explicit ExpressionStatement(Expression *expr) : Statement(NodeKind::ExpressionStatement), expression(expr) {}
-
-  
 };
 
 } // namespace celestia::ast

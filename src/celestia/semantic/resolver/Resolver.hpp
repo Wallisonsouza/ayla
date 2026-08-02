@@ -2,14 +2,16 @@
 
 #include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
-#include "celestia/engine/CompilationUnit.hpp"
-#include "celestia/engine/CompilerEnvironment.hpp"
+#include "celestia/compiler/CompilationUnit.hpp"
+#include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/semantic/scope/Scope.hpp"
 
+#include "ContextStack.hpp"
 #include "Handler.hpp"
-#include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
-#include "celestia/ast/declarations/VariableDeclarationNode.hpp"
+#include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
 #include "celestia/ast/expressions/AssignmentExpression.hpp"
 #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
 #include "celestia/ast/expressions/CallExpressionNode.hpp"
@@ -20,10 +22,8 @@
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 #include "celestia/ast/statements/IfStatementNode.hpp"
-#include "celestia/ast/statements/ImportStatementNode.hpp"
 #include "celestia/ast/statements/ReturnStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
-#include "ContextStack.hpp"
 
 struct ResolverContext {
   CompilerEnvironment &compiler;
@@ -31,7 +31,7 @@ struct ResolverContext {
 
   ContextStack<core::Scope> scopes;
 
-  celestia::ast::FunctionDeclarationNode *current_function = nullptr;
+  celestia::ast::FunctionDeclaration *current_function = nullptr;
   celestia::ast::ModuleDeclaration *current_module = nullptr;
   celestia::ast::WhileStatement *current_loop = nullptr;
 
@@ -69,15 +69,15 @@ private:
   void if_statement(celestia::ast::IfStatement *node);
   void while_statement(celestia::ast::WhileStatement *node);
 
-  void variable_declaration(celestia::ast::VariableDeclarationNode *node);
-  void function_declaration(celestia::ast::FunctionDeclarationNode *node);
+  void variable_declaration(celestia::ast::VariableDeclaration *node);
+  void function_declaration(celestia::ast::FunctionDeclaration *node);
   void module_declaration(celestia::ast::ModuleDeclaration *node);
 
   void block(celestia::ast::BlockStatement *node);
 
   void return_statement(celestia::ast::ReturnStatement *node);
 
-  void import_declaration(celestia::ast::ImportDeclarationNode *node);
+  void import_declaration(celestia::ast::ImportDeclaration *node);
   void expression_statement(celestia::ast::ExpressionStatement *node);
 
   void identifier_pattern(celestia::ast::IdentifierPatternNode *pattern);

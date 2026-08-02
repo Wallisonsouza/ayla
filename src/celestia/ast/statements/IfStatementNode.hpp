@@ -11,6 +11,5 @@ struct IfStatement : Statement {
   Statement *else_block;
 
   IfStatement(Expression *cond, Statement *then_b, Statement *else_b = nullptr) : Statement(NodeKind::IfStatement), condition(cond), then_block(then_b), else_block(else_b) {}
- 
 };
 } // namespace celestia::ast

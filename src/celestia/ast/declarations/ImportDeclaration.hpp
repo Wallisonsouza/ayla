@@ -1,6 +1,6 @@
 #pragma once
 
-#include "celestia/ast/declarations/DeclarationNode.hpp"
+#include "Declaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 
@@ -8,13 +8,13 @@
 
 namespace celestia::ast {
 
-struct ImportDeclarationNode : Declaration {
+struct ImportDeclaration : Declaration {
   QualifiedNameNode* name;
   std::optional<std::string> alias;
   SymbolId resolved_symbol_id;
 
-  explicit ImportDeclarationNode(QualifiedNameNode* n) : Declaration(NodeKind::ImportDeclaration), name(n) {}
+  explicit ImportDeclaration(QualifiedNameNode* n) : Declaration(NodeKind::ImportDeclaration), name(n) {}
 
-  
+
 };
 } // namespace celestia::ast

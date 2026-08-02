@@ -8,7 +8,7 @@
 #include "PatternParser.hpp"
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include "celestia/syntax/parser/ParserUtil.hpp"
 #include <vector>
 

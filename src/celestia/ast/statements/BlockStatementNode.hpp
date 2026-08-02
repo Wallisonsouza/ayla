@@ -9,7 +9,5 @@ struct BlockStatement : Statement {
   std::vector<Statement *> statements;
 
   explicit BlockStatement(std::vector<Statement *> stmts = {}) : Statement(NodeKind::BlockStatement), statements(std::move(stmts)) {}
-
-  
 };
 } // namespace celestia::ast

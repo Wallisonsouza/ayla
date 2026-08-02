@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace debug::lexer {
+namespace celestia::debug {
 
 constexpr const char *TokenDumper::token_group_to_str(TokenGroup grp) {
   using G = TokenGroup;
@@ -123,4 +123,4 @@ std::string TokenDumper::dump(const core::token::TokenStream &tokens, const core
   return oss.str();
 }
 
-} // namespace debug::lexer
+} // namespace celestia::debug

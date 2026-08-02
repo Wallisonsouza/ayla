@@ -1,8 +1,11 @@
 #include "ayla/language/AylaLanguage.hpp"
 #include "celestia/core/stages/ResolverStage.hpp"
 #include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-#include "celestia/engine/Compiler.hpp"
+#include "celestia/compiler/Compiler.hpp"
 
 #include "celestia/core/stages/DumperStage.hpp"
 #include "celestia/core/stages/LexerStage.hpp"
@@ -41,3 +44,4 @@ int main(int argc, char *argv[]) {
     // session.show_diagnostics();
   }
 }
+

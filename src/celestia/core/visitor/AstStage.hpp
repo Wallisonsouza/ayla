@@ -7,7 +7,7 @@
 
 #include "celestia/ast/Node.hpp"
 #include "celestia/core/visitor/NodeTraits.hpp"
-#include "celestia/engine/CompilationUnit.hpp"
+#include "celestia/compiler/CompilationUnit.hpp"
 
 class AstStage : public Stage {
 

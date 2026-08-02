@@ -3,10 +3,10 @@
 #include "celestia/ast/NodeKind.hpp"
 
 // Declarations
-#include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
-#include "celestia/ast/declarations/VariableDeclarationNode.hpp"
-
+#include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
 // Expressions
 #include "celestia/ast/expressions/AssignmentExpression.hpp"
 #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
@@ -16,15 +16,12 @@
 #include "celestia/ast/expressions/LiteralExpressionNode.hpp"
 #include "celestia/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "celestia/ast/expressions/UnaryExpressionNode.hpp"
-
 // Statements
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 #include "celestia/ast/statements/IfStatementNode.hpp"
-#include "celestia/ast/statements/ImportStatementNode.hpp"
 #include "celestia/ast/statements/ReturnStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
-
 // Names
 #include "celestia/ast/names/IdentifierNode.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
@@ -34,6 +31,7 @@
 
 // Patterns
 #include "celestia/ast/patterns/PatternNode.hpp"
+#include "celestia/ast/patterns/IdentifierPatternNode.hpp"
 
 namespace celestia::ast {
 
@@ -43,11 +41,11 @@ template <typename T> struct NodeTraits;
 // Declarations
 // =====================
 
-template <> struct NodeTraits<FunctionDeclarationNode> {
+template <> struct NodeTraits<FunctionDeclaration> {
   static constexpr NodeKind kind = NodeKind::FunctionDeclaration;
 };
 
-template <> struct NodeTraits<VariableDeclarationNode> {
+template <> struct NodeTraits<VariableDeclaration> {
   static constexpr NodeKind kind = NodeKind::VariableDeclaration;
 };
 
@@ -143,7 +141,7 @@ template <> struct NodeTraits<ExpressionStatement> {
   static constexpr NodeKind kind = NodeKind::ExpressionStatement;
 };
 
-template <> struct NodeTraits<ImportDeclarationNode> {
+template <> struct NodeTraits<ImportDeclaration> {
   static constexpr NodeKind kind = NodeKind::ImportDeclaration;
 };
 

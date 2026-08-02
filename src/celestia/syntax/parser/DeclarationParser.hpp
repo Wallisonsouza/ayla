@@ -1,7 +1,7 @@
 #pragma once
 
-#include "celestia/ast/declarations/DeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
+#include "celestia/ast/declarations/Declaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include "celestia/syntax/parser/DeclarationSpecifiers.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 

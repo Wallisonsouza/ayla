@@ -1,7 +1,7 @@
 #pragma once
 
 #include "celestia/core/visitor/AstStage.hpp"
-#include "celestia/engine/CompilerEnvironment.hpp"
+#include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/semantic/resolver/Resolver.hpp"
 
 class ResolverStage : public AstStage {

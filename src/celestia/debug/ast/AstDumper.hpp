@@ -1,9 +1,13 @@
 #pragma once
 
+#include <iostream>
+#include <ostream>
+
 #include "celestia/ast/Node.hpp"
-#include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
-#include "celestia/ast/declarations/VariableDeclarationNode.hpp"
+#include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
 #include "celestia/ast/expressions/AssignmentExpression.hpp"
 #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
 #include "celestia/ast/expressions/CallExpressionNode.hpp"
@@ -12,27 +16,23 @@
 #include "celestia/ast/expressions/LiteralExpressionNode.hpp"
 #include "celestia/ast/expressions/MemberAccessExpressionNode.hpp"
 #include "celestia/ast/expressions/UnaryExpressionNode.hpp"
-#include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 #include "celestia/ast/statements/IfStatementNode.hpp"
-#include "celestia/ast/statements/ImportStatementNode.hpp"
 #include "celestia/ast/statements/ReturnStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
 #include "celestia/core/visitor/AstStage.hpp"
 #include "celestia/debug/ast/DumpContext.hpp"
 
-#include <iostream>
-#include <ostream>
-
+namespace celestia::debug {
 class AstDumper : public AstStage {
 
 public:
   AstDumper(std::ostream &out = std::cout) : context(out, [this](const celestia::ast::Node *node) { dispatch(node); }) { register_handlers(); }
 
-  public: void dump_scrypt() {
-    
-  }
+public:
+  void dump_scrypt() {}
+
 private:
   void register_handlers() {
     bind(&AstDumper::dump_number_literal);
@@ -74,72 +74,74 @@ private:
     bind(&AstDumper::dump_array_literal);
   }
 
-  void dump_number_literal(const celestia::ast::NumberLiteralNode *node);
+  void dump_number_literal(const ast::NumberLiteralNode *node);
 
-  void dump_string_literal(const celestia::ast::StringLiteralNode *node);
+  void dump_string_literal(const ast::StringLiteralNode *node);
 
-  void dump_bool_literal(const celestia::ast::BoolLiteralNode *node);
+  void dump_bool_literal(const ast::BoolLiteralNode *node);
 
-  void dump_null_literal(const celestia::ast::NullLiteralNode *node);
+  void dump_null_literal(const ast::NullLiteralNode *node);
 
   // Names
 
-  void dump_identifier(const celestia::ast::IdentifierNode *node);
+  void dump_identifier(const ast::IdentifierNode *node);
 
-  void dump_qualified_name(const celestia::ast::QualifiedNameNode *node);
+  void dump_qualified_name(const ast::QualifiedNameNode *node);
 
   // Expressions
 
-  void dump_identifier_expression(const celestia::ast::IdentifierExpressionNode *node);
+  void dump_identifier_expression(const ast::IdentifierExpressionNode *node);
 
-  void dump_binary_expression(const celestia::ast::BinaryExpressionNode *node);
+  void dump_binary_expression(const ast::BinaryExpressionNode *node);
 
-  void dump_unary_expression(const celestia::ast::UnaryExpressionNode *node);
+  void dump_unary_expression(const ast::UnaryExpressionNode *node);
 
-  void dump_call_expression(const celestia::ast::CallExpressionNode *node);
+  void dump_call_expression(const ast::CallExpressionNode *node);
 
-  void dump_member_acess_expression(const celestia::ast::MemberAccessExpressionNode *node);
+  void dump_member_acess_expression(const ast::MemberAccessExpressionNode *node);
 
-  void dump_index_acess_expression(const celestia::ast::IndexAccessExpressionNode *node);
+  void dump_index_acess_expression(const ast::IndexAccessExpressionNode *node);
 
-  void dump_assignment_expression(const celestia::ast::AssignmentExpressionNode *node);
- 
+  void dump_assignment_expression(const ast::AssignmentExpressionNode *node);
+
   // Statements
 
-  void dump_expression_statement(const celestia::ast::ExpressionStatement *node);
+  void dump_expression_statement(const ast::ExpressionStatement *node);
 
-  void dump_block_statement(const celestia::ast::BlockStatement *node);
+  void dump_block_statement(const ast::BlockStatement *node);
 
-  void dump_if_statement(const celestia::ast::IfStatement *node);
+  void dump_if_statement(const ast::IfStatement *node);
 
-  void dump_while_statement(const celestia::ast::WhileStatement *node);
+  void dump_while_statement(const ast::WhileStatement *node);
 
-  void dump_return_statement(const celestia::ast::ReturnStatement *node);
+  void dump_return_statement(const ast::ReturnStatement *node);
 
-  void dump_import_statement(const celestia::ast::ImportDeclarationNode *node);
+  void dump_import_statement(const ast::ImportDeclaration *node);
 
   // Declarations
 
-  void dump_variable_declaration(const celestia::ast::VariableDeclarationNode *node);
+  void dump_variable_declaration(const ast::VariableDeclaration *node);
 
-  void dump_function_declaration(const celestia::ast::FunctionDeclarationNode *node);
+  void dump_function_declaration(const ast::FunctionDeclaration *node);
 
-  void dump_module_declaration(const celestia::ast::ModuleDeclaration *node);
+  void dump_module_declaration(const ast::ModuleDeclaration *node);
 
   // Other nodes
 
-  void dump_identifier_pattern(const celestia::ast::IdentifierPatternNode *node);
+  void dump_identifier_pattern(const ast::IdentifierPatternNode *node);
 
-  void dump_type(const celestia::ast::TypeNode *node);
+  void dump_type(const ast::TypeNode *node);
 
-  void dump_object_literal(const celestia::ast::ObjectLiteralNode *node);
+  void dump_object_literal(const ast::ObjectLiteralNode *node);
 
-  void dump_object_field(const celestia::ast::ObjectFieldNode *node);
+  void dump_object_field(const ast::ObjectFieldNode *node);
 
-  void dump_array_literal(const celestia::ast::ArrayLiteralNode *node);
+  void dump_array_literal(const ast::ArrayLiteralNode *node);
 
   //---------
 
 private:
   DumpContext context;
 };
+
+} // namespace celestia::debug

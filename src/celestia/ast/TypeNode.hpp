@@ -1,6 +1,6 @@
 #pragma once
-#include "celestia/ast/names/IdentifierNode.hpp"
 #include "celestia/ast/Node.hpp"
+#include "celestia/ast/names/IdentifierNode.hpp"
 
 #include "celestia/semantic/symbols/SymbolId.hpp"
 

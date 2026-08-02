@@ -1,6 +1,6 @@
 #pragma once
 
-#include "celestia/engine/CompilationUnit.hpp"
+#include "celestia/compiler/CompilationUnit.hpp"
 
 class UnitManager {
 

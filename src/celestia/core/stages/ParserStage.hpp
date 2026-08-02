@@ -1,5 +1,5 @@
 #include "celestia/core/visitor/Stage.hpp"
-#include "celestia/engine/CompilerEnvironment.hpp"
+#include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 #include "celestia/syntax/parser/ParserContext.hpp"
 

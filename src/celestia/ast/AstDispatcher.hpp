@@ -13,17 +13,17 @@
 #include "celestia/ast/expressions/UnaryExpressionNode.hpp"
 
 // Statements
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 #include "celestia/ast/statements/IfStatementNode.hpp"
-#include "celestia/ast/statements/ImportStatementNode.hpp"
 #include "celestia/ast/statements/ReturnStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
 
 // Declarations
-#include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
-#include "celestia/ast/declarations/ModuleDeclarationNode.hpp"
-#include "celestia/ast/declarations/VariableDeclarationNode.hpp"
+#include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
 
 class AstDispatcher {
 public:
@@ -47,9 +47,9 @@ public:
 
     case NodeKind::ObjectLiteral: invoke<ObjectLiteralNode>(node, visitor, method); break;
 
-    case NodeKind::VariableDeclaration: invoke<VariableDeclarationNode>(node, visitor, method); break;
+    case NodeKind::VariableDeclaration: invoke<VariableDeclaration>(node, visitor, method); break;
 
-    case NodeKind::FunctionDeclaration: invoke<FunctionDeclarationNode>(node, visitor, method); break;
+    case NodeKind::FunctionDeclaration: invoke<FunctionDeclaration>(node, visitor, method); break;
 
     case NodeKind::Call: invoke<CallExpressionNode>(node, visitor, method); break;
 
@@ -71,7 +71,7 @@ public:
 
     case NodeKind::BlockStatement: invoke<BlockStatement>(node, visitor, method); break;
 
-    case NodeKind::ImportDeclaration: invoke<ImportDeclarationNode>(node, visitor, method); break;
+    case NodeKind::ImportDeclaration: invoke<ImportDeclaration>(node, visitor, method); break;
 
     case NodeKind::ModuleDeclaration: invoke<ModuleDeclaration>(node, visitor, method); break;
 

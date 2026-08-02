@@ -1,5 +1,5 @@
 // #include "TypeChecker.hpp"
-// #include "celestia/ast/declarations/FunctionDeclarationNode.hpp"
+// #include "celestia/ast/declarations/FunctionDeclaration.hpp"
 // #include "celestia/ast/statements/BlockStatementNode.hpp"
 // #include "celestia/core/operators/BinaryOperation.hpp"
 // #include "celestia/diagnostic/DiagnosticCode.hpp"
@@ -18,8 +18,8 @@
 //   case ast::NodeKind::BooleanLiteral: check_boolean_literal(static_cast<ast::BoolLiteralNode *>(node)); break;
 //   case ast::NodeKind::ArrayLiteral: check_array_literal(static_cast<ast::ArrayLiteralNode *>(node)); break;
 //   case ast::NodeKind::ObjectLiteral: check_object_literal(static_cast<ast::ObjectLiteralNode *>(node)); break;
-//   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::VariableDeclarationNode *>(node)); break;
-//   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::FunctionDeclarationNode *>(node)); break;
+//   case ast::NodeKind::VariableDeclaration: check_variable_declaration(static_cast<ast::VariableDeclaration *>(node)); break;
+//   case ast::NodeKind::FunctionDeclaration: check_function_declaration(static_cast<ast::FunctionDeclaration *>(node)); break;
 //   case ast::NodeKind::Call: check_function_call(static_cast<ast::CallExpressionNode *>(node)); break;
 //   case ast::NodeKind::BinaryExpression: check_binary_expression(static_cast<ast::BinaryExpressionNode *>(node)); break;
 //   case ast::NodeKind::MemberAccess: check_member_access(static_cast<ast::MemberAccessExpressionNode *>(node)); break;
@@ -29,7 +29,7 @@
 //   case ast::NodeKind::WhileStatement: check_while_statement(static_cast<ast::WhileStatementNode *>(node)); break;
 //   case ast::NodeKind::ReturnStatement: check_return_statement(static_cast<ast::ReturnStatementNode *>(node)); break;
 //   case ast::NodeKind::BlockStatement: check_block(static_cast<ast::BlockStatementNode *>(node)); break;
-//   case ast::NodeKind::ImportDeclaration: check_import_declaration_node(static_cast<ast::ImportDeclarationNode *>(node)); break;
+//   case ast::NodeKind::ImportDeclaration: check_import_declaration_node(static_cast<ast::ImportDeclaration *>(node)); break;
 //   case ast::NodeKind::ModuleDeclaration: check_module_declaration(static_cast<ast::ModuleDeclaration *>(node)); break;
 //   case ast::NodeKind::Pattern: check_pattern(static_cast<ast::PatternNode *>(node)); break;
 //   case ast::NodeKind::UnaryExpression: check_unary_expression(static_cast<ast::UnaryExpressionNode *>(node)); break;
@@ -102,7 +102,7 @@
 // // Variáveis
 // //---------------------------
 
-// void TypeChecker::check_variable_declaration(ast::VariableDeclarationNode *node) {
+// void TypeChecker::check_variable_declaration(ast::VariableDeclaration *node) {
 //   // if (!node) return;
 
 //   // if (node->initializer) { check(node->initializer); }
@@ -170,7 +170,7 @@
 //   node->inferred_type = actual;
 // }
 
-// void TypeChecker::check_function_declaration(ast::FunctionDeclarationNode *node) {
+// void TypeChecker::check_function_declaration(ast::FunctionDeclaration *node) {
 //   if (!node) return;
 
 //   current_function_return_type = node->return_type ? node->return_type->inferred_type : nullptr;
