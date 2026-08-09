@@ -5,30 +5,29 @@
 #include "celestia/syntax/parser/DeclarationSpecifiers.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 
-
-
+namespace celestia::syntax {
 class ParseContext;
-
 
 class DeclarationParser {
 
 public:
-  DeclarationParser(ParseContext &, celestia::Parser &);
+  DeclarationParser(ParseContext &, Parser &);
 
   DeclarationSpecifiers parse_specifiers();
 
-  celestia::ast::Declaration *parse_variable_declaration(DeclarationSpecifiers);
+  ast::Declaration *parse_variable_declaration(DeclarationSpecifiers);
 
-  celestia::ast::Declaration *parse_function_declaration(DeclarationSpecifiers);
+  ast::Declaration *parse_function_declaration(DeclarationSpecifiers);
 
-  celestia::ast::ModuleDeclaration *parse_module_declaration();
+  ast::ModuleDeclaration *parse_module_declaration();
 
-  celestia::ast::Declaration *parse_declaration();
+  ast::Declaration *parse_declaration();
 
-  celestia::ast::Declaration *parse_import_declaration();
+  ast::Declaration *parse_import_declaration();
 
 private:
   ParseContext &context;
-  celestia::Parser &parser;
+  Parser &parser;
 };
 
+} // namespace celestia::syntax

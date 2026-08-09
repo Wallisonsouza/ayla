@@ -1,6 +1,9 @@
 #include "NameParser.hpp"
+#include "celestia/core/token/TokenKind.hpp"
+#include "celestia/syntax/parser/ParserContext.hpp"
 
-NameParser::NameParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
+namespace celestia::syntax {
+NameParser::NameParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::IdentifierNode *NameParser::parse_name() {
   auto &tokens = context.tokens();
@@ -36,3 +39,4 @@ celestia::ast::QualifiedNameNode *NameParser::parse_qualified_name() {
 
   return context.get_ast().create_node<celestia::ast::QualifiedNameNode>(std::move(parts));
 }
+} // namespace celestia::syntax

@@ -3,21 +3,24 @@
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 
-class ParseContext;
+namespace celestia::syntax {
+
 class Parser;
 
+class ParseContext;
 class PatternParser {
 public:
-  PatternParser(ParseContext &, celestia::Parser &);
+  PatternParser(ParseContext &, Parser &);
 
-  celestia::ast::PatternNode *parse_pattern();
+  ast::PatternNode *parse_pattern();
 
 private:
-  celestia::ast::PatternNode *parse_identifier_pattern();
+  ast::PatternNode *parse_identifier_pattern();
 
-  celestia::ast::PatternNode *parse_typed_pattern();
+  ast::PatternNode *parse_typed_pattern();
 
 private:
   ParseContext &context;
-  celestia::Parser &parser;
+  Parser &parser;
 };
+} // namespace celestia::syntax

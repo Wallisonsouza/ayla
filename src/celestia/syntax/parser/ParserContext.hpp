@@ -5,6 +5,7 @@
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
 
+namespace celestia::syntax {
 class ParseContext {
 public:
   CompilationUnit &unit;
@@ -26,3 +27,4 @@ public:
 
   auto &descriptors() { return env.language.descriptors; }
 };
+}

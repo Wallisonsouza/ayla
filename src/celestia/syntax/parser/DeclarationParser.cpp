@@ -1,5 +1,4 @@
 #include "DeclarationParser.hpp"
-#include "ExpressionParser.hpp"
 #include "NameParser.hpp"
 #include "Parser.hpp"
 #include "ParserContext.hpp"
@@ -10,12 +9,12 @@
 #include "celestia/ast/NodeState.hpp"
 #include "celestia/ast/declarations/Declaration.hpp"
 #include "celestia/ast/declarations/FunctionDeclaration.hpp"
+#include "celestia/ast/declarations/ImportDeclaration.hpp"
 #include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include "celestia/ast/declarations/VariableDeclaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
-#include "celestia/ast/declarations/ImportDeclaration.hpp"
 #include "celestia/core/token/Token.hpp"
 #include "celestia/core/token/TokenKind.hpp"
 #include "celestia/core/token/token_stream.hpp"
@@ -23,8 +22,9 @@
 #include "celestia/diagnostic/DiagnosticCode.hpp"
 #include "celestia/diagnostic/Expected.hpp"
 #include "celestia/syntax/parser/ParserUtil.hpp"
-
-DeclarationParser::DeclarationParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
+#include "celestia/syntax/parser/expressions/Expression.hpp"
+namespace celestia::syntax {
+DeclarationParser::DeclarationParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::Declaration *DeclarationParser::parse_declaration() {
   auto specifiers = parse_specifiers();
@@ -202,3 +202,5 @@ celestia::ast::Declaration *DeclarationParser::parse_import_declaration() {
 
   return context.get_ast().create_node<celestia::ast::ImportDeclaration>(module);
 }
+
+} // namespace celestia::syntax

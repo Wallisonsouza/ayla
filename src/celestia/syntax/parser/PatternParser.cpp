@@ -8,9 +8,10 @@
 #include "celestia/core/AST.hpp"
 #include "celestia/core/token/token_stream.hpp"
 
-PatternParser::PatternParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
+namespace celestia::syntax {
+PatternParser::PatternParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
-celestia::ast::PatternNode *PatternParser::parse_pattern() {
+ast::PatternNode *PatternParser::parse_pattern() {
 
   auto current = context.tokens().peek();
 
@@ -28,15 +29,16 @@ celestia::ast::PatternNode *PatternParser::parse_pattern() {
   }
 }
 
-celestia::ast::PatternNode *PatternParser::parse_identifier_pattern() {
+ast::PatternNode *PatternParser::parse_identifier_pattern() {
 
   auto *name = parser.names().parse_name();
   if (!name) return nullptr;
 
-  celestia::ast::TypeNode *type = nullptr;
+  ast::TypeNode *type = nullptr;
 
   if (context.tokens().match(TokenKind::COLON)) type = parser.types().parse_type();
 
-  return context.get_ast().create_node<celestia::ast::IdentifierPatternNode>(name, type);
+  return context.get_ast().create_node<ast::IdentifierPatternNode>(name, type);
 }
-celestia::ast::PatternNode *PatternParser::parse_typed_pattern() { return nullptr; }
+ast::PatternNode *PatternParser::parse_typed_pattern() { return nullptr; }
+} // namespace celestia::syntax

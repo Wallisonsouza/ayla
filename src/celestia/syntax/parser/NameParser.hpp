@@ -1,18 +1,19 @@
 #pragma once
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
-#include "celestia/syntax/parser/ParserContext.hpp"
 
+namespace celestia::syntax {
 class NameParser {
 
 public:
-  NameParser(ParseContext &ctx, celestia::Parser &parser);
+  NameParser(ParseContext &ctx, Parser &parser);
 
- celestia::ast::IdentifierNode *parse_name();
+  ast::IdentifierNode *parse_name();
 
- celestia::ast::QualifiedNameNode *parse_qualified_name();
+  ast::QualifiedNameNode *parse_qualified_name();
 
 private:
   ParseContext &context;
-  celestia::Parser &parser;
+  Parser &parser;
 };
+} // namespace celestia::syntax

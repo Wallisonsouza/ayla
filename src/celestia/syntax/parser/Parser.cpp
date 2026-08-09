@@ -3,7 +3,7 @@
 #include "ParserContext.hpp"
 
 #include "DeclarationParser.hpp"
-#include "ExpressionParser.hpp"
+#include "celestia/syntax/parser/expressions/Expression.hpp"
 #include "NameParser.hpp"
 #include "PatternParser.hpp"
 #include "StatementParser.hpp"
@@ -12,7 +12,7 @@
 #include "celestia/syntax/parser/ParserUtil.hpp"
 #include <vector>
 
-namespace celestia {
+namespace celestia::syntax {
 Parser::Parser(ParseContext &context) : context(context) {
   declaration_parser = std::make_unique<DeclarationParser>(context, *this);
   expression_parser = std::make_unique<ExpressionParser>(context, *this);

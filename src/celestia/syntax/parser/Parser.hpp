@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+namespace celestia::syntax {
+
 class ParseContext;
 
 class DeclarationParser;
@@ -10,7 +12,6 @@ class PatternParser;
 class TypeParser;
 class NameParser;
 
-namespace celestia {
 class Parser {
 
 public:
@@ -47,4 +48,4 @@ private:
   std::unique_ptr<NameParser> name_parser;
 };
 
-} // namespace celestia
+} // namespace celestia::syntax

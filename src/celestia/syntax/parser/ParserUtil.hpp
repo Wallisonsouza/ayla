@@ -5,15 +5,18 @@
 #include "ParserContext.hpp"
 #include "celestia/ast/NodeState.hpp"
 #include "celestia/core/token/TokenKind.hpp"
+#include "celestia/syntax/parser/NameParser.hpp"
 
+namespace celestia::syntax {
 class ParseContext;
+}
 
 namespace ayla::parser {
 
-inline void consume_statement_separators(ParseContext &context) { while (context.tokens().match(TokenKind::NEW_LINE) || context.tokens().match(TokenKind::SEMI_COLON)); }
+inline void consume_statement_separators(celestia::syntax::ParseContext &context) { while (context.tokens().match(TokenKind::NEW_LINE) || context.tokens().match(TokenKind::SEMI_COLON)); }
 
 template <typename ElementType, typename ParseFunc>
-std::vector<ElementType *> parse_generic_list(ParseContext &context, TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
+std::vector<ElementType *> parse_generic_list(celestia::syntax::ParseContext &context, TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
   std::vector<ElementType *> elements;
 
   auto &tokens = context.tokens();

@@ -1,10 +1,11 @@
 #include "TypeParser.hpp"
+#include "NameParser.hpp"
 #include "Parser.hpp"
 #include "ParserContext.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
-#include "NameParser.hpp"
 
-TypeParser::TypeParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
+namespace celestia::syntax {
+TypeParser::TypeParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::TypeNode *TypeParser::parse_type() {
   auto *name = parser.names().parse_name();
@@ -19,3 +20,4 @@ celestia::ast::TypeNode *TypeParser::parse_type() {
 
   return context.get_ast().create_node<celestia::ast::TypeNode>(name, std::move(generic_arguments));
 }
+} // namespace celestia::syntax

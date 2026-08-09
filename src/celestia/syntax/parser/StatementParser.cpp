@@ -1,7 +1,6 @@
 #include "StatementParser.hpp"
 
 #include "DeclarationParser.hpp"
-#include "ExpressionParser.hpp"
 #include "Parser.hpp"
 #include "ParserContext.hpp"
 #include "celestia/ast/NodeState.hpp"
@@ -14,8 +13,9 @@
 
 #include "celestia/core/token/token_stream.hpp"
 #include "celestia/syntax/parser/ParserUtil.hpp"
-
-StatementParser::StatementParser(ParseContext &context, celestia::Parser &parser) : context(context), parser(parser) {}
+#include "celestia/syntax/parser/expressions/Expression.hpp"
+namespace celestia::syntax {
+StatementParser::StatementParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
 celestia::ast::Statement *StatementParser::parse_statement() {
   auto &tokens = context.tokens();
@@ -168,3 +168,5 @@ celestia::ast::Statement *StatementParser::parse_expression_statement() {
 
   return context.get_ast().create_node<celestia::ast::ExpressionStatement>(expr);
 }
+
+} // namespace celestia::syntax
