@@ -6,13 +6,23 @@
 
 namespace core {
 
+enum class ScopeKind {
+  Module,
+  Function,
+  Struct,
+  Block,
+  Capability,
+  Impl,
+};
+
 struct Scope {
 
   Scope *parent = nullptr;
 
   SymbolTable symbols;
+  ScopeKind kind;
 
-  explicit Scope(Scope *p = nullptr) : parent(p) {}
+  explicit Scope(ScopeKind kind, Scope *p = nullptr) : parent(p), kind(kind) {}
 
   SymbolId symbol(std::string_view name) const {
     const Scope *scope = this;

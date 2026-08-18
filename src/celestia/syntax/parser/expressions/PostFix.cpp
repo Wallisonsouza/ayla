@@ -34,7 +34,11 @@ celestia::ast::Expression *ExpressionParser::parse_postfix_expression() {
     case PostfixOperation::IndexAccess: expr = parse_index_access(expr); break;
 
     case PostfixOperation::MemberAccess: expr = parse_member_access(expr); break;
+
+    default: return nullptr;
     }
+
+    
 
     if (!expr) return nullptr;
   }

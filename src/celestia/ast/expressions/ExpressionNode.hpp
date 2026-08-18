@@ -1,13 +1,12 @@
 #pragma once
 
 #include "celestia/ast/Node.hpp"
-#include "celestia/semantic/symbols/SymbolId.hpp"
+#include "celestia/semantic/types/type.hpp"
 
 namespace celestia::ast {
 
 struct Expression : Node {
-
-  SymbolId resolved_symbol_id;
+  const semantic::Type *resolved_type = nullptr;
   explicit Expression(NodeKind k) : Node(k) {}
 };
 

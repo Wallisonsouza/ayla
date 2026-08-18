@@ -3,13 +3,13 @@
 #include "ParserContext.hpp"
 
 #include "DeclarationParser.hpp"
-#include "celestia/syntax/parser/expressions/Expression.hpp"
 #include "NameParser.hpp"
 #include "PatternParser.hpp"
 #include "StatementParser.hpp"
 #include "TypeParser.hpp"
 #include "celestia/ast/declarations/ModuleDeclaration.hpp"
 #include "celestia/syntax/parser/ParserUtil.hpp"
+#include "celestia/syntax/parser/expressions/Expression.hpp"
 #include <vector>
 
 namespace celestia::syntax {
@@ -54,4 +54,4 @@ void Parser::run() {
   context.get_ast().set_root(module);
 }
 
-} // namespace celestia
+} // namespace celestia::syntax

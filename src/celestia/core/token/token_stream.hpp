@@ -19,6 +19,20 @@ public:
     return tok;
   }
 
+  inline bool is_trivia(Token *tok) const noexcept {
+    if (!tok) return false;
+
+    return tok->kind() == TokenKind::NEW_LINE;
+  }
+
+  inline void skip_trivial() noexcept {
+    while (auto *tok = peek()) {
+      if (!is_trivia(tok)) break;
+
+      consume();
+    }
+  }
+
   void traverse(const std::function<void(Token *)> &fn) const {
     for (auto *tok : tokens_) fn(tok);
   }

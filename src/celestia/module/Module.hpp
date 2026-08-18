@@ -5,7 +5,7 @@
 
 class Module {
 public:
-  explicit Module(std::string name) : name_(std::move(name)), scope_(nullptr) {}
+  explicit Module(std::string name) : name_(std::move(name)), scope_(core::ScopeKind::Module,nullptr) {}
 
   std::string_view name() const { return name_; }
 

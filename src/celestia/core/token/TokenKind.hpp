@@ -12,17 +12,23 @@ enum class TokenKind : uint8_t {
   EXTERN,
   MODULE_KEYWORD,
   VALUE_KEYWORD,
+  FOR_KEYWORD,
+  CAP_KEYWORD,
+  IMPL_KEYWORD,
   CONST,
   FUNCTION_KEYWORD,
   IMPORT_KEYWORD,
+  STRUCT_KEYWORD,
   IF_KEYWORD,     // Representa a palavra-chave 'if'.
   ELSE_KEYWORD,   // Representa a palavra-chave 'else'.
   RETURN_KEYWORD, // Representa a palavra-chave 'return'.
   WHILE_KEYWORD,
+  REF_KEYWORD,
   TRUE,
   FALSE,
 
   OPEN_BRACKET,
+
   CLOSE_BRACKET,
   COMMA,        // Representa a vírgula ','.d
   DOUBLE_QUOTE, // Representa uma aspa dupla '"'.

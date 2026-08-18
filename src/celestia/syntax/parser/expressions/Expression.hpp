@@ -1,6 +1,7 @@
 #pragma once
 
 #include "celestia/ast/expressions/ExpressionNode.hpp"
+#include "celestia/ast/names/IdentifierNode.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 
 namespace celestia::syntax {
@@ -29,6 +30,8 @@ private:
 
   ast::Expression *parse_primary_expression();
 
+  ast::Expression *parse_struct_literal(celestia::ast::IdentifierNode *name);
+
   ast::Expression *parse_number_literal();
 
   ast::Expression *parse_string_literal();
@@ -46,6 +49,7 @@ private:
   ast::Expression *parse_call(ast::Expression *);
 
   ast::Expression *parse_identifier_expression();
+  ast::Expression *parse_array_literal();
 
 private:
   ParseContext &context;

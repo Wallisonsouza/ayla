@@ -2,45 +2,92 @@
 #include "celestia/ast/NodeState.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 
+namespace celestia::semantic {
+
 Resolver::Resolver(ResolverContext &ctx) : context(ctx), handlers(this) {
-  handlers.bind<celestia::ast::NumberLiteralNode>(&Resolver::number_literal);
-  handlers.bind<celestia::ast::StringLiteralNode>(&Resolver::string_literal);
-  handlers.bind<celestia::ast::BoolLiteralNode>(&Resolver::boolean_literal);
 
-  handlers.bind<celestia::ast::BinaryExpressionNode>(&Resolver::binary_expression);
-  handlers.bind<celestia::ast::UnaryExpressionNode>(&Resolver::unary_expression);
-  handlers.bind<celestia::ast::AssignmentExpressionNode>(&Resolver::assignment);
-
-  handlers.bind<celestia::ast::CallExpressionNode>(&Resolver::function_call);
-  handlers.bind<celestia::ast::MemberAccessExpressionNode>(&Resolver::member_access);
-  handlers.bind<celestia::ast::IndexAccessExpressionNode>(&Resolver::index_access);
-
-  handlers.bind<celestia::ast::IdentifierExpressionNode>(&Resolver::identifier);
-
-  handlers.bind<celestia::ast::IfStatement>(&Resolver::if_statement);
-  handlers.bind<celestia::ast::WhileStatement>(&Resolver::while_statement);
-  handlers.bind<celestia::ast::BlockStatement>(&Resolver::block);
-  handlers.bind<celestia::ast::ExpressionStatement>(&Resolver::expression_statement);
-  handlers.bind<celestia::ast::ReturnStatement>(&Resolver::return_statement);
-
-  handlers.bind<celestia::ast::VariableDeclaration>(&Resolver::variable_declaration);
-  handlers.bind<celestia::ast::FunctionDeclaration>(&Resolver::function_declaration);
-  handlers.bind<celestia::ast::ModuleDeclaration>(&Resolver::module_declaration);
-  handlers.bind<celestia::ast::ImportDeclaration>(&Resolver::import_declaration);
-
-  handlers.bind<celestia::ast::ArrayLiteralNode>(&Resolver::array_literal);
-  handlers.bind<celestia::ast::ObjectLiteralNode>(&Resolver::object_literal);
-
-  handlers.bind<celestia::ast::TypeNode>(&Resolver::type_node);
+  bind_literals();
+  bind_expressions();
+  bind_statements();
+  bind_declarations();
+  bind_types();
 }
 
-void Resolver::resolve(celestia::ast::Node *node) {
+void Resolver::bind_literals() {
 
-  auto *root = context.unit.ast.get_root();
+  handlers.bind<ast::NumberLiteralNode>(&Resolver::number_literal);
 
-  if (!node || node->flags.has(celestia::ast::NodeFlags::Resolved)) return;
+  handlers.bind<ast::StringLiteralNode>(&Resolver::string_literal);
 
-  node->flags.add(celestia::ast::NodeFlags::Resolved);
+  handlers.bind<ast::BoolLiteralNode>(&Resolver::boolean_literal);
+
+  handlers.bind<ast::ArrayLiteralNode>(&Resolver::array_literal);
+
+  handlers.bind<ast::ObjectLiteralNode>(&Resolver::object_literal);
+}
+
+void Resolver::bind_expressions() {
+
+  handlers.bind<ast::BinaryExpressionNode>(&Resolver::binary_expression);
+
+  handlers.bind<ast::UnaryExpressionNode>(&Resolver::unary_expression);
+
+  handlers.bind<ast::AssignmentExpressionNode>(&Resolver::assignment);
+
+  handlers.bind<ast::CallExpressionNode>(&Resolver::function_call);
+
+  handlers.bind<ast::MemberAccessExpressionNode>(&Resolver::member_access);
+
+  handlers.bind<ast::IndexAccessExpressionNode>(&Resolver::index_access);
+
+  handlers.bind<ast::IdentifierExpressionNode>(&Resolver::identifier);
+}
+
+
+void Resolver::bind_statements() {
+
+  handlers.bind<ast::IfStatement>(&Resolver::if_statement);
+
+  handlers.bind<ast::WhileStatement>(&Resolver::while_statement);
+
+  handlers.bind<ast::BlockStatement>(&Resolver::block_statement);
+
+  handlers.bind<ast::ExpressionStatement>(&Resolver::expression_statement);
+
+  handlers.bind<ast::ReturnStatement>(&Resolver::return_statement);
+}
+
+
+void Resolver::bind_declarations() {
+
+  handlers.bind<ast::VariableDeclaration>(&Resolver::variable_declaration);
+
+  handlers.bind<ast::FunctionDeclaration>(&Resolver::function_declaration);
+
+  handlers.bind<ast::ModuleDeclaration>(&Resolver::module_declaration);
+
+  handlers.bind<ast::ImportDeclaration>(&Resolver::import_declaration);
+
+  handlers.bind<ast::CapabilityDeclaration>(&Resolver::capability_declaration);
+
+  handlers.bind<ast::ImplDeclaration>(&Resolver::impl_declaration);
+
+  handlers.bind<ast::FieldDeclaration>(&Resolver::field_declaration);
+
+  handlers.bind<ast::StructDeclaration>(&Resolver::struct_declaration);
+}
+
+void Resolver::bind_types() { handlers.bind<ast::TypeNode>(&Resolver::type_node); }
+
+void Resolver::resolve(ast::Node *node) {
+
+  if (!node) return;
+
+  if (node->flags.has(ast::NodeFlags::Resolved)) return;
+
+  node->flags.add(ast::NodeFlags::Resolved);
 
   handlers.dispatch(node);
 }
+
+} // namespace celestia::semantic

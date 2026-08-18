@@ -1,5 +1,5 @@
 #include "celestia/semantic/resolver/Resolver.hpp"
-
+namespace celestia::semantic {
 void Resolver::type_node(celestia::ast::TypeNode *node) {
   if (!node) return;
 
@@ -13,4 +13,5 @@ void Resolver::type_node(celestia::ast::TypeNode *node) {
   // node->symbol_id = sym_id;
 
   // for (auto *generic : node->generics) { type_node(generic); }
+}
 }

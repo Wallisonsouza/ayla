@@ -15,12 +15,17 @@ void register_tokens(celestia::LanguageDefinition &def) {
   def.descriptors.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::STRUCT_KEYWORD, "struct", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::STATIC, "static", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::MUT, "mut", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::VALUE_KEYWORD, "val", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::PUBLIC, "public", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
 
+  def.descriptors.add(TokenKind::FOR_KEYWORD, "for", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::CAP_KEYWORD, "cap", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::IMPL_KEYWORD, "impl", TokenGroup::Keyword);
+   def.descriptors.add(TokenKind::REF_KEYWORD, "ref", TokenGroup::Keyword);
   // punctuaction
   def.descriptors.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
   def.descriptors.add(TokenKind::COLON, ":", TokenGroup::Punctuation);
@@ -41,4 +46,4 @@ void register_tokens(celestia::LanguageDefinition &def) {
   def.descriptors.add(TokenKind::CHAR_LITERAL, TokenGroup::Literal);
   def.descriptors.add(TokenKind::NULL_LITERAL, TokenGroup::Literal);
 }
-}
+} // namespace ayla::language

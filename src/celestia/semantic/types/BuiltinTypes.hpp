@@ -1,15 +1,13 @@
 #include "celestia/semantic/types/type.hpp"
-namespace semantic {
 
-struct BuiltinTypes {
+namespace celestia::semantic {
 
-  celestia::semantic::Type *Unknown;
-  celestia::semantic::Type *Number;
-  celestia::semantic::Type *String;
-  celestia::semantic::Type *Boolean;
-  celestia::semantic::Type *Char;
-  celestia::semantic::Type *Null;
-  celestia::semantic::Type *Void;
-};
+inline const PrimitiveTypeInfo NumberType{PrimitiveType::Number};
 
-} // namespace semantic
+inline const PrimitiveTypeInfo StringType{PrimitiveType::String};
+
+inline const PrimitiveTypeInfo BooleanType{PrimitiveType::Boolean};
+
+inline const PrimitiveTypeInfo VoidType{PrimitiveType::Void};
+
+} // namespace celestia::semantic

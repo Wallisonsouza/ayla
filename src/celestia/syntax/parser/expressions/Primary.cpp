@@ -2,10 +2,11 @@
 #include "celestia/ast/expressions/ExpressionNode.hpp"
 #include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
 #include "celestia/ast/expressions/LiteralExpressionNode.hpp"
-#include "celestia/syntax/parser/expressions/Expression.hpp"
+#include "celestia/ast/types/NamedType.hpp"
 #include "celestia/syntax/parser/NameParser.hpp"
 #include "celestia/syntax/parser/Parser.hpp"
 #include "celestia/syntax/parser/ParserContext.hpp"
+#include "celestia/syntax/parser/expressions/Expression.hpp"
 namespace celestia::syntax {
 celestia::ast::Expression *ExpressionParser::parse_number_literal() {
   auto &tokens = context.tokens();
@@ -46,6 +47,8 @@ celestia::ast::Expression *ExpressionParser::parse_identifier_expression() {
 
   if (!name) return nullptr;
 
+  if (context.tokens().check(TokenKind::OPEN_BRACE)) { return parse_struct_literal(name); }
+
   return context.get_ast().create_node<celestia::ast::IdentifierExpressionNode>(name);
 }
 
@@ -64,11 +67,13 @@ celestia::ast::Expression *ExpressionParser::parse_grouped_expression() {
 }
 
 celestia::ast::Expression *ExpressionParser::parse_primary_expression() {
+
   auto *token = context.tokens().peek();
 
   if (!token) return nullptr;
 
   switch (token->desc->kind) {
+
   case TokenKind::NUMBER_LITERAL: return parse_number_literal();
 
   case TokenKind::STRING_LITERAL: return parse_string_literal();
@@ -80,6 +85,102 @@ celestia::ast::Expression *ExpressionParser::parse_primary_expression() {
 
   case TokenKind::OPEN_PAREN: return parse_grouped_expression();
 
+  case TokenKind::OPEN_BRACKET: return parse_array_literal();
+
   default: return nullptr;
   }
-}}
+}
+celestia::ast::Expression *ExpressionParser::parse_struct_literal(celestia::ast::IdentifierNode *name) {
+
+  auto &tokens = context.tokens();
+
+  if (!tokens.match(TokenKind::OPEN_BRACE)) return nullptr;
+
+  std::vector<celestia::ast::StructFieldInitializerNode *> fields;
+
+  while (!tokens.check(TokenKind::CLOSE_BRACE)) {
+
+    tokens.skip_trivial();
+
+    auto *field_name = parser.names().parse_name();
+
+    if (!field_name) return nullptr;
+
+    if (!tokens.match(TokenKind::COLON)) return nullptr;
+
+    auto *value = parse_expression();
+
+    if (!value) return nullptr;
+
+    fields.push_back(context.get_ast().create_node<celestia::ast::StructFieldInitializerNode>(field_name, value));
+
+    tokens.skip_trivial();
+
+    // vírgula opcional
+    if (tokens.match(TokenKind::COMMA)) {
+      tokens.skip_trivial();
+
+      // trailing comma
+      if (tokens.check(TokenKind::CLOSE_BRACE)) break;
+
+      continue;
+    }
+
+    // sem vírgula, o próximo campo deve começar
+    if (tokens.check(TokenKind::IDENTIFIER)) continue;
+
+    break;
+  }
+
+  if (!tokens.match(TokenKind::CLOSE_BRACE)) return nullptr;
+
+  auto *type = context.get_ast().create_node<celestia::ast::NamedType>(name);
+
+  return context.get_ast().create_node<celestia::ast::StructLiteralNode>(type, std::move(fields));
+}
+
+celestia::ast::Expression *ExpressionParser::parse_array_literal() {
+
+  auto &tokens = context.tokens();
+
+  if (!tokens.match(TokenKind::OPEN_BRACKET)) return nullptr;
+
+  std::vector<celestia::ast::Expression *> elements;
+
+  tokens.skip_trivial();
+
+  // []
+  if (tokens.match(TokenKind::CLOSE_BRACKET)) { return context.get_ast().create_node<celestia::ast::ArrayLiteralNode>(std::move(elements)); }
+
+  while (!tokens.check(TokenKind::CLOSE_BRACKET)) {
+
+    tokens.skip_trivial();
+
+    auto *element = parse_expression();
+
+    if (!element) return nullptr;
+
+    elements.push_back(element);
+
+    tokens.skip_trivial();
+
+    if (tokens.match(TokenKind::COMMA)) {
+
+      tokens.skip_trivial();
+
+      // trailing comma:
+      // [1, 2, 3,]
+      if (tokens.check(TokenKind::CLOSE_BRACKET)) break;
+
+      continue;
+    }
+
+    if (!tokens.check(TokenKind::CLOSE_BRACKET)) return nullptr;
+  }
+
+  if (!tokens.match(TokenKind::CLOSE_BRACKET)) return nullptr;
+
+  return context.get_ast().create_node<celestia::ast::ArrayLiteralNode>(std::move(elements));
+}
+
+} // namespace celestia::syntax

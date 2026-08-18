@@ -3,22 +3,33 @@
 #include <functional>
 #include <unordered_map>
 
+#include "celestia/ast/NodeKindName.hpp"
 #include "celestia/core/visitor/Stage.hpp"
 
 #include "celestia/ast/Node.hpp"
-#include "celestia/core/visitor/NodeTraits.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
+#include "celestia/core/visitor/NodeTraits.hpp"
 
 class AstStage : public Stage {
 
 public:
-  void run(CompilerEnvironment &env, CompilationUnit &unit) override { dispatch(unit.ast.get_root()); }
+  void run(CompilerEnvironment &env, CompilationUnit &unit) override {
+    if (auto *root = unit.ast.get_root()) { dispatch(root); }
+  }
 
 protected:
   void dispatch(const celestia::ast::Node *node) {
+
+    if (!node) { throw std::runtime_error("Dispatcher: node nulo"); }
+
     auto it = handlers.find(node->kind);
 
-    if (it != handlers.end()) it->second(node);
+
+    auto view = celestia::ast::node_kind_name(node->kind);
+
+    if (it == handlers.end()) { throw std::runtime_error("Dispatcher: nenhum handler para NodeKind " + std::string(view)); }
+
+    it->second(node);
   }
 
   template <typename Node, typename Owner> void bind(void (Owner::*method)(const Node *)) {

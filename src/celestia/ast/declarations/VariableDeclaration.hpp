@@ -12,7 +12,9 @@ struct VariableDeclaration : Declaration {
   Expression *initializer;
   DeclarationSpecifiers specifiers;
 
-  VariableDeclaration(PatternNode *p, Expression *init, DeclarationSpecifiers specifiers = {}) : Declaration(NodeKind::VariableDeclaration), pattern(p), initializer(init), specifiers(specifiers) {}
+  VariableDeclaration(PatternNode *pattern, Expression *initializer, DeclarationSpecifiers specifiers = {})
+      : Declaration(NodeKind::VariableDeclaration), pattern(pattern), initializer(initializer), specifiers(specifiers) {}
 };
+;
 
 } // namespace celestia::ast

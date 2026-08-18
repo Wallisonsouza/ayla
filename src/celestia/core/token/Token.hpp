@@ -10,4 +10,12 @@ struct Token {
   constexpr Token() = default;
 
   constexpr Token(const celestia::TokenDescriptor *desc, SourceSlice slice) : desc(desc), slice(slice) {}
+
+  constexpr bool is(TokenKind kind) const { return desc && desc->kind == kind; }
+
+  constexpr TokenKind kind() const {
+    if (!desc) return TokenKind::INVALID;
+
+    return desc->kind;
+  }
 };

@@ -28,6 +28,7 @@ public:
   void diagnostics() {
     for (auto &unit : units.all()) {
 
+
       for (auto &diag : unit->diagnostics.all()) { diagnostic::print_diagnostic(diag, unit->source); }
     }
   }

@@ -31,6 +31,21 @@ void AstDumper::dump_null_literal(const ast::NullLiteralNode *node) {
   (void)g;
 }
 
+void AstDumper::dump_struct_field(const ast::StructFieldInitializerNode *node) {
+
+  auto g = context.object(ast::node_kind_name(node->kind));
+
+  g.field("Name", node->name);
+  g.field("Value", node->value);
+}
+
+void AstDumper::dump_struct_literal(const ast::StructLiteralNode *node) {
+
+  auto g = context.object(ast::node_kind_name(node->kind));
+
+  g.list("Fields", node->fields);
+  
+}
 void AstDumper::dump_array_literal(const ast::ArrayLiteralNode *node) {
   auto g = context.object("ArrayLiteral");
 

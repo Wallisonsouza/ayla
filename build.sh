@@ -4,7 +4,7 @@ set -e
 export CC=clang
 export CXX=clang++
 
-# rm -rf build
+#  rm -rf build
 
  mkdir -p build
 cd build
@@ -27,8 +27,7 @@ ninja -j $THREADS
 # Volta para a raiz do projeto
 cd ..
 
-# Cria/atualiza link do compile_commands.json para o clangd
-# ln -sf build/compile_commands.json compile_commands.json
+ln -sf build/compile_commands.json compile_commands.json
 
 clear
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "celestia/ast/TypeNode.hpp"
+#include "celestia/ast/types/TypeNode.hpp"
+#include "celestia/ast/names/IdentifierNode.hpp"
 #include "celestia/semantic/symbols/SymbolId.hpp"
 #include "PatternNode.hpp"
 
@@ -11,7 +12,7 @@ struct IdentifierPatternNode : PatternNode {
   SymbolId symbol_id;
   TypeNode *type_annotation;
 
-  IdentifierPatternNode(IdentifierNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::IdentifierPattern), name(n), type_annotation(type) {}
+  IdentifierPatternNode(IdentifierNode *n, TypeNode *type = nullptr) : PatternNode(NodeKind::NamePattern), name(n), type_annotation(type) {}
 };
 
 } // namespace celestia::ast

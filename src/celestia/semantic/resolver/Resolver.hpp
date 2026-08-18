@@ -24,7 +24,7 @@
 #include "celestia/ast/statements/IfStatementNode.hpp"
 #include "celestia/ast/statements/ReturnStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
-
+namespace celestia::semantic {
 struct ResolverContext {
   CompilerEnvironment &compiler;
   CompilationUnit &unit;
@@ -48,7 +48,13 @@ private:
   HandlerRegistry handlers;
   ResolverContext context;
 
-  void pattern(celestia::ast::PatternNode *pat);
+  void bind_literals();
+  void bind_expressions();
+  void bind_statements();
+  void bind_declarations();
+  void bind_types();
+
+  void pattern(celestia::ast::PatternNode *pat, Visibility visibilit);
 
   void function_call(celestia::ast::CallExpressionNode *node);
   void assignment(celestia::ast::AssignmentExpressionNode *node);
@@ -67,18 +73,24 @@ private:
   void binary_expression(celestia::ast::BinaryExpressionNode *node);
   void unary_expression(celestia::ast::UnaryExpressionNode *node);
   void if_statement(celestia::ast::IfStatement *node);
+
   void while_statement(celestia::ast::WhileStatement *node);
 
   void variable_declaration(celestia::ast::VariableDeclaration *node);
+  void struct_declaration(celestia::ast::StructDeclaration *node);
+  void field_declaration(celestia::ast::FieldDeclaration *node);
   void function_declaration(celestia::ast::FunctionDeclaration *node);
   void module_declaration(celestia::ast::ModuleDeclaration *node);
-
-  void block(celestia::ast::BlockStatement *node);
+  void capability_declaration(celestia::ast::CapabilityDeclaration *node);
+  void impl_declaration(celestia::ast::ImplDeclaration *node);
+  void block_statement(celestia::ast::BlockStatement *node);
 
   void return_statement(celestia::ast::ReturnStatement *node);
 
   void import_declaration(celestia::ast::ImportDeclaration *node);
   void expression_statement(celestia::ast::ExpressionStatement *node);
-
-  void identifier_pattern(celestia::ast::IdentifierPatternNode *pattern);
+  bool can_have_visibility(core::ScopeKind kind, Visibility visibility);
+  SymbolId declare_symbol(const std::string &name, SymbolKind kind, Visibility visibility, celestia::ast::Node *node);
+  void identifier_pattern(celestia::ast::IdentifierPatternNode *pattern, Visibility visibilit);
 };
+} // namespace celestia::semantic

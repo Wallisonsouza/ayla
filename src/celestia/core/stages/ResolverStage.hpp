@@ -9,9 +9,9 @@ class ResolverStage : public AstStage {
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
 
-    ResolverContext ctx = ResolverContext(env, unit);
+    celestia::semantic::ResolverContext ctx = celestia::semantic::ResolverContext(env, unit);
 
-    Resolver resolver = Resolver(ctx);
+    celestia::semantic::Resolver resolver = celestia::semantic::Resolver(ctx);
 
     resolver.resolve(unit.ast.get_root());
   }

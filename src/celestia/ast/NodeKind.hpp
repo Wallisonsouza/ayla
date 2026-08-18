@@ -9,13 +9,15 @@ enum class NodeKind {
   StringLiteral,
   BooleanLiteral,
   ObjectLiteral,
+  StructLiteral,
+  StructFieldInitializer,
   ObjectField,
   ObjectFieldList,
   CharLiteral,
   NullLiteral,
   Name,
   Interface,
-  IdentifierPattern,
+  NamePattern,
   QualifiedName,
 
   // === Statements ===
@@ -28,12 +30,16 @@ enum class NodeKind {
   ReturnStatement,
   ExpressionStatement,
   ImportDeclaration,
+  StructDeclaration,
+  FieldDeclaration,
 
   // === Declarations ===
   VariableDeclaration,
   FunctionDeclaration,
   OperatorDeclaration,
   ModuleDeclaration,
+  CapabilityDeclaration,
+  ImplementationDeclaration,
 
   Call,
   FunctionParameter,
@@ -51,8 +57,14 @@ enum class NodeKind {
 
   // === Types ===
   Type,
+  ArrayType,
+  NamedType,
+  ReferenceType,
   TypeReference,
   GenericType,
+  GenericIdentifier,
+  GenericParameter,
+
   Assignment,
   Pattern,
   Error,

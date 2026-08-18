@@ -1,6 +1,6 @@
-#include "celestia/core/visitor/Stage.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
+#include "celestia/core/visitor/Stage.hpp"
 
 class Pipeline {
 public:
@@ -15,7 +15,7 @@ public:
   }
 
   void run(CompilerEnvironment &env, CompilationUnit &unit) {
-    for (auto &stage : stages) stage->run(env,unit);
+    for (auto &stage : stages) stage->run(env, unit);
   }
 
 private:

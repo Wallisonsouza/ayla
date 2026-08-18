@@ -1,9 +1,6 @@
 #include "ayla/language/AylaLanguage.hpp"
 #include "celestia/core/stages/ResolverStage.hpp"
 #include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
 #include "celestia/compiler/Compiler.hpp"
 
@@ -12,7 +9,7 @@
 #include "celestia/core/stages/LoweringStage.hpp"
 #include "celestia/core/stages/ParserStage.hpp"
 #include "celestia/core/stages/TokenDumperStage.hpp"
-
+#include "celestia/core/stages/Transpiler.hpp"
 #include "src/CommandLine.hpp"
 
 int main(int argc, char *argv[]) {
@@ -37,11 +34,11 @@ int main(int argc, char *argv[]) {
     if (has_flag(cmd.dumps, DumpFlags::Tokens)) { compiler.pipeline.add_stage<TokenDumperStage>(); };
     if (has_flag(cmd.dumps, DumpFlags::Ast)) { compiler.pipeline.add_stage<AstDumperStage>(); };
 
+    compiler.pipeline.add_stage<CTranspilePass>();
+
     compiler.add_script(*cmd.input);
     compiler.compile();
 
-    compiler.diagnostics();
     // session.show_diagnostics();
   }
 }
-

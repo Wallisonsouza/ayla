@@ -8,8 +8,8 @@ class ScopeManager {
   std::vector<core::Scope *> scopes;
 
 public:
-  core::Scope *create_scope(core::Scope *parent) {
-    auto *scope = arena.alloc<core::Scope>(parent);
+  core::Scope *create_scope(core::ScopeKind kind, core::Scope *parent) {
+    auto *scope = arena.alloc<core::Scope>(kind, parent);
     scopes.push_back(scope);
     return scope;
   }

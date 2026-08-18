@@ -2,7 +2,6 @@
 #include "celestia/core/visitor/Stage.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
-#include <iostream>
 
 class LoweringStage : public Stage {
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {

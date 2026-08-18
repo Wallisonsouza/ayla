@@ -3,10 +3,13 @@
 #include "celestia/ast/NodeKind.hpp"
 
 // Declarations
+#include "celestia/ast/declarations/CapabilityDeclaration.hpp"
 #include "celestia/ast/declarations/FunctionDeclaration.hpp"
-#include "celestia/ast/declarations/ModuleDeclaration.hpp"
-#include "celestia/ast/declarations/VariableDeclaration.hpp"
+#include "celestia/ast/declarations/ImplementationDeclaration.hpp"
 #include "celestia/ast/declarations/ImportDeclaration.hpp"
+#include "celestia/ast/declarations/ModuleDeclaration.hpp"
+#include "celestia/ast/declarations/StructDeclaration.hpp"
+#include "celestia/ast/declarations/VariableDeclaration.hpp"
 // Expressions
 #include "celestia/ast/expressions/AssignmentExpression.hpp"
 #include "celestia/ast/expressions/BinaryExpressionNode.hpp"
@@ -27,11 +30,15 @@
 #include "celestia/ast/names/QualifiedNameNode.hpp"
 
 // Types
-#include "celestia/ast/TypeNode.hpp"
+#include "celestia/ast/types/ReferenceType.hpp"
+#include "celestia/ast/types/TypeNode.hpp"
 
 // Patterns
-#include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/patterns/IdentifierPatternNode.hpp"
+#include "celestia/ast/patterns/PatternNode.hpp"
+#include "celestia/ast/types/Array.hpp"
+#include "celestia/ast/types/GenericType.hpp"
+#include "celestia/ast/types/NamedType.hpp"
 
 namespace celestia::ast {
 
@@ -40,6 +47,36 @@ template <typename T> struct NodeTraits;
 // =====================
 // Declarations
 // =====================
+
+template <> struct NodeTraits<ReferenceType> {
+  static constexpr NodeKind kind = NodeKind::ReferenceType;
+};
+template <> struct NodeTraits<GenericType> {
+  static constexpr NodeKind kind = NodeKind::GenericType;
+};
+
+template <> struct NodeTraits<CapabilityDeclaration> {
+  static constexpr NodeKind kind = NodeKind::CapabilityDeclaration;
+};
+template <> struct NodeTraits<ImplDeclaration> {
+  static constexpr NodeKind kind = NodeKind::ImplementationDeclaration;
+};
+
+template <> struct NodeTraits<ArrayType> {
+  static constexpr NodeKind kind = NodeKind::ArrayType;
+};
+
+template <> struct NodeTraits<NamedType> {
+  static constexpr NodeKind kind = NodeKind::NamedType;
+};
+
+template <> struct NodeTraits<StructDeclaration> {
+  static constexpr NodeKind kind = NodeKind::StructDeclaration;
+};
+
+template <> struct NodeTraits<FieldDeclaration> {
+  static constexpr NodeKind kind = NodeKind::FieldDeclaration;
+};
 
 template <> struct NodeTraits<FunctionDeclaration> {
   static constexpr NodeKind kind = NodeKind::FunctionDeclaration;
@@ -103,6 +140,14 @@ template <> struct NodeTraits<BoolLiteralNode> {
 
 template <> struct NodeTraits<NullLiteralNode> {
   static constexpr NodeKind kind = NodeKind::NullLiteral;
+};
+
+template <> struct NodeTraits<StructFieldInitializerNode> {
+  static constexpr NodeKind kind = NodeKind::StructFieldInitializer;
+};
+
+template <> struct NodeTraits<StructLiteralNode> {
+  static constexpr NodeKind kind = NodeKind::StructLiteral;
 };
 
 template <> struct NodeTraits<ArrayLiteralNode> {
@@ -169,9 +214,8 @@ template <> struct NodeTraits<PatternNode> {
   static constexpr NodeKind kind = NodeKind::Pattern;
 };
 
-template<>
-struct NodeTraits<IdentifierPatternNode> {
-    static constexpr NodeKind kind = NodeKind::IdentifierPattern;
+template <> struct NodeTraits<IdentifierPatternNode> {
+  static constexpr NodeKind kind = NodeKind::NamePattern;
 };
 
 } // namespace celestia::ast

@@ -1,15 +1,11 @@
-module std.io 
+Node: struct {
+    test: [int]
+ 
+}
 
-extern fu print(text: String) -> Void
+main: () -> Void {
+   instance: Node = Node {
+    test: [10, 20, 30, 40, 50]
+}
 
-val pi = 3.14
-
-extern fu log(text: String) -> Void
-
-extern fu error(text: String) -> Void
-
-extern fu warn(text: String) -> Void
-
-fu abacate () {
-    val pi = 10
 }

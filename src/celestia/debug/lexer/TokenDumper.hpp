@@ -16,7 +16,7 @@ public:
 
   std::string dump(const core::token::TokenStream &tokens, const core::source::SourceBuffer &source);
 
-private:
+
   static constexpr const char *token_group_to_str(TokenGroup group);
 
   static constexpr const char *token_kind_to_str(TokenKind kind);
