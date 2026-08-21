@@ -1,0 +1,157 @@
+
+// Capability genérica
+Comparable<T>: cap {
+    compare: (T, T) -> int
+}
+
+// Capability sem genéricos
+Printable: cap {
+    print: () -> void
+}
+
+// Enum com valores associados
+Result<T, E>: enum {
+    ok(T)
+    error(E)
+}
+
+// Enum simples
+Option<T>: enum {
+    some(T)
+    none
+}
+
+// Struct básica
+Node: struct {
+    id: int
+}
+
+// Composição de struct
+Expression: struct {
+    Node
+}
+
+// Composição em cadeia
+Literal: struct {
+    Expression
+    value: int
+}
+
+// Struct com vários campos
+User: struct {
+    id: int
+    name: string
+    age: int
+}
+
+// Implementação de uma capability
+int: impl Comparable<int> {
+    compare: (int, int) -> int (a, b) {
+        if a < b {
+            -1
+        } else if a > b {
+            1
+        } else {
+            0
+        }
+    }
+}
+
+// Função comum
+add: (int, int) -> int (a, b) {
+    a + b
+}
+
+// Função que cria um struct
+create_user: (int, string, int) -> User (id, name, age) {
+    User {
+        id = id
+        name = name
+        age = age
+    }
+}
+
+// Array dinâmico
+sum: (array<int>) -> int (values) {
+    result: int = 0
+
+    for value in values {
+        result = result + value
+    }
+
+    result
+}
+
+// Função retornando um enum
+find_user: (array<User>, int) -> Option<User> (users, id) {
+    for user in users {
+        if user.id == id {
+            Option.some(user)
+        }
+    }
+
+    Option.none
+}
+
+// Resultado de operação
+divide: (int, int) -> Result<int, string> (a, b) {
+    if b == 0 {
+        Result.error("division by zero")
+    }
+
+    Result.ok(a / b)
+}
+
+// Função sem argumentos
+create_default_user: () -> User {
+    User {
+        id = 0
+        name = "Unknown"
+        age = 0
+    }
+}
+
+// Valor: atribuição copia o valor
+copy_user: User = user
+
+// Referência: não copia o valor
+reference_user: ref<User> = user
+
+// Array por valor: copia o array
+numbers: array<int> = [10, 20, 30]
+numbers_copy: array<int> = numbers
+
+// Array por referência: não copia o array
+numbers_ref: ref<array<int>> = numbers
+
+// Função como valor
+main: () -> void {
+    user: User = create_user(1, "Wallison", 23)
+
+    copy: User = user
+    reference: ref<User> = user
+
+    numbers: array<int> = [10, 20, 30, 40]
+
+    numbers_copy: array<int> = numbers
+    numbers_ref: ref<array<int>> = numbers
+
+    total: int = sum(numbers)
+
+    users: array<User> = [user]
+
+    found: Option<User> = find_user(users, 1)
+
+    result: Result<int, string> = divide(total, 10)
+
+    operation: (int, int) -> int = add
+
+    value: int = operation(10, 20)
+
+    default_user: User = create_default_user()
+}
+
+
+add: (a: int, b: int) -> int {
+    a + b
+}

@@ -19,15 +19,21 @@ void CGenerator::generate_string_literal(const ast::StringLiteralNode *literal) 
 }
 
 void CGenerator::generate_array_literal(const ast::ArrayLiteralNode *literal) {
-
   if (!literal) return;
 
-  out << "{";
+  const size_t size = literal->elements.size();
+
+
+  if (size == 0) {
+    out << "ayla_array_make(sizeof(int))";
+    return;
+  }
+
+  out << "ayla_array_from((int[]){";
 
   bool first = true;
 
   for (auto *element : literal->elements) {
-
     if (!element) continue;
 
     if (!first) out << ", ";
@@ -37,7 +43,9 @@ void CGenerator::generate_array_literal(const ast::ArrayLiteralNode *literal) {
     generate_expression(element);
   }
 
-  out << "}";
+  out << "}, ";
+  out << size;
+  out << ", sizeof(int))";
 }
 
 void CGenerator::generate_expression(const ast::Expression *expr) {

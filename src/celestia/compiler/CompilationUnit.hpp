@@ -6,7 +6,7 @@
 #include "celestia/core/source/Source.hpp"
 #include "celestia/core/token/token_stream.hpp"
 #include "celestia/diagnostic/DiagnosticContext.hpp"
-#include "celestia/semantic/scope/scope_manager.hpp"
+#include "celestia/semantic/scope/ScopeManager.hpp"
 
 struct CompilationUnit {
 
@@ -15,6 +15,8 @@ struct CompilationUnit {
   Ast ast;
 
   ScopeManager scopes;
+
+  core::memory::Arena types;
 
   diagnostic::DiagnosticContext diagnostics;
 

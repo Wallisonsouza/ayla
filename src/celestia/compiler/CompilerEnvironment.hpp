@@ -1,10 +1,9 @@
 #pragma once
 
-
 #include "celestia/language/LanguageDefinition.hpp"
 #include "celestia/module/ModuleManager.hpp"
 
-#include "celestia/semantic/symbols/SymbolManager.hpp"
+#include "celestia/semantic/symbol/SymbolManager.hpp"
 
 #include "celestia/core/memory/Arena.hpp"
 

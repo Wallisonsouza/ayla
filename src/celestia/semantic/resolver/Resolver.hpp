@@ -1,5 +1,6 @@
 #pragma once
 
+#include "celestia/ast/AstDispacher.hpp"
 #include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
@@ -7,7 +8,6 @@
 #include "celestia/semantic/scope/Scope.hpp"
 
 #include "ContextStack.hpp"
-#include "Handler.hpp"
 #include "celestia/ast/declarations/FunctionDeclaration.hpp"
 #include "celestia/ast/declarations/ImportDeclaration.hpp"
 #include "celestia/ast/declarations/ModuleDeclaration.hpp"
@@ -45,7 +45,7 @@ public:
   void resolve(celestia::ast::Node *node);
 
 private:
-  HandlerRegistry handlers;
+  AstDispatcher dispatcher;
   ResolverContext context;
 
   void bind_literals();
@@ -61,9 +61,9 @@ private:
 
   void array_literal(celestia::ast::ArrayLiteralNode *node);
   void object_literal(celestia::ast::ObjectLiteralNode *node);
-  void number_literal(celestia::ast::NumberLiteralNode *node);
-  void string_literal(celestia::ast::StringLiteralNode *node);
-  void boolean_literal(celestia::ast::BoolLiteralNode *node);
+  // void number_literal(celestia::ast::NumberLiteralNode *node);
+  // void string_literal(celestia::ast::StringLiteralNode *node);
+  // void boolean_literal(celestia::ast::BoolLiteralNode *node);
   void type_node(celestia::ast::TypeNode *node);
 
   void index_access(celestia::ast::IndexAccessExpressionNode *node);

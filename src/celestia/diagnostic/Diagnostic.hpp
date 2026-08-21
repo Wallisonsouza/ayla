@@ -6,7 +6,7 @@
 #include "celestia/diagnostic/Label.hpp"
 #include "celestia/diagnostic/Severity.hpp"
 
-#include "celestia/semantic/symbols/Symbol.hpp"
+#include "celestia/semantic/symbol/Symbol.hpp"
 #include "celestia/semantic/types/type.hpp"
 
 #include <string>

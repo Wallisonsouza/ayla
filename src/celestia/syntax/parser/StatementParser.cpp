@@ -3,7 +3,6 @@
 #include "DeclarationParser.hpp"
 #include "Parser.hpp"
 #include "ParserContext.hpp"
-#include "celestia/ast/NodeState.hpp"
 #include "celestia/ast/statements/ExpressionStatementNode.hpp"
 #include "celestia/ast/statements/IfStatementNode.hpp"
 #include "celestia/ast/statements/WhileStatementNode.hpp"
@@ -89,7 +88,7 @@ celestia::ast::Statement *StatementParser::parse_while_statement() {
 
   auto *condition = parser.expressions().parse_expression();
 
-  if (!condition || condition->flags.has(celestia::ast::NodeFlags::HasError)) {
+  if (!condition) {
     // context.//report_error(
     //     DiagnosticCode::ConditionMissing,
     //     "expected condition after while"
@@ -109,7 +108,7 @@ celestia::ast::Statement *StatementParser::parse_while_statement() {
 
   auto *block = parse_block_statement();
 
-  if (!block || block->flags.has(celestia::ast::NodeFlags::HasError)) {
+  if (!block ) {
     // context.//report_error(
     //     DiagnosticCode::BlockError,
     //     "error in while block"
@@ -128,7 +127,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
 
   auto *condition = parser.expressions().parse_expression();
 
-  if (!condition || condition->flags.has(celestia::ast::NodeFlags::HasError)) {
+  if (!condition ) {
     // context.//report_error(...)
     return nullptr;
   }
@@ -140,7 +139,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
 
   auto *then_block = parse_block_statement();
 
-  if (!then_block || then_block->flags.has(celestia::ast::NodeFlags::HasError)) {
+  if (!then_block ) {
     // erro
     return nullptr;
   }
@@ -155,7 +154,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
       else_block = parse_block_statement();
     }
 
-    if (else_block && else_block->flags.has(celestia::ast::NodeFlags::HasError)) { return nullptr; }
+    if (else_block) { return nullptr; }
   }
 
   return context.get_ast().create_node<celestia::ast::IfStatement>(condition, then_block, else_block);

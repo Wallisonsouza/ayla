@@ -1,7 +1,7 @@
 #pragma once
 #include "Declaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
-#include "celestia/semantic/symbols/SymbolId.hpp"
+#include "celestia/semantic/symbol/SymbolId.hpp"
 
 namespace celestia::ast {
 

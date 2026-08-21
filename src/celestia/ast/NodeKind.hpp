@@ -64,6 +64,7 @@ enum class NodeKind {
   GenericType,
   GenericIdentifier,
   GenericParameter,
+  FunctionType,
 
   Assignment,
   Pattern,

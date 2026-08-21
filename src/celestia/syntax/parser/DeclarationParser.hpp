@@ -22,14 +22,14 @@ public:
   celestia::ast::Declaration *parse_variable_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers);
 
   ast::FunctionDeclaration *parse_function_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers, bool require_body);
-  ast::Declaration *parser_capability_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers);
+  ast::Declaration *parse_capability_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers);
   celestia::ast::Declaration *parse_impl_declaration(celestia::ast::NamedType *target, DeclarationSpecifiers specifiers);
   ast::ModuleDeclaration *parse_module_declaration();
 
   ast::Declaration *parse_declaration();
 
   ast::Declaration *parse_import_declaration();
-  ast::Declaration *parser_struct_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers);
+  ast::Declaration *parse_struct_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers);
   ast::Declaration *named(DeclarationSpecifiers specifiers);
 
   ast::FieldDeclaration *_field();

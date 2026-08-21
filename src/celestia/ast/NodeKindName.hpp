@@ -76,6 +76,7 @@ constexpr std::string_view node_kind_name(NodeKind kind) {
   case NodeKind::Error: return "Error";
   case NodeKind::ParameterList: return "ParameterList";
   case NodeKind::ArrayLiteral: return "ArrayLiteral";
+  case NodeKind::FunctionType: return "FunctionType";
   }
 
   return "Unknown";

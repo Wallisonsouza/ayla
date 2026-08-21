@@ -34,78 +34,58 @@
 #include "celestia/ast/types/ReferenceType.hpp"
 
 #include "celestia/core/visitor/AstStage.hpp"
+#include "celestia/semantic/resolver/Resolver.hpp"
+
+
 
 namespace celestia::semantic {
 
-class TypeChecker : public AstStage {
-
+class TypeChecker {
 public:
+  explicit TypeChecker(ResolverContext &context);
 
-  // ========================================================
-  // Expressions
-
-  void number_literal(ast::NumberLiteralNode *node);
-
-  void string_literal(ast::StringLiteralNode *node);
-
-  void boolean_literal(ast::BoolLiteralNode *node);
-
-  void null_literal(ast::NullLiteralNode *node);
-
-  void array_literal(ast::ArrayLiteralNode *node);
-
-  void object_literal(ast::ObjectLiteralNode *node);
-
-  void struct_literal(ast::StructLiteralNode *node);
-
-  void identifier(ast::IdentifierExpressionNode *node);
-
-  void binary_expression(ast::BinaryExpressionNode *node);
-
-  void unary_expression(ast::UnaryExpressionNode *node);
-
-  void call_expression(ast::CallExpressionNode *node);
-
-  void member_access(ast::MemberAccessExpressionNode *node);
-
-  void index_access(ast::IndexAccessExpressionNode *node);
-
-  // ========================================================
-  // Declarations
-  // ========================================================
-
-  void variable_declaration(ast::VariableDeclaration *node);
-
-  void function_declaration(ast::FunctionDeclaration *node);
-
-  void struct_declaration(ast::StructDeclaration *node);
-
-  // ========================================================
-  // Types
-  // ========================================================
-
-  void named_type(ast::NamedType *node);
-
-  void array_type(ast::ArrayType *node);
-
-  void reference_type(ast::ReferenceType *node);
-
-  void generic_type(ast::GenericType *node);
+  void check(ast::Node *node);
 
 private:
+  ResolverContext &context;
+  AstDispatcher dispatcher;
 
-  CompilationUnit &unit;
-  // ========================================================
-  // Type helpers
-  // ========================================================
+  void bind_literals();
+  void bind_expressions();
+  void bind_statements();
+  void bind_declarations();
+  void bind_types();
 
-  ast::TypeNode *type_of(ast::Expression *expression);
+  // Literals
+  void number_literal(ast::NumberLiteralNode *node);
+  void string_literal(ast::StringLiteralNode *node);
+  void boolean_literal(ast::BoolLiteralNode *node);
+  void array_literal(ast::ArrayLiteralNode *node);
 
-  bool same_type(const ast::TypeNode *a, const ast::TypeNode *b);
+  // Expressions
+  void binary_expression(ast::BinaryExpressionNode *node);
+  void unary_expression(ast::UnaryExpressionNode *node);
+  void assignment(ast::AssignmentExpressionNode *node);
+  void function_call(ast::CallExpressionNode *node);
+  void member_access(ast::MemberAccessExpressionNode *node);
+  void index_access(ast::IndexAccessExpressionNode *node);
+  void identifier(ast::IdentifierExpressionNode *node);
 
-  bool is_assignable(const ast::TypeNode *from, const ast::TypeNode *to);
+  // Statements
+  void expression_statement(ast::ExpressionStatement *node);
+  void return_statement(ast::ReturnStatement *node);
+  void if_statement(ast::IfStatement *node);
+  void while_statement(ast::WhileStatement *node);
+  void block_statement(ast::BlockStatement *node);
 
-  ast::ArrayType *make_array_type(ast::TypeNode *element_type);
+  // Declarations
+  void variable_declaration(ast::VariableDeclaration *node);
+  void function_declaration(ast::FunctionDeclaration *node);
+
+  // Types
+  void type_node(ast::TypeNode *node);
+
+  void error(ast::Node *node, std::string message){throw std::runtime_error(message);}
 };
 
 } // namespace celestia::semantic

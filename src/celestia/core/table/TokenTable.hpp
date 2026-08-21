@@ -1,6 +1,5 @@
 #pragma once
 #include "TrieNode.hpp"
-#include "celestia/core/hash/TransparentHash.hpp"
 #include "celestia/core/token/TokenDescriptor.hpp"
 #include "celestia/core/token/TokenGroup.hpp"
 #include "celestia/core/token/TokenKind.hpp"
@@ -46,23 +45,22 @@ public:
     return it != by_kind_.end() ? it->second : nullptr;
   }
 
-  celestia::TokenDescriptor *lookup_by_name(const std::string_view &name) {
+  celestia::TokenDescriptor *lookup_by_name(std::string_view name) {
     auto it = by_name_.find(std::string(name));
+
     return it != by_name_.end() ? it->second : nullptr;
   }
-
   bool has_prefix(const std::string_view &prefix) const { return trie_.has_prefix(prefix); }
 
   const std::deque<celestia::TokenDescriptor> &all() const { return storage_; }
-
-  const std::unordered_map<std::string, celestia::TokenDescriptor *, U32Hash, U32Equal> &all_names() const { return by_name_; }
 
   Trie<celestia::TokenDescriptor> &trie() { return trie_; }
 
 private:
   std::deque<celestia::TokenDescriptor> storage_;
   std::unordered_map<TokenKind, celestia::TokenDescriptor *> by_kind_;
-  std::unordered_map<std::string, celestia::TokenDescriptor *, U32Hash, U32Equal> by_name_;
+
+  std::unordered_map<std::string, celestia::TokenDescriptor *> by_name_;
   Trie<celestia::TokenDescriptor> trie_;
 };
 

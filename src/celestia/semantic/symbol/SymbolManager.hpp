@@ -1,7 +1,7 @@
 #pragma once
 #include "Symbol.hpp"
 #include "SymbolId.hpp"
-#include "celestia/semantic/symbols/Symbol.hpp"
+#include "celestia/semantic/symbol/Symbol.hpp"
 
 #include <deque>
 #include <stdexcept>

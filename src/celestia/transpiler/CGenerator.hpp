@@ -35,7 +35,7 @@ private:
 
   void generate_named_type(const ast::NamedType *type);
 
-  void generate_array_type_name(const ast::ArrayType *type);
+  // void generate_array_type_name(const ast::ArrayType *type);
 
   void generate_reference_type(const ast::ReferenceType *type);
 
@@ -74,11 +74,11 @@ private:
 
   void generate_array_types();
 
-  void generate_array_type(const ast::ArrayType *type);
+  // void generate_array_type(const ast::ArrayType *type);
 
   void generate_array_runtime(const ast::ArrayType *type);
 
-  std::string array_name(const ast::TypeNode *type) const;
+  // std::string array_name(const ast::TypeNode *type) const;
 
   void visit_struct(const std::string &name);
 

@@ -81,6 +81,7 @@ void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaratio
 
   out << "} " << capability_name << ";\n\n";
 }
+
 void CGenerator::generate_impl_declaration(const ast::ImplDeclaration *declaration) {
 
   if (!declaration) return;

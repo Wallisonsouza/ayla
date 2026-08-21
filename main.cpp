@@ -1,15 +1,17 @@
 #include "ayla/language/AylaLanguage.hpp"
-#include "celestia/core/stages/ResolverStage.hpp"
+
 #include <iostream>
 
 #include "celestia/compiler/Compiler.hpp"
 
-#include "celestia/core/stages/DumperStage.hpp"
-#include "celestia/core/stages/LexerStage.hpp"
-#include "celestia/core/stages/LoweringStage.hpp"
-#include "celestia/core/stages/ParserStage.hpp"
-#include "celestia/core/stages/TokenDumperStage.hpp"
-#include "celestia/core/stages/Transpiler.hpp"
+#include "celestia/stages/ResolverStage.hpp"
+#include "celestia/stages/DumperStage.hpp"
+#include "celestia/stages/LexerStage.hpp"
+#include "celestia/stages/LoweringStage.hpp"
+#include "celestia/stages/ParserStage.hpp"
+#include "celestia/stages/TokenDumperStage.hpp"
+#include "celestia/stages/Transpiler.hpp"
+
 #include "src/CommandLine.hpp"
 
 int main(int argc, char *argv[]) {

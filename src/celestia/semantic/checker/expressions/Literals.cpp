@@ -3,27 +3,11 @@
 
 namespace celestia::semantic {
 
-void TypeChecker::number_literal(ast::NumberLiteralNode *node) {
+void TypeChecker::number_literal(ast::NumberLiteralNode *node) { node->resolved_type = &NumberType; }
 
-  if (!node) return;
+void TypeChecker::string_literal(ast::StringLiteralNode *node) { node->resolved_type = &StringType; }
 
-  node->resolved_type = &NumberType;
-}
-
-void TypeChecker::string_literal(ast::StringLiteralNode *node) {
-
-  if (!node) return;
-
-  node->resolved_type = &StringType;
-}
-
-void TypeChecker::boolean_literal(ast::BoolLiteralNode *node) {
-
-  if (!node) return;
-
-  node->resolved_type = &BooleanType;
-}
-
+void TypeChecker::boolean_literal(ast::BoolLiteralNode *node) { node->resolved_type = &BooleanType; }
 
 
 } // namespace celestia::semantic

@@ -1,6 +1,5 @@
 #include "CGenerator.hpp"
 
-#include "celestia/ast/types/Array.hpp"
 #include "celestia/ast/types/GenericType.hpp"
 #include "celestia/ast/types/NamedType.hpp"
 #include "celestia/ast/types/ReferenceType.hpp"
@@ -14,7 +13,7 @@ void CGenerator::generate_type(const ast::TypeNode *type) {
 
   case ast::NodeKind::NamedType: generate_named_type(static_cast<const ast::NamedType *>(type)); return;
 
-  case ast::NodeKind::ArrayType: generate_array_type_name(static_cast<const ast::ArrayType *>(type)); return;
+  case ast::NodeKind::ArrayType: out << "AylaArray"; return;
 
   case ast::NodeKind::ReferenceType: generate_reference_type(static_cast<const ast::ReferenceType *>(type)); return;
 
@@ -44,7 +43,7 @@ void CGenerator::generate_named_type(const ast::NamedType *type) {
     return;
   }
 
-  if (name == "String") {
+  if (name == "string") {
     out << "const char *";
     return;
   }
@@ -74,17 +73,6 @@ void CGenerator::generate_named_type(const ast::NamedType *type) {
 }
 
 // ============================================================
-// ARRAY TYPE NAME
-// ============================================================
-
-void CGenerator::generate_array_type_name(const ast::ArrayType *type) {
-
-  if (!type) return;
-
-  out << array_name(type);
-}
-
-// ============================================================
 // REFERENCE TYPE
 // ============================================================
 
@@ -109,55 +97,5 @@ void CGenerator::generate_generic_type(const ast::GenericType *type) {
   out << type->name->str;
 }
 
-// ============================================================
-// ARRAY NAME
-// ============================================================
-
-std::string CGenerator::array_name(const ast::TypeNode *type) const {
-
-  if (!type) return {};
-
-  // Array<T>
-  if (type->kind == ast::NodeKind::ArrayType) {
-
-    auto *array = static_cast<const ast::ArrayType *>(type);
-
-    if (!array->element_type) return "AylaArray";
-
-    return "Array_" + array_name(array->element_type);
-  }
-
-  // ref<T>
-  if (type->kind == ast::NodeKind::ReferenceType) {
-
-    auto *reference = static_cast<const ast::ReferenceType *>(type);
-
-    if (!reference->target) return "Ref";
-
-    return "Ref_" + array_name(reference->target);
-  }
-
-  // Tipo normal.
-  if (type->kind == ast::NodeKind::NamedType) {
-
-    auto *named = static_cast<const ast::NamedType *>(type);
-
-    if (!named->name) return "Unknown";
-
-    return named->name->str;
-  }
-
-  // Generic.
-  if (type->kind == ast::NodeKind::GenericType) {
-
-    auto *generic = static_cast<const ast::GenericType *>(type);
-
-    if (!generic->name) return "Generic";
-
-    return generic->name->str;
-  }
-
-  return "Unknown";
-}
 
 } // namespace celestia::codegen

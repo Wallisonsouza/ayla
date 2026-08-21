@@ -3,9 +3,8 @@
 #include <vector>
 
 #include "ParserContext.hpp"
-#include "celestia/ast/NodeState.hpp"
 #include "celestia/core/token/TokenKind.hpp"
-#include "celestia/syntax/parser/NameParser.hpp"
+#include "celestia/syntax/parser/ParseStatus.hpp"
 
 namespace celestia::syntax {
 class ParseContext;
@@ -16,57 +15,37 @@ namespace ayla::parser {
 inline void consume_statement_separators(celestia::syntax::ParseContext &context) { while (context.tokens().match(TokenKind::NEW_LINE) || context.tokens().match(TokenKind::SEMI_COLON)); }
 
 template <typename ElementType, typename ParseFunc>
-std::vector<ElementType *> parse_generic_list(celestia::syntax::ParseContext &context, TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
-  std::vector<ElementType *> elements;
+celestia::syntax::ParseResult<std::vector<ElementType>>
+parse_generic_list(celestia::syntax::ParseContext &context, TokenKind open_token, TokenKind close_token, TokenKind separator_token, ParseFunc parse_element) {
+  std::vector<ElementType> elements;
 
   auto &tokens = context.tokens();
 
-  if (!tokens.match(open_token)) {
-    // context.//report_error(
-    //     DiagnosticCode::ExpectedToken,
-    //     "opening token"
-    // );
+  if (!tokens.check(open_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::no_match(); }
 
-    return {};
-  }
-
-  bool expect_element = true;
+  tokens.advance();
 
   while (!tokens.is_end()) {
 
     consume_statement_separators(context);
 
-    if (tokens.match(close_token)) { return elements; }
+    if (tokens.match(close_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::ok(std::move(elements)); }
 
-    if (expect_element) {
+    auto result = parse_element();
 
-      auto *element = parse_element();
+    if (result.is_error()) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(result.error().token, result.error().message); }
 
-      if (!element) { return {}; }
+    if (result.is_no_match()) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "expected list element"); }
 
-      if (element->flags.has(celestia::ast::NodeFlags::HasError)) { return {}; }
+    elements.push_back(result.value());
 
-      elements.push_back(element);
+    consume_statement_separators(context);
 
-      expect_element = false;
+    if (tokens.match(close_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::ok(std::move(elements)); }
 
-      continue;
-    }
-
-    if (tokens.match(separator_token)) {
-      expect_element = true;
-
-      continue;
-    }
-
-    // context.//report_error(DiagnosticCode::ExpectedToken, "separator");
-
-    return {};
+    if (!tokens.match(separator_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "expected list separator"); }
   }
 
-  // context.//report_error(DiagnosticCode::ExpectedToken, "unterminated list");
-
-  return {};
+  return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "unterminated list");
 }
-
 } // namespace ayla::parser

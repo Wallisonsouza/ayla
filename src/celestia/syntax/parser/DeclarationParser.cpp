@@ -57,9 +57,9 @@ celestia::ast::Declaration *DeclarationParser::named(DeclarationSpecifiers speci
 
   switch (tokens.peek()->kind()) {
 
-  case TokenKind::CAP_KEYWORD: return parser_capability_declaration(name, specifiers);
+  case TokenKind::CAP_KEYWORD: return parse_capability_declaration(name, specifiers);
 
-  case TokenKind::STRUCT_KEYWORD: return parser_struct_declaration(name, specifiers);
+  case TokenKind::STRUCT_KEYWORD: return parse_struct_declaration(name, specifiers);
 
   case TokenKind::IMPL_KEYWORD: {
     auto *target = context.get_ast().create_node<ast::NamedType>(name);
@@ -124,7 +124,7 @@ celestia::ast::Declaration *DeclarationParser::parse_variable_declaration(ast::I
 
   auto &tokens = context.tokens();
 
-  auto *type = parser.types().parse_type();
+  auto *type = parser.types().parse_type().value();
 
   if (!type) return nullptr;
 
@@ -187,7 +187,7 @@ celestia::ast::FieldDeclaration *DeclarationParser::_field() {
 
   if (!tokens.match(TokenKind::COLON)) return nullptr;
 
-  auto *type = parser.types().parse_type();
+  auto *type = parser.types().parse_type().value();
 
   if (!type) return nullptr;
 
@@ -195,32 +195,44 @@ celestia::ast::FieldDeclaration *DeclarationParser::_field() {
 }
 
 ast::FunctionDeclaration *DeclarationParser::parse_function_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers, bool require_body) {
+
   auto &tokens = context.tokens();
 
-  auto params = ayla::parser::parse_generic_list<ast::PatternNode>(context, TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parser.patterns().parse_pattern(); });
+  // (a: int, b: int)
+  auto parameters = ayla::parser::parse_generic_list<ast::PatternNode *>(context, TokenKind::OPEN_PAREN, TokenKind::CLOSE_PAREN, TokenKind::COMMA, [&]() { return parser.patterns().parse_pattern(); });
 
+  if (parameters.is_error()) { return nullptr; }
+
+  if (parameters.is_no_match()) { return nullptr; }
+
+  // -> int
   ast::TypeNode *return_type = nullptr;
 
   if (tokens.match(TokenKind::ARROW)) {
-    return_type = parser.types().parse_type();
 
-    if (!return_type) return nullptr;
+    return_type = parser.types().parse_type().value();
+
+    if (!return_type) { return nullptr; }
   }
 
+  // { ... }
   ast::BlockStatement *body = nullptr;
 
   if (tokens.check(TokenKind::OPEN_BRACE)) {
+
     body = parser.statements().parse_block_statement();
 
-    if (!body) return nullptr;
+    if (!body) { return nullptr; }
+
   } else if (require_body) {
+
     return nullptr;
   }
 
-  return context.get_ast().create_node<ast::FunctionDeclaration>(name, std::move(params), return_type, body, specifiers);
+  return context.get_ast().create_node<ast::FunctionDeclaration>(name, std::move(parameters.value()), return_type, body, specifiers);
 }
 
-celestia::ast::Declaration *DeclarationParser::parser_struct_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
+celestia::ast::Declaration *DeclarationParser::parse_struct_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
   auto &tokens = context.tokens();
 
   if (!tokens.match(TokenKind::STRUCT_KEYWORD)) return nullptr;
@@ -232,7 +244,7 @@ celestia::ast::Declaration *DeclarationParser::parser_struct_declaration(celesti
 
     while (true) {
 
-      auto *type = parser.types().parse_type();
+      auto *type = parser.types().parse_type().value();
 
       if (!type) return nullptr;
 
@@ -266,7 +278,7 @@ celestia::ast::Declaration *DeclarationParser::parser_struct_declaration(celesti
   return context.get_ast().create_node<ast::StructDeclaration>(name, std::move(compositions), std::move(fields), specifiers);
 }
 
-celestia::ast::Declaration *DeclarationParser::parser_capability_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
+celestia::ast::Declaration *DeclarationParser::parse_capability_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
   auto &tokens = context.tokens();
 
   std::cout << "1: capability\n";
@@ -334,7 +346,7 @@ celestia::ast::Declaration *DeclarationParser::parse_impl_declaration(celestia::
   if (!tokens.match(TokenKind::IMPL_KEYWORD)) return nullptr;
 
   // Printable
-  auto *capability = parser.types().parse_type();
+  auto *capability = parser.types().parse_type().value();
 
   if (!capability) return nullptr;
 

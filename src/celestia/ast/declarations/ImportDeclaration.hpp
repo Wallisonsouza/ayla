@@ -2,7 +2,6 @@
 
 #include "Declaration.hpp"
 #include "celestia/ast/names/QualifiedNameNode.hpp"
-#include "celestia/semantic/symbols/SymbolId.hpp"
 
 #include <optional>
 

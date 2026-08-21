@@ -1,26 +1,27 @@
 #pragma once
 
-#include "celestia/ast/patterns/PatternNode.hpp"
-#include "celestia/syntax/parser/Parser.hpp"
+#include "celestia/syntax/parser/ParseStatus.hpp"
+
+namespace celestia::ast {
+class PatternNode;
+}
 
 namespace celestia::syntax {
 
+class ParseContext;
 class Parser;
 
-class ParseContext;
 class PatternParser {
 public:
-  PatternParser(ParseContext &, Parser &);
+  PatternParser(ParseContext &context, Parser &parser);
 
-  ast::PatternNode *parse_pattern();
-
-private:
-  ast::PatternNode *parse_identifier_pattern();
-
-  ast::PatternNode *parse_typed_pattern();
+  ParseResult<ast::PatternNode *> parse_pattern();
+  ParseResult<ast::PatternNode *> parse_identifier_pattern();
+  ParseResult<ast::PatternNode *> parse_typed_pattern();
 
 private:
   ParseContext &context;
   Parser &parser;
 };
+
 } // namespace celestia::syntax

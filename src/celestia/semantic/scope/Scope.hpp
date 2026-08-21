@@ -1,7 +1,7 @@
 #pragma once
 
-#include "celestia/semantic/symbols/SymbolId.hpp"
-#include "celestia/semantic/symbols/SymbolTable.hpp"
+#include "celestia/semantic/symbol/SymbolId.hpp"
+#include "celestia/semantic/symbol/SymbolTable.hpp"
 #include <string_view>
 
 namespace core {

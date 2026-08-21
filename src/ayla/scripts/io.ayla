@@ -1,11 +1,23 @@
-Node: struct {
-    test: [int]
- 
+
+Printable: cap {
+    compare: (a: int, b: int) -> int
 }
 
-main: () -> Void {
-   instance: Node = Node {
-    test: [10, 20, 30, 40, 50]
+int: impl Comparable {
+    compare: (a: int, b: int) -> int {
+        if a < b {
+            -1
+        } else if a > b {
+            1
+        } else {
+            0
+        }
+    }
 }
 
+
+print: (a: int, b: int) -> int {
+    
 }
+
+

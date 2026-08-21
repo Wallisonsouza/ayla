@@ -79,9 +79,9 @@ struct FunctionType : Type {
 };
 
 struct ArrayType : Type {
-  Type *element_type;
+  const Type *element_type;
 
-  ArrayType(Type *el) : Type(TypeKind::Array), element_type(el) {}
+  ArrayType(const Type *el) : Type(TypeKind::Array), element_type(el) {}
 };
 
 } // namespace celestia::semantic

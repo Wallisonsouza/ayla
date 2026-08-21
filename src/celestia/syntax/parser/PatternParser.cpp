@@ -3,19 +3,24 @@
 #include "Parser.hpp"
 #include "ParserContext.hpp"
 #include "TypeParser.hpp"
+
 #include "celestia/ast/patterns/IdentifierPatternNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/core/AST.hpp"
 #include "celestia/core/token/token_stream.hpp"
 
 namespace celestia::syntax {
+
 PatternParser::PatternParser(ParseContext &context, Parser &parser) : context(context), parser(parser) {}
 
-ast::PatternNode *PatternParser::parse_pattern() {
+ParseResult<ast::PatternNode *> PatternParser::parse_pattern() {
 
-  auto current = context.tokens().peek();
+  auto *current = context.tokens().peek();
+
+  if (!current) { return ParseResult<ast::PatternNode *>::no_match(); }
 
   switch (current->desc->kind) {
+
   case TokenKind::IDENTIFIER:
     return parse_identifier_pattern();
 
@@ -25,20 +30,34 @@ ast::PatternNode *PatternParser::parse_pattern() {
     // case TokenKind::OPEN_BRACE:
     //     return parse_object_pattern();
 
-  default: return nullptr;
+  default: return ParseResult<ast::PatternNode *>::no_match();
   }
 }
 
-ast::PatternNode *PatternParser::parse_identifier_pattern() {
+ParseResult<ast::PatternNode *> PatternParser::parse_identifier_pattern() {
 
   auto *name = parser.names().parse_name();
-  if (!name) return nullptr;
+
+  if (!name) { return ParseResult<ast::PatternNode *>::fail(context.tokens().peek(), "expected pattern name"); }
 
   ast::TypeNode *type = nullptr;
 
-  if (context.tokens().match(TokenKind::COLON)) type = parser.types().parse_type();
+  if (context.tokens().match(TokenKind::COLON)) {
 
-  return context.get_ast().create_node<ast::IdentifierPatternNode>(name, type);
+    auto type_result = parser.types().parse_type();
+
+    if (type_result.is_error()) { return ParseResult<ast::PatternNode *>::fail(type_result.error().token, type_result.error().message); }
+
+    if (type_result.is_no_match()) { return ParseResult<ast::PatternNode *>::fail(context.tokens().peek(), "expected pattern type"); }
+
+    type = type_result.value();
+  }
+
+  auto *pattern = context.get_ast().create_node<ast::IdentifierPatternNode>(name, type);
+
+  return ParseResult<ast::PatternNode *>::ok(pattern);
 }
-ast::PatternNode *PatternParser::parse_typed_pattern() { return nullptr; }
+
+ParseResult<ast::PatternNode *> PatternParser::parse_typed_pattern() { return ParseResult<ast::PatternNode *>::no_match(); }
+
 } // namespace celestia::syntax

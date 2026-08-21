@@ -1,100 +1,36 @@
-// // TypeChecker.Arrays.cpp
+#include "celestia/semantic/checker/TypeChecker.hpp"
+#include "celestia/semantic/types/BuiltinTypes.hpp"
 
-// #include "celestia/semantic/checker/TypeChecker.hpp"
-// #include "celestia/semantic/types/BuiltinTypes.hpp"
+namespace celestia::semantic {
 
-// namespace celestia::semantic {
+void TypeChecker::array_literal(ast::ArrayLiteralNode *node) {
 
-// void TypeChecker::array_literal(ast::ArrayLiteralNode *node) {
+  if (node->elements.empty()) {
+    error(node, "cannot infer type of empty array");
+    return;
+  }
 
-//   if (!node) return;
+  check(node->elements[0]);
 
-//   for (auto *element : node->elements) {
+  auto *element_type = node->elements[0]->resolved_type;
 
-//     if (!element) continue;
+  if (!element_type) return;
 
-//     check(element);
-//   }
+  for (size_t i = 1; i < node->elements.size(); ++i) {
 
-//   if (node->elements.empty()) { return; }
+    check(node->elements[i]);
 
-//   const Type *element_type = nullptr;
+    auto *type = node->elements[i]->resolved_type;
 
-//   for (auto *element : node->elements) {
+    if (!type) return;
 
-//     if (!element) continue;
+    if (type != element_type) {
+      error(node->elements[i], "array elements must have the same type");
+      return;
+    }
+  }
 
-//     element_type = element->resolved_type;
+  node->resolved_type = context.unit.types.alloc<ArrayType>(element_type);
+}
 
-//     if (element_type) break;
-//   }
-
-//   if (!element_type) return;
-
-//   for (auto *element : node->elements) {
-
-//     if (!element) continue;
-
-//     if (!element->resolved_type) return;
-
-//     if (!same_type(element_type, element->resolved_type)) { return; }
-//   }
-
-//   // Cria o tipo semântico do array.
-//   node->resolved_type = make_array_type(element_type);
-// }
-
-// #include "celestia/semantic/checker/TypeChecker.hpp"
-// #include "celestia/semantic/types/ArrayType.hpp"
-// #include "celestia/semantic/types/BuiltinTypes.hpp"
-
-// namespace celestia::semantic {
-
-// const ArrayType *TypeChecker::make_array_type(const Type *element_type) {
-
-//   if (!element_type) return nullptr;
-
-//   return new ArrayType(element_type);
-// }
-
-// void TypeChecker::array_literal(ast::ArrayLiteralNode *node) {
-
-//   if (!node) return;
-
-//   for (auto *element : node->elements) {
-
-//     if (!element) continue;
-
-//     check(element);
-//   }
-
-//   if (node->elements.empty()) return;
-
-//   const Type *element_type = nullptr;
-
-//   for (auto *element : node->elements) {
-
-//     if (!element) continue;
-
-//     element_type = element->resolved_type;
-
-//     if (element_type) break;
-//   }
-
-//   if (!element_type) return;
-
-//   for (auto *element : node->elements) {
-
-//     if (!element) continue;
-
-//     if (!element->resolved_type) return;
-
-//     if (!same_type(element_type, element->resolved_type)) { return; }
-//   }
-
-//   node->resolved_type = un make_array_type(element_type);
-// }
-
-// } // namespace celestia::semantic
-
-// } // namespace celestia::semantic
+} // namespace celestia::semantic
