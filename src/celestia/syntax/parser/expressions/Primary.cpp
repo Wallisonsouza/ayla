@@ -18,7 +18,7 @@ celestia::ast::Expression *ExpressionParser::parse_number_literal() {
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
   try {
-    return context.get_ast().create_node<celestia::ast::NumberLiteralNode>(std::stod(text));
+    return context.get_ast().alloc<celestia::ast::NumberLiteralNode>(std::stod(text));
   } catch (...) { return nullptr; }
 }
 
@@ -29,7 +29,7 @@ celestia::ast::Expression *ExpressionParser::parse_string_literal() {
 
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
-  return context.get_ast().create_node<celestia::ast::StringLiteralNode>(text);
+  return context.get_ast().alloc<celestia::ast::StringLiteralNode>(text);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_bool_literal() {
@@ -39,7 +39,7 @@ celestia::ast::Expression *ExpressionParser::parse_bool_literal() {
 
   bool value = token->desc->kind == TokenKind::TRUE;
 
-  return context.get_ast().create_node<celestia::ast::BoolLiteralNode>(value);
+  return context.get_ast().alloc<celestia::ast::BoolLiteralNode>(value);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_identifier_expression() {
@@ -49,7 +49,7 @@ celestia::ast::Expression *ExpressionParser::parse_identifier_expression() {
 
   if (context.tokens().check(TokenKind::OPEN_BRACE)) { return parse_struct_literal(name); }
 
-  return context.get_ast().create_node<celestia::ast::IdentifierExpressionNode>(name);
+  return context.get_ast().alloc<celestia::ast::IdentifierExpressionNode>(name);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_grouped_expression() {
@@ -112,7 +112,7 @@ celestia::ast::Expression *ExpressionParser::parse_struct_literal(celestia::ast:
 
     if (!value) return nullptr;
 
-    fields.push_back(context.get_ast().create_node<celestia::ast::StructFieldInitializerNode>(field_name, value));
+    fields.push_back(context.get_ast().alloc<celestia::ast::StructFieldInitializerNode>(field_name, value));
 
     tokens.skip_trivial();
 
@@ -134,9 +134,9 @@ celestia::ast::Expression *ExpressionParser::parse_struct_literal(celestia::ast:
 
   if (!tokens.match(TokenKind::CLOSE_BRACE)) return nullptr;
 
-  auto *type = context.get_ast().create_node<celestia::ast::NamedType>(name);
+  auto *type = context.get_ast().alloc<celestia::ast::NamedType>(name);
 
-  return context.get_ast().create_node<celestia::ast::StructLiteralNode>(type, std::move(fields));
+  return context.get_ast().alloc<celestia::ast::StructLiteralNode>(type, std::move(fields));
 }
 
 celestia::ast::Expression *ExpressionParser::parse_array_literal() {
@@ -150,7 +150,7 @@ celestia::ast::Expression *ExpressionParser::parse_array_literal() {
   tokens.skip_trivial();
 
   // []
-  if (tokens.match(TokenKind::CLOSE_BRACKET)) { return context.get_ast().create_node<celestia::ast::ArrayLiteralNode>(std::move(elements)); }
+  if (tokens.match(TokenKind::CLOSE_BRACKET)) { return context.get_ast().alloc<celestia::ast::ArrayLiteralNode>(std::move(elements)); }
 
   while (!tokens.check(TokenKind::CLOSE_BRACKET)) {
 
@@ -180,7 +180,7 @@ celestia::ast::Expression *ExpressionParser::parse_array_literal() {
 
   if (!tokens.match(TokenKind::CLOSE_BRACKET)) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::ArrayLiteralNode>(std::move(elements));
+  return context.get_ast().alloc<celestia::ast::ArrayLiteralNode>(std::move(elements));
 }
 
 } // namespace celestia::syntax

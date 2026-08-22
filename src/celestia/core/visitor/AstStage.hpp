@@ -14,7 +14,7 @@ class AstStage : public Stage {
 
 public:
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
-    if (auto *root = unit.ast.get_root()) { dispatch(root); }
+    if (auto *root = unit.module) { dispatch(root); }
   }
 
 protected:

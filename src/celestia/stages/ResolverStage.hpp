@@ -13,6 +13,6 @@ class ResolverStage : public AstStage {
 
     celestia::semantic::Resolver resolver = celestia::semantic::Resolver(ctx);
 
-    resolver.resolve(unit.ast.get_root());
+    resolver.resolve(unit.module);
   }
 };

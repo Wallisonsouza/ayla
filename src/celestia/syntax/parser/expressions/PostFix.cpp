@@ -55,7 +55,7 @@ celestia::ast::Expression *ExpressionParser::parse_member_access(celestia::ast::
 
   if (!member) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::MemberAccessExpressionNode>(base, member);
+  return context.get_ast().alloc<celestia::ast::MemberAccessExpressionNode>(base, member);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_index_access(celestia::ast::Expression *base) {
@@ -69,7 +69,7 @@ celestia::ast::Expression *ExpressionParser::parse_index_access(celestia::ast::E
 
   if (!tokens.match(TokenKind::CLOSE_BRACKET)) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::IndexAccessExpressionNode>(base, index);
+  return context.get_ast().alloc<celestia::ast::IndexAccessExpressionNode>(base, index);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_call(celestia::ast::Expression *callee) {
@@ -95,6 +95,6 @@ celestia::ast::Expression *ExpressionParser::parse_call(celestia::ast::Expressio
     }
   }
 
-  return context.get_ast().create_node<celestia::ast::CallExpressionNode>(callee, std::move(args));
+  return context.get_ast().alloc<celestia::ast::CallExpressionNode>(callee, std::move(args));
 }
 } // namespace celestia::syntax

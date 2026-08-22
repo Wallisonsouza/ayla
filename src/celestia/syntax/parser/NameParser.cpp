@@ -14,7 +14,7 @@ celestia::ast::IdentifierNode *NameParser::parse_name() {
 
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
-  return context.get_ast().create_node<celestia::ast::IdentifierNode>(text);
+  return context.get_ast().alloc<celestia::ast::IdentifierNode>(text);
 }
 
 celestia::ast::QualifiedNameNode *NameParser::parse_qualified_name() {
@@ -37,6 +37,6 @@ celestia::ast::QualifiedNameNode *NameParser::parse_qualified_name() {
     parts.push_back(next);
   }
 
-  return context.get_ast().create_node<celestia::ast::QualifiedNameNode>(std::move(parts));
+  return context.get_ast().alloc<celestia::ast::QualifiedNameNode>(std::move(parts));
 }
 } // namespace celestia::syntax

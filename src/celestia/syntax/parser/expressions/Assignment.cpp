@@ -14,6 +14,6 @@ celestia::ast::Expression *ExpressionParser::parse_assignment(celestia::ast::Exp
 
   if (!value) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::AssignmentExpressionNode>(target, value);
+  return context.get_ast().alloc<celestia::ast::AssignmentExpressionNode>(target, value);
 }
 }

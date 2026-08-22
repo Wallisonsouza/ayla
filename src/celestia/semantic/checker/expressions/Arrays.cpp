@@ -30,7 +30,7 @@ void TypeChecker::array_literal(ast::ArrayLiteralNode *node) {
     }
   }
 
-  node->resolved_type = context.unit.types.alloc<ArrayType>(element_type);
+  node->resolved_type = context.unit.type_arena.alloc<ArrayType>(element_type);
 }
 
 } // namespace celestia::semantic

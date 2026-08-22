@@ -24,6 +24,6 @@ celestia::ast::Expression *ExpressionParser::parse_unary_expression() {
 
   if (!operand) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::UnaryExpressionNode>(op, operand);
+  return context.get_ast().alloc<celestia::ast::UnaryExpressionNode>(op, operand);
 }
 }

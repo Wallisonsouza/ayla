@@ -27,9 +27,9 @@ Parser::~Parser() = default;
 void Parser::run() {
   auto *module = declarations().parse_module_declaration();
 
-  if (!module) { module = context.get_ast().create_node<celestia::ast::ModuleDeclaration>(nullptr); }
+  if (!module) { module = context.get_ast().alloc<celestia::ast::ModuleDeclaration>(nullptr); }
 
-  auto *script = context.get_ast().create_node<celestia::ast::BlockStatement>();
+  auto *script = context.get_ast().alloc<celestia::ast::BlockStatement>();
 
   auto &tokens = context.tokens();
 
@@ -50,8 +50,6 @@ void Parser::run() {
 
   context.unit.module = module;
   context.unit.script = script;
-
-  context.get_ast().set_root(module);
 }
 
 } // namespace celestia::syntax

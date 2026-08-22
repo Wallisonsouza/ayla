@@ -6,7 +6,6 @@
 
 #include "celestia/ast/patterns/IdentifierPatternNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
-#include "celestia/core/AST.hpp"
 #include "celestia/core/token/token_stream.hpp"
 
 namespace celestia::syntax {
@@ -53,7 +52,7 @@ ParseResult<ast::PatternNode *> PatternParser::parse_identifier_pattern() {
     type = type_result.value();
   }
 
-  auto *pattern = context.get_ast().create_node<ast::IdentifierPatternNode>(name, type);
+  auto *pattern = context.get_ast().alloc<ast::IdentifierPatternNode>(name, type);
 
   return ParseResult<ast::PatternNode *>::ok(pattern);
 }

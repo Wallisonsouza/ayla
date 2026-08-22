@@ -30,7 +30,7 @@ celestia::ast::Expression *ExpressionParser::parse_binary_expression(int min_bp,
 
     auto op = std::get<BinaryOperation>(info->op);
 
-    left = context.get_ast().create_node<celestia::ast::BinaryExpressionNode>(left, op, right);
+    left = context.get_ast().alloc<celestia::ast::BinaryExpressionNode>(left, op, right);
   }
 
   return left;

@@ -39,7 +39,7 @@ ParseResult<ast::TypeNode *> TypeParser::parse_named_type() {
 
   if (!name) { return ParseResult<ast::TypeNode *>::fail(context.tokens().peek(), "expected type name"); }
 
-  auto *type = context.get_ast().create_node<ast::NamedType>(name);
+  auto *type = context.get_ast().alloc<ast::NamedType>(name);
 
   return ParseResult<ast::TypeNode *>::ok(type);
 }
@@ -60,7 +60,7 @@ ParseResult<ast::TypeNode *> TypeParser::parse_array_type() {
 
   if (!tokens.match(TokenKind::CLOSE_BRACKET)) { return ParseResult<ast::TypeNode *>::fail(tokens.peek(), "expected ']'"); }
 
-  auto *type = context.get_ast().create_node<ast::ArrayType>(element_result.value());
+  auto *type = context.get_ast().alloc<ast::ArrayType>(element_result.value());
 
   return ParseResult<ast::TypeNode *>::ok(type);
 }
@@ -83,7 +83,7 @@ ParseResult<ast::TypeNode *> TypeParser::parse_reference_type() {
 
   if (!tokens.match(TokenKind::GREATER)) { return ParseResult<ast::TypeNode *>::fail(tokens.peek(), "expected '>' after reference type"); }
 
-  auto *type = context.get_ast().create_node<ast::ReferenceType>(target_result.value());
+  auto *type = context.get_ast().alloc<ast::ReferenceType>(target_result.value());
 
   return ParseResult<ast::TypeNode *>::ok(type);
 }
@@ -108,7 +108,7 @@ ParseResult<ast::TypeNode *> TypeParser::parse_function_type() {
 
   if (return_result.is_no_match()) { return ParseResult<ast::TypeNode *>::fail(tokens.peek(), "expected function return type"); }
 
-  auto *type = context.get_ast().create_node<ast::FunctionType>(std::move(parameters.value()), return_result.value());
+  auto *type = context.get_ast().alloc<ast::FunctionType>(std::move(parameters.value()), return_result.value());
 
   return ParseResult<ast::TypeNode *>::ok(type);
 }

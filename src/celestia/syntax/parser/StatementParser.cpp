@@ -38,13 +38,13 @@ celestia::ast::Statement *StatementParser::parse_return_statement() {
   tokens.match(TokenKind::RETURN_KEYWORD);
 
   // return vazio
-  if (tokens.peek(TokenKind::CLOSE_BRACE) || tokens.peek(TokenKind::NEW_LINE)) { return context.get_ast().create_node<celestia::ast::ReturnStatement>(nullptr); }
+  if (tokens.peek(TokenKind::CLOSE_BRACE) || tokens.peek(TokenKind::NEW_LINE)) { return context.get_ast().alloc<celestia::ast::ReturnStatement>(nullptr); }
 
   auto *value = parser.expressions().parse_expression();
 
   if (!value) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::ReturnStatement>(value);
+  return context.get_ast().alloc<celestia::ast::ReturnStatement>(value);
 }
 
 celestia::ast::BlockStatement *StatementParser::parse_block_statement() {
@@ -78,7 +78,7 @@ celestia::ast::BlockStatement *StatementParser::parse_block_statement() {
     return nullptr;
   }
 
-  return context.get_ast().create_node<celestia::ast::BlockStatement>(std::move(statements));
+  return context.get_ast().alloc<celestia::ast::BlockStatement>(std::move(statements));
 }
 
 celestia::ast::Statement *StatementParser::parse_while_statement() {
@@ -117,7 +117,7 @@ celestia::ast::Statement *StatementParser::parse_while_statement() {
     return nullptr;
   }
 
-  return context.get_ast().create_node<celestia::ast::WhileStatement>(condition, block);
+  return context.get_ast().alloc<celestia::ast::WhileStatement>(condition, block);
 }
 
 celestia::ast::Statement *StatementParser::parse_if_statement() {
@@ -157,7 +157,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
     if (else_block) { return nullptr; }
   }
 
-  return context.get_ast().create_node<celestia::ast::IfStatement>(condition, then_block, else_block);
+  return context.get_ast().alloc<celestia::ast::IfStatement>(condition, then_block, else_block);
 }
 
 celestia::ast::Statement *StatementParser::parse_expression_statement() {
@@ -165,7 +165,7 @@ celestia::ast::Statement *StatementParser::parse_expression_statement() {
 
   if (!expr) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::ExpressionStatement>(expr);
+  return context.get_ast().alloc<celestia::ast::ExpressionStatement>(expr);
 }
 
 } // namespace celestia::syntax

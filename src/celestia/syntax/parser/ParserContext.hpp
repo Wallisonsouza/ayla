@@ -1,9 +1,9 @@
 #pragma once
 
-#include "celestia/diagnostic/Diagnostic.hpp"
-#include "celestia/diagnostic/DiagnosticCode.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
+#include "celestia/diagnostic/Diagnostic.hpp"
+#include "celestia/diagnostic/DiagnosticCode.hpp"
 
 namespace celestia::syntax {
 class ParseContext {
@@ -17,14 +17,14 @@ public:
 
   auto &source() { return unit.source; }
 
-  auto &get_ast() { return unit.ast; }
+  auto &get_ast() { return unit.ast_arena; }
 
   auto &operators() { return env.language.operators; }
 
   auto &diagnostics() { return unit.diagnostics; }
 
-  void report_error(diagnostic::Diagnostic diag) {unit.diagnostics.report(diag);}
+  void report_error(diagnostic::Diagnostic diag) { unit.diagnostics.report(diag); }
 
   auto &descriptors() { return env.language.descriptors; }
 };
-}
+} // namespace celestia::syntax

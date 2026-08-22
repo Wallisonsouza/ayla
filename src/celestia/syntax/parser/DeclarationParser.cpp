@@ -62,7 +62,7 @@ celestia::ast::Declaration *DeclarationParser::named(DeclarationSpecifiers speci
   case TokenKind::STRUCT_KEYWORD: return parse_struct_declaration(name, specifiers);
 
   case TokenKind::IMPL_KEYWORD: {
-    auto *target = context.get_ast().create_node<ast::NamedType>(name);
+    auto *target = context.get_ast().alloc<ast::NamedType>(name);
 
     return parse_impl_declaration(target, specifiers);
   }
@@ -137,9 +137,9 @@ celestia::ast::Declaration *DeclarationParser::parse_variable_declaration(ast::I
     if (!initializer) return nullptr;
   }
 
-  auto *pattern = context.get_ast().create_node<ast::IdentifierPatternNode>(name, type);
+  auto *pattern = context.get_ast().alloc<ast::IdentifierPatternNode>(name, type);
 
-  return context.get_ast().create_node<ast::VariableDeclaration>(pattern, initializer, specifiers);
+  return context.get_ast().alloc<ast::VariableDeclaration>(pattern, initializer, specifiers);
 }
 
 celestia::ast::ModuleDeclaration *DeclarationParser::parse_module_declaration() {
@@ -154,12 +154,12 @@ celestia::ast::ModuleDeclaration *DeclarationParser::parse_module_declaration() 
 
   } else {
 
-    auto *part = context.get_ast().create_node<celestia::ast::IdentifierNode>(context.unit.source.stem());
+    auto *part = context.get_ast().alloc<celestia::ast::IdentifierNode>(context.unit.source.stem());
 
-    name = context.get_ast().create_node<celestia::ast::QualifiedNameNode>(std::vector{part});
+    name = context.get_ast().alloc<celestia::ast::QualifiedNameNode>(std::vector{part});
   }
 
-  return context.get_ast().create_node<celestia::ast::ModuleDeclaration>(name);
+  return context.get_ast().alloc<celestia::ast::ModuleDeclaration>(name);
 }
 
 celestia::ast::Declaration *DeclarationParser::parse_import_declaration() {
@@ -172,7 +172,7 @@ celestia::ast::Declaration *DeclarationParser::parse_import_declaration() {
 
   if (!module) { return nullptr; }
 
-  return context.get_ast().create_node<celestia::ast::ImportDeclaration>(module);
+  return context.get_ast().alloc<celestia::ast::ImportDeclaration>(module);
 }
 
 celestia::ast::FieldDeclaration *DeclarationParser::_field() {
@@ -191,7 +191,7 @@ celestia::ast::FieldDeclaration *DeclarationParser::_field() {
 
   if (!type) return nullptr;
 
-  return context.get_ast().create_node<celestia::ast::FieldDeclaration>(name, type);
+  return context.get_ast().alloc<celestia::ast::FieldDeclaration>(name, type);
 }
 
 ast::FunctionDeclaration *DeclarationParser::parse_function_declaration(ast::IdentifierNode *name, DeclarationSpecifiers specifiers, bool require_body) {
@@ -229,7 +229,7 @@ ast::FunctionDeclaration *DeclarationParser::parse_function_declaration(ast::Ide
     return nullptr;
   }
 
-  return context.get_ast().create_node<ast::FunctionDeclaration>(name, std::move(parameters.value()), return_type, body, specifiers);
+  return context.get_ast().alloc<ast::FunctionDeclaration>(name, std::move(parameters.value()), return_type, body, specifiers);
 }
 
 celestia::ast::Declaration *DeclarationParser::parse_struct_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
@@ -275,7 +275,7 @@ celestia::ast::Declaration *DeclarationParser::parse_struct_declaration(celestia
     tokens.match(TokenKind::COMMA);
   }
 
-  return context.get_ast().create_node<ast::StructDeclaration>(name, std::move(compositions), std::move(fields), specifiers);
+  return context.get_ast().alloc<ast::StructDeclaration>(name, std::move(compositions), std::move(fields), specifiers);
 }
 
 celestia::ast::Declaration *DeclarationParser::parse_capability_declaration(celestia::ast::IdentifierNode *name, DeclarationSpecifiers specifiers) {
@@ -336,7 +336,7 @@ celestia::ast::Declaration *DeclarationParser::parse_capability_declaration(cele
 
   std::cout << "9: criando CapabilityDeclaration\n";
 
-  return context.get_ast().create_node<celestia::ast::CapabilityDeclaration>(name, std::move(members), specifiers);
+  return context.get_ast().alloc<celestia::ast::CapabilityDeclaration>(name, std::move(members), specifiers);
 }
 
 celestia::ast::Declaration *DeclarationParser::parse_impl_declaration(celestia::ast::NamedType *target, DeclarationSpecifiers specifiers) {
@@ -380,7 +380,7 @@ celestia::ast::Declaration *DeclarationParser::parse_impl_declaration(celestia::
     tokens.skip_trivial();
   }
 
-  return context.get_ast().create_node<celestia::ast::ImplDeclaration>(target, capability, std::move(members));
+  return context.get_ast().alloc<celestia::ast::ImplDeclaration>(target, capability, std::move(members));
 }
 
 } // namespace celestia::syntax

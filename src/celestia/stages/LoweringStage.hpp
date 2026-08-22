@@ -1,7 +1,7 @@
 #include "celestia/ast/declarations/FunctionDeclaration.hpp"
-#include "celestia/core/visitor/Stage.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
+#include "celestia/core/visitor/Stage.hpp"
 
 class LoweringStage : public Stage {
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
@@ -11,10 +11,9 @@ class LoweringStage : public Stage {
 
     if (!script || script->statements.empty()) return;
 
+    auto *main = unit.ast_arena.alloc<celestia::ast::FunctionDeclaration>();
 
-    auto *main = unit.ast.create_node<celestia::ast::FunctionDeclaration>();
-
-    main->name = unit.ast.create_node<celestia::ast::IdentifierNode>("main");
+    main->name = unit.ast_arena.alloc<celestia::ast::IdentifierNode>("__init__");
 
     main->body = script;
 

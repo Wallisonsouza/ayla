@@ -38,6 +38,7 @@ enum class NodeKind {
   FunctionDeclaration,
   OperatorDeclaration,
   ModuleDeclaration,
+  ModuleInitDeclaration,
   CapabilityDeclaration,
   ImplementationDeclaration,
 
