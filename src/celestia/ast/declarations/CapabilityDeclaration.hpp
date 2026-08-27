@@ -7,9 +7,11 @@
 namespace celestia::ast {
 
 struct CapabilityDeclaration : NamedDeclaration {
+
   std::vector<FunctionDeclaration *> members;
 
-  CapabilityDeclaration(IdentifierNode *name, std::vector<FunctionDeclaration *> members, DeclarationSpecifiers specifiers)
-      : NamedDeclaration(NodeKind::CapabilityDeclaration, name, specifiers), members(std::move(members)) {}
+  CapabilityDeclaration(IdentifierNode *name, std::vector<IdentifierNode *> generic_parameters, std::vector<FunctionDeclaration *> members, DeclarationSpecifiers specifiers)
+      : NamedDeclaration(NodeKind::CapabilityDeclaration, name, specifiers, std::move(generic_parameters)), members(std::move(members)) {}
 };
+
 } // namespace celestia::ast

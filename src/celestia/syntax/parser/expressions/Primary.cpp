@@ -68,7 +68,7 @@ celestia::ast::Expression *ExpressionParser::parse_grouped_expression() {
 
 celestia::ast::Expression *ExpressionParser::parse_primary_expression() {
 
-  auto *token = context.tokens().peek();
+  auto *token = context.tokens().current();
 
   if (!token) return nullptr;
 
@@ -100,7 +100,7 @@ celestia::ast::Expression *ExpressionParser::parse_struct_literal(celestia::ast:
 
   while (!tokens.check(TokenKind::CLOSE_BRACE)) {
 
-    tokens.skip_trivial();
+    tokens.skip_trivia();
 
     auto *field_name = parser.names().parse_name();
 
@@ -114,11 +114,11 @@ celestia::ast::Expression *ExpressionParser::parse_struct_literal(celestia::ast:
 
     fields.push_back(context.get_ast().alloc<celestia::ast::StructFieldInitializerNode>(field_name, value));
 
-    tokens.skip_trivial();
+    tokens.skip_trivia();
 
     // vírgula opcional
     if (tokens.match(TokenKind::COMMA)) {
-      tokens.skip_trivial();
+      tokens.skip_trivia();
 
       // trailing comma
       if (tokens.check(TokenKind::CLOSE_BRACE)) break;
@@ -147,14 +147,14 @@ celestia::ast::Expression *ExpressionParser::parse_array_literal() {
 
   std::vector<celestia::ast::Expression *> elements;
 
-  tokens.skip_trivial();
+  tokens.skip_trivia();
 
   // []
   if (tokens.match(TokenKind::CLOSE_BRACKET)) { return context.get_ast().alloc<celestia::ast::ArrayLiteralNode>(std::move(elements)); }
 
   while (!tokens.check(TokenKind::CLOSE_BRACKET)) {
 
-    tokens.skip_trivial();
+    tokens.skip_trivia();
 
     auto *element = parse_expression();
 
@@ -162,11 +162,11 @@ celestia::ast::Expression *ExpressionParser::parse_array_literal() {
 
     elements.push_back(element);
 
-    tokens.skip_trivial();
+    tokens.skip_trivia();
 
     if (tokens.match(TokenKind::COMMA)) {
 
-      tokens.skip_trivial();
+      tokens.skip_trivia();
 
       // trailing comma:
       // [1, 2, 3,]

@@ -1,20 +1,22 @@
 #pragma once
 
+#include "celestia/compiler/IntrinsicRegistry.hpp"
+#include "celestia/compiler/TypeManager.hpp"
 #include "celestia/language/LanguageDefinition.hpp"
 #include "celestia/module/ModuleManager.hpp"
-
 #include "celestia/semantic/symbol/SymbolManager.hpp"
-
-#include "celestia/core/memory/Arena.hpp"
-
 
 struct CompilerEnvironment {
 
-    celestia::LanguageDefinition language;
+  celestia::LanguageDefinition language;
 
-    SymbolManager symbols;
+  SymbolManager symbols;
 
-    ModuleManager modules;
+  ModuleManager modules;
 
-    core::memory::Arena type_arena;
+  TypeManager types;
+
+  celestia::IntrinsicRegistry intrinsics;
+
+  CompilerEnvironment() = default;
 };

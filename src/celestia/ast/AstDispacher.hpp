@@ -2,57 +2,62 @@
 
 #include "celestia/ast/Node.hpp"
 #include "celestia/ast/NodeKind.hpp"
-#include "celestia/ast/NodeKindName.hpp"
-#include "celestia/core/visitor/NodeTraits.hpp"
+#include "celestia/ast/NodeTraits.hpp"
 
-#include <functional>
+#include <cassert>
 #include <stdexcept>
 #include <string>
-#include <unordered_map>
-#include <utility>
+#include <vector>
 
 enum class DispatchResult { Handled, NotHandled };
 
-class AstDispatcher {
+template <typename ContextType, typename BaseNode = celestia::ast::Node> class AstDispatcher {
 public:
-  template <typename Owner> explicit AstDispatcher(Owner *owner) : owner(owner) {
+  using HandlerFunc = void (*)(ContextType *, BaseNode *);
 
-    if (!owner) throw std::invalid_argument("AstDispatcher: owner cannot be null");
+  AstDispatcher() = default;
+
+  template <typename TargetNode, void (ContextType::*Method)(TargetNode *)> void bind() {
+    constexpr auto kind = celestia::ast::NodeTraits<TargetNode>::kind;
+    const size_t index = static_cast<size_t>(kind);
+
+    if (index >= table.size()) { table.resize(index + 1, nullptr); }
+
+    assert(table[index] == nullptr && "AstDispatcher: Handler already registered for this NodeKind");
+
+    table[index] = [](ContextType *ctx, BaseNode *node) { (ctx->*Method)(static_cast<TargetNode *>(node)); };
   }
 
-  template <typename Node, typename Owner> void bind(void (Owner::*method)(Node *)) {
+  template <typename TargetNode, void (ContextType::*Method)(const TargetNode *)> void bind() {
+    constexpr auto kind = celestia::ast::NodeTraits<TargetNode>::kind;
+    const size_t index = static_cast<size_t>(kind);
 
-    const auto kind = celestia::ast::NodeTraits<Node>::kind;
+    if (index >= table.size()) { table.resize(index + 1, nullptr); }
 
-    auto handler = [this, method](celestia::ast::Node *node) { (static_cast<Owner *>(owner)->*method)(static_cast<Node *>(node)); };
+    assert(table[index] == nullptr && "AstDispatcher: Handler already registered for this NodeKind");
 
-    auto [it, inserted] = handlers.emplace(kind, std::move(handler));
-
-    if (!inserted) { throw std::runtime_error(std::string("AstDispatcher: handler already registered for NodeKind: ") + std::string(celestia::ast::node_kind_name(kind))); }
+    table[index] = [](ContextType *ctx, BaseNode *node) { (ctx->*Method)(static_cast<const TargetNode *>(node)); };
   }
 
-  DispatchResult dispatch(celestia::ast::Node *node) {
+  [[nodiscard]] DispatchResult dispatch(ContextType *ctx, BaseNode *node) const {
+    assert(node != nullptr && "AstDispatcher: cannot dispatch null node");
 
-    if (!node) throw std::invalid_argument("AstDispatcher: cannot dispatch null node");
+    const size_t index = static_cast<size_t>(node->kind);
 
-    auto it = handlers.find(node->kind);
+    if (index >= table.size() || table[index] == nullptr) { return DispatchResult::NotHandled; }
 
-    if (it == handlers.end()) return DispatchResult::NotHandled;
-
-    it->second(node);
-
+    table[index](ctx, node);
     return DispatchResult::Handled;
   }
 
-  void dispatch_required(celestia::ast::Node *node) {
-
-    const auto result = dispatch(node);
-
-    if (result == DispatchResult::NotHandled) { throw std::runtime_error(std::string("AstDispatcher: no handler registered for NodeKind: ") + std::string(celestia::ast::node_kind_name(node->kind))); }
+  void dispatch_required(ContextType *ctx, BaseNode *node) const {
+    if (dispatch(ctx, node) == DispatchResult::NotHandled) {
+      throw std::runtime_error(std::string("AstDispatcher: no handler registered for NodeKind: ") + std::string(celestia::ast::node_kind_name(node->kind)));
+    }
   }
 
-private:
-  void *owner;
+  void reserve(size_t capacity) { table.reserve(capacity); }
 
-  std::unordered_map<celestia::ast::NodeKind, std::function<void(celestia::ast::Node *)>> handlers;
+private:
+  std::vector<HandlerFunc> table;
 };

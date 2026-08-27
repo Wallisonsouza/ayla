@@ -35,7 +35,7 @@ parse_generic_list(celestia::syntax::ParseContext &context, TokenKind open_token
 
     if (result.is_error()) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(result.error().token, result.error().message); }
 
-    if (result.is_no_match()) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "expected list element"); }
+    if (result.is_no_match()) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.current(), "expected list element"); }
 
     elements.push_back(result.value());
 
@@ -43,9 +43,9 @@ parse_generic_list(celestia::syntax::ParseContext &context, TokenKind open_token
 
     if (tokens.match(close_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::ok(std::move(elements)); }
 
-    if (!tokens.match(separator_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "expected list separator"); }
+    if (!tokens.match(separator_token)) { return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.current(), "expected list separator"); }
   }
 
-  return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.peek(), "unterminated list");
+  return celestia::syntax::ParseResult<std::vector<ElementType>>::fail(tokens.current(), "unterminated list");
 }
 } // namespace ayla::parser

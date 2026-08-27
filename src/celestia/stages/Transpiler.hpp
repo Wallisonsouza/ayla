@@ -9,7 +9,7 @@ class CTranspilePass : public Stage {
 public:
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
-    auto *module = unit.module;
+    auto *module = unit.ast_module;
 
     std::filesystem::path output_dir = "out";
 
@@ -24,13 +24,13 @@ public:
 
     if (!out) return;
 
-    celestia::codegen::CGenerator gen(out);
+    celestia::codegen::CGeneratorContext ctx{.unit = unit, .compiler = env};
+    
+    celestia::codegen::CGenerator gen(out, ctx);
 
     gen.generate_module(module);
-    
   }
 };
-
 
 // #include "celestia/compiler/CompilationUnit.hpp"
 // #include "celestia/core/visitor/Stage.hpp"

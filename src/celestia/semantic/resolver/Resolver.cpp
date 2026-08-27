@@ -1,11 +1,9 @@
 #include "Resolver.hpp"
-#include "celestia/ast/statements/BlockStatementNode.hpp"
 #include <iostream>
 
 namespace celestia::semantic {
 
-Resolver::Resolver(ResolverContext &ctx) : context(ctx), dispatcher(this) {
-
+Resolver::Resolver(ResolverContext &ctx) : context(ctx), dispatcher() {
   bind_literals();
   bind_expressions();
   bind_statements();
@@ -14,74 +12,76 @@ Resolver::Resolver(ResolverContext &ctx) : context(ctx), dispatcher(this) {
 }
 
 void Resolver::bind_literals() {
+  dispatcher.bind<ast::StructLiteralNode, &Resolver::struct_literal>();
 
-  // dispacher.bind<ast::NumberLiteralNode>(&Resolver::number_literal);
+  dispatcher.bind<ast::ArrayLiteralNode, &Resolver::array_literal>();
 
-  // dispacher.bind<ast::StringLiteralNode>(&Resolver::string_literal);
-
-  // dispacher.bind<ast::BoolLiteralNode>(&Resolver::boolean_literal);
-
-  dispatcher.bind<ast::ArrayLiteralNode>(&Resolver::array_literal);
-
-  dispatcher.bind<ast::ObjectLiteralNode>(&Resolver::object_literal);
+  dispatcher.bind<ast::ObjectLiteralNode, &Resolver::object_literal>();
 }
 
 void Resolver::bind_expressions() {
+  dispatcher.bind<ast::BinaryExpressionNode, &Resolver::binary_expression>();
 
-  dispatcher.bind<ast::BinaryExpressionNode>(&Resolver::binary_expression);
+  dispatcher.bind<ast::UnaryExpressionNode, &Resolver::unary_expression>();
 
-  dispatcher.bind<ast::UnaryExpressionNode>(&Resolver::unary_expression);
+  dispatcher.bind<ast::AssignmentExpressionNode, &Resolver::assignment>();
 
-  dispatcher.bind<ast::AssignmentExpressionNode>(&Resolver::assignment);
+  dispatcher.bind<ast::CallExpressionNode, &Resolver::function_call>();
 
-  dispatcher.bind<ast::CallExpressionNode>(&Resolver::function_call);
+  dispatcher.bind<ast::MemberAccessExpressionNode, &Resolver::member_access>();
 
-  dispatcher.bind<ast::MemberAccessExpressionNode>(&Resolver::member_access);
+  dispatcher.bind<ast::IndexAccessExpressionNode, &Resolver::index_access>();
 
-  dispatcher.bind<ast::IndexAccessExpressionNode>(&Resolver::index_access);
-
-  dispatcher.bind<ast::IdentifierExpressionNode>(&Resolver::identifier);
+  dispatcher.bind<ast::IdentifierExpressionNode, &Resolver::identifier>();
 }
 
 void Resolver::bind_statements() {
+  dispatcher.bind<ast::IfStatement, &Resolver::if_statement>();
 
-  dispatcher.bind<ast::IfStatement>(&Resolver::if_statement);
+  dispatcher.bind<ast::WhileStatement, &Resolver::while_statement>();
 
-  dispatcher.bind<ast::WhileStatement>(&Resolver::while_statement);
+  dispatcher.bind<ast::BlockStatement, &Resolver::block_statement>();
 
-  dispatcher.bind<ast::BlockStatement>(&Resolver::block_statement);
+  dispatcher.bind<ast::ExpressionStatement, &Resolver::expression_statement>();
 
-  dispatcher.bind<ast::ExpressionStatement>(&Resolver::expression_statement);
-
-  dispatcher.bind<ast::ReturnStatement>(&Resolver::return_statement);
+  dispatcher.bind<ast::ReturnStatement, &Resolver::return_statement>();
 }
 
 void Resolver::bind_declarations() {
 
-  dispatcher.bind<ast::VariableDeclaration>(&Resolver::variable_declaration);
+    dispatcher.bind<ast::TypeDeclaration, &Resolver::resolve_type_declaration>();
 
-  dispatcher.bind<ast::FunctionDeclaration>(&Resolver::function_declaration);
+  dispatcher.bind<ast::VariableDeclaration, &Resolver::resolve_variable_declaration>();
 
-  dispatcher.bind<ast::ModuleDeclaration>(&Resolver::module_declaration);
+  dispatcher.bind<ast::FunctionDeclaration, &Resolver::resolve_function_declaration>();
 
-  dispatcher.bind<ast::ImportDeclaration>(&Resolver::import_declaration);
+  dispatcher.bind<ast::ModuleDeclaration, &Resolver::resolve_module_declaration>();
 
-  dispatcher.bind<ast::CapabilityDeclaration>(&Resolver::capability_declaration);
+  dispatcher.bind<ast::ImportDeclaration, &Resolver::resolve_import_declaration>();
 
-  dispatcher.bind<ast::ImplDeclaration>(&Resolver::impl_declaration);
+  dispatcher.bind<ast::CapabilityDeclaration, &Resolver::resolve_capability_declaration>();
 
-  dispatcher.bind<ast::FieldDeclaration>(&Resolver::field_declaration);
+  dispatcher.bind<ast::ImplDeclaration, &Resolver::resolve_impl_declaration>();
 
-  dispatcher.bind<ast::StructDeclaration>(&Resolver::struct_declaration);
+  dispatcher.bind<ast::FieldDeclaration, &Resolver::resolve_field_declaration>();
+
+  dispatcher.bind<ast::StructDeclaration, &Resolver::resolve_struct_declaration>();
+
+  dispatcher.bind<ast::ModuleInitDeclaration, &Resolver::resolve_module_init_declaration>();
 }
 
-void Resolver::bind_types() { dispatcher.bind<ast::TypeNode>(&Resolver::type_node); }
+void Resolver::bind_types() {
+  dispatcher.bind<ast::NamedType, &Resolver::resolve_named_type>();
+
+  dispatcher.bind<ast::GenericTypeNode, &Resolver::resolve_generic_type>();
+
+  dispatcher.bind<ast::FunctionType, &Resolver::resolve_function_type>();
+}
 
 void Resolver::resolve(ast::Node *node) {
+  if (!node) { return; }
 
-  if (!node) return;
-
-  if (dispatcher.dispatch(node) == DispatchResult::NotHandled) { std::cerr << "Resolver: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
+  if (dispatcher.dispatch(this, node) == DispatchResult::NotHandled) { std::cerr << "Resolver: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
 }
 
 } // namespace celestia::semantic

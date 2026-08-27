@@ -19,7 +19,7 @@ StatementParser::StatementParser(ParseContext &context, Parser &parser) : contex
 celestia::ast::Statement *StatementParser::parse_statement() {
   auto &tokens = context.tokens();
 
-  switch (tokens.peek()->desc->kind) {
+  switch (tokens.kind()) {
   case TokenKind::IF_KEYWORD: return parse_if_statement();
 
   case TokenKind::WHILE_KEYWORD: return parse_while_statement();
@@ -38,7 +38,7 @@ celestia::ast::Statement *StatementParser::parse_return_statement() {
   tokens.match(TokenKind::RETURN_KEYWORD);
 
   // return vazio
-  if (tokens.peek(TokenKind::CLOSE_BRACE) || tokens.peek(TokenKind::NEW_LINE)) { return context.get_ast().alloc<celestia::ast::ReturnStatement>(nullptr); }
+  if (tokens.check(TokenKind::CLOSE_BRACE) || tokens.check(TokenKind::NEW_LINE)) { return context.get_ast().alloc<celestia::ast::ReturnStatement>(nullptr); }
 
   auto *value = parser.expressions().parse_expression();
 
@@ -59,7 +59,7 @@ celestia::ast::BlockStatement *StatementParser::parse_block_statement() {
 
   ayla::parser::consume_statement_separators(context);
 
-  while (!tokens.is_end() && !tokens.peek(TokenKind::CLOSE_BRACE)) {
+  while (!tokens.is_end() && !tokens.check(TokenKind::CLOSE_BRACE)) {
 
     if (auto *decl_node = parser.declarations().parse_declaration()) {
       statements.push_back(decl_node);
@@ -148,7 +148,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
 
   if (tokens.match(TokenKind::ELSE_KEYWORD)) {
 
-    if (tokens.peek(TokenKind::IF_KEYWORD)) {
+    if (tokens.check(TokenKind::IF_KEYWORD)) {
       else_block = parse_if_statement();
     } else {
       else_block = parse_block_statement();

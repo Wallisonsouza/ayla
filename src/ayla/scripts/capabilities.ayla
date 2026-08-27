@@ -1,0 +1,25 @@
+module capabilities
+
+export Add<T>: cap {
+    add: (other: T) -> T
+}
+
+export Sub<T>: cap {
+    sub: (other: T) -> T
+}
+
+export Mul<T>: cap {
+    mul: (other: T) -> T
+}
+
+export Div<T>: cap {
+    div: (other: T) -> T
+}
+
+export Eq<T>: cap {
+    eq: (other: T) -> bool
+}
+
+export Ord<T>: cap {
+    cmp: (other: T) -> int
+}

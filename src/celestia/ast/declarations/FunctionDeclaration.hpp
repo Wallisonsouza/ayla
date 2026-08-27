@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Declaration.hpp"
+
 #include "celestia/ast/names/IdentifierNode.hpp"
 #include "celestia/ast/patterns/PatternNode.hpp"
 #include "celestia/ast/statements/BlockStatementNode.hpp"
 #include "celestia/ast/types/TypeNode.hpp"
+
 #include "celestia/syntax/parser/DeclarationSpecifiers.hpp"
 
 namespace celestia::ast {
@@ -12,10 +14,18 @@ namespace celestia::ast {
 struct FunctionDeclaration : NamedDeclaration {
 
   std::vector<PatternNode *> parameters;
+
   TypeNode *return_type;
+
   BlockStatement *body;
 
-  FunctionDeclaration(IdentifierNode *n = nullptr, std::vector<PatternNode *> params = {}, TypeNode *ret_type = nullptr, BlockStatement *b = nullptr, DeclarationSpecifiers s = {})
-      : NamedDeclaration(NodeKind::FunctionDeclaration, n, s), parameters(std::move(params)), return_type(ret_type), body(b) {}
+  FunctionDeclaration(IdentifierNode *name = nullptr,
+                      std::vector<IdentifierNode *> generic_parameters = {},
+                      std::vector<PatternNode *> parameters = {},
+                      TypeNode *return_type = nullptr,
+                      BlockStatement *body = nullptr,
+                      DeclarationSpecifiers specifiers = {})
+      : NamedDeclaration(NodeKind::FunctionDeclaration, name, specifiers, std::move(generic_parameters)), parameters(std::move(parameters)), return_type(return_type), body(body) {}
 };
+
 } // namespace celestia::ast

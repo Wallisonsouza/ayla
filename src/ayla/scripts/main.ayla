@@ -1,0 +1,20 @@
+
+Base1: struct {
+    a: int
+    b: int
+}
+
+Base2: struct {
+
+    c: int
+    d: int
+}
+
+Expression: struct Base1, Base2 {
+    
+}
+
+
+
+
+arr: array<Expression> = [Expression {a: 10, b: 20, c: 50, d: 60}]

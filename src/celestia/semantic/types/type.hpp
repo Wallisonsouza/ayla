@@ -1,15 +1,17 @@
 #pragma once
 
-#include "celestia/semantic/types/PrimitiveType.hpp"
-#include "celestia/semantic/types/TypeKind.hpp"
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+#include "celestia/core/ids/Ids.hpp"
+#include "celestia/semantic/types/PrimitiveType.hpp"
+#include "celestia/semantic/types/TypeKind.hpp"
 
 namespace celestia::semantic {
 
 struct Type {
-
   TypeKind kind;
 
   explicit Type(TypeKind kind) : kind(kind) {}
@@ -26,62 +28,103 @@ struct Type {
 
     case TypeKind::Object: return "Object";
 
-    case TypeKind::Array: return "Array";
+    case TypeKind::Struct: return "Struct";
+
+    case TypeKind::GenericInstance: return "GenericInstance";
     }
 
     return "Invalid";
   }
 };
 
-struct PrimitiveTypeInfo : Type {
+struct PrimitiveType : Type {
+  PrimitiveKind primitive;
 
-  PrimitiveType primitive;
+  explicit PrimitiveType(PrimitiveKind primitive) : Type(TypeKind::Primitive), primitive(primitive) {}
 
-  PrimitiveTypeInfo(PrimitiveType primitive) : Type(TypeKind::Primitive), primitive(primitive) {}
-
-  std::string to_string() const override {
-    switch (primitive) {
-    case PrimitiveType::Number: return "Number";
-
-    case PrimitiveType::String: return "String";
-
-    case PrimitiveType::Boolean: return "Boolean";
-
-    case PrimitiveType::Void: return "Void";
-    }
-
-    return "Unknown";
-  }
+  std::string to_string() const override { return std::string(primitive_kind_name(primitive)); }
 };
 
 struct ObjectType : Type {
-  std::unordered_map<std::string, Type *> members;
+  std::unordered_map<std::string, TypeId> members;
 
   ObjectType() : Type(TypeKind::Object) {}
 
   bool has_member(const std::string &name) const { return members.find(name) != members.end(); }
 
-  Type *get_member(const std::string &name) const {
+  TypeId get_member(const std::string &name) const {
     auto it = members.find(name);
-    return it == members.end() ? nullptr : it->second;
+
+    if (it == members.end()) return TypeId::invalid();
+
+    return it->second;
   }
 
-  void add_member(const std::string &name, Type *type) { members[name] = type; }
+  void add_member(const std::string &name, TypeId type) { members[name] = type; }
 };
 
 struct ModuleType : ObjectType {};
 
 struct FunctionType : Type {
-  std::vector<Type *> params;
-  Type *return_type = nullptr;
+  std::vector<TypeId> params;
+  TypeId return_type = TypeId::invalid();
 
   FunctionType() : Type(TypeKind::Function) {}
 };
 
-struct ArrayType : Type {
-  const Type *element_type;
+struct GenericInstanceType : Type {
+  SymbolId constructor;
+  std::vector<TypeId> arguments;
 
-  ArrayType(const Type *el) : Type(TypeKind::Array), element_type(el) {}
+  GenericInstanceType(SymbolId constructor, std::vector<TypeId> arguments) : Type(TypeKind::GenericInstance), constructor(constructor), arguments(std::move(arguments)) {}
 };
+
+struct GenericType : Type {
+  SymbolId symbol;
+  std::vector<SymbolId> parameters;
+
+  GenericType(SymbolId symbol, std::vector<SymbolId> parameters) : Type(TypeKind::Generic), symbol(symbol), parameters(std::move(parameters)) {}
+};
+struct StructMember {
+  std::string name;
+  TypeId type;
+};
+
+struct StructType : Type {
+
+  SymbolId symbol;
+
+  std::vector<StructMember> members;
+
+  std::unordered_map<std::string, size_t> member_lookup;
+
+  explicit StructType(SymbolId symbol) : Type(TypeKind::Struct), symbol(symbol) {}
+
+  bool has_member(const std::string &name) const { return member_lookup.find(name) != member_lookup.end(); }
+
+  TypeId get_member(const std::string &name) const {
+
+    auto it = member_lookup.find(name);
+
+    if (it == member_lookup.end()) return TypeId::invalid();
+
+    return members[it->second].type;
+  }
+
+  void add_member(std::string name, TypeId type) {
+
+    const size_t index = members.size();
+
+    members.push_back({std::move(name), type});
+
+    member_lookup.emplace(members[index].name, index);
+  }
+};
+
+// struct ArrayType : Type {
+//   TypeId element_type;
+
+//   explicit ArrayType(TypeId element_type) : Type(TypeKind::Array), element_type(element_type) {}
+// };
 
 } // namespace celestia::semantic

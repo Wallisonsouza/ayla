@@ -6,7 +6,7 @@
 namespace celestia::ast {
 
 struct Expression : Node {
-  const semantic::Type *resolved_type = nullptr;
+  const semantic::Type *type = nullptr;
   explicit Expression(NodeKind k) : Node(k) {}
 };
 

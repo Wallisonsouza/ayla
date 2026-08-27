@@ -1,0 +1,20 @@
+export extern int: type
+export extern uint: type
+
+export extern int8: type
+export extern int16: type
+export extern int32: type
+export extern int64: type
+
+export extern uint8: type
+export extern uint16: type
+export extern uint32: type
+export extern uint64: type
+
+export extern f32: type
+export extern f64: type
+
+export extern bool: type
+export extern char: type
+export extern string: type
+export extern void: type

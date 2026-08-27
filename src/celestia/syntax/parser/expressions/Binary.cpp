@@ -8,7 +8,7 @@
 namespace celestia::syntax {
 celestia::ast::Expression *ExpressionParser::parse_binary_expression(int min_bp, celestia::ast::Expression *left) {
   while (true) {
-    auto *token = context.tokens().peek();
+    auto *token = context.tokens().current();
 
     if (!token) break;
 

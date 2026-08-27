@@ -65,7 +65,7 @@ SymbolId Resolver::declare_symbol(const std::string &name, SymbolKind kind, Visi
   return id;
 }
 
-void Resolver::identifier_pattern(celestia::ast::IdentifierPatternNode *pattern, Visibility visibility) {
+void Resolver::named_pattern(celestia::ast::NamedPattern *pattern, Visibility visibility) {
 
   if (!pattern || !pattern->name) return;
 
@@ -88,7 +88,7 @@ void Resolver::pattern(celestia::ast::PatternNode *pat, Visibility visibility) {
 
   switch (pat->kind) {
 
-  case celestia::ast::NodeKind::NamePattern: identifier_pattern(static_cast<celestia::ast::IdentifierPatternNode *>(pat), visibility); break;
+  case celestia::ast::NodeKind::NamedPattern: named_pattern(static_cast<celestia::ast::NamedPattern *>(pat), visibility); break;
 
   default: std::cout << "Pattern nao suportado\n"; break;
   }

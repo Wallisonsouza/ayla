@@ -1,6 +1,5 @@
 #pragma once
 
-#include "celestia/semantic/symbol/SymbolId.hpp"
 #include "celestia/semantic/symbol/SymbolTable.hpp"
 #include <string_view>
 
@@ -10,6 +9,7 @@ enum class ScopeKind {
   Module,
   Function,
   Struct,
+  Type,
   Block,
   Capability,
   Impl,

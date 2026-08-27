@@ -11,7 +11,7 @@ void register_tokens(celestia::LanguageDefinition &def) {
   def.descriptors.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::FUNCTION_KEYWORD, "fu", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::FUN_KEYWORD, "fun", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
@@ -23,9 +23,10 @@ void register_tokens(celestia::LanguageDefinition &def) {
   def.descriptors.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
 
   def.descriptors.add(TokenKind::FOR_KEYWORD, "for", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::TYPE_KEYWORD, "type", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::CAP_KEYWORD, "cap", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::IMPL_KEYWORD, "impl", TokenGroup::Keyword);
-   def.descriptors.add(TokenKind::REF_KEYWORD, "ref", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::REF_KEYWORD, "ref", TokenGroup::Keyword);
   // punctuaction
   def.descriptors.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
   def.descriptors.add(TokenKind::COLON, ":", TokenGroup::Punctuation);

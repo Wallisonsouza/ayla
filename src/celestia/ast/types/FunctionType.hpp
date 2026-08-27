@@ -5,13 +5,13 @@
 
 namespace celestia::ast {
 
-class FunctionType : public TypeNode {
+struct FunctionType : public TypeNode {
 
-  std::vector<TypeNode *> parameters_;
-  TypeNode *return_type_;
+  std::vector<TypeNode *> parameters;
+  TypeNode *return_type;
 
 public:
-  FunctionType(std::vector<TypeNode *> parameters, TypeNode *return_type) : TypeNode(NodeKind::FunctionType), parameters_(std::move(parameters)), return_type_(return_type) {}
+  FunctionType(std::vector<TypeNode *> parameters, TypeNode *return_type) : TypeNode(NodeKind::FunctionType), parameters(std::move(parameters)), return_type(return_type) {}
 };
 
 } // namespace celestia::ast

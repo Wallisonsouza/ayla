@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SymbolId.hpp"
+#include "celestia/core/ids/Ids.hpp"
 #include <string>
 #include <string_view>
 #include <unordered_map>

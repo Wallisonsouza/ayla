@@ -25,22 +25,25 @@ Parser::Parser(ParseContext &context) : context(context) {
 Parser::~Parser() = default;
 
 void Parser::run() {
+
   auto *module = declarations().parse_module_declaration();
 
-  if (!module) { module = context.get_ast().alloc<celestia::ast::ModuleDeclaration>(nullptr); }
+  if (!module) { module = context.get_ast().alloc<ast::ModuleDeclaration>(nullptr); }
 
-  auto *script = context.get_ast().alloc<celestia::ast::BlockStatement>();
+  auto *script = context.get_ast().alloc<ast::BlockStatement>();
 
   auto &tokens = context.tokens();
 
   while (!tokens.is_end()) {
 
     if (auto *decl = declarations().parse_declaration()) {
+
       module->declarations.push_back(decl);
       continue;
     }
 
     if (auto *stmt = statements().parse_statement()) {
+
       script->statements.push_back(stmt);
       continue;
     }
@@ -48,8 +51,11 @@ void Parser::run() {
     tokens.advance();
   }
 
-  context.unit.module = module;
-  context.unit.script = script;
+  auto *init = context.get_ast().alloc<ast::ModuleInitDeclaration>(script);
+
+  module->declarations.push_back(init);
+
+  context.set_ast_module(module);
 }
 
 } // namespace celestia::syntax

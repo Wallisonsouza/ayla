@@ -4,25 +4,6 @@
 
 namespace celestia::codegen {
 
-void CGenerator::generate_declaration(const ast::Declaration *declaration) {
-  if (!declaration) return;
-
-  switch (declaration->kind) {
-
-  case ast::NodeKind::VariableDeclaration: generate_variable_declaration(static_cast<const ast::VariableDeclaration *>(declaration)); return;
-
-  case ast::NodeKind::FunctionDeclaration: generate_function_declaration(static_cast<const ast::FunctionDeclaration *>(declaration)); return;
-
-  case ast::NodeKind::StructDeclaration: generate_struct_declaration(static_cast<const ast::StructDeclaration *>(declaration)); return;
-
-  case ast::NodeKind::CapabilityDeclaration: generate_capability_declaration(static_cast<const ast::CapabilityDeclaration *>(declaration)); return;
-
-  case ast::NodeKind::ImplementationDeclaration: generate_impl_declaration(static_cast<const ast::ImplDeclaration *>(declaration)); return;
-
-  default: return;
-  }
-}
-
 void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaration *declaration) {
 
   if (!declaration || !declaration->name) return;
@@ -37,7 +18,7 @@ void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaratio
 
     out << "static ";
 
-    generate_type(function->return_type);
+    // generate_type(function->return_type);
 
     out << " " << capability_name << "_" << function->name->str << "(void *self";
 
@@ -46,7 +27,7 @@ void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaratio
       if (!parameter) continue;
 
       out << ", ";
-      generate_pattern(parameter);
+      // generate_pattern(parameter);
     }
 
     out << ")";
@@ -64,7 +45,7 @@ void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaratio
 
     out << "    ";
 
-    generate_type(function->return_type);
+    // generate_type(function->return_type);
 
     out << " (*" << function->name->str << ")(void *self";
 
@@ -73,7 +54,7 @@ void CGenerator::generate_capability_declaration(const ast::CapabilityDeclaratio
       if (!parameter) continue;
 
       out << ", ";
-      generate_pattern(parameter);
+      // generate_pattern(parameter);
     }
 
     out << ");\n";
@@ -108,7 +89,7 @@ void CGenerator::generate_impl_declaration(const ast::ImplDeclaration *declarati
     out << "static ";
 
     // Retorno
-    generate_type(function->return_type);
+    // generate_type(function->return_type);
 
     out << " " << target_name << "_" << function->name->str << "(";
 
@@ -121,7 +102,7 @@ void CGenerator::generate_impl_declaration(const ast::ImplDeclaration *declarati
       if (!parameter) continue;
 
       out << ", ";
-      generate_pattern(parameter);
+      // generate_pattern(parameter);
     }
 
     out << ");\n";

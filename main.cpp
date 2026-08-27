@@ -1,16 +1,14 @@
 #include "ayla/language/AylaLanguage.hpp"
 
-#include <iostream>
-
 #include "celestia/compiler/Compiler.hpp"
 
-#include "celestia/stages/ResolverStage.hpp"
+#include "celestia/stages/CheckStage.hpp"
 #include "celestia/stages/DumperStage.hpp"
+#include "celestia/stages/LanguageBootstrap.hpp"
 #include "celestia/stages/LexerStage.hpp"
-#include "celestia/stages/LoweringStage.hpp"
+#include "celestia/stages/ModuleSetupStage.hpp"
 #include "celestia/stages/ParserStage.hpp"
-#include "celestia/stages/TokenDumperStage.hpp"
-#include "celestia/stages/Transpiler.hpp"
+#include "celestia/stages/ResolverStage.hpp"
 
 #include "src/CommandLine.hpp"
 
@@ -18,29 +16,40 @@ int main(int argc, char *argv[]) {
 
   auto cmd = parse_command_line(argc, argv);
 
-  if (cmd.command == Command::Run) {
+  if (cmd.command != Command::Run) return 0;
 
-    if (!cmd.input) throw std::runtime_error("Nenhum arquivo informado.");
+  if (!cmd.input) throw std::runtime_error("Nenhum arquivo informado.");
 
-    std::cout << "Arquivo: " << *cmd.input << '\n';
+  auto lang = ayla::language::create_definition();
 
-    auto lang = ayla::language::create_definition();
+  Compiler compiler(lang);
 
-    Compiler compiler(lang);
+  auto bootstrap = compiler.create_frame();
 
-    compiler.pipeline.add_stage<LexerStage>();
-    compiler.pipeline.add_stage<ParserStage>();
-    compiler.pipeline.add_stage<LoweringStage>();
-    compiler.pipeline.add_stage<ResolverStage>();
+  bootstrap.add_script("../src/ayla/scripts/collections.ayla")
+      .add_stage<LexerStage>()
+      .add_stage<ParserStage>()
+      .add_stage<ModuleBootstrapSetupStage>()
+      .add_stage<ResolverStage>()
+      // .add_stage<LanguageBootstrapStage>()
+      .add_stage<AstDumperStage>();
 
-    if (has_flag(cmd.dumps, DumpFlags::Tokens)) { compiler.pipeline.add_stage<TokenDumperStage>(); };
-    if (has_flag(cmd.dumps, DumpFlags::Ast)) { compiler.pipeline.add_stage<AstDumperStage>(); };
+  bootstrap.run();
 
-    compiler.pipeline.add_stage<CTranspilePass>();
+  // auto user = compiler.create_frame();
+  // user
+  //     .add_script(*cmd.input)
+  //     .add_stage<LexerStage>()
+  //     .add_stage<ParserStage>()
+  //     .add_stage<ModuleSetupStage>();
 
-    compiler.add_script(*cmd.input);
-    compiler.compile();
+  // if (has_flag(cmd.dumps, DumpFlags::Ast)) {
+  //   user.add_stage<AstDumperStage>();
+  // }
 
-    // session.show_diagnostics();
-  }
+  // user
+  //     .add_stage<ResolverStage>()
+  //     .add_stage<CheckStage>();
+
+  // user.run();
 }

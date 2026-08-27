@@ -15,7 +15,7 @@
 
 namespace diagnostic {
 
-using DiagnosticValue = std::variant<Token *, TokenKind, ExpectedKind, Type *, Symbol *, std::string>;
+using DiagnosticValue = std::variant<Token *, TokenKind, ExpectedKind, celestia::semantic::Type *, Symbol *, std::string>;
 
 struct Help {
   DiagnosticCode code;

@@ -6,7 +6,7 @@
 
 namespace celestia::syntax {
 celestia::ast::Expression *ExpressionParser::parse_unary_expression() {
-  auto *token = context.tokens().peek();
+  auto *token = context.tokens().current();
 
   if (!token) return parse_postfix_expression();
 

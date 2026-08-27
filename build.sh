@@ -14,7 +14,7 @@ cmake -G Ninja \
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 ..
 
-MAX_THREADS=4
+MAX_THREADS=2
 THREADS=$(nproc)
 
 if [ "$THREADS" -gt "$MAX_THREADS" ]; then
@@ -34,4 +34,5 @@ clear
 # Executa
 cd build
 
-./ayla run ../src/ayla/scripts/io.ayla  --dump ast
+#  /gdb --args
+ ./ayla run ../src/ayla/scripts/main.ayla --dump ast

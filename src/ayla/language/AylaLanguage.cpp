@@ -7,13 +7,13 @@
 namespace ayla::language {
 
 celestia::LanguageDefinition create_definition() {
-  
+
   celestia::LanguageDefinition definition;
 
   register_types(definition);
   register_operators(definition);
   register_tokens(definition);
-
+  // register_builtins(definition);
   return definition;
 }
 

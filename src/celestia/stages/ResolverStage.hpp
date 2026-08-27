@@ -1,10 +1,9 @@
 #pragma once
-
-#include "celestia/core/visitor/AstStage.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
+#include "celestia/core/visitor/Stage.hpp"
 #include "celestia/semantic/resolver/Resolver.hpp"
 
-class ResolverStage : public AstStage {
+class ResolverStage : public Stage{
 
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
@@ -13,6 +12,6 @@ class ResolverStage : public AstStage {
 
     celestia::semantic::Resolver resolver = celestia::semantic::Resolver(ctx);
 
-    resolver.resolve(unit.module);
+    resolver.resolve(unit.ast_module);
   }
 };

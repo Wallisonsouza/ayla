@@ -2,7 +2,6 @@
 
 #include "celestia/ast/types/GenericType.hpp"
 #include "celestia/ast/types/NamedType.hpp"
-#include "celestia/ast/types/ReferenceType.hpp"
 
 #include <string>
 
@@ -37,7 +36,7 @@ void CGenerator::generate_module(const ast::ModuleDeclaration *module) {
 // ============================================================
 
 void CGenerator::generate_runtime() {
-   out << "#include \"lib/ayla_array.h\"\n";
+  out << "#include \"lib/ayla_array.h\"\n";
   out << "#include <stddef.h>\n";
   out << "#include <stdbool.h>\n";
   out << "\n";
@@ -111,24 +110,8 @@ void CGenerator::collect_type_dependency(const ast::TypeNode *type, std::vector<
     return;
   }
 
-  case ast::NodeKind::ReferenceType: {
-    auto *reference = static_cast<const ast::ReferenceType *>(type);
-
-    collect_type_dependency(reference->target, deps);
-
-    return;
-  }
-
-  case ast::NodeKind::ArrayType: {
-    auto *array = static_cast<const ast::ArrayType *>(type);
-
-    collect_type_dependency(array->element_type, deps);
-
-    return;
-  }
-
   case ast::NodeKind::GenericType: {
-    auto *generic = static_cast<const ast::GenericType *>(type);
+    auto *generic = static_cast<const ast::GenericTypeNode *>(type);
 
     for (auto *argument : generic->arguments) { collect_type_dependency(argument, deps); }
 
@@ -182,77 +165,9 @@ void CGenerator::visit_struct(const std::string &name) {
 }
 
 // ============================================================
-// STRUCT DECLARATION
-// ============================================================
-
-void CGenerator::generate_struct_declaration(const ast::StructDeclaration *decl) {
-  if (!decl || !decl->name) return;
-
-  out << "struct " << decl->name->str << " {\n";
-
-  for (auto *composition : decl->compositions) {
-    if (!composition) continue;
-
-    out << "    ";
-
-    generate_type(composition);
-
-    out << " base;\n";
-  }
-
-  for (auto *field : decl->fields) {
-    if (field) generate_field(field);
-  }
-
-  out << "};\n\n";
-}
-
-// ============================================================
-// FIELD
-// ============================================================
-
-void CGenerator::generate_field(const ast::FieldDeclaration *field) {
-  if (!field || !field->name || !field->type) return;
-
-  out << "    ";
-
-  generate_type(field->type);
-
-  out << " " << field->name->str << ";\n";
-}
-
-// ============================================================
 // STRUCT LITERAL
 // ============================================================
 
-void CGenerator::generate_struct_literal(const ast::StructLiteralNode *node) {
-  if (!node || !node->type) return;
 
-  out << "(";
-
-  generate_type(node->type);
-
-  out << "){";
-
-  bool first = true;
-
-  for (auto *field : node->fields) {
-    if (!field) continue;
-
-    if (!first) out << ", ";
-
-    first = false;
-
-    out << ".";
-
-    if (field->name) out << field->name->str;
-
-    out << " = ";
-
-    if (field->value) generate_expression(field->value);
-  }
-
-  out << "}";
-}
 
 } // namespace celestia::codegen

@@ -14,7 +14,7 @@ celestia::ast::Expression *ExpressionParser::parse_postfix_expression() {
   if (!expr) return nullptr;
 
   while (true) {
-    auto *token = context.tokens().peek();
+    auto *token = context.tokens().current();
 
     if (!token) break;
 

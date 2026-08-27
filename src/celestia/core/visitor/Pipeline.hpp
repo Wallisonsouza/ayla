@@ -1,3 +1,4 @@
+#pragma once
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/core/visitor/Stage.hpp"

@@ -5,11 +5,11 @@
 
 namespace celestia::ast {
 
-struct GenericType : TypeNode {
+struct GenericTypeNode : TypeNode {
 
   IdentifierNode *name;
   std::vector<TypeNode *> arguments;
 
-  GenericType(IdentifierNode *name, std::vector<TypeNode *> arguments) : TypeNode(NodeKind::GenericType), name(name), arguments(std::move(arguments)) {}
+  GenericTypeNode(IdentifierNode *name, std::vector<TypeNode *> arguments) : TypeNode(NodeKind::GenericType), name(name), arguments(std::move(arguments)) {}
 };
 } // namespace celestia::ast
