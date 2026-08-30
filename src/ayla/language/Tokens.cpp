@@ -7,26 +7,33 @@ void register_tokens(celestia::LanguageDefinition &def) {
   def.descriptors.add(TokenKind::IDENTIFIER, TokenGroup::Name);
   def.descriptors.add(TokenKind::TRUE, "true", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::FALSE, "false", TokenGroup::Keyword);
+
   def.descriptors.add(TokenKind::IF_KEYWORD, "if", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::EXTERN, "extern", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::ELSE_KEYWORD, "else", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::WHILE_KEYWORD, "while", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::FUN_KEYWORD, "fun", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::RETURN_KEYWORD, "return", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::STRUCT_KEYWORD, "struct", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::STATIC, "static", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::MUT, "mut", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::VALUE_KEYWORD, "val", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::PUBLIC, "public", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
 
-  def.descriptors.add(TokenKind::FOR_KEYWORD, "for", TokenGroup::Keyword);
+  // decl
+  def.descriptors.add(TokenKind::FUN_KEYWORD, "fun", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::STRUCT_KEYWORD, "struct", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::TYPE_KEYWORD, "type", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::CAP_KEYWORD, "cap", TokenGroup::Keyword);
   def.descriptors.add(TokenKind::IMPL_KEYWORD, "impl", TokenGroup::Keyword);
-  def.descriptors.add(TokenKind::REF_KEYWORD, "ref", TokenGroup::Keyword);
+
+  def.descriptors.add(TokenKind::PUBLIC, "public", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::PRIVATE, "private", TokenGroup::Keyword);
+
+  // var
+  def.descriptors.add(TokenKind::STATIC, "static", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::MUT_KEYWORD, "mut", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::LET_KEYWORD, "let", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::CONST_KEYWORD, "const", TokenGroup::Keyword);
+
+  def.descriptors.add(TokenKind::MODULE_KEYWORD, "module", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::IMPORT_KEYWORD, "import", TokenGroup::Keyword);
+  def.descriptors.add(TokenKind::EXPORT_KEYWORD, "export", TokenGroup::Keyword);
+
   // punctuaction
   def.descriptors.add(TokenKind::OPEN_PAREN, "(", TokenGroup::Punctuation);
   def.descriptors.add(TokenKind::COLON, ":", TokenGroup::Punctuation);

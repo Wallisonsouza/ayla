@@ -9,7 +9,7 @@ void Resolver::assignment(celestia::ast::AssignmentExpressionNode *node) {
 
   auto symbol = context.compiler.symbols.get(node->target->symbol_id);
 
-  if (symbol->modifiers.has(Modifier::Mut)) { std::cout << "aaaaaaaaaaaaaaaa, e mut"; }
+  // if (symbol->modifiers.has(Modifier::Mut)) { std::cout << "aaaaaaaaaaaaaaaa, e mut"; }
 
   if (node->value) { resolve(node->value); }
 }

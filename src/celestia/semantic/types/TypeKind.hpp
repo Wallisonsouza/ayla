@@ -6,6 +6,7 @@ enum class TypeKind {
     Unknown,
     Primitive,
     Function,
+    GenericDefinition,
     GenericInstance,
     Generic,
     Struct,

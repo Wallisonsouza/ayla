@@ -57,7 +57,7 @@ celestia::ast::BlockStatement *StatementParser::parse_block_statement() {
 
   std::vector<celestia::ast::Statement *> statements;
 
-  ayla::parser::consume_statement_separators(context);
+  tokens.skip_trivia();
 
   while (!tokens.is_end() && !tokens.check(TokenKind::CLOSE_BRACE)) {
 
@@ -70,7 +70,7 @@ celestia::ast::BlockStatement *StatementParser::parse_block_statement() {
       tokens.advance();
     }
 
-    ayla::parser::consume_statement_separators(context);
+    tokens.skip_trivia();
   }
 
   if (!tokens.match(TokenKind::CLOSE_BRACE)) {
@@ -108,7 +108,7 @@ celestia::ast::Statement *StatementParser::parse_while_statement() {
 
   auto *block = parse_block_statement();
 
-  if (!block ) {
+  if (!block) {
     // context.//report_error(
     //     DiagnosticCode::BlockError,
     //     "error in while block"
@@ -127,7 +127,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
 
   auto *condition = parser.expressions().parse_expression();
 
-  if (!condition ) {
+  if (!condition) {
     // context.//report_error(...)
     return nullptr;
   }
@@ -139,7 +139,7 @@ celestia::ast::Statement *StatementParser::parse_if_statement() {
 
   auto *then_block = parse_block_statement();
 
-  if (!then_block ) {
+  if (!then_block) {
     // erro
     return nullptr;
   }

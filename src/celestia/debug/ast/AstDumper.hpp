@@ -128,6 +128,7 @@ private:
 
     dispatcher.bind<ast::GenericTypeNode, &AstDumper::dump_generic_type>();
     dispatcher.bind<ast::TypeDeclaration, &AstDumper::dump_type_declaration>();
+
   }
 
   void dump_impl_declaration(const ast::ImplDeclaration *node);

@@ -1,6 +1,5 @@
 #pragma once
 #include "Symbol.hpp"
-#include "SymbolId.hpp"
 #include "celestia/semantic/symbol/Symbol.hpp"
 
 #include <deque>
@@ -13,17 +12,17 @@ private:
   uint32_t next_id = 0;
 
 public:
-  SymbolId create_symbol(const std::string &name, SymbolKind kind, Visibility visibility = Visibility::Private, bool is_builtin = false, celestia::ast::Node *decl = nullptr) {
+  celestia::semantic::SymbolId create_symbol(const std::string &name, SymbolKind kind, Visibility visibility = Visibility::Private, bool is_builtin = false, celestia::ast::Node *decl = nullptr) {
 
-    if (next_id == SymbolId::INVALID) { throw std::runtime_error("SymbolId overflow"); }
+    if (next_id == celestia::semantic::SymbolId::INVALID) { throw std::runtime_error("celestia::semantic::SymbolId overflow"); }
 
-    SymbolId id(next_id++);
+    celestia::semantic::SymbolId id(next_id++);
     symbols.emplace_back(id, name, kind, visibility, is_builtin, decl);
 
     return id;
   }
 
-  Symbol *get(SymbolId id) {
+  Symbol *get(celestia::semantic::SymbolId id) {
     if (!id.is_valid()) return nullptr;
 
     uint32_t i = id.index();
@@ -33,7 +32,7 @@ public:
     return &symbols[i];
   }
 
-  const Symbol *get(SymbolId id) const {
+  const Symbol *get(celestia::semantic::SymbolId id) const {
     if (!id.is_valid()) return nullptr;
 
     uint32_t i = id.index();

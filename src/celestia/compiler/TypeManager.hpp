@@ -1,7 +1,7 @@
 #pragma once
 
-#include "celestia/core/ids/Ids.hpp"
 #include "celestia/core/memory/Arena.hpp"
+#include "celestia/semantic/id/ids.hpp"
 #include "celestia/semantic/types/type.hpp"
 
 #include <unordered_map>
@@ -9,7 +9,7 @@
 
 class TypeManager {
 public:
-  TypeId get_or_create(SymbolId symbol, celestia::semantic::TypeKind kind) {
+  celestia::semantic::TypeId get_or_create(celestia::semantic::SymbolId symbol, celestia::semantic::TypeKind kind) {
 
     auto it = types_by_symbol.find(symbol);
 
@@ -23,17 +23,17 @@ public:
 
     case celestia::semantic::TypeKind::Function: type = arena.alloc<celestia::semantic::FunctionType>(); break;
 
-    default: return TypeId::invalid();
+    default: return celestia::semantic::TypeId::invalid();
     }
 
-    TypeId id = insert(type);
+    celestia::semantic::TypeId id = insert(type);
 
     types_by_symbol.emplace(symbol, id);
 
     return id;
   }
 
-  TypeId get_or_create_primitive(SymbolId symbol, celestia::semantic::PrimitiveKind primitive) {
+  celestia::semantic::TypeId get_or_create_primitive(celestia::semantic::SymbolId symbol, celestia::semantic::PrimitiveKind primitive) {
 
     auto it = types_by_symbol.find(symbol);
 
@@ -41,14 +41,29 @@ public:
 
     auto *type = arena.alloc<celestia::semantic::PrimitiveType>(primitive);
 
-    TypeId id = insert(type);
+    celestia::semantic::TypeId id = insert(type);
 
     types_by_symbol.emplace(symbol, id);
 
     return id;
   }
 
-  TypeId get_or_create_generic_instance(SymbolId constructor, const std::vector<TypeId> &arguments) {
+  celestia::semantic::TypeId get_or_create_generic(celestia::semantic::SymbolId symbol, size_t arity) {
+
+    auto it = types_by_symbol.find(symbol);
+
+    if (it != types_by_symbol.end()) return it->second;
+
+    auto *type = arena.alloc<celestia::semantic::GenericDeclarationType>(symbol, arity);
+
+    celestia::semantic::TypeId id = insert(type);
+
+    types_by_symbol.emplace(symbol, id);
+
+    return id;
+  }
+
+  celestia::semantic::TypeId get_or_create_generic_instance(celestia::semantic::SymbolId constructor, const std::vector<celestia::semantic::TypeId> &arguments) {
 
     for (size_t i = 0; i < types.size(); ++i) {
 
@@ -62,7 +77,7 @@ public:
 
       if (generic.arguments != arguments) continue;
 
-      return TypeId(static_cast<TypeId::ValueType>(i));
+      return celestia::semantic::TypeId(static_cast<celestia::semantic::TypeId::ValueType>(i));
     }
 
     auto *type = arena.alloc<celestia::semantic::GenericInstanceType>(constructor, arguments);
@@ -70,14 +85,14 @@ public:
     return insert(type);
   }
 
-  celestia::semantic::Type &get(TypeId id) { return *types[id.index()]; }
+  celestia::semantic::Type &get(celestia::semantic::TypeId id) { return *types[id.index()]; }
 
-  const celestia::semantic::Type &get(TypeId id) const { return *types[id.index()]; }
+  const celestia::semantic::Type &get(celestia::semantic::TypeId id) const { return *types[id.index()]; }
 
 private:
-  TypeId insert(celestia::semantic::Type *type) {
+  celestia::semantic::TypeId insert(celestia::semantic::Type *type) {
 
-    TypeId id(static_cast<TypeId::ValueType>(types.size()));
+    celestia::semantic::TypeId id(static_cast<celestia::semantic::TypeId::ValueType>(types.size()));
 
     types.push_back(type);
 
@@ -89,5 +104,5 @@ private:
 
   std::vector<celestia::semantic::Type *> types;
 
-  std::unordered_map<SymbolId, TypeId> types_by_symbol;
+  std::unordered_map<celestia::semantic::SymbolId, celestia::semantic::TypeId> types_by_symbol;
 };

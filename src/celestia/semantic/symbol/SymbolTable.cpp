@@ -1,11 +1,11 @@
 #include "SymbolTable.hpp"
 
-bool SymbolTable::insert(std::string_view name, SymbolId id) { return m_symbols.emplace(std::string(name), id).second; }
+bool SymbolTable::insert(std::string_view name, celestia::semantic::SymbolId id) { return m_symbols.emplace(std::string(name), id).second; }
 
-SymbolId SymbolTable::find(std::string_view name) const {
+celestia::semantic::SymbolId SymbolTable::find(std::string_view name) const {
   auto it = m_symbols.find(std::string(name));
 
-  if (it == m_symbols.end()) return SymbolId();
+  if (it == m_symbols.end()) return celestia::semantic::SymbolId();
 
   return it->second;
 }

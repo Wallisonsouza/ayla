@@ -1,5 +1,6 @@
 #pragma once
 
+#include "celestia/semantic/id/ids.hpp"
 #include "celestia/semantic/symbol/SymbolTable.hpp"
 #include <string_view>
 
@@ -24,18 +25,18 @@ struct Scope {
 
   explicit Scope(ScopeKind kind, Scope *p = nullptr) : parent(p), kind(kind) {}
 
-  SymbolId symbol(std::string_view name) const {
+  celestia::semantic::SymbolId symbol(std::string_view name) const {
     const Scope *scope = this;
 
     while (scope) {
-      SymbolId id = scope->symbols.find(name);
+      celestia::semantic::SymbolId id = scope->symbols.find(name);
 
       if (id.is_valid()) return id;
 
       scope = scope->parent;
     }
 
-    return SymbolId::invalid();
+    return celestia::semantic::SymbolId::invalid();
   }
 
   bool has_symbol_local(std::string_view name) const { return symbols.contains(name); }

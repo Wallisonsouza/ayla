@@ -1,20 +1,18 @@
 
-Base1: struct {
-    a: int
-    b: int
+let name: String = "Wallison"
+let age: Int = 23
+
+fun add(a: Int, b: Int) -> Int {
+    a + b
 }
 
-Base2: struct {
-
-    c: int
-    d: int
+struct Point {
+    x: Int
+    y: Int
 }
 
-Expression: struct Base1, Base2 {
-    
+enum Color {
+    Red
+    Green
+    Blue
 }
-
-
-
-
-arr: array<Expression> = [Expression {a: 10, b: 20, c: 50, d: 60}]

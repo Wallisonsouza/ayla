@@ -19,7 +19,7 @@ struct ModuleDeclaration : Declaration {
 
   std::vector<Declaration *> declarations;
 
-  SymbolId resolved_symbol_id;
+  // SymbolId resolved_symbol_id;
 
   ModuleDeclaration(QualifiedNameNode *n, std::vector<Declaration *> decls = {}) : Declaration(NodeKind::ModuleDeclaration), name(n), declarations(std::move(decls)) {}
 };

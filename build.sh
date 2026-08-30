@@ -4,14 +4,15 @@ set -e
 export CC=clang
 export CXX=clang++
 
-#  rm -rf build
-
- mkdir -p build
+mkdir -p build
 cd build
 
-# Gera build usando Ninja
 cmake -G Ninja \
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+-DCMAKE_C_FLAGS="-O0 -g" \
+-DCMAKE_CXX_FLAGS="-O0 -g" \
+-DCMAKE_C_COMPILER_LAUNCHER=ccache \
+-DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
 ..
 
 MAX_THREADS=2
@@ -21,18 +22,14 @@ if [ "$THREADS" -gt "$MAX_THREADS" ]; then
     THREADS=$MAX_THREADS
 fi
 
-# Compila usando Ninja
 ninja -j $THREADS
 
-# Volta para a raiz do projeto
 cd ..
 
 ln -sf build/compile_commands.json compile_commands.json
 
 clear
 
-# Executa
 cd build
 
-#  /gdb --args
- ./ayla run ../src/ayla/scripts/main.ayla --dump ast
+./ayla run ../src/ayla/scripts/main.ayla --dump ast

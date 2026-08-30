@@ -81,7 +81,8 @@ void Resolver::bind_types() {
 void Resolver::resolve(ast::Node *node) {
   if (!node) { return; }
 
-  if (dispatcher.dispatch(this, node) == DispatchResult::NotHandled) { std::cerr << "Resolver: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
+  dispatcher.dispatch(this, node) ;
+  // if (== DispatchResult::NotHandled) { std::cerr << "Resolver: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
 }
 
 } // namespace celestia::semantic

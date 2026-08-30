@@ -102,7 +102,8 @@ void TypeChecker::bind_literals() {
 void TypeChecker::check(ast::Node *node) {
   if (!node) return;
 
-  if (dispatcher.dispatch(this, node) == DispatchResult::NotHandled) { std::cerr << "Checker: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
+  dispatcher.dispatch(this, node);
+  // if ( == DispatchResult::NotHandled) { std::cerr << "Checker: no handler for NodeKind: " << celestia::ast::node_kind_name(node->kind) << '\n'; }
 }
 
 TypeId TypeChecker::type_from_node(ast::TypeNode *node) {

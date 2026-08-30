@@ -10,7 +10,7 @@ namespace celestia::ast {
 struct ImportDeclaration : Declaration {
   QualifiedNameNode* name;
   std::optional<std::string> alias;
-  SymbolId resolved_symbol_id;
+  // SymbolId resolved_symbol_id;
 
   explicit ImportDeclaration(QualifiedNameNode* n) : Declaration(NodeKind::ImportDeclaration), name(n) {}
 

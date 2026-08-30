@@ -33,26 +33,26 @@ void Resolver::block_statement(celestia::ast::BlockStatement *node) {
     return;
   }
 
-  auto *scope = context.unit.module->scopes.create_scope(core::ScopeKind::Block, parent);
+  auto *scope = context.scope_manager.create_scope(core::ScopeKind::Block, parent);
 
   if (!scope) {
     std::cout << "ERRO: nao foi possivel criar scope\n";
     return;
   }
 
-  // context.scopes.push(*scope);
+  context.scopes.push(*scope);
 
-  // for (auto *stmt : node->statements) {
+  for (auto *stmt : node->statements) {
 
-  //   if (!stmt) {
-  //     std::cout << "ERRO: statement nulo no bloco\n";
-  //     continue;
-  //   }
+    if (!stmt) {
+      std::cout << "ERRO: statement nulo no bloco\n";
+      continue;
+    }
 
-  //   resolve(stmt);
-  // }
+    resolve(stmt);
+  }
 
-  // context.scopes.pop();
+  context.scopes.pop();
 }
 
 } // namespace celestia::semantic

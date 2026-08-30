@@ -19,7 +19,7 @@ enum class DiagnosticCode : std::uint32_t {
   //-----------------------------------
   // Parser
   //-----------------------------------
-
+  ExpectedToken,
   UnexpectedToken,
   ExpectedIdentifier,
   ExpectedExpression,
@@ -35,6 +35,11 @@ enum class DiagnosticCode : std::uint32_t {
   RedefinedSymbol,
   ShadowedSymbol,
 
+  UnknownType,
+  NotAType,
+  UnknownGeneric,
+  InvalidGenericArity,
+
   //-----------------------------------
   // Type Checker
   //-----------------------------------
@@ -44,4 +49,4 @@ enum class DiagnosticCode : std::uint32_t {
   InvalidConversion,
 };
 
-}
+} // namespace diagnostic

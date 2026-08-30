@@ -2,19 +2,19 @@
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/core/visitor/Stage.hpp"
+#include "celestia/ir/IRDumper.hpp"
+#include "celestia/lowering/Lowering.hpp"
+#include <iostream>
 
 class LoweringStage : public Stage {
   void run(CompilerEnvironment &env, CompilationUnit &unit) override {
 
-    // auto *module = unit.module;
-    // auto *script = unit.script;
 
-    // if (!module || !script || script->statements.empty()) return;
+    celestia::lowering::LoweringContext lowering(unit.ir, env);
 
-    // auto *init = unit.ast_arena.alloc<celestia::ast::ModuleInitDeclaration>(script);
+    celestia::ir::IRDumper dumper(unit.ir);
 
-    // module->declarations.push_back(init);
-
-    // unit.script = nullptr;
+    lowering.lower(unit.ast_module);
+    dumper.dump(std::cout);
   }
 };

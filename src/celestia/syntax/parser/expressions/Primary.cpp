@@ -17,9 +17,7 @@ celestia::ast::Expression *ExpressionParser::parse_number_literal() {
 
   auto text = context.source().buffer.get_text(token->slice.get_span());
 
-  try {
-    return context.get_ast().alloc<celestia::ast::NumberLiteralNode>(std::stod(text));
-  } catch (...) { return nullptr; }
+  return context.get_ast().alloc<celestia::ast::NumberLiteralNode>(text);
 }
 
 celestia::ast::Expression *ExpressionParser::parse_string_literal() {

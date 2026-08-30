@@ -45,6 +45,11 @@ public:
     return it != by_kind_.end() ? it->second : nullptr;
   }
 
+  const celestia::TokenDescriptor *lookup_by_kind(TokenKind kind) const {
+    auto it = by_kind_.find(kind);
+    return it != by_kind_.end() ? it->second : nullptr;
+  }
+  
   celestia::TokenDescriptor *lookup_by_name(std::string_view name) {
     auto it = by_name_.find(std::string(name));
 

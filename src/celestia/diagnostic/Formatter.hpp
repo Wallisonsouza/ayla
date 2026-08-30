@@ -1,102 +1,105 @@
 #pragma once
 
+#include "celestia/compiler/CompilerEnvironment.hpp"
 #include "celestia/diagnostic/Diagnostic.hpp"
 
 #include <string>
+#include <string_view>
+#include <utility>
+#include <variant>
+#include <vector>
 
 namespace diagnostic {
 
-class Formatter {
+class DiagnosticFormatter {
 
 public:
+  // Substitui os placeholders pela representação textual dos argumentos.
+  static std::string format(std::string_view message, const std::vector<DiagnosticArgument> &arguments, const CompilerEnvironment &env) {
 
-    std::string format(const std::string& message, const Diagnostic& diagnostic) {
+    std::string result(message);
 
-        std::string result = message;
+    for (const auto &argument : arguments) {
 
-        for (const auto& argument : diagnostic.arguments) {
+      const auto placeholder = placeholder_name(argument.kind);
+      const auto value = format_value(argument.value, env);
 
-            std::string key = argument_name(argument.kind);
-
-            replace(
-                result,
-                "{" + key + "}",
-                format_value(argument.value)
-            );
-        }
-
-        return result;
+      replace(result, placeholder, value);
     }
 
+    return result;
+  }
 
 private:
+  static std::string_view placeholder_name(DiagnosticArgumentKind kind) {
 
-    std::string argument_name(DiagnosticArgumentKind kind) {
+    switch (kind) {
 
-        switch (kind) {
+    case DiagnosticArgumentKind::Expected: return "{expected}";
 
-        case DiagnosticArgumentKind::Expected:
-            return "expected";
+    case DiagnosticArgumentKind::Found: return "{found}";
 
-        case DiagnosticArgumentKind::Found:
-            return "found";
+    case DiagnosticArgumentKind::Previous: return "{previous}";
 
-        case DiagnosticArgumentKind::Previous:
-            return "previous";
+    case DiagnosticArgumentKind::Type: return "{type}";
 
-        // case DiagnosticArgumentKind::Actual:
-        //     return "actual";
+    case DiagnosticArgumentKind::Symbol: return "{symbol}";
 
-        default:
-            return "unknown";
-        }
+    case DiagnosticArgumentKind::Name: return "{name}";
     }
 
+    return "{unknown}";
+  }
 
-    std::string format_value(const DiagnosticValue& value) {
+  static std::string format_value(const DiagnosticValue &value, const CompilerEnvironment &env) {
 
-        return std::visit([](auto&& arg) -> std::string {
+    return std::visit([&](const auto &value) -> std::string { return format_value_impl(value, env); }, value);
+  }
 
-            using T = std::decay_t<decltype(arg)>;
+  static std::string format_value_impl(TokenKind kind, const CompilerEnvironment &env) {
 
-            if constexpr (std::is_same_v<T, const Token*>) {
-                return arg->descriptor->text;
-            }
+    auto *desc = env.language.descriptors.lookup_by_kind(kind);
 
-            else if constexpr (std::is_same_v<T, TokenKind>) {
-              return"";
-                // return token_kind_name(arg);
-            }
+    if (!desc) return "EOF";
 
-            else if constexpr (std::is_same_v<T, ExpectedKind>) {
-                   return"";
-                // return expected_kind_name(arg);
-            }
+    return desc->name;
+  }
 
-            else if constexpr (std::is_same_v<T, std::string>) {
-                return arg;
-            }
+  static std::string format_value_impl(ExpectedKind kind, const CompilerEnvironment &) { return std::string(); }
 
-            else {
-                return "<unknown>";
-            }
+  static std::string format_value_impl(celestia::semantic::TypeId id, const CompilerEnvironment &env) {
 
-        }, value);
+    if (!id.is_valid()) return "<invalid type>";
+
+    const auto &type = env.types.get(id);
+
+    return type.to_string();
+  }
+
+  static std::string format_value_impl(celestia::semantic::SymbolId id, const CompilerEnvironment &env) {
+
+    if (!id.is_valid()) return "<invalid symbol>";
+
+    const auto *symbol = env.symbols.get(id);
+
+    if (!symbol) return "<invalid symbol>";
+
+    return symbol->name;
+  }
+
+  static std::string format_value_impl(const std::string &value, const CompilerEnvironment &) { return value; }
+
+  static void replace(std::string &text, std::string_view from, std::string_view to) {
+
+    std::size_t pos = 0;
+
+    while ((pos = text.find(from, pos)) != std::string::npos) {
+
+      text.replace(pos, from.size(), to);
+
+      pos += to.size();
     }
-
-
-    void replace(
-        std::string& text,
-        const std::string& from,
-        const std::string& to)
-    {
-        size_t pos = 0;
-
-        while ((pos = text.find(from, pos)) != std::string::npos) {
-            text.replace(pos, from.size(), to);
-            pos += to.size();
-        }
-    }
+  }
 };
 
-}
+} // namespace diagnostic

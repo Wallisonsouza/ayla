@@ -1,7 +1,7 @@
 #pragma once
 
 #include "celestia/ast/NodeKind.hpp"
-#include "celestia/core/ids/Ids.hpp"
+#include "celestia/semantic/id/ids.hpp"
 #include "celestia/core/token/Location.hpp"
 
 namespace celestia::ast {
@@ -12,13 +12,15 @@ struct Node {
 
   SourceSlice slice;
 
-  SymbolId symbol_id;
-  TypeId type_id;
+  semantic::SymbolId symbol_id;
+  
+  semantic::TypeId type_id;
 
   virtual ~Node() = default;
+  
 
 protected:
-  explicit Node(NodeKind k) : kind(k), symbol_id(SymbolId::invalid()), type_id(TypeId::invalid()) {}
+  explicit Node(NodeKind k) : kind(k), symbol_id(semantic::SymbolId::invalid()), type_id(semantic::TypeId::invalid()) {}
 };
 
 } // namespace celestia::ast

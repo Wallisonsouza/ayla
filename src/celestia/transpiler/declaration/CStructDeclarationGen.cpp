@@ -1,38 +1,60 @@
+#include "celestia/ir/IRIds.hpp"
 #include "celestia/transpiler/CGenerator.hpp"
-#include <iostream>
 
 namespace celestia::codegen {
 
-void CGenerator::generate_struct_declaration(const ast::StructDeclaration *decl) {
+void CGenerator::generate_type(ir::TypeId id) {
 
-  if (!decl || !decl->name) return;
+  const auto &type = ir.get_type(id);
 
-  if (!decl->type_id.is_valid()) {
-    std::cerr << "[CGenerator] struct has no resolved type\n";
-    return;
+  switch (type.kind) {
+
+  case ir::TypeKind::Int: out << "int"; break;
+
+  case ir::TypeKind::String: out << "const char*"; break;
+
+  case ir::TypeKind::Bool: out << "bool"; break;
+
+  case ir::TypeKind::Struct: {
+    const auto &struct_type = static_cast<const ir::StructType &>(type);
+
+    out << "struct ";
+
+    const auto &structure = ir.get_struct(struct_type.id);
+
+    out << ir.get_string(structure.name);
+
+    break;
   }
 
-  const auto &type = context.compiler.types.get(decl->type_id);
-
-  if (type.kind != semantic::TypeKind::Struct) {
-    std::cerr << "[CGenerator] declaration is not a struct type\n";
-    return;
+    // ...
   }
+}
 
-  const auto &struct_type = static_cast<const semantic::StructType &>(type);
+void CGenerator::generate_struct(ir::StructId id) {
 
-  out << "struct " << decl->name->str << " {\n";
+  const auto &structure = ir.get_struct(id);
 
-  for (const auto &[name, type_id] : struct_type.members) {
+  out << "struct ";
+
+  out << ir.get_string(structure.name);
+
+  out << " {\n";
+
+  for (const auto &field : structure.fields) {
 
     out << "    ";
 
-    generate_type(type_id);
+    generate_type(field.type);
 
-    out << " " << name << ";\n";
+    out << " ";
+
+    out << ir.get_string(field.name);
+
+    out << ";\n";
   }
 
-  out << "};\n\n";
+  out << "};\n";
 }
 
 } // namespace celestia::codegen

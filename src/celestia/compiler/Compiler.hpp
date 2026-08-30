@@ -22,6 +22,9 @@ public:
  
   CompilerEnvironment &environment() { return environment_; }
 
+
+
+
 private:
   friend class CompilationFrame;
 

@@ -1,25 +1,25 @@
 module capabilities
 
-export Add<T>: cap {
-    add: (other: T) -> T
+export Add: cap<T> {
+    add: fun(other: T) -> T
 }
 
-export Sub<T>: cap {
-    sub: (other: T) -> T
+export Sub: cap<T> {
+    sub: fun(other: T) -> T
 }
 
-export Mul<T>: cap {
-    mul: (other: T) -> T
+export Mul: cap<T> {
+    mul: fun(other: T) -> T
 }
 
-export Div<T>: cap {
-    div: (other: T) -> T
+export Div: cap<T> {
+    div: fun(other: T) -> T
 }
 
-export Eq<T>: cap {
-    eq: (other: T) -> bool
+export Eq: cap<T> {
+    eq: fun(other: T) -> bool
 }
 
-export Ord<T>: cap {
-    cmp: (other: T) -> int
+export Ord: cap<T> {
+    cmp: fun(other: T) -> int
 }

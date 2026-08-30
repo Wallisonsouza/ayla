@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "celestia/core/ids/Ids.hpp"
+#include "celestia/semantic/id/ids.hpp"
 #include "celestia/semantic/types/PrimitiveType.hpp"
 #include "celestia/semantic/types/TypeKind.hpp"
 
@@ -72,6 +72,13 @@ struct FunctionType : Type {
   FunctionType() : Type(TypeKind::Function) {}
 };
 
+struct GenericDeclarationType : Type {
+  SymbolId symbol;
+  size_t arity;
+
+  GenericDeclarationType(SymbolId symbol, size_t arity) : Type(TypeKind::Generic), symbol(symbol), arity(arity) {}
+};
+
 struct GenericInstanceType : Type {
   SymbolId constructor;
   std::vector<TypeId> arguments;
@@ -79,12 +86,6 @@ struct GenericInstanceType : Type {
   GenericInstanceType(SymbolId constructor, std::vector<TypeId> arguments) : Type(TypeKind::GenericInstance), constructor(constructor), arguments(std::move(arguments)) {}
 };
 
-struct GenericType : Type {
-  SymbolId symbol;
-  std::vector<SymbolId> parameters;
-
-  GenericType(SymbolId symbol, std::vector<SymbolId> parameters) : Type(TypeKind::Generic), symbol(symbol), parameters(std::move(parameters)) {}
-};
 struct StructMember {
   std::string name;
   TypeId type;
@@ -120,11 +121,5 @@ struct StructType : Type {
     member_lookup.emplace(members[index].name, index);
   }
 };
-
-// struct ArrayType : Type {
-//   TypeId element_type;
-
-//   explicit ArrayType(TypeId element_type) : Type(TypeKind::Array), element_type(element_type) {}
-// };
 
 } // namespace celestia::semantic

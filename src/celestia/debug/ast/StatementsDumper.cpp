@@ -14,6 +14,7 @@ void AstDumper::dump_block_statement(const ast::BlockStatement *node) {
   auto g = context.object("BlockStatement");
 
   g.list("Statements", node->statements);
+  
 }
 
 void AstDumper::dump_if_statement(const ast::IfStatement *node) {

@@ -2,6 +2,7 @@
 
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/core/visitor/Pipeline.hpp"
+#include "celestia/diagnostic/diagnostic_debug.hpp"
 
 #include <string>
 #include <vector>
@@ -21,10 +22,11 @@ public:
 
   void run();
 
+
+  std::vector<CompilationUnit *> units_;
+
 private:
   Compiler &compiler_;
 
   Pipeline pipeline_;
-
-  std::vector<CompilationUnit *> units_;
 };

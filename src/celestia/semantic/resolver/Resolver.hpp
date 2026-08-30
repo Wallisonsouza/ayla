@@ -1,36 +1,14 @@
 #pragma once
 
+#include "ContextStack.hpp"
+#include "celestia/ast/ASTFwd.hpp"
 #include "celestia/ast/AstDispacher.hpp"
-#include "celestia/ast/declarations/StructDeclaration.hpp"
-#include "celestia/ast/expressions/IdentifierExpressionNode.hpp"
-#include "celestia/ast/patterns/PatternNode.hpp"
-#include "celestia/ast/types/GenericType.hpp"
-#include "celestia/ast/types/NamedType.hpp"
 #include "celestia/compiler/CompilationUnit.hpp"
 #include "celestia/compiler/CompilerEnvironment.hpp"
+#include "celestia/semantic/id/ids.hpp"
 #include "celestia/semantic/scope/Scope.hpp"
+#include "celestia/semantic/scope/ScopeManager.hpp"
 
-#include "ContextStack.hpp"
-#include "celestia/ast/declarations/CapabilityDeclaration.hpp"
-#include "celestia/ast/declarations/FunctionDeclaration.hpp"
-#include "celestia/ast/declarations/ImplementationDeclaration.hpp"
-#include "celestia/ast/declarations/ImportDeclaration.hpp"
-#include "celestia/ast/declarations/ModuleDeclaration.hpp"
-#include "celestia/ast/declarations/VariableDeclaration.hpp"
-#include "celestia/ast/expressions/AssignmentExpression.hpp"
-#include "celestia/ast/expressions/BinaryExpressionNode.hpp"
-#include "celestia/ast/expressions/CallExpressionNode.hpp"
-#include "celestia/ast/expressions/IndexAcessExpressionNode.hpp"
-#include "celestia/ast/expressions/LiteralExpressionNode.hpp"
-#include "celestia/ast/expressions/MemberAccessExpressionNode.hpp"
-#include "celestia/ast/expressions/UnaryExpressionNode.hpp"
-#include "celestia/ast/patterns/NamedPatternNode.hpp"
-#include "celestia/ast/statements/BlockStatementNode.hpp"
-#include "celestia/ast/statements/ExpressionStatementNode.hpp"
-#include "celestia/ast/statements/IfStatementNode.hpp"
-#include "celestia/ast/statements/ReturnStatementNode.hpp"
-#include "celestia/ast/statements/WhileStatementNode.hpp"
-#include "celestia/ast/types/FunctionType.hpp"
 namespace celestia::semantic {
 struct ResolverContext {
   CompilerEnvironment &compiler;
@@ -38,11 +16,11 @@ struct ResolverContext {
 
   ContextStack<core::Scope> scopes;
 
+  ScopeManager scope_manager;
+
   celestia::ast::FunctionDeclaration *current_function = nullptr;
   celestia::ast::ModuleDeclaration *current_module = nullptr;
   celestia::ast::WhileStatement *current_loop = nullptr;
-
-  Module &get_module() { return *unit.module; }
 
   ResolverContext(CompilerEnvironment &compiler, CompilationUnit &unit) : compiler(compiler), unit(unit), scopes(nullptr) {}
 };
@@ -56,13 +34,15 @@ public:
 private:
   AstDispatcher<Resolver, celestia::ast::Node> dispatcher;
 
-  ResolverContext context;
+  ResolverContext &context;
 
   void bind_literals();
   void bind_expressions();
   void bind_statements();
   void bind_declarations();
   void bind_types();
+  SymbolId lookup_symbol(std::string_view name) const;
+
 
   void resolve_named_type(ast::NamedType *node);
   void resolve_generic_type(ast::GenericTypeNode *node);
@@ -102,7 +82,7 @@ private:
   void resolve_impl_declaration(celestia::ast::ImplDeclaration *node);
   void resolve_type_declaration(ast::TypeDeclaration *node);
   void block_statement(celestia::ast::BlockStatement *node);
-
+  void declare_generics(const std::vector<ast::IdentifierNode *> &parameters);
   void return_statement(celestia::ast::ReturnStatement *node);
 
   void resolve_import_declaration(celestia::ast::ImportDeclaration *node);
@@ -110,5 +90,7 @@ private:
   bool can_have_visibility(core::ScopeKind kind, Visibility visibility);
   SymbolId declare_symbol(const std::string &name, SymbolKind kind, Visibility visibility, celestia::ast::Node *node);
   void named_pattern(celestia::ast::NamedPattern *pattern, Visibility visibilit);
+
+  void diagnostic() {}
 };
 } // namespace celestia::semantic

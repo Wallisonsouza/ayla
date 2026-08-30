@@ -9,9 +9,9 @@
 namespace celestia::ast {
 
 struct NumberLiteralNode : Expression {
-  double value;
+  std::string value;
 
-  explicit NumberLiteralNode(double v) : Expression(NodeKind::NumberLiteral), value(v) {}
+  explicit NumberLiteralNode(std::string value) : Expression(NodeKind::NumberLiteral), value(std::move(value)) {}
 };
 
 struct StringLiteralNode : Expression {

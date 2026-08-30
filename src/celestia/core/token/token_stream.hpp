@@ -128,6 +128,11 @@ public:
     return last_token_ ? last_token_->slice : empty;
   }
 
+  const SourceSlice &diagnostic_slice() const noexcept {
+    if (auto *token = current()) { return token->slice; }
+
+    return last_slice();
+  }
   const SourceSlice &current_slice() const noexcept {
     static SourceSlice empty{};
 
@@ -150,11 +155,11 @@ public:
 
 private:
   TokenKind kind_at(size_t distance) const noexcept {
-    if (!has(distance)) return TokenKind::INVALID;
+    if (!has(distance)) return TokenKind::EndOfFile;
 
     auto *token = tokens_[pos_ + distance];
 
-    return token ? token->kind() : TokenKind::INVALID;
+    return token ? token->kind() : TokenKind::EndOfFile;
   }
 
 private:

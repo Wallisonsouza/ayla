@@ -1,9 +1,9 @@
 #pragma once
 
 #include "SymbolKind.hpp"
-#include "celestia/core/ids/Ids.hpp"
 #include "celestia/core/modifiers/ModifierSet.hpp"
 #include "celestia/core/modifiers/Visibility.hpp"
+#include "celestia/semantic/id/ids.hpp"
 
 #include <string>
 
@@ -14,9 +14,9 @@ struct Node;
 
 struct Symbol {
 
-  SymbolId id;
-  ModuleId module;
-  TypeId type;
+  celestia::semantic::SymbolId id;
+  celestia::semantic::ModuleId module;
+  celestia::semantic::TypeId type;
   SymbolKind kind;
 
   std::string name;
@@ -27,6 +27,6 @@ struct Symbol {
 
   celestia::ast::Node *declaration = nullptr;
 
-  Symbol(SymbolId id, std::string name, SymbolKind kind, Visibility visibility, bool builtin, celestia::ast::Node *decl)
+  Symbol(celestia::semantic::SymbolId id, std::string name, SymbolKind kind, Visibility visibility, bool builtin, celestia::ast::Node *decl)
       : id(id), name(std::move(name)), kind(kind), visibility(visibility), declaration(decl) {}
 };

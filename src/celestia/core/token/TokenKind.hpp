@@ -5,7 +5,6 @@
 
 enum class TokenKind : uint8_t {
   STATIC,
-  MUT,
   PUBLIC,
   PRIVATE,
   INVALID,
@@ -13,14 +12,16 @@ enum class TokenKind : uint8_t {
 
   EXTERN,
   MODULE_KEYWORD,
-  VALUE_KEYWORD,
+  MUT_KEYWORD,
+  LET_KEYWORD,
   FOR_KEYWORD,
   CAP_KEYWORD,
   IMPL_KEYWORD,
   TYPE_KEYWORD,
-  CONST,
+  CONST_KEYWORD,
   FUN_KEYWORD,
   IMPORT_KEYWORD,
+  EXPORT_KEYWORD,
   STRUCT_KEYWORD,
   IF_KEYWORD,
   ELSE_KEYWORD,
@@ -83,7 +84,6 @@ constexpr std::string_view token_kind_name(TokenKind kind) noexcept {
   switch (kind) {
 
   case TokenKind::STATIC: return "STATIC";
-  case TokenKind::MUT: return "MUT";
   case TokenKind::PUBLIC: return "PUBLIC";
   case TokenKind::PRIVATE: return "PRIVATE";
   case TokenKind::INVALID: return "INVALID";
@@ -91,12 +91,12 @@ constexpr std::string_view token_kind_name(TokenKind kind) noexcept {
 
   case TokenKind::EXTERN: return "EXTERN";
   case TokenKind::MODULE_KEYWORD: return "MODULE_KEYWORD";
-  case TokenKind::VALUE_KEYWORD: return "VALUE_KEYWORD";
+  case TokenKind::MUT_KEYWORD: return "MUT_KEYWORD";
   case TokenKind::FOR_KEYWORD: return "FOR_KEYWORD";
   case TokenKind::CAP_KEYWORD: return "CAP_KEYWORD";
   case TokenKind::IMPL_KEYWORD: return "IMPL_KEYWORD";
   case TokenKind::TYPE_KEYWORD: return "TYPE_KEYWORD";
-  case TokenKind::CONST: return "CONST";
+  case TokenKind::CONST_KEYWORD: return "CONST_KEYWORD";
   case TokenKind::FUN_KEYWORD: return "FUNCTION_KEYWORD";
   case TokenKind::IMPORT_KEYWORD: return "IMPORT_KEYWORD";
   case TokenKind::STRUCT_KEYWORD: return "STRUCT_KEYWORD";
@@ -160,6 +160,8 @@ constexpr std::string_view token_kind_name(TokenKind kind) noexcept {
   case TokenKind::EndOfFile: return "END_OF_FILE";
   case TokenKind::NEW_LINE: return "NEW_LINE";
 
+  case TokenKind::EXPORT_KEYWORD: return "EXPORT_KEYWORD";
+  case TokenKind::LET_KEYWORD: return "LET_KEYWORD";
   }
 
   return "UNKNOWN";

@@ -1,32 +1,23 @@
 #pragma once
-
-#include "celestia/core/token/Token.hpp"
-
-#include <string>
 #include <utility>
-
-enum class ParseStatus { Success, NoMatch, Error };
 
 namespace celestia::syntax {
 
-struct ParseError {
-  Token *token;
-  std::string message;
-};
+enum class ParseStatus { Success, NoMatch, Error };
 
 template <typename T> class ParseResult {
+
   ParseStatus status_;
   T value_;
-  ParseError error_;
 
-  ParseResult(ParseStatus status, T value, ParseError error) : status_(status), value_(std::move(value)), error_(std::move(error)) {}
+  ParseResult(ParseStatus status, T value) : status_(status), value_(std::move(value)) {}
 
 public:
-  static ParseResult ok(T value) { return ParseResult(ParseStatus::Success, std::move(value), {}); }
+  static ParseResult ok(T value) { return ParseResult(ParseStatus::Success, std::move(value)); }
 
-  static ParseResult fail(Token *token, std::string message) { return ParseResult(ParseStatus::Error, T{}, {token, std::move(message)}); }
+  static ParseResult fail() { return ParseResult(ParseStatus::Error, T{}); }
 
-  static ParseResult no_match() { return ParseResult(ParseStatus::NoMatch, T{}, {}); }
+  static ParseResult no_match() { return ParseResult(ParseStatus::NoMatch, T{}); }
 
   bool is_ok() const { return status_ == ParseStatus::Success; }
 
@@ -37,8 +28,6 @@ public:
   T &value() { return value_; }
 
   const T &value() const { return value_; }
-
-  const ParseError &error() const { return error_; }
 };
 
 } // namespace celestia::syntax

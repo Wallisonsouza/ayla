@@ -1,7 +1,5 @@
 #pragma once
 #include "celestia/semantic/scope/Scope.hpp"
-#include "celestia/semantic/scope/ScopeManager.hpp"
-
 #include <string>
 
 class Module {
@@ -12,8 +10,6 @@ public:
   std::string_view name() const { return name_; }
 
   core::Scope &get_scope() { return scope_; }
-
-  ScopeManager scopes;
 
 private:
 

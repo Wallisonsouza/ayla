@@ -7,11 +7,10 @@ enum class Modifier : uint32_t
     None    = 0,
 
     Static  = 1 << 0,
-    Mut     = 1 << 1,
-    Extern  = 1 << 2,
-    Async   = 1 << 3,
-    Inline  = 1 << 4,
-    Const   = 1 << 5
+    Extern  = 1 << 1,
+    Async   = 1 << 2,
+    Inline  = 1 << 3,
+    Const   = 1 << 4
 };
 
 constexpr Modifier operator|(Modifier a, Modifier b)
